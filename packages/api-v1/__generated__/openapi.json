@@ -340,7 +340,7 @@
                                 "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.slack.discriminated_connector_config"
@@ -461,7 +461,7 @@
                                 "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
                                 "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
                                 "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
-                                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connector_config",
+                                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connector_config",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connector_config",
                                 "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
                                 "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
@@ -836,7 +836,7 @@
                           "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
@@ -957,7 +957,7 @@
                           "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
                           "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
                           "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                          "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
+                          "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
                           "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                           "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                           "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
@@ -1423,7 +1423,7 @@
                                 "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
@@ -1544,7 +1544,7 @@
                                 "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
                                 "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
                                 "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
+                                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                                 "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                                 "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
@@ -1786,7 +1786,7 @@
                         "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
@@ -1907,7 +1907,7 @@
                         "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
                         "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
                         "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                        "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
+                        "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
                         "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                         "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                         "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
@@ -7460,12 +7460,12 @@
         ],
         "title": "saltedge"
       },
-      "connector.sharepointonline.discriminated_connection_settings": {
+      "connector.sharepoint.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "sharepointonline"
+            "const": "sharepoint"
           },
           "settings": {
             "type": "object",
@@ -7538,14 +7538,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "sharepointonline"
+        "title": "sharepoint"
       },
-      "connector.sharepointonline.discriminated_connector_config": {
+      "connector.sharepoint.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "sharepointonline"
+            "const": "sharepoint"
           },
           "config": {
             "type": "object",
@@ -7598,7 +7598,7 @@
           "connector_name",
           "config"
         ],
-        "title": "sharepointonline"
+        "title": "sharepoint"
       },
       "connector.slack.discriminated_connection_settings": {
         "type": "object",
@@ -9051,7 +9051,7 @@
                 "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
@@ -9172,7 +9172,7 @@
                 "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
                 "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
                 "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
+                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                 "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                 "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
@@ -9346,7 +9346,7 @@
           "reddit",
           "salesloft",
           "saltedge",
-          "sharepointonline",
+          "sharepoint",
           "slack",
           "splitwise",
           "stripe",

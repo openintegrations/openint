@@ -7,11 +7,11 @@ import discord from './json-defs/discord'
 import facebook from './json-defs/facebook'
 import github from './json-defs/github'
 import gong from './json-defs/gong'
-import googleCalendar from './json-defs/google-calendar'
-import googleDocs from './json-defs/google-docs'
-import googleDrive from './json-defs/google-drive'
-import googleMail from './json-defs/google-mail'
-import googleSheet from './json-defs/google-sheet'
+import google_calendar from './json-defs/google-calendar'
+import google_docs from './json-defs/google-docs'
+import google_drive from './json-defs/google-drive'
+import google_mail from './json-defs/google-mail'
+import google_sheet from './json-defs/google-sheet'
 import hubspot from './json-defs/hubspot'
 import instagram from './json-defs/instagram'
 import intercom from './json-defs/intercom'
@@ -25,11 +25,11 @@ import pipedrive from './json-defs/pipedrive'
 import quickbooks from './json-defs/quickbooks'
 import reddit from './json-defs/reddit'
 import salesloft from './json-defs/salesloft'
-import sharepointonline from './json-defs/sharepoint'
+import sharepoint from './json-defs/sharepoint'
 import slack from './json-defs/slack'
 import twitter from './json-defs/twitter'
 import xero from './json-defs/xero'
-import zohoDesk from './json-defs/zoho-desk'
+import zoho_desk from './json-defs/zoho-desk'
 
 const defs = {
   'acme-oauth2': acme_oauth2,
@@ -39,11 +39,11 @@ const defs = {
   facebook,
   github,
   gong,
-  'google-calendar': googleCalendar,
-  'google-docs': googleDocs,
-  'google-drive': googleDrive,
-  'google-mail': googleMail,
-  'google-sheet': googleSheet,
+  'google-calendar': google_calendar,
+  'google-docs': google_docs,
+  'google-drive': google_drive,
+  'google-mail': google_mail,
+  'google-sheet': google_sheet,
   hubspot,
   instagram,
   intercom,
@@ -57,11 +57,11 @@ const defs = {
   quickbooks,
   reddit,
   salesloft,
-  sharepointonline,
+  sharepoint,
   slack,
   twitter,
   xero,
-  'zoho-desk': zohoDesk,
+  'zoho-desk': zoho_desk,
 }
 
 export default defs

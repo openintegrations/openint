@@ -5,7 +5,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Acme Oauth2',
+      displayName: 'Acme Oauth Connector',
       stage: 'ga',
       verticals: ['social-media'],
       logoUrl:
@@ -17,7 +17,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Aircall (OAuth)',
+      displayName: 'Aircall',
       stage: 'ga',
       verticals: ['ticketing'],
       logoUrl:
@@ -126,7 +126,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'GitHub (User OAuth)',
+      displayName: 'GitHub',
       stage: 'ga',
       verticals: ['developer-tools', 'ticketing'],
       logoUrl:
@@ -138,7 +138,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Gong (Oauth)',
+      displayName: 'Gong',
       stage: 'ga',
       verticals: ['communication', 'streaming'],
       logoUrl:
@@ -266,7 +266,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Jira (OAuth)',
+      displayName: 'Jira',
       stage: 'ga',
       verticals: ['ticketing'],
       logoUrl:
@@ -278,7 +278,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Lever (OAuth)',
+      displayName: 'Lever',
       stage: 'ga',
       verticals: ['ats'],
       logoUrl:
@@ -461,15 +461,15 @@ export default {
       logoUrl: '/_assets/logo-saltedge.svg',
     },
   },
-  sharepointonline: {
+  sharepoint: {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'SharePoint Online (v2)',
+      displayName: 'SharePoint',
       stage: 'ga',
       verticals: ['file-storage', 'communication'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepoint.svg',
       authType: 'OAUTH2',
     },
   },
@@ -531,7 +531,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Twitter (v2)',
+      displayName: 'Twitter',
       stage: 'ga',
       verticals: ['social-media'],
       logoUrl:
