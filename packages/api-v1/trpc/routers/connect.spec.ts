@@ -1,14 +1,13 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
+import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import Elysia from 'elysia'
-import {
-  oauth2Schemas,
-  OAuthConnectorConfig,
-} from '@openint/cnext/auth-oauth2/schemas'
+import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
+import {safeJSONParse} from '@openint/util/json-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {trpc} from '../_base'
 import {routerContextFromViewer} from '../context'
@@ -99,7 +98,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const oauthConfig: OAuthConnectorConfig =
       oauthConfigs[key as keyof typeof oauthConfigs]
     const redirectUri =
-      oauthConfig.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY
+      oauthConfig.redirect_uri?.trim() ||
+      env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY
 
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
@@ -131,10 +131,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
       const authorizationUrl = new URL(parsed.authorization_url)
+      const state = zOauthState.parse(
+        safeJSONParse(authorizationUrl.searchParams.get('state')),
+      )
       expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
         redirectUri,
       )
-      return parsed
+      return {...parsed, state}
     })
 
     const connectRes = $test('connect get 302 redirect', async () => {
@@ -167,6 +170,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.status).toBe('healthy')
       expect(res.status_message).toBeNull()
       expect(res.customer_id).toBe('cus_222')
+      expect(res.id).toEqual(preConnectRes.current.state.connection_id)
+
       return {id: res.id, settings}
     })
 

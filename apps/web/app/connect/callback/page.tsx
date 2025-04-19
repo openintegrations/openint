@@ -23,6 +23,7 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
 import {redirect} from 'next/navigation'
+import {zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {getBaseURLs} from '@openint/env'
 import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
@@ -32,12 +33,6 @@ const zOauthCallbackSearchParams = z.object({
   code: z.string(),
   state: z.string(),
   // connector_name: z.enum(['hi', 'there']),
-})
-
-// TODO: Dedupe this with cnext
-const zOauthState = z.object({
-  connection_id: z.string(),
-  redirect_uri: z.string().optional(),
 })
 
 export default async function ConnectCallback(pageProps: PageProps) {

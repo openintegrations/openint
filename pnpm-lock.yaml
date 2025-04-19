@@ -135,6 +135,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../../connectors/cnext
       '@openint/commands':
         specifier: workspace:*
         version: link:../../packages/commands

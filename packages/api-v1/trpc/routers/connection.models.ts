@@ -65,7 +65,7 @@ export function formatConnection(
     })
   }
 
-  console.log('include_secrets', include_secrets)
+  // console.log('include_secrets', include_secrets)
 
   // Handle different levels of secret inclusion
   // the default is 'none' at which point settings should be an empty object

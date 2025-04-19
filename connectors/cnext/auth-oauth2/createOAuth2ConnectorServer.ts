@@ -1,12 +1,12 @@
-import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
+import type {ConnectorDef, ConnectorServer, ExternalId, Id} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
 
-import {makeId} from '@openint/cdk'
+import {extractId, makeId} from '@openint/cdk'
 import {env, getBaseURLs} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
-import {z} from '@openint/util/zod-utils'
+import {zOauthState} from './schemas'
 import {getClient} from './utils'
 
 /*
@@ -51,10 +51,10 @@ export function createOAuth2ConnectorServer<
       const connectionId =
         input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
 
-      console.log(
-        `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
-        config,
-      )
+      // console.log(
+      //   `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
+      //   config,
+      // )
 
       const codeChallenge = oauthConfig.code_challenge_method
         ? {
@@ -65,7 +65,8 @@ export function createOAuth2ConnectorServer<
 
       const authorizeUrl = await client.getAuthorizeUrl({
         redirect_uri:
-          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
+          config.oauth?.redirect_uri?.trim() ||
+          env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -93,28 +94,24 @@ export function createOAuth2ConnectorServer<
       config,
       instance: {client, oauthConfig},
     }) {
-      const state = z
-        .object({
-          connection_id: z.string(),
-          redirect_uri: z.string().optional(),
-        })
-        .parse(JSON.parse(connectOutput.state))
+      const state = zOauthState.parse(JSON.parse(connectOutput.state))
 
-      console.log(
-        `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
-      )
+      // console.log(
+      //   `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
+      // )
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
         redirect_uri:
-          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
+          config.oauth?.redirect_uri?.trim() ||
+          env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
 
       return {
-        // TODO: Why is connection_id not being used here?
-        connectionExternalId: undefined as unknown as ExternalId,
+        // TODO: Fix this connectionExternalId abstraction
+        connectionExternalId: extractId(state.connection_id as Id['conn'])[2],
         settings: {
           oauth: {
             credentials: {
@@ -141,7 +138,7 @@ export function createOAuth2ConnectorServer<
         throw new Error('No access token available')
       }
 
-      console.log('[oauth2] Check connection called', oauthConfig)
+      // console.log('[oauth2] Check connection called', oauthConfig)
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =
         settings.oauth.credentials

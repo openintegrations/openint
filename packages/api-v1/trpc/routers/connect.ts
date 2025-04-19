@@ -225,7 +225,6 @@ export const connectRouter = router({
     )
     .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
-      console.log('postConnect', input, ctx)
       // @pellicceama: Have another way to validate
       // const connectorNamesFromToken =
       //   ctx.viewer?.connectOptions?.connector_names ?? []
@@ -271,7 +270,6 @@ export const connectRouter = router({
           connectionExternalId: '', // TODO: Check on me....
         }))
 
-      console.log('postConnect', input, ctx, ccfg)
       const context = {
         webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
         extCustomerId: (ctx.viewer.role === 'customer'
@@ -298,7 +296,7 @@ export const connectRouter = router({
       const id = makeId(
         'conn',
         input.discriminated_data.connector_name,
-        makeUlid(),
+        connUpdate.connectionExternalId || makeUlid(),
       )
 
       // would be much nicer if this is the materialized schemas
@@ -423,7 +421,7 @@ export const connectRouter = router({
             instance,
             context,
           })
-          console.log('[connection] Check connection result', res)
+          // console.log('[connection] Check connection result', res)
           // QQ: should this parse the results of checkConnection somehow?
 
           // Can this happen after returning result? But what about read-after-write consistency?

@@ -3,6 +3,8 @@ import type {Z} from '@openint/util/zod-utils'
 
 import {z} from '@openint/util/zod-utils'
 
+// MARK: - Connector schemas
+
 const _zOauthConnectorConfig = z
   .object({
     client_id: z.string().nullish(),
@@ -55,6 +57,47 @@ const zOAuthConnectionSettings = z.object({
 })
 
 export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
+
+export const oauth2Schemas = {
+  connector_config: z.object({
+    oauth: zOauthConnectorConfig.nullable(),
+  }),
+
+  connection_settings: z.object({
+    oauth: zOAuthConnectionSettings,
+  }),
+  // No pre connect input is necessary for oauth2
+  // TODO: Fix to be unnecessary
+  pre_connect_input: z.object({
+    connection_id: z
+      .string()
+      .optional()
+      .describe('In case of re-connecting, id of the existing connection'),
+  }),
+  connect_input: z.object({
+    code_verifier: z.string().optional().describe('Code verifier for PKCE'),
+    authorization_url: z.string().describe('URL to take user to for approval'),
+  }),
+  connect_output: z.object({
+    code_verifier: z
+      .string()
+      .optional()
+      .describe('Code verifier for PKCE from the connect input'),
+    code: z
+      .string()
+      .describe('OAuth2 authorization code used for token exchange'),
+    state: z.string().describe('OAuth2 state'),
+  }),
+} satisfies Omit<ConnectorSchemas, 'name'>
+
+// State gets encoded into this. We should consider adding a zod transform from connect_output.state
+// but make sure it has an effectType on it
+export const zOauthState = z.object({
+  connection_id: z.string(),
+  redirect_uri: z.string().optional(),
+})
+
+// MARK; - JSON Def schemas
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
@@ -133,35 +176,3 @@ export const zOAuthConfig = z.object({
     ),
   params_config: zAuthParamsConfig.optional().default({}),
 })
-
-export const oauth2Schemas = {
-  connector_config: z.object({
-    oauth: zOauthConnectorConfig.nullable(),
-  }),
-
-  connection_settings: z.object({
-    oauth: zOAuthConnectionSettings,
-  }),
-  // No pre connect input is necessary for oauth2
-  // TODO: Fix to be unnecessary
-  pre_connect_input: z.object({
-    connection_id: z
-      .string()
-      .optional()
-      .describe('In case of re-connecting, id of the existing connection'),
-  }),
-  connect_input: z.object({
-    code_verifier: z.string().optional().describe('Code verifier for PKCE'),
-    authorization_url: z.string().describe('URL to take user to for approval'),
-  }),
-  connect_output: z.object({
-    code_verifier: z
-      .string()
-      .optional()
-      .describe('Code verifier for PKCE from the connect input'),
-    code: z
-      .string()
-      .describe('OAuth2 authorization code used for token exchange'),
-    state: z.string().describe('OAuth2 state'),
-  }),
-} satisfies Omit<ConnectorSchemas, 'name'>
