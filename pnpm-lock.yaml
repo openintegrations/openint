@@ -1319,6 +1319,9 @@ importers:
       '@openint/commands':
         specifier: workspace:*
         version: link:../commands
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../env
       '@openint/shadcn':
         specifier: workspace:*
         version: link:../shadcn
@@ -1368,6 +1371,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../../connectors/cnext
       '@openint/db':
         specifier: workspace:*
         version: link:../db
