@@ -196,11 +196,8 @@ jobs:
           git config user.email "pellicceama@gmail.com"
           git fetch 
 
-          # Add all generated files
-          git add -f docs/mintlify.oas.yml || true
-          git add -f packages/api-v1/__generated__/openapi.documented.json || true
-          git add -f packages/api-v1/__generated__/openapi.json || true
-          git add -f packages/api-v1/__generated__/openapi.types.ts || true
+          # Add all generated files using pattern matching
+          git add -f "packages/api-v1/__generated__/*" "docs/mintlify.oas.yml" 2>/dev/null || true
 
           # Check if there are changes to commit
           if git diff --staged --quiet; then
