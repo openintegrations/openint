@@ -50,9 +50,9 @@ jobs:
         run: pnpm install
       - name: Run generate
         run: pnpm generate
-      - name: Setup upterm session
-        if: always()
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   if: always()
+      #   uses: lhotari/action-upterm@v1
       - name: Check for changes after generate
         run: |
           # Check if there are any changes in the entire repo after running generate
