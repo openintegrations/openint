@@ -5,7 +5,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Acme Oauth Connector',
+      displayName: 'Acme OAuth',
       stage: 'ga',
       verticals: ['social-media'],
       logoUrl:

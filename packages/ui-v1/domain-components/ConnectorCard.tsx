@@ -1,8 +1,9 @@
-import type {Core} from '@openint/api-v1/models'
+import type {ConnectorName, Core} from '@openint/api-v1/models'
 
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
+import {ConnectorLogo} from './ConnectorLogo'
 
 export interface ConnectorCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +22,7 @@ const ConnectorCard = ({
   connector,
   ...props
 }: ConnectorCardProps) => {
-  const {name, logo_url, display_name} = connector
+  const {name, display_name} = connector
   return (
     // TODO: @snrondina: Refactor to use the proper card component from our library
     <div
@@ -32,13 +33,10 @@ const ConnectorCard = ({
       {...props}>
       <div className="flex w-full flex-row items-center gap-4">
         <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
-          {logo_url && (
-            <img
-              src={logo_url}
-              alt={`${name} logo`}
-              className="h-12 w-12 object-contain"
-            />
-          )}
+          <ConnectorLogo
+            connectorName={name as ConnectorName}
+            className="object-contain"
+          />
         </div>
         <h3 className="line-clamp-2 text-xl font-semibold transition-colors group-hover:text-gray-900">
           {display_name || name}
