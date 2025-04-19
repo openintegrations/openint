@@ -41,8 +41,10 @@ const RequestLink: FC<{className?: string}> = ({className}) => (
     <span>Need new scopes?</span>
     {/* TODO: @rodrigo - Add connector name to the email title and body */}
     <a
-      href={`mailto:support@openint.dev?subject=Add%20OpenInt%20scopes%20to%20&body=I%20require%20the%20following%20scopes%20to%20be%20added%20to%20:\n\n`}
-      className="text-primary ml-1 cursor-pointer border-none bg-transparent p-1 hover:underline">
+      href={`mailto:support@openint.dev?subject=Add%20OpenInt%20scopes%20request%20&body=I%20require%20the%20following%20scopes%20to%20be%20added%20to%20<CONNECTOR_NAME>:\n\n`}
+      className="text-primary ml-1 cursor-pointer border-none bg-transparent p-1 hover:underline"
+      target="_blank"
+      rel="noopener noreferrer">
       Request Scopes
     </a>
   </div>
