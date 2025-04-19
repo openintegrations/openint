@@ -7,7 +7,8 @@ const db = drizzle('postgres://noop', {logger: false, schema})
 
 test('query with to-many joins', async () => {
   const query = db.query.connector_config.findMany({
-    with: {connections: true},
+    with: {connections: {columns: {id: true, settings: true}}},
+    columns: {id: true, connector_name: true},
   })
   // console.log(await formatSql(query?.toSQL().sql ?? ''))
 
@@ -15,18 +16,6 @@ test('query with to-many joins', async () => {
     "select
       "connector_config"."id",
       "connector_config"."connector_name",
-      "connector_config"."config",
-      "connector_config"."created_at",
-      "connector_config"."updated_at",
-      "connector_config"."org_id",
-      "connector_config"."display_name",
-      "connector_config"."env_name",
-      "connector_config"."disabled",
-      "connector_config"."default_pipe_out",
-      "connector_config"."default_pipe_in",
-      "connector_config"."default_pipe_out_destination_id",
-      "connector_config"."default_pipe_in_source_id",
-      "connector_config"."metadata",
       "connector_config_connections"."data" as "connections"
     from
       "connector_config"
@@ -36,19 +25,7 @@ test('query with to-many joins', async () => {
             json_agg(
               json_build_array(
                 "connector_config_connections"."id",
-                "connector_config_connections"."connector_name",
-                "connector_config_connections"."customer_id",
-                "connector_config_connections"."connector_config_id",
-                "connector_config_connections"."integration_id",
-                "connector_config_connections"."env_name",
-                "connector_config_connections"."status",
-                "connector_config_connections"."status_message",
-                "connector_config_connections"."settings",
-                "connector_config_connections"."created_at",
-                "connector_config_connections"."updated_at",
-                "connector_config_connections"."display_name",
-                "connector_config_connections"."disabled",
-                "connector_config_connections"."metadata"
+                "connector_config_connections"."settings"
               )
             ),
             '[]'::json
