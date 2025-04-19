@@ -66,6 +66,8 @@ jobs:
             echo "::error::To fix this:"
             echo "::error::1. Run 'pnpm generate' locally"
             echo "::error::2. See the diffs, performs any checks and tests manually and if you're happy with them add them to the PR, commit & push the changes"
+            echo "::error::3. Here's the diff of the changes:"
+            git diff
             exit 1
           fi
 
