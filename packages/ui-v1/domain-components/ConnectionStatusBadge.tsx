@@ -49,10 +49,17 @@ export const getConnectionStatusStyles = (
         borderColor: 'border-amber-200',
       }
     case 'manual':
-    default:
       return {
         icon: HelpCircle,
         label: 'Manual',
+        color: 'bg-gray-100 text-gray-800 hover:bg-gray-100/80',
+        borderColor: 'border-gray-200',
+      }
+    case 'unknown':
+    default:
+      return {
+        icon: HelpCircle,
+        label: 'Unknown',
         color: 'bg-gray-100 text-gray-800 hover:bg-gray-100/80',
         borderColor: 'border-gray-200',
       }
