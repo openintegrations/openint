@@ -127,12 +127,24 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
 
   return {
     ...shape,
-    ...(zodErr && error.message === 'Output validation failed'
-      ? {output_issues: zodErr.errors, output: zodErr.data}
-      : {}),
-    ...(zodErr && error.message === 'Input validation failed'
-      ? {issues: zodErr?.errors, input: zodErr.data}
-      : {}),
+    ...(() => {
+      if (!zodErr) {
+        return {}
+      }
+      if (error.message === 'Output validation failed') {
+        return {output_issues: zodErr.errors, output: zodErr.data}
+      }
+      if (error.message === 'Input validation failed') {
+        return {issues: zodErr.errors, input: zodErr.data}
+      }
+      return {
+        // uncomment me to debug issues during dev
+        // zodError: {
+        //   errors: zodErr.errors,
+        //   data: zodErr.data,
+        // },
+      }
+    })(),
   }
 }
 

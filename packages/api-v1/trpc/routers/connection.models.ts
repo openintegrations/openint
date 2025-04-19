@@ -50,7 +50,7 @@ export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 /**
  * Formats a connection for API responses
  */
-export async function formatConnection(
+export function formatConnection(
   _ctx: any,
   connection: Core['connection_select'],
   include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
@@ -99,9 +99,13 @@ export async function formatConnection(
     }
   }
 
-  return {
+  const ret = {
     ...connection,
     // ...settingsToInclude, // buggy, fix me
     ...expandedFields,
   }
+  // DUring development, parse right here
+  // zConnectionExpanded.parse(ret)
+
+  return ret
 }

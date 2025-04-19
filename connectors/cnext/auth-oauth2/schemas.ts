@@ -31,7 +31,9 @@ const zOAuthConnectionSettings = z.object({
         .string()
         .describe('Client ID used for the connection')
         .optional(),
-      scope: z.string(),
+      // This should be really a string or array of strings, probably should be turned into
+      // an array
+      scope: z.string().optional(),
       refresh_token: z.string().optional(),
       expires_in: z.number().optional(),
       expires_at: z.string().optional(),

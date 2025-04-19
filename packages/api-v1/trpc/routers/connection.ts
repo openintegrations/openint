@@ -252,14 +252,12 @@ export const connectionRouter = router({
 
       return {
         // TODO: fix this to respect rls policy... Add corresponding tests also
-        items: await Promise.all(
-          items.map((conn) =>
-            formatConnection(
-              ctx,
-              conn as any,
-              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-              input?.expand ?? [],
-            ),
+        items: items.map((conn) =>
+          formatConnection(
+            ctx,
+            conn as any,
+            input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+            input?.expand ?? [],
           ),
         ),
         total,
