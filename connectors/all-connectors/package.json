@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "generate": "run-s generate:lists generate:stories generate:meta",
+    "generate": "run-s generate:lists generate:meta generate:stories",
     "generate:lists": "bun ./__scripts__/generateConnectorLists.ts",
     "generate:meta": "bun ./__scripts__/generateConnectorMeta.ts",
     "generate:stories": "bun ./__scripts__/generateConnectorStories.ts"

@@ -3,7 +3,7 @@ import type {JsonConnectorDef} from '../schema'
 export default {
   audience: ['business'],
   verticals: ['social-media'],
-  display_name: 'Twitter (v2)',
+  display_name: 'Twitter',
   stage: 'ga',
   version: 1,
   auth: {

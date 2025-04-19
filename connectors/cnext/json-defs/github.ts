@@ -3,7 +3,7 @@ import type {JsonConnectorDef} from '../schema'
 export default {
   audience: ['business'],
   verticals: ['developer-tools', 'ticketing'],
-  display_name: 'GitHub (User OAuth)',
+  display_name: 'GitHub',
   stage: 'ga',
   version: 1,
   auth: {

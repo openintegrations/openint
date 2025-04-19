@@ -8,8 +8,11 @@ const defsDir = path.join(__dirname, '../json-defs')
 // Path to the output file (now index.ts in the defs folder)
 const outputFile = path.join(__dirname, '../json-defs.ts')
 
-// Get all .ts files in the defs directory
-const files = fs.readdirSync(defsDir).filter((file) => file.endsWith('.ts'))
+// Get all .ts files in the defs directory and sort them
+const files = fs
+  .readdirSync(defsDir)
+  .filter((file) => file.endsWith('.ts'))
+  .sort()
 
 // Generate the content for index.ts
 let content = '// This file is auto-generated. Do not edit manually.\n\n'

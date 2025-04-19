@@ -3,7 +3,7 @@ import type {JsonConnectorDef} from '../schema'
 export default {
   audience: ['business'],
   verticals: ['ats'],
-  display_name: 'Lever (OAuth)',
+  display_name: 'Lever',
   stage: 'ga',
   version: 1,
   auth: {
