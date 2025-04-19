@@ -154,7 +154,7 @@ const nextConfig = {
   // eslint-disable-next-line @typescript-eslint/require-await
   headers: async () => [
     {
-      source: '/*',
+      source: '/',
       headers: [
         {
           key: 'Access-Control-Allow-Origin',
@@ -182,6 +182,23 @@ const nextConfig = {
             ]
           : [],
       ),
+    },
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Access-Control-Allow-Origin',
+          value: '*', // Allow any origin
+        },
+        {
+          key: 'Access-Control-Allow-Methods',
+          value: 'GET, POST, PUT, DELETE, OPTIONS',
+        },
+        {
+          key: 'Access-Control-Allow-Headers',
+          value: 'Content-Type, Authorization',
+        },
+      ],
     },
   ],
 } satisfies NextConfig
