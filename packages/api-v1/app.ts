@@ -1,13 +1,17 @@
 import type {CreateFetchHandlerOptions} from './trpc/handlers'
 
+import {cors} from '@elysiajs/cors'
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
-import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './trpc/handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
+import {
+  createFetchHandlerOpenAPI,
+  createFetchHandlerTRPC,
+} from './trpc/handlers'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CreateAppOptions
@@ -16,6 +20,7 @@ export interface CreateAppOptions
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
 export function createApp(opts: CreateAppOptions) {
   const app = new Elysia()
+    .use(cors())
     .get('/health', () => ({healthy: true}), {detail: {hide: true}})
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
       detail: {hide: true},

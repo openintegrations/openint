@@ -15,9 +15,19 @@ export default {
     openint_scopes: ['users:read'],
     scopes: [
       {
+        scope: 'app_mentions:read',
+        description:
+          'Allows the app to view messages that directly mention the app in channels it has access to.',
+      },
+      {
         scope: 'channels:read',
         description:
           'Allows the app to view basic information about public channels in the workspace, including channel names, topics, and purposes.',
+      },
+      {
+        scope: 'channels:history',
+        description:
+          'Allows the app to view messages and other content in public channels.',
       },
       {
         scope: 'channels:write',
@@ -35,6 +45,16 @@ export default {
           'Allows the app to add custom slash commands that users can invoke in Slack.',
       },
       {
+        scope: 'im:history',
+        description:
+          'Allows the app to view messages and other content in direct messages.',
+      },
+      {
+        scope: 'im:write',
+        description:
+          'Allows the app to start direct message conversations with users.',
+      },
+      {
         scope: 'users:read',
         description:
           'Allows the app to view basic information about users in the workspace, including names, emails, and avatars.',
@@ -43,6 +63,11 @@ export default {
         scope: 'users:read.email',
         description:
           'Allows the app to view email addresses of users in the workspace (in addition to basic user information).',
+      },
+      {
+        scope: 'users.profile:read',
+        description:
+          "Allows the app to view users' profile details, including custom profile fields.",
       },
       {
         scope: 'admin',
