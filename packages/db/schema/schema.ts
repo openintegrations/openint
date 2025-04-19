@@ -1,4 +1,5 @@
 import type {ConnectorName} from '@openint/all-connectors/name'
+import type {ZStandard} from '@openint/cdk'
 
 import {sql} from 'drizzle-orm'
 import {
@@ -34,10 +35,12 @@ export const connection = pgTable(
       .$type<ConnectorName>()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     customer_id: varchar(),
-    connector_config_id: varchar().notNull(),
+    connector_config_id: varchar(), // .notNull(), // Currently nullible
     integration_id: varchar(),
-    /** @deprecated Not sure if we want this */
+    /** @deprecated Not sure if we want this. Shouldn't it be genereated? */
     env_name: varchar(),
+    status: varchar().$type<ZStandard['connection']['status']>(),
+    status_message: varchar(),
     settings: jsonb().default({}).notNull().$type<any>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()

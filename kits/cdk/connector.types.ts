@@ -7,7 +7,7 @@ import type {
 import type {MaybePromise} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import type {
-  CheckConnectionContext,
+  BaseContext,
   CheckConnectionOptions,
   ConnectContext,
   ConnectionUpdate,
@@ -101,8 +101,9 @@ export interface ConnectorServer<
    */
   newInstance?: (opts: {
     config: T['_types']['connector_config']
-    settings: T['_types']['connection_settings']
+    settings: T['_types']['connection_settings'] | undefined
     fetchLinks: FetchLink[]
+    context: BaseContext
     /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
     onSettingsChange: (
       newSettings: T['_types']['connection_settings'],
@@ -112,12 +113,14 @@ export interface ConnectorServer<
   // MARK: - Connect
 
   preConnect?: (opts: {
+    instance: TInstance
     config: T['_types']['connector_config']
     context: ConnectContext<T['_types']['connection_settings']>
     input: T['_types']['pre_connect_input']
   }) => Promise<T['_types']['connect_input']>
 
   postConnect?: (opts: {
+    instance: TInstance
     connectOutput: T['_types']['connect_output']
     config: T['_types']['connector_config']
     context: ConnectContext<T['_types']['connection_settings']>
@@ -130,11 +133,11 @@ export interface ConnectorServer<
 
   checkConnection?: (
     opts: OmitNever<{
+      instance: TInstance
       settings: T['_types']['connection_settings']
       config: T['_types']['connector_config']
       options: CheckConnectionOptions
-      context: CheckConnectionContext
-      instance?: TInstance
+      context: BaseContext
     }>,
   ) => MaybePromise<
     Omit<
@@ -143,12 +146,14 @@ export interface ConnectorServer<
     >
   >
 
-  // This probably need to also return an observable
   revokeConnection?: (opts: {
+    instance: TInstance
     settings: T['_types']['connection_settings']
     config: T['_types']['connector_config']
-    instance: TInstance
   }) => Promise<unknown>
+
+  // TODO: Add a triggerEventForTesting method with
+  // sandboxSimulateUpdate and sandboxSimulateDisconnect
 
   // MARK: - Sync
 
@@ -168,11 +173,6 @@ export interface ConnectorServer<
     }>
   }>
 
-  refreshConnection?: (opts: {
-    settings: T['_types']['connection_settings']
-    config: T['_types']['connector_config']
-  }) => Promise<T['_types']['connection_settings']>
-
   // MARK - Webhook
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
@@ -185,8 +185,6 @@ export interface ConnectorServer<
     WebhookReturnType<AnyEntityPayload, T['_types']['connection_settings']>
   >
 
-  /** Passthrough request proxy */
-  /** @deprecated */
   proxy?: (opts: {instance: TInstance; req: Request}) => Promise<Response>
 }
 

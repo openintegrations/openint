@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 
 import {useState} from 'react'
 import {Skeleton, Switch} from '@openint/shadcn/ui'
-import ConnectorScopes from './ConnectorScopes'
+import {ConnectorScopes} from './ConnectorScopes'
 
 const meta: Meta<typeof ConnectorScopes> = {
   component: ConnectorScopes,

@@ -6,7 +6,7 @@ import {initCodaSDK} from '@opensdks/sdk-coda'
 
 export const codaServer = {
   newInstance({settings}) {
-    return initCodaSDK({headers: {Authorization: `Bearer ${settings.apiKey}`}})
+    return initCodaSDK({headers: {Authorization: `Bearer ${settings!.apiKey}`}})
   },
 
   async proxy({instance, req}) {

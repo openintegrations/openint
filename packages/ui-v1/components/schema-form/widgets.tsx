@@ -1,6 +1,6 @@
 import type {RegistryWidgetsType, WidgetProps} from '@rjsf/utils'
 
-import ConnectorScopes from '../ConnectorScopes'
+import {ConnectorScopes} from '../ConnectorScopes'
 import {MultiSelectWidget} from './widgets/MultiSelectWidget'
 
 export function ScopesWidget(props: WidgetProps<string[]>) {

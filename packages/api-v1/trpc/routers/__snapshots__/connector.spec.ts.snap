@@ -133,6 +133,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -321,6 +322,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -806,6 +808,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -1045,6 +1048,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -1266,6 +1270,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -2043,6 +2048,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -2262,6 +2268,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -2462,6 +2469,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -2662,6 +2670,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -2866,6 +2875,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -3078,6 +3088,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -3290,6 +3301,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -3613,6 +3625,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -3866,6 +3879,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -4078,6 +4092,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -4286,6 +4301,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -4490,6 +4506,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -4720,6 +4737,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -4963,6 +4981,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -5465,6 +5484,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -5790,6 +5810,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -6000,6 +6021,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -6533,6 +6555,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -6856,6 +6879,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -7112,6 +7136,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -7399,6 +7424,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -7614,6 +7640,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     ],
                   },
                   "redirect_uri": {
+                    "description": "Custom redirect URI",
                     "type": [
                       "string",
                       "null",
@@ -8503,6 +8530,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -8857,6 +8885,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",
@@ -9292,6 +9321,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "redirect_uri": {
+                "description": "Custom redirect URI",
                 "type": [
                   "string",
                   "null",

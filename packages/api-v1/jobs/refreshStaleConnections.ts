@@ -43,9 +43,7 @@ export async function refreshStaleConnections(
         `),
         lt(
           sql`
-            (
-              connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at'
-            )::timestamp
+            (connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at')::timestamp
           `,
           new Date(Date.now() + expiryWindow),
         ),
@@ -82,19 +80,26 @@ export async function refreshStaleConnections(
           const connector = connectors[
             connection.connection.connector_name as keyof typeof connectors
           ] as ConnectorServer
-          if (!connector?.refreshConnection) {
+          if (!connector?.checkConnection) {
             return
           }
 
           try {
-            const refreshedSettings = await connector.refreshConnection({
+            // TODO: Fix em
+
+            const connUpdate = await connector.checkConnection({
               settings: connection.connection.settings,
               config: connection.connector_config.config,
+              options: {},
+              instance: undefined,
+              context: {} as never,
             })
             await db
               .update(schema.connection)
               .set({
-                settings: refreshedSettings,
+                settings: connUpdate.settings,
+                status: connUpdate.status,
+                status_message: connUpdate.status_message,
                 updated_at: new Date().toISOString(),
               })
               .where(eq(schema.connection.id, connection.connection.id))

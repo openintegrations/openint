@@ -53,14 +53,16 @@ export function zFlattenForEnv<T extends Z.ZodTypeAny>(
     }),
   )
 
-  return flatSchema.transform(
-    zGuard((input) => {
-      const nested: Record<string, unknown> = unflattenEnv(input, {separator})
-      // console.log('beforeafter', input, nested, prefix)
-      // Notably this does not work with optional...
-      return schema.parse(prefix ? nested[prefix] : nested) as unknown
-    }),
-  )
+  return flatSchema
+    .transform(
+      zGuard((input) => {
+        const nested: Record<string, unknown> = unflattenEnv(input, {separator})
+        // console.log('beforeafter', input, nested, prefix)
+        // Notably this does not work with optional...
+        return schema.parse(prefix ? nested[prefix] : nested) as unknown
+      }),
+    )
+    .openapi({effectType: 'input'})
 }
 
 // TODO: Can we convert to JSON schema and flatten that instead?
@@ -148,7 +150,8 @@ function flattenShapeForEnv<T extends Z.ZodTypeAny>(
               hint && schema.description && ' - ',
               schema.description,
             ]).join(''),
-          ),
+          )
+          .openapi({effectType: 'input'}),
   }
 }
 

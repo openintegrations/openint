@@ -32,31 +32,29 @@ export function createOAuth2ConnectorServer<
 
   // Create the base server implementation
   const baseServer = {
-    newInstance: ({config, settings}) =>
+    newInstance: ({config, settings, context}) =>
       getClient({
         connectorName: connectorDef.name,
         oauthConfigTemplate,
         connectorConfig: config,
         connectionSettings: settings,
-        fetch: undefined,
-        baseURLs: {api: '', console: '', connect: ''},
+        fetch: context.fetch,
+        baseURLs: context.baseURLs,
       }),
 
-    async preConnect({config, context, input}) {
+    async preConnect({
+      config,
+      context,
+      input,
+      instance: {client, oauthConfig},
+    }) {
       const connectionId =
         input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
 
       console.log(
         `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
+        config,
       )
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: undefined,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
 
       const codeChallenge = oauthConfig.code_challenge_method
         ? {
@@ -66,7 +64,8 @@ export function createOAuth2ConnectorServer<
         : undefined
 
       const authorizeUrl = await client.getAuthorizeUrl({
-        redirect_uri: env.OAUTH_REDIRECT_URI_GATEWAY,
+        redirect_uri:
+          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -89,7 +88,11 @@ export function createOAuth2ConnectorServer<
       }
     },
 
-    async postConnect({connectOutput, config, context}) {
+    async postConnect({
+      connectOutput,
+      config,
+      instance: {client, oauthConfig},
+    }) {
       const state = z
         .object({
           connection_id: z.string(),
@@ -100,19 +103,11 @@ export function createOAuth2ConnectorServer<
       console.log(
         `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
       )
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: undefined,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
-      // console.log(`oauthConfig`, oauthConfig)
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
-        redirectUri: env.OAUTH_REDIRECT_URI_GATEWAY,
+        redirect_uri:
+          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
@@ -134,58 +129,19 @@ export function createOAuth2ConnectorServer<
           },
         },
         integration: undefined, // TODO: add integration
+        status: 'healthy',
+        status_message: null,
       }
     },
 
-    async refreshConnection({settings, config}) {
-      const refreshToken = settings?.oauth?.credentials?.refresh_token
-      if (!refreshToken) {
-        throw new Error('No refresh token available for this connection')
-      }
-
-      console.log(`Oauth2 Refresh connection called`)
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass context
-        baseURLs: {api: '', console: '', connect: ''},
-      })
-      const res = await client.refreshToken({
-        refresh_token: refreshToken,
-        additional_params: oauthConfig.params_config.refresh,
-      })
-
-      return {
-        oauth: {
-          credentials: {
-            client_id: client.config.clientId,
-            access_token: res.access_token,
-            refresh_token: res.refresh_token,
-            expires_in: res.expires_in,
-            raw: res,
-            scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
-            token_type: undefined, // What should this be?
-          },
-        },
-      } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
-    },
-
-    async checkConnection({settings, config}) {
+    async checkConnection({settings, config, instance}) {
+      const {client, oauthConfig} = instance
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {
         throw new Error('No access token available')
       }
 
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass consistent context with fetch inside
-        baseURLs: {api: '', console: '', connect: ''},
-      })
+      console.log('[oauth2] Check connection called', oauthConfig)
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =
         settings.oauth.credentials
@@ -194,13 +150,30 @@ export function createOAuth2ConnectorServer<
       const shouldRefreshToken = isTokenExpired || refreshToken
 
       if (shouldRefreshToken) {
-        if (!refreshToken || !this.refreshConnection) {
+        if (!refreshToken) {
           throw new Error('Token expired and no refresh token available')
         }
-
         try {
+          const res = await client.refreshToken({
+            refresh_token: refreshToken,
+            additional_params: oauthConfig.params_config.refresh,
+          })
+          const settings = {
+            oauth: {
+              credentials: {
+                client_id: client.config.clientId,
+                access_token: res.access_token,
+                refresh_token: res.refresh_token,
+                expires_in: res.expires_in,
+                raw: res,
+                scope:
+                  res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
+                token_type: undefined, // What should this be?
+              },
+            },
+          } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
           // Attempt to refresh the token
-          return {settings: await this.refreshConnection({settings, config})}
+          return {settings, status: 'healthy', status_message: null}
         } catch (error: unknown) {
           throw new Error(`Failed to refresh token: ${error}`)
         }
@@ -210,9 +183,11 @@ export function createOAuth2ConnectorServer<
           additional_params: oauthConfig.params_config.introspect,
         })
         if (res.active) {
-          return {settings}
+          return {settings, status: 'healthy', status_message: null}
         } else {
-          throw new Error('Token is not active')
+          console.log('[oauth2] Token introspection failed', res)
+          // Should this be revoked?
+          return {settings, status: 'disconnected', status_message: null}
         }
       }
       // TODO: Return proper `status` for connection
@@ -223,17 +198,10 @@ export function createOAuth2ConnectorServer<
       // for now we're just going to check if the token is expired and try to refresh it
       // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
 
-      return {settings}
+      return {settings, status: 'healthy', status_message: null}
     },
-    revokeConnection: async ({settings, config}) => {
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass consistent context with fetch inside
-        baseURLs: {api: '', console: '', connect: ''},
-      })
+
+    revokeConnection: async ({settings, instance: {client, oauthConfig}}) => {
       if (!settings.oauth.credentials?.access_token) {
         throw new Error('No access token available')
       }
@@ -245,7 +213,13 @@ export function createOAuth2ConnectorServer<
         additional_params: oauthConfig.params_config.revoke,
       })
     },
-  } satisfies ConnectorServer<typeof oauth2Schemas & {name: T['name']}>
+  } satisfies ConnectorServer<
+    typeof oauth2Schemas & {name: T['name']},
+    ReturnType<typeof getClient>
+  >
 
-  return baseServer as unknown as ConnectorServer<ConnectorDef<T>['schemas']>
+  return baseServer as unknown as ConnectorServer<
+    ConnectorDef<T>['schemas'],
+    ReturnType<typeof getClient>
+  >
 }
