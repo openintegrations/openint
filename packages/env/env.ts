@@ -67,7 +67,10 @@ export const envConfig = {
     /** One url to rule them all */
     NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY: z
       .string()
-      .default('https://connect.openint.dev/callback'),
+      .default('https://app.openint.dev/connect/callback'),
+    // TODO: Reset to this once we have fully update the redirect URLs and sunset v0
+    // .default('https://connect.openint.dev/callback'),
+
     // Useful later for when we switch to asymmetric jwt rather than symmetric ones
     // JWT_PRIVATE_KEY: z.string().optional(),
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
