@@ -35,15 +35,13 @@ interface ConnectorScopesProps {
   scopes: string[]
 }
 
-const RequestLink: FC<{className?: string; connectorName: string}> = ({
-  className,
-  connectorName,
-}) => (
+const RequestLink: FC<{className?: string}> = ({className}) => (
   <div className={cn('flex items-center text-sm text-gray-500', className)}>
     <Info className="mr-1 size-4" />
     <span>Need new scopes?</span>
+    {/* TODO: @rodrigo - Add connector name to the email title and body */}
     <a
-      href={`mailto:support@openint.dev?subject=Add%20scopes%20to%20${connectorName}&body=I%20require%20the%20following%20scopes%20to%20be%20added%20to%20${connectorName}:\n\n`}
+      href={`mailto:support@openint.dev?subject=Add%20OpenInt%20scopes%20to%20&body=I%20require%20the%20following%20scopes%20to%20be%20added%20to%20:\n\n`}
       className="text-primary ml-1 cursor-pointer border-none bg-transparent p-1 hover:underline">
       Request Scopes
     </a>
