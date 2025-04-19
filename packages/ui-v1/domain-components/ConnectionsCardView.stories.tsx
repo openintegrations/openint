@@ -1,99 +1,112 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import type {Core} from '@openint/api-v1/models'
+import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.models'
 
-import {ConnectionCardContent, ConnectionsCardView} from './ConnectionsCardView'
+import {ConnectionsCardView} from './ConnectionsCardView'
 
-const meta: Meta<typeof ConnectionsCardView> = {
-  title: 'DOMAIN COMPONENTS/ConnectionsCardView',
+const meta = {
+  title: 'Domain Components/ConnectionsCardView',
   component: ConnectionsCardView,
   parameters: {
     layout: 'centered',
   },
-  argTypes: {
-    connection: {
-      control: 'object',
-      description: 'Connection object containing all connection details',
-    },
-  },
-}
-
-// Mock connection object generator
-const createMockConnection = (
-  id: string,
-  customerId: string,
-  connectorConfigId: string,
-): Core['connection_select'] => {
-  const connectorName = id.split('_')[1]
-  if (!connectorName) {
-    throw new Error('Invalid connection ID')
-  }
-  return {
-    id,
-    customer_id: customerId,
-    connector_config_id: connectorConfigId,
-    created_at: '2023-09-12T12:00:00Z',
-    updated_at: '2023-09-12T12:00:00Z',
-    display_name: null,
-    disabled: false,
-    integration_id: null,
-    connector_name: connectorName,
-    settings: {
-      type: 'oauth',
-      oauth: {
-        access_token: 'mock_access_token',
-        refresh_token: 'mock_refresh_token',
-        expires_at: '2023-09-13T12:00:00Z',
-      },
-    },
-    metadata: null,
-  }
-}
+  tags: ['autodocs'],
+} satisfies Meta<typeof ConnectionsCardView>
 
 export default meta
 type Story = StoryObj<typeof ConnectionsCardView>
 
-// Basic example
+// Mock connection data
+const mockConnection: ConnectionExpanded = {
+  id: 'conn_123',
+  customer_id: 'cust_456',
+  connector_config_id: 'config_789',
+  connector_name: 'salesforce',
+  status: 'healthy',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  disabled: null,
+  integration_id: null,
+  display_name: null,
+}
+
+// Basic usage
 export const Default: Story = {
   args: {
-    connection: createMockConnection(
-      'conn_salesforce',
-      'cust_123',
-      'config_123',
-    ),
+    connection: mockConnection,
   },
 }
 
-// Example with warning status
-export const WarningStatus: Story = {
+// Connection with disconnected status
+export const DisconnectedStatus: Story = {
   args: {
-    connection: createMockConnection('conn_hubspot', 'cust_456', 'config_456'),
+    connection: {
+      ...mockConnection,
+      status: 'disconnected',
+    },
   },
 }
 
-// Example with offline status
-export const OfflineStatus: Story = {
+// Connection with error status
+export const ErrorStatus: Story = {
   args: {
-    connection: createMockConnection('conn_stripe', 'cust_789', 'config_789'),
+    connection: {
+      ...mockConnection,
+      status: 'error',
+    },
   },
 }
 
-// Example with destructive status
-export const DestructiveStatus: Story = {
+// Connection with manual status
+export const ManualStatus: Story = {
   args: {
-    connection: createMockConnection('conn_zapier', 'cust_012', 'config_012'),
+    connection: {
+      ...mockConnection,
+      status: 'manual',
+    },
   },
 }
 
-// Story that just shows the card content
-export const CardContent: Story = {
+// Connection with non-existent connector (will show fallback)
+export const NonExistentConnector: Story = {
+  args: {
+    connection: {
+      ...mockConnection,
+      connector_name: 'non-existent-connector',
+    },
+  },
+}
+
+// Multiple connections
+export const MultipleConnections: Story = {
   render: () => (
-    <div className="w-[400px]">
-      <ConnectionCardContent
-        connection={createMockConnection(
-          'conn_salesforce',
-          'cust_123',
-          'config_123',
-        )}
+    <div className="flex flex-col gap-4">
+      <ConnectionsCardView
+        connection={{
+          ...mockConnection,
+          connector_name: 'salesforce',
+          status: 'healthy',
+        }}
+      />
+      <ConnectionsCardView
+        connection={{
+          ...mockConnection,
+          connector_name: 'plaid',
+          status: 'disconnected',
+        }}
+      />
+      <ConnectionsCardView
+        connection={{
+          ...mockConnection,
+          connector_name: 'mercury',
+          status: 'error',
+        }}
+      />
+      <ConnectionsCardView
+        connection={{
+          ...mockConnection,
+          connector_name: 'non-existent-connector',
+          status: 'manual',
+        }}
       />
     </div>
   ),
@@ -107,54 +120,32 @@ export const AllVariants: Story = {
         <h3 className="text-sm font-medium text-gray-500">Default Variants</h3>
         <div className="flex flex-col gap-4">
           <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_salesforce',
-              'cust_123',
-              'config_123',
-            )}
+            connection={{
+              ...mockConnection,
+              connector_name: 'salesforce',
+              status: 'healthy',
+            }}
           />
           <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_hubspot',
-              'cust_456',
-              'config_456',
-            )}
+            connection={{
+              ...mockConnection,
+              connector_name: 'plaid',
+              status: 'disconnected',
+            }}
           />
           <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_stripe',
-              'cust_789',
-              'config_789',
-            )}
+            connection={{
+              ...mockConnection,
+              connector_name: 'mercury',
+              status: 'error',
+            }}
           />
           <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_zapier',
-              'cust_012',
-              'config_012',
-            )}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-gray-500">
-          With Custom Properties
-        </h3>
-        <div className="flex flex-col gap-4">
-          <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_salesforce',
-              'cust_345',
-              'config_345',
-            )}
-          />
-          <ConnectionsCardView
-            connection={createMockConnection(
-              'conn_hubspot',
-              'cust_678',
-              'config_678',
-            )}
+            connection={{
+              ...mockConnection,
+              connector_name: 'non-existent-connector',
+              status: 'manual',
+            }}
           />
         </div>
       </div>
