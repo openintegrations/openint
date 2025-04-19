@@ -4,7 +4,6 @@ import type React from 'react'
 
 import Image from 'next/image'
 import {useState} from 'react'
-import {toast} from 'sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +25,7 @@ import {
 import {Dialog, DialogContent, DialogTitle} from '@openint/shadcn/ui/dialog'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
+import {toast} from '@openint/shadcn/ui/sonner'
 
 type OnboardingStep = 'organization' | 'connector'
 type ConnectorName = 'github' | 'calendar' | 'slack'
