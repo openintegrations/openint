@@ -67,6 +67,7 @@ export const zConnectOptions = z.object({
   // userId: UserId,
   /** Noop if `connectionId` is specified */
   integrationExternalId: zExternalId.nullish(),
+  /** @deprecated . use the `connection` property instead */
   connectionExternalId: zExternalId.nullish(),
 })
 
@@ -97,21 +98,8 @@ export type UseConnectHook<T extends ConnHelpers = ConnHelpers> = (scope: {
 
 // MARK: - Server side connect types
 
-export interface CheckConnectionContext {
+export interface BaseContext {
   webhookBaseUrl: string
-}
-
-/** Context providers get during the connection establishing phase */
-export interface ConnectContext<TSettings>
-  extends Omit<ConnectOptions, 'connectionExternalId' | 'envName'>,
-    CheckConnectionContext {
-  extCustomerId: ExtCustomerId
-  /** Used for OAuth based integrations, e.g. https://plaid.com/docs/link/oauth/#create-and-register-a-redirect-uri */
-  redirectUrl?: string
-  connection?: {
-    externalId: ExternalId
-    settings: TSettings
-  } | null
   baseURLs: {
     api: string
     console: string
@@ -119,6 +107,17 @@ export interface ConnectContext<TSettings>
   }
   /** Custom fetch, typically for testing purposes */
   fetch?: (req: Request) => Promise<Response>
+}
+
+/** Context providers get during the connection establishing phase */
+export interface ConnectContext<TSettings> extends ConnectOptions, BaseContext {
+  extCustomerId: ExtCustomerId
+  /** Used for OAuth based integrations, e.g. https://plaid.com/docs/link/oauth/#create-and-register-a-redirect-uri */
+  redirectUrl?: string
+  connection?: {
+    externalId: ExternalId
+    settings: TSettings
+  } | null
 }
 
 // TODO: We should rename `provider` to `integration` given that they are both

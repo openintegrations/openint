@@ -94,7 +94,7 @@ const tokenRes = $test('exchange code for tokens', async () => {
   // Use OAuth2Client to exchange code for tokens
   const res = await oauthClient.exchangeCodeForToken({
     code: authorizeRes.current.code,
-    redirectUri: client.redirectUris[0],
+    redirect_uri: client.redirectUris[0],
     code_verifier: codeVerifier,
   })
 

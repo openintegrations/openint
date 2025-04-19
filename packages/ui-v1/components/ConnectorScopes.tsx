@@ -250,5 +250,3 @@ export function ConnectorScopes({
     </TooltipProvider>
   )
 }
-
-export default ConnectorScopes

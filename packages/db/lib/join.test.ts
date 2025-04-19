@@ -41,6 +41,8 @@ test('query with to-many joins', async () => {
                 "connector_config_connections"."connector_config_id",
                 "connector_config_connections"."integration_id",
                 "connector_config_connections"."env_name",
+                "connector_config_connections"."status",
+                "connector_config_connections"."status_message",
                 "connector_config_connections"."settings",
                 "connector_config_connections"."created_at",
                 "connector_config_connections"."updated_at",
