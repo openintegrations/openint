@@ -690,9 +690,18 @@
                           ]
                         },
                         "connector_config_id": {
-                          "type": "string"
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         },
                         "integration_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "status_message": {
                           "type": [
                             "string",
                             "null"
@@ -714,6 +723,19 @@
                           "type": [
                             "boolean",
                             "null"
+                          ]
+                        },
+                        "status": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "healthy",
+                            "disconnected",
+                            "error",
+                            "manual",
+                            null
                           ]
                         },
                         "metadata": {
@@ -975,16 +997,6 @@
                       "properties": {
                         "connector": {
                           "$ref": "#/components/schemas/core.connector"
-                        },
-                        "status": {
-                          "type": "string",
-                          "enum": [
-                            "healthy",
-                            "disconnected",
-                            "error",
-                            "manual"
-                          ],
-                          "description": "Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)"
                         },
                         "integration": {
                           "$ref": "#/components/schemas/core.integration_select"
@@ -1265,9 +1277,18 @@
                                 ]
                               },
                               "connector_config_id": {
-                                "type": "string"
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
                               },
                               "integration_id": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "status_message": {
                                 "type": [
                                   "string",
                                   "null"
@@ -1289,6 +1310,19 @@
                                 "type": [
                                   "boolean",
                                   "null"
+                                ]
+                              },
+                              "status": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "enum": [
+                                  "healthy",
+                                  "disconnected",
+                                  "error",
+                                  "manual",
+                                  null
                                 ]
                               },
                               "metadata": {
@@ -1550,16 +1584,6 @@
                             "properties": {
                               "connector": {
                                 "$ref": "#/components/schemas/core.connector"
-                              },
-                              "status": {
-                                "type": "string",
-                                "enum": [
-                                  "healthy",
-                                  "disconnected",
-                                  "error",
-                                  "manual"
-                                ],
-                                "description": "Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)"
                               },
                               "integration": {
                                 "$ref": "#/components/schemas/core.integration_select"
@@ -1982,119 +2006,6 @@
         }
       }
     },
-    "/connection/{id}/check": {
-      "post": {
-        "operationId": "checkConnection",
-        "summary": "Check Connection Health",
-        "description": "Verify that a connection is healthy",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "The id of the connection, starts with `conn_`",
-            "schema": {
-              "type": "string",
-              "pattern": "^conn_",
-              "description": "The id of the connection, starts with `conn_`"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "pattern": "^conn_",
-                      "description": "The id of the connection, starts with `conn_`"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "healthy",
-                        "disconnected",
-                        "error",
-                        "manual"
-                      ],
-                      "description": "Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)"
-                    },
-                    "error": {
-                      "type": "string",
-                      "enum": [
-                        "refresh_failed",
-                        "unknown_external_error"
-                      ],
-                      "description": "Error types: refresh_failed and unknown_external_error"
-                    },
-                    "errorMessage": {
-                      "type": "string",
-                      "description": "Optional expanded error message"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "status"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/customer/{customer_id}/magic-link": {
       "post": {
         "operationId": "createMagicLink",
@@ -2322,6 +2233,113 @@
                   },
                   "required": [
                     "token"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/connection/{id}/check": {
+      "post": {
+        "operationId": "checkConnection",
+        "summary": "Check Connection Health",
+        "description": "Verify that a connection is healthy",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The id of the connection, starts with `conn_`",
+            "schema": {
+              "type": "string",
+              "pattern": "^conn_",
+              "description": "The id of the connection, starts with `conn_`"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "healthy",
+                        "disconnected",
+                        "error",
+                        "manual",
+                        null
+                      ]
+                    },
+                    "status_message": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id"
                   ]
                 }
               }
@@ -2688,16 +2706,6 @@
       }
     },
     "schemas": {
-      "AuthMode": {
-        "type": "string",
-        "enum": [
-          "OAUTH2",
-          "OAUTH1",
-          "BASIC",
-          "API_KEY"
-        ],
-        "title": "AuthMode"
-      },
       "connector.acme-oauth2.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -2819,7 +2827,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -2958,7 +2967,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -3033,144 +3043,12 @@
           "settings": {
             "type": "object",
             "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
+              "api_key": {
+                "type": "string"
               }
             },
             "required": [
-              "oauth"
+              "api_key"
             ]
           }
         },
@@ -3435,7 +3313,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -3574,7 +3453,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -3713,7 +3593,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4162,7 +4043,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4307,7 +4189,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4446,7 +4329,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4585,7 +4469,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4724,7 +4609,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -4863,7 +4749,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5002,7 +4889,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5227,7 +5115,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5366,7 +5255,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5505,7 +5395,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5644,7 +5535,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5783,7 +5675,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -5922,7 +5815,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -6061,7 +5955,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -6403,7 +6298,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -6620,7 +6516,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -6765,7 +6662,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -7137,7 +7035,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -7353,7 +7252,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -7492,7 +7392,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -7680,7 +7581,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -7819,7 +7721,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -8376,7 +8279,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -8638,7 +8542,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -8966,7 +8871,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Custom redirect URI"
                   }
                 },
                 "description": "Base oauth configuration for the connector",
@@ -8999,9 +8905,18 @@
                 ]
               },
               "connector_config_id": {
-                "type": "string"
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "integration_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status_message": {
                 "type": [
                   "string",
                   "null"
@@ -9023,6 +8938,19 @@
                 "type": [
                   "boolean",
                   "null"
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "healthy",
+                  "disconnected",
+                  "error",
+                  "manual",
+                  null
                 ]
               },
               "metadata": {
