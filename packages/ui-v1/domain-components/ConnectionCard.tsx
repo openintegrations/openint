@@ -1,17 +1,12 @@
 import type {ConnectionExpanded} from '@openint/api-v1/models'
 
-import {
-  AlertCircle,
-  CheckCircle2,
-  HelpCircle,
-  Settings,
-  XCircle,
-} from 'lucide-react'
+import {Settings} from 'lucide-react'
 import Image from 'next/image'
 import {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Badge, Card, CardContent} from '@openint/shadcn/ui'
+import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
+import {ConnectionStatusBadge, getConnectionStatusStyles} from './ConnectionStatusBadge'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -38,12 +33,7 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
-  const {
-    icon: StatusIcon,
-    label,
-    color,
-    borderColor,
-  } = getStatusStyles(connection.status)
+  const {borderColor} = getConnectionStatusStyles(connection.status)
 
   return (
     <Card
@@ -88,10 +78,7 @@ export function ConnectionCard({
                   {connection.id}
                 </pre>
               )}
-              <Badge variant="secondary" className={cn('mt-2 gap-1', color)}>
-                <StatusIcon className="h-3.5 w-3.5" />
-                <span>{label}</span>
-              </Badge>
+              <ConnectionStatusBadge status={connection.status} />
             </>
           )}
         </div>
@@ -99,38 +86,4 @@ export function ConnectionCard({
       </CardContent>
     </Card>
   )
-}
-
-const getStatusStyles = (status: ConnectionExpanded['status']) => {
-  switch (status) {
-    case 'healthy':
-      return {
-        icon: CheckCircle2,
-        label: 'Connected',
-        color: 'bg-green-100 text-green-800 hover:bg-green-100/80',
-        borderColor: 'border-green-200',
-      }
-    case 'error':
-      return {
-        icon: AlertCircle,
-        label: 'Error',
-        color: 'bg-red-100 text-red-800 hover:bg-red-100/80',
-        borderColor: 'border-red-200',
-      }
-    case 'disconnected':
-      return {
-        icon: XCircle,
-        label: 'Disconnected',
-        color: 'bg-amber-100 text-amber-800 hover:bg-amber-100/80',
-        borderColor: 'border-amber-200',
-      }
-    case 'manual':
-    default:
-      return {
-        icon: HelpCircle,
-        label: 'Manual',
-        color: 'bg-gray-100 text-gray-800 hover:bg-gray-100/80',
-        borderColor: 'border-gray-200',
-      }
-  }
 }
