@@ -133,6 +133,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Salesforce Connection',
+    status: 'healthy',
   },
   'salesforce-with-integration': {
     id: 'conn_salesforce_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -164,6 +165,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Salesforce No Logo',
+    status: 'healthy',
   },
   'hubspot-basic': {
     id: 'conn_hubspot_01HN4QZXG7YPBR8MXQT4KBWQ5N',
