@@ -20,19 +20,10 @@ import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 /** TODO: move into ui-v1 */
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
-    id: 'id',
-    header: 'id',
+    accessorKey: 'id',
     cell: ({row}) => {
       const connection = row.original
-
-      // Pass only what we have to ConnectionTableCell
-      return (
-        <ConnectionTableCell
-          connection={connection}
-          // We don't have status from listConnections API, would need to call checkConnection
-          // to get the actual status for each connection
-        />
-      )
+      return <ConnectionTableCell connection={connection} />
     },
   },
   {
@@ -44,24 +35,21 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 
   {
-    id: 'connector_name',
     header: 'Connector',
     accessorKey: 'connector.name',
   },
   {
-    id: 'customer_id',
+    accessorKey: 'customer_id',
     header: 'Customer',
     cell: ({row}) => (
       <CopyID value={row.original.customer_id!} size="compact" width="auto" />
     ),
   },
   {
-    id: 'created_at',
     header: 'Created At',
     accessorKey: 'created_at',
   },
   {
-    id: 'updated_at',
     header: 'Updated At',
     accessorKey: 'updated_at',
   },
