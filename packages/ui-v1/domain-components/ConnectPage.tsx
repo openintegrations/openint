@@ -3,8 +3,8 @@
 import {ChevronDown} from 'lucide-react'
 import {useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
+import {toast} from '@openint/shadcn/ui/sonner'
 import {JSONSchemaForm} from '../components/schema-form'
-import {toast} from '../components/toast'
 
 // Define the type for the trpc response
 interface MagicLinkResponse {

@@ -4,7 +4,7 @@ import type {InputProps} from '@openint/shadcn/ui'
 
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
-import {Button, Input, Label, useToast} from '@openint/shadcn/ui'
+import {Button, Input, Label, toast} from '@openint/shadcn/ui'
 
 interface SecureInputProps extends Omit<InputProps, 'type'> {
   label?: string
@@ -24,7 +24,6 @@ export function SecureInput({
 }: SecureInputProps) {
   const [showingValue, setShowValue] = useState(showValue)
   const [copied, setCopied] = useState(false)
-  const {toast} = useToast()
 
   const toggleValueVisibility = () => {
     if (showingValue) {
