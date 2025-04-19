@@ -166,6 +166,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const settings = oauth2Schemas.connection_settings.parse(res.settings)
       expect(res.status).toBe('healthy')
       expect(res.status_message).toBeNull()
+      expect(res.customer_id).toBe('cus_222')
       return {id: res.id, settings}
     })
 

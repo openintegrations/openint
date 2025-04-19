@@ -427,7 +427,7 @@ export const connectRouter = router({
           // QQ: should this parse the results of checkConnection somehow?
 
           // Can this happen after returning result? But what about read-after-write consistency?
-          await ctx.db
+          await ctx.asOrgIfCustomer.db
             .update(schema.connection)
             .set({
               status: res.status,
@@ -445,7 +445,7 @@ export const connectRouter = router({
           }
         } catch (error) {
           console.error('[connection] Check connection failed', error)
-          await ctx.db
+          await ctx.asOrgIfCustomer.db
             .update(schema.connection)
             .set({
               status: 'error',
