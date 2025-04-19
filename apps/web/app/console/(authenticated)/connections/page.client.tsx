@@ -6,7 +6,12 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMemo, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
+import {
+  CommandPopover,
+  ConnectionStatusBadge,
+  ConnectionTableCell,
+  CopyID,
+} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
@@ -30,6 +35,14 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
       )
     },
   },
+  {
+    accessorKey: 'status',
+    cell: ({row}) => {
+      const connection = row.original
+      return <ConnectionStatusBadge status={connection.status} />
+    },
+  },
+
   {
     id: 'connector_name',
     header: 'Connector',
