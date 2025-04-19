@@ -125,17 +125,26 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
   const trpcErr = error instanceof TRPCError ? error : undefined
   const zodErr = isZodError(trpcErr?.cause) ? trpcErr.cause : undefined
 
-  // console.log('errorFormatter', opts)
-  // console.log('error', error.message)
-
   return {
     ...shape,
-    ...(zodErr && error.message === 'Output validation failed'
-      ? {output_issues: zodErr.errors, output: zodErr.data}
-      : {}),
-    ...(zodErr && error.message === 'Input validation failed'
-      ? {issues: zodErr?.errors, input: zodErr.data}
-      : {}),
+    ...(() => {
+      if (!zodErr) {
+        return {}
+      }
+      if (error.message === 'Output validation failed') {
+        return {output_issues: zodErr.errors, output: zodErr.data}
+      }
+      if (error.message === 'Input validation failed') {
+        return {issues: zodErr.errors, input: zodErr.data}
+      }
+      return {
+        // uncomment me to debug issues during dev
+        // zodError: {
+        //   errors: zodErr.errors,
+        //   data: zodErr.data,
+        // },
+      }
+    })(),
   }
 }
 
@@ -160,10 +169,10 @@ export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   // console.log('onError', {error, path, input, ctx, type})
   Object.assign(error, {path})
   // TODO: Better way to check if it's an input error
-  const isInputError = z
+  const isZodError = z
     .object({issues: zZodIssues})
     .safeParse(safeJSONParse(error.message)).success
-  if (isInputError) {
+  if (isZodError && error.code === 'BAD_REQUEST') {
     Object.assign(error, {message: 'Input validation failed'})
   }
   // for client side error handling

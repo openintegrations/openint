@@ -126,7 +126,8 @@ export const connection = pgTable(
         )
       `,
     }),
-    pgPolicy('customer_access', {
+
+    pgPolicy('customer_access', { // technically this is customer_readonly_access
       to: 'customer',
       using: sql`
         (

@@ -30,6 +30,17 @@ export const generalRouter = router({
     .output(z.object({}).passthrough())
     .mutation(({input}) => ({input})),
 
+  // Uncomment me to debug server environment variables
+  // env: publicProcedure
+  //   .meta({openapi: {method: 'GET', path: '/env'}})
+  //   .input(z.void())
+  //   .output(z.object({}).passthrough())
+  //   .mutation(() => ({
+  //     env,
+  //     baseURLs: getBaseURLs(null),
+  //     serverURL: _getServerUrl(null),
+  //   })),
+
   viewer: publicProcedure
     .meta({
       openapi: {

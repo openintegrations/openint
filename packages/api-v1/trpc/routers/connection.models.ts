@@ -50,10 +50,10 @@ export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 /**
  * Formats a connection for API responses
  */
-export async function formatConnection(
+export function formatConnection(
   _ctx: any,
   connection: Core['connection_select'],
-  include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
+  _include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
   expand: Array<Z.infer<typeof zConnectionExpandOption>> = [],
 ) {
   const connector =
@@ -65,7 +65,7 @@ export async function formatConnection(
     })
   }
 
-  console.log('include_secrets', include_secrets)
+  // console.log('include_secrets', include_secrets)
 
   // Handle different levels of secret inclusion
   // the default is 'none' at which point settings should be an empty object
@@ -99,9 +99,13 @@ export async function formatConnection(
     }
   }
 
-  return {
+  const ret = {
     ...connection,
     // ...settingsToInclude, // buggy, fix me
     ...expandedFields,
   }
+  // DUring development, parse right here
+  // zConnectionExpanded.parse(ret)
+
+  return ret
 }

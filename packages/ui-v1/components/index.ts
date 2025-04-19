@@ -19,6 +19,5 @@ export * from './Spinner'
 export * from './StatusDot'
 export * from './tabs'
 export * from './ThemeProvider'
-export * from './toast'
 export * from './WebhookInput'
 // codegen:end

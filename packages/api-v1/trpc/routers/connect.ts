@@ -225,7 +225,6 @@ export const connectRouter = router({
     )
     .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
-      console.log('postConnect', input, ctx)
       // @pellicceama: Have another way to validate
       // const connectorNamesFromToken =
       //   ctx.viewer?.connectOptions?.connector_names ?? []
@@ -271,7 +270,6 @@ export const connectRouter = router({
           connectionExternalId: '', // TODO: Check on me....
         }))
 
-      console.log('postConnect', input, ctx, ccfg)
       const context = {
         webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
         extCustomerId: (ctx.viewer.role === 'customer'
@@ -298,7 +296,7 @@ export const connectRouter = router({
       const id = makeId(
         'conn',
         input.discriminated_data.connector_name,
-        makeUlid(),
+        connUpdate.connectionExternalId || makeUlid(),
       )
 
       // would be much nicer if this is the materialized schemas
@@ -356,20 +354,19 @@ export const connectRouter = router({
         }),
     )
     .mutation(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
+      const conn = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
       })
-      if (!connection || !connection.connector_config_id) {
+      if (!conn || !conn.connector_config_id) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Connection not found',
         })
       }
 
-      const credentialsRequiresRefresh = connection.settings.oauth?.credentials
+      const credentialsRequiresRefresh = conn.settings.oauth?.credentials
         ?.expires_at
-        ? new Date(connection.settings.oauth.credentials.expires_at) <
-          new Date()
+        ? new Date(conn.settings.oauth.credentials.expires_at) < new Date()
         : false
 
       if (credentialsRequiresRefresh) {
@@ -379,30 +376,24 @@ export const connectRouter = router({
       }
 
       const connector = serverConnectors[
-        connection.connector_name as keyof typeof serverConnectors
+        conn.connector_name as keyof typeof serverConnectors
       ] as ConnectorServer
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector not found for connection ${connection.id}`,
+          message: `Connector not found for connection ${conn.id}`,
         })
       }
 
-      if (
-        'checkConnection' in connector &&
-        typeof connector.checkConnection === 'function'
-      ) {
+      if (connector.checkConnection) {
         const ccfg =
           await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-            where: eq(
-              schema.connector_config.id,
-              connection.connector_config_id,
-            ),
+            where: eq(schema.connector_config.id, conn.connector_config_id),
           })
         if (!ccfg) {
           throw new TRPCError({
             code: 'NOT_FOUND',
-            message: `Connector config ${connection.connector_config_id} not found`,
+            message: `Connector config ${conn.connector_config_id} not found`,
           })
         }
         const context = {
@@ -424,26 +415,43 @@ export const connectRouter = router({
 
         try {
           const res = await connector.checkConnection({
-            settings: connection.settings,
+            settings: conn.settings,
             config: ccfg.config,
             options: {},
             instance,
             context,
           })
-          console.log('[connection] Check connection result', res)
+          // console.log('[connection] Check connection result', res)
           // QQ: should this parse the results of checkConnection somehow?
+
+          // Can this happen after returning result? But what about read-after-write consistency?
+          await ctx.asOrgIfCustomer.db
+            .update(schema.connection)
+            .set({
+              status: res.status,
+              status_message: res.status_message,
+              ...(res.settings && {settings: res.settings}),
+            })
+            .where(eq(schema.connection.id, conn.id))
 
           // TODO: persist the result of checkConnection for settings
           return {
             ...res,
-            id: connection.id,
+            id: conn.id,
             status: res.status ?? null,
             status_message: res.status_message ?? null,
           }
         } catch (error) {
           console.error('[connection] Check connection failed', error)
+          await ctx.asOrgIfCustomer.db
+            .update(schema.connection)
+            .set({
+              status: 'error',
+              status_message: 'Unable to check connection',
+            })
+            .where(eq(schema.connection.id, conn.id))
           return {
-            id: connection.id as `conn_${string}`,
+            id: conn.id as `conn_${string}`,
             status: 'disconnected',
             status_message: 'Unknown error',
           }
@@ -452,7 +460,7 @@ export const connectRouter = router({
 
       // QQ: should we return healthy by default even if there's no check connection implemented?
       return {
-        id: connection.id as `conn_${string}`,
+        id: conn.id as `conn_${string}`,
         status: 'healthy',
         status_message: null,
       }
