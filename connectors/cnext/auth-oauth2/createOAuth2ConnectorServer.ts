@@ -1,4 +1,4 @@
-import type {ConnectorDef, ConnectorServer, ExternalId, Id} from '@openint/cdk'
+import type {ConnectorDef, ConnectorServer, Id} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
 
@@ -42,12 +42,7 @@ export function createOAuth2ConnectorServer<
         baseURLs: context.baseURLs,
       }),
 
-    async preConnect({
-      config,
-      context,
-      input,
-      instance: {client, oauthConfig},
-    }) {
+    async preConnect({config, input, instance: {client, oauthConfig}}) {
       const connectionId =
         input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
 

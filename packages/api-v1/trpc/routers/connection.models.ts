@@ -53,7 +53,7 @@ export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 export function formatConnection(
   _ctx: any,
   connection: Core['connection_select'],
-  include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
+  _include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
   expand: Array<Z.infer<typeof zConnectionExpandOption>> = [],
 ) {
   const connector =
