@@ -51,7 +51,7 @@ export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
       // cannot use stringUtils due to Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
       // in lodash...
       env[`NEXT_PUBLIC_${base.toUpperCase() as Uppercase<typeof base>}_URL`],
-    ) ?? joinPath(serverUrl, base),
+    ) || joinPath(serverUrl, base),
   ])
 }
 
