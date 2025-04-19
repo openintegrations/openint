@@ -265,94 +265,94 @@
                           {
                             "oneOf": [
                               {
-                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.confluence.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.discord.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.facebook.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.github.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.gong.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.instagram.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.slack.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.reddit.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.lever.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linear.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.notion.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.outreach.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.github.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.quickbooks.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.reddit.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.notion.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.instagram.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.slack.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.twitter.discriminated_connector_config"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.facebook.discriminated_connector_config"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.xero.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.lever.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.outreach.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.discord.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.gong.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linear.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.confluence.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.airtable.discriminated_connector_config"
@@ -436,36 +436,36 @@
                             "discriminator": {
                               "propertyName": "connector_name",
                               "mapping": {
-                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
-                                "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
-                                "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
-                                "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
-                                "facebook": "#/components/schemas/connector.facebook.discriminated_connector_config",
-                                "github": "#/components/schemas/connector.github.discriminated_connector_config",
-                                "gong": "#/components/schemas/connector.gong.discriminated_connector_config",
-                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connector_config",
-                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connector_config",
-                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connector_config",
-                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connector_config",
-                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
-                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
-                                "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
-                                "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
-                                "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
-                                "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
-                                "linear": "#/components/schemas/connector.linear.discriminated_connector_config",
-                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connector_config",
-                                "notion": "#/components/schemas/connector.notion.discriminated_connector_config",
-                                "outreach": "#/components/schemas/connector.outreach.discriminated_connector_config",
-                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connector_config",
-                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
-                                "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
-                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
-                                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connector_config",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connector_config",
-                                "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
-                                "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
+                                "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
+                                "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
+                                "github": "#/components/schemas/connector.github.discriminated_connector_config",
+                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
+                                "notion": "#/components/schemas/connector.notion.discriminated_connector_config",
+                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connector_config",
+                                "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
+                                "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
                                 "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connector_config",
+                                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connector_config",
+                                "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
+                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connector_config",
+                                "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
+                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connector_config",
+                                "facebook": "#/components/schemas/connector.facebook.discriminated_connector_config",
+                                "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
+                                "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
+                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
+                                "outreach": "#/components/schemas/connector.outreach.discriminated_connector_config",
+                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connector_config",
+                                "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
+                                "gong": "#/components/schemas/connector.gong.discriminated_connector_config",
+                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
+                                "linear": "#/components/schemas/connector.linear.discriminated_connector_config",
+                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connector_config",
+                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
+                                "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
+                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
+                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connector_config",
                                 "airtable": "#/components/schemas/connector.airtable.discriminated_connector_config",
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connector_config",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connector_config",
@@ -761,94 +761,94 @@
                     {
                       "oneOf": [
                         {
-                          "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -932,36 +932,36 @@
                       "discriminator": {
                         "propertyName": "connector_name",
                         "mapping": {
-                          "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
-                          "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                          "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                          "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                          "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
-                          "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                          "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
-                          "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
-                          "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
-                          "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
-                          "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
-                          "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
-                          "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                          "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                          "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                          "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                          "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
-                          "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                          "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                          "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                          "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                          "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
-                          "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                          "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                          "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                          "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                           "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                          "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
-                          "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                          "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                          "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                          "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                          "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                          "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                          "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                          "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                          "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                           "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
+                          "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
+                          "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                          "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                          "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                          "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                          "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                          "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                          "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                          "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                          "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                          "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                          "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                          "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                          "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                          "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                          "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                          "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                          "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                          "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
+                          "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
                           "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                           "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                           "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -1348,94 +1348,94 @@
                           {
                             "oneOf": [
                               {
-                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -1519,36 +1519,36 @@
                             "discriminator": {
                               "propertyName": "connector_name",
                               "mapping": {
-                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
-                                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
-                                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
-                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
-                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
-                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
-                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
-                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
-                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
-                                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
-                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
-                                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                                 "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
+                                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
+                                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
+                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
                                 "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -1711,94 +1711,94 @@
                   "data": {
                     "oneOf": [
                       {
-                        "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                       },
                       {
+                        "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                      },
+                      {
                         "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -1882,36 +1882,36 @@
                     "discriminator": {
                       "propertyName": "connector_name",
                       "mapping": {
-                        "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
-                        "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                        "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                        "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                        "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
-                        "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                        "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
-                        "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
-                        "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
-                        "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
-                        "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
-                        "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
-                        "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                        "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                        "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                        "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                        "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
-                        "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                        "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                        "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                        "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                        "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
-                        "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                        "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                        "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                        "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                         "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                        "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
-                        "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                        "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                        "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                        "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                        "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                        "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                        "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                        "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                        "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                         "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
+                        "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
+                        "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                        "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                        "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                        "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                        "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                        "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                        "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                        "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                        "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                        "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                        "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                        "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                        "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                        "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                        "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                        "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                        "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                        "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
+                        "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
                         "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                         "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                         "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -7460,12 +7460,12 @@
         ],
         "title": "saltedge"
       },
-      "connector.sharepointonline.discriminated_connection_settings": {
+      "connector.sharepoint.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "sharepointonline"
+            "const": "sharepoint"
           },
           "settings": {
             "type": "object",
@@ -7538,14 +7538,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "sharepointonline"
+        "title": "sharepoint"
       },
-      "connector.sharepointonline.discriminated_connector_config": {
+      "connector.sharepoint.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "sharepointonline"
+            "const": "sharepoint"
           },
           "config": {
             "type": "object",
@@ -7598,7 +7598,7 @@
           "connector_name",
           "config"
         ],
-        "title": "sharepointonline"
+        "title": "sharepoint"
       },
       "connector.slack.discriminated_connection_settings": {
         "type": "object",
@@ -8976,94 +8976,94 @@
           {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.sharepoint.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
               },
               {
+                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+              },
+              {
                 "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -9147,36 +9147,36 @@
             "discriminator": {
               "propertyName": "connector_name",
               "mapping": {
-                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
-                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
-                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
-                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
-                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
-                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
-                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
-                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
-                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
-                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
-                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
-                "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
-                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                 "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
+                "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connection_settings",
+                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
+                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
                 "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -9346,7 +9346,7 @@
           "reddit",
           "salesloft",
           "saltedge",
-          "sharepointonline",
+          "sharepoint",
           "slack",
           "splitwise",
           "stripe",

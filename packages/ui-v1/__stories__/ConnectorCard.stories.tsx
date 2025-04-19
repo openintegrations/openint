@@ -30,16 +30,16 @@ const meta: Meta<typeof StoryWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const acmeOauth2ConnectorCard: Story = {
-  args: {name: 'acme-oauth2'},
-}
-
-export const sharepointonlineConnectorCard: Story = {
-  args: {name: 'sharepointonline'},
-}
-
 export const slackConnectorCard: Story = {
   args: {name: 'slack'},
+}
+
+export const intercomConnectorCard: Story = {
+  args: {name: 'intercom'},
+}
+
+export const redditConnectorCard: Story = {
+  args: {name: 'reddit'},
 }
 
 export const githubConnectorCard: Story = {
@@ -50,10 +50,6 @@ export const quickbooksConnectorCard: Story = {
   args: {name: 'quickbooks'},
 }
 
-export const googlemailConnectorCard: Story = {
-  args: {name: 'googlemail'},
-}
-
 export const notionConnectorCard: Story = {
   args: {name: 'notion'},
 }
@@ -62,44 +58,96 @@ export const linkedinConnectorCard: Story = {
   args: {name: 'linkedin'},
 }
 
-export const googledocsConnectorCard: Story = {
-  args: {name: 'googledocs'},
+export const instagramConnectorCard: Story = {
+  args: {name: 'instagram'},
+}
+
+export const jiraConnectorCard: Story = {
+  args: {name: 'jira'},
+}
+
+export const zohoDeskConnectorCard: Story = {
+  args: {name: 'zoho-desk'},
+}
+
+export const sharepointConnectorCard: Story = {
+  args: {name: 'sharepoint'},
 }
 
 export const aircallConnectorCard: Story = {
   args: {name: 'aircall'},
 }
 
-export const googlecalendarConnectorCard: Story = {
-  args: {name: 'googlecalendar'},
+export const googleCalendarConnectorCard: Story = {
+  args: {name: 'google-calendar'},
 }
 
-export const googlesheetConnectorCard: Story = {
-  args: {name: 'googlesheet'},
+export const twitterConnectorCard: Story = {
+  args: {name: 'twitter'},
+}
+
+export const pipedriveConnectorCard: Story = {
+  args: {name: 'pipedrive'},
+}
+
+export const facebookConnectorCard: Story = {
+  args: {name: 'facebook'},
+}
+
+export const xeroConnectorCard: Story = {
+  args: {name: 'xero'},
+}
+
+export const leverConnectorCard: Story = {
+  args: {name: 'lever'},
+}
+
+export const acmeOauth2ConnectorCard: Story = {
+  args: {name: 'acme-oauth2'},
+}
+
+export const outreachConnectorCard: Story = {
+  args: {name: 'outreach'},
+}
+
+export const googleMailConnectorCard: Story = {
+  args: {name: 'google-mail'},
 }
 
 export const discordConnectorCard: Story = {
   args: {name: 'discord'},
 }
 
-export const hubspotConnectorCard: Story = {
-  args: {name: 'hubspot'},
+export const gongConnectorCard: Story = {
+  args: {name: 'gong'},
 }
 
-export const salesforceConnectorCard: Story = {
-  args: {name: 'salesforce'},
+export const hubspotConnectorCard: Story = {
+  args: {name: 'hubspot'},
 }
 
 export const linearConnectorCard: Story = {
   args: {name: 'linear'},
 }
 
+export const googleDriveConnectorCard: Story = {
+  args: {name: 'google-drive'},
+}
+
+export const googleSheetConnectorCard: Story = {
+  args: {name: 'google-sheet'},
+}
+
 export const confluenceConnectorCard: Story = {
   args: {name: 'confluence'},
 }
 
-export const googledriveConnectorCard: Story = {
-  args: {name: 'googledrive'},
+export const salesloftConnectorCard: Story = {
+  args: {name: 'salesloft'},
+}
+
+export const googleDocsConnectorCard: Story = {
+  args: {name: 'google-docs'},
 }
 
 export const airtableConnectorCard: Story = {

@@ -38,16 +38,16 @@ const meta: Meta<typeof FormWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const acmeOauth2ConnectionSettings: Story = {
-  args: {name: 'acme-oauth2'},
-}
-
-export const sharepointonlineConnectionSettings: Story = {
-  args: {name: 'sharepointonline'},
-}
-
 export const slackConnectionSettings: Story = {
   args: {name: 'slack'},
+}
+
+export const intercomConnectionSettings: Story = {
+  args: {name: 'intercom'},
+}
+
+export const redditConnectionSettings: Story = {
+  args: {name: 'reddit'},
 }
 
 export const githubConnectionSettings: Story = {
@@ -58,10 +58,6 @@ export const quickbooksConnectionSettings: Story = {
   args: {name: 'quickbooks'},
 }
 
-export const googlemailConnectionSettings: Story = {
-  args: {name: 'googlemail'},
-}
-
 export const notionConnectionSettings: Story = {
   args: {name: 'notion'},
 }
@@ -70,44 +66,96 @@ export const linkedinConnectionSettings: Story = {
   args: {name: 'linkedin'},
 }
 
-export const googledocsConnectionSettings: Story = {
-  args: {name: 'googledocs'},
+export const instagramConnectionSettings: Story = {
+  args: {name: 'instagram'},
+}
+
+export const jiraConnectionSettings: Story = {
+  args: {name: 'jira'},
+}
+
+export const zohoDeskConnectionSettings: Story = {
+  args: {name: 'zoho-desk'},
+}
+
+export const sharepointConnectionSettings: Story = {
+  args: {name: 'sharepoint'},
 }
 
 export const aircallConnectionSettings: Story = {
   args: {name: 'aircall'},
 }
 
-export const googlecalendarConnectionSettings: Story = {
-  args: {name: 'googlecalendar'},
+export const googleCalendarConnectionSettings: Story = {
+  args: {name: 'google-calendar'},
 }
 
-export const googlesheetConnectionSettings: Story = {
-  args: {name: 'googlesheet'},
+export const twitterConnectionSettings: Story = {
+  args: {name: 'twitter'},
+}
+
+export const pipedriveConnectionSettings: Story = {
+  args: {name: 'pipedrive'},
+}
+
+export const facebookConnectionSettings: Story = {
+  args: {name: 'facebook'},
+}
+
+export const xeroConnectionSettings: Story = {
+  args: {name: 'xero'},
+}
+
+export const leverConnectionSettings: Story = {
+  args: {name: 'lever'},
+}
+
+export const acmeOauth2ConnectionSettings: Story = {
+  args: {name: 'acme-oauth2'},
+}
+
+export const outreachConnectionSettings: Story = {
+  args: {name: 'outreach'},
+}
+
+export const googleMailConnectionSettings: Story = {
+  args: {name: 'google-mail'},
 }
 
 export const discordConnectionSettings: Story = {
   args: {name: 'discord'},
 }
 
-export const hubspotConnectionSettings: Story = {
-  args: {name: 'hubspot'},
+export const gongConnectionSettings: Story = {
+  args: {name: 'gong'},
 }
 
-export const salesforceConnectionSettings: Story = {
-  args: {name: 'salesforce'},
+export const hubspotConnectionSettings: Story = {
+  args: {name: 'hubspot'},
 }
 
 export const linearConnectionSettings: Story = {
   args: {name: 'linear'},
 }
 
+export const googleDriveConnectionSettings: Story = {
+  args: {name: 'google-drive'},
+}
+
+export const googleSheetConnectionSettings: Story = {
+  args: {name: 'google-sheet'},
+}
+
 export const confluenceConnectionSettings: Story = {
   args: {name: 'confluence'},
 }
 
-export const googledriveConnectionSettings: Story = {
-  args: {name: 'googledrive'},
+export const salesloftConnectionSettings: Story = {
+  args: {name: 'salesloft'},
+}
+
+export const googleDocsConnectionSettings: Story = {
+  args: {name: 'google-docs'},
 }
 
 export const airtableConnectionSettings: Story = {

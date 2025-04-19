@@ -5,7 +5,7 @@ import {z} from '@openint/util/zod-utils'
 export default {
   audience: ['business'],
   verticals: ['communication', 'streaming'],
-  display_name: 'Gong (Oauth)',
+  display_name: 'Gong',
   stage: 'ga',
   version: 1,
   auth: {

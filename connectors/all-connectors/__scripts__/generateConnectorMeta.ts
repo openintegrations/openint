@@ -37,4 +37,8 @@ void writePretty(
   join(__dirname, '..'),
 ).then(() => {
   console.log(`Generated metadata for ${allConnectors.length} connectors`)
+  console.log(
+    'connectors meta updated',
+    allConnectors.map((name) => name),
+  )
 })

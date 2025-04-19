@@ -38,16 +38,16 @@ const meta: Meta<typeof FormWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const acmeOauth2ConnectorConfig: Story = {
-  args: {name: 'acme-oauth2'},
-}
-
-export const sharepointonlineConnectorConfig: Story = {
-  args: {name: 'sharepointonline'},
-}
-
 export const slackConnectorConfig: Story = {
   args: {name: 'slack'},
+}
+
+export const intercomConnectorConfig: Story = {
+  args: {name: 'intercom'},
+}
+
+export const redditConnectorConfig: Story = {
+  args: {name: 'reddit'},
 }
 
 export const githubConnectorConfig: Story = {
@@ -58,10 +58,6 @@ export const quickbooksConnectorConfig: Story = {
   args: {name: 'quickbooks'},
 }
 
-export const googlemailConnectorConfig: Story = {
-  args: {name: 'googlemail'},
-}
-
 export const notionConnectorConfig: Story = {
   args: {name: 'notion'},
 }
@@ -70,44 +66,96 @@ export const linkedinConnectorConfig: Story = {
   args: {name: 'linkedin'},
 }
 
-export const googledocsConnectorConfig: Story = {
-  args: {name: 'googledocs'},
+export const instagramConnectorConfig: Story = {
+  args: {name: 'instagram'},
+}
+
+export const jiraConnectorConfig: Story = {
+  args: {name: 'jira'},
+}
+
+export const zohoDeskConnectorConfig: Story = {
+  args: {name: 'zoho-desk'},
+}
+
+export const sharepointConnectorConfig: Story = {
+  args: {name: 'sharepoint'},
 }
 
 export const aircallConnectorConfig: Story = {
   args: {name: 'aircall'},
 }
 
-export const googlecalendarConnectorConfig: Story = {
-  args: {name: 'googlecalendar'},
+export const googleCalendarConnectorConfig: Story = {
+  args: {name: 'google-calendar'},
 }
 
-export const googlesheetConnectorConfig: Story = {
-  args: {name: 'googlesheet'},
+export const twitterConnectorConfig: Story = {
+  args: {name: 'twitter'},
+}
+
+export const pipedriveConnectorConfig: Story = {
+  args: {name: 'pipedrive'},
+}
+
+export const facebookConnectorConfig: Story = {
+  args: {name: 'facebook'},
+}
+
+export const xeroConnectorConfig: Story = {
+  args: {name: 'xero'},
+}
+
+export const leverConnectorConfig: Story = {
+  args: {name: 'lever'},
+}
+
+export const acmeOauth2ConnectorConfig: Story = {
+  args: {name: 'acme-oauth2'},
+}
+
+export const outreachConnectorConfig: Story = {
+  args: {name: 'outreach'},
+}
+
+export const googleMailConnectorConfig: Story = {
+  args: {name: 'google-mail'},
 }
 
 export const discordConnectorConfig: Story = {
   args: {name: 'discord'},
 }
 
-export const hubspotConnectorConfig: Story = {
-  args: {name: 'hubspot'},
+export const gongConnectorConfig: Story = {
+  args: {name: 'gong'},
 }
 
-export const salesforceConnectorConfig: Story = {
-  args: {name: 'salesforce'},
+export const hubspotConnectorConfig: Story = {
+  args: {name: 'hubspot'},
 }
 
 export const linearConnectorConfig: Story = {
   args: {name: 'linear'},
 }
 
+export const googleDriveConnectorConfig: Story = {
+  args: {name: 'google-drive'},
+}
+
+export const googleSheetConnectorConfig: Story = {
+  args: {name: 'google-sheet'},
+}
+
 export const confluenceConnectorConfig: Story = {
   args: {name: 'confluence'},
 }
 
-export const googledriveConnectorConfig: Story = {
-  args: {name: 'googledrive'},
+export const salesloftConnectorConfig: Story = {
+  args: {name: 'salesloft'},
+}
+
+export const googleDocsConnectorConfig: Story = {
+  args: {name: 'google-docs'},
 }
 
 export const brexConnectorConfig: Story = {

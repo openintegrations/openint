@@ -8,24 +8,28 @@ async function getOasSpec() {
       const {exec} = require('child_process')
 
       // Run the pnpm gen command in the api-v1 package
-      exec('pnpm gen', {cwd: '../packages/api-v1'}, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error executing pnpm gen: ${error.message}`)
-          reject(new Error('pnpm gen stderr'))
-        }
-        if (stderr) {
-          console.error(`pnpm gen stderr: ${stderr}`)
-          reject(new Error('pnpm gen stderr'))
-        }
-        resolve(
-          JSON.parse(
-            fs.readFileSync(
-              '../packages/api-v1/__generated__/openapi.json',
-              'utf8',
+      exec(
+        'pnpm generate',
+        {cwd: '../packages/api-v1'},
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Error executing pnpm gen: ${error.message}`)
+            reject(new Error('pnpm gen stderr'))
+          }
+          if (stderr) {
+            console.error(`pnpm gen stderr: ${stderr}`)
+            reject(new Error('pnpm gen stderr'))
+          }
+          resolve(
+            JSON.parse(
+              fs.readFileSync(
+                '../packages/api-v1/__generated__/openapi.json',
+                'utf8',
+              ),
             ),
-          ),
-        )
-      })
+          )
+        },
+      )
     } else {
       https.get(
         'https://app.stainless.com/api/spec/documented/openint',
