@@ -62,7 +62,7 @@ export function SecureInput({
             value={value}
             onChange={onChange}
             className="pr-10 font-light"
-            readOnly={readOnly}
+            readOnly={readOnly ?? !onChange}
           />
           {!showValue && (
             <Button
