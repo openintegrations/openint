@@ -45,6 +45,21 @@ export default {
           "Allows creating, updating, and deleting issues in Linear. This scope includes all permissions granted by the 'issues:read' scope.",
       },
       {
+        scope: 'issues:create',
+        description:
+          'Allows creating new issues in Linear. This scope is more specific than the general issues:write scope.',
+      },
+      {
+        scope: 'comments:create',
+        description:
+          'Allows creating comments on issues in Linear. This scope is more specific than the general issues:write scope.',
+      },
+      {
+        scope: 'timeSchedule:write',
+        description:
+          'Allows creating and managing time schedules in Linear. This scope is more specific than the general write scope.',
+      },
+      {
         scope: 'projects:read',
         description:
           'Allows read-only access to projects in Linear, including their settings and issue lists. This scope does not permit modifications.',
