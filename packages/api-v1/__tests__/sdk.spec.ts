@@ -55,6 +55,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     test('customer token client should authenticate as customer', async () => {
       const tokenResponse = await apiKeyClient.createToken(customerId, {})
       const tokenClient = new Openint({
+        apiKey: null, // not sure why this is needed, but it is
+        // test mysteriously fails without this
         customerToken: tokenResponse.token,
         baseURL: 'http://localhost/v1',
         fetch: appFetch,
