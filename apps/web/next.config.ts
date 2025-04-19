@@ -154,7 +154,7 @@ const nextConfig = {
   // eslint-disable-next-line @typescript-eslint/require-await
   headers: async () => [
     {
-      source: '/',
+      source: '/*',
       headers: [
         {
           key: 'Access-Control-Allow-Origin',
