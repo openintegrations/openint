@@ -125,9 +125,6 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
   const trpcErr = error instanceof TRPCError ? error : undefined
   const zodErr = isZodError(trpcErr?.cause) ? trpcErr.cause : undefined
 
-  // console.log('errorFormatter', opts)
-  // console.log('error', error.message)
-
   return {
     ...shape,
     ...(zodErr && error.message === 'Output validation failed'
@@ -160,10 +157,10 @@ export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   // console.log('onError', {error, path, input, ctx, type})
   Object.assign(error, {path})
   // TODO: Better way to check if it's an input error
-  const isInputError = z
+  const isZodError = z
     .object({issues: zZodIssues})
     .safeParse(safeJSONParse(error.message)).success
-  if (isInputError) {
+  if (isZodError && error.code === 'BAD_REQUEST') {
     Object.assign(error, {message: 'Input validation failed'})
   }
   // for client side error handling
