@@ -91,7 +91,10 @@ export const connectionRouter = router({
         typeof connector.refreshConnection === 'function'
       ) {
         const connector_config = await ctx.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, connection.connector_config_id),
+          where: eq(
+            schema.connector_config.id,
+            connection.connector_config_id!,
+          ),
           columns: {
             id: true,
             connector_name: true,
