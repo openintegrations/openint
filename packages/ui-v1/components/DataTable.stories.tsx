@@ -1,7 +1,13 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {Core} from '@openint/api-v1/models'
-import type {ColumnDef, Columns} from './DataTable'
+import type {
+  ColumnDef,
+  Columns,
+  DataTableProps,
+  PaginatedData,
+} from './DataTable'
 
+import {useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {FIXTURES} from '../domain-components/__stories__/fixtures'
 import {ConnectorTableCell} from '../domain-components/tables/ConnectorTableCell'
@@ -170,4 +176,100 @@ const ConnectorConfigTableExample = () => {
 // Add a new story variant for connectors
 export const ConnectorConfigTable: Story = {
   render: () => <ConnectorConfigTableExample />,
+}
+
+const roles = ['Admin', 'User', 'Editor', 'Viewer']
+const names = [
+  'John',
+  'Jane',
+  'Bob',
+  'Alice',
+  'Charlie',
+  'David',
+  'Eve',
+  'Frank',
+  'George',
+  'Helen',
+]
+const lastNames = [
+  'Doe',
+  'Smith',
+  'Johnson',
+  'Brown',
+  'Wilson',
+  'Taylor',
+  'Moore',
+  'Martin',
+  'Lee',
+  'Garcia',
+]
+
+const generateRandomData = (count: number): Person[] => {
+  return Array.from({length: count}, (_, i) => {
+    const name = `${names[Math.floor(Math.random() * names.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`
+    const email = `${name.toLowerCase().replace(/\s+/g, '.')}@example.com`
+    return {
+      id: i + 1,
+      name,
+      email,
+      role: roles[Math.floor(Math.random() * roles.length)] as string,
+      age: Math.floor(Math.random() * 50) + 20,
+    }
+  })
+}
+
+const PaginatedTable = (props: DataTableProps<Person, string | number>) => {
+  const [pageIndex, setPageIndex] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentData, setCurrentData] = useState(generateRandomData(10))
+
+  const handlePageChange = async (newPageIndex: number) => {
+    setIsLoading(true)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    setPageIndex(newPageIndex)
+    setCurrentData(generateRandomData(10))
+    setIsLoading(false)
+  }
+
+  return (
+    <DataTable
+      {...props}
+      data={{
+        ...props.data,
+        items: currentData,
+        offset: pageIndex * (props.data as PaginatedData<Person>).limit,
+      }}
+      isLoading={isLoading}
+      onPageChange={handlePageChange}
+    />
+  )
+}
+
+export const WithPagination: Story = {
+  args: {
+    data: {
+      items: generateRandomData(10),
+      total: 100,
+      limit: 10,
+      offset: 0,
+    } as PaginatedData<Person>,
+    columns: sampleColumns,
+    children: (
+      <>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+      </>
+    ),
+  },
+  render: (props) => (
+    <PaginatedTable
+      {...(props as unknown as DataTableProps<Person, string | number>)}
+    />
+  ),
 }
