@@ -30,6 +30,7 @@ export const connection = pgTable(
     id: varchar()
       .default("concat('conn_', generate_ulid())")
       .primaryKey()
+      // .$type<ZId('conn')>()
       .notNull(),
     connector_name: varchar()
       .notNull()
@@ -461,12 +462,12 @@ export const event = pgTable(
     pgPolicy('org_member_append', {
       to: 'authenticated',
       for: 'insert',
-      withCheck: sql`org_id = public.jwt_org_id ()`,
+      withCheck: sql`org_id = public.jwt_org_id ()`, // add userId and customerId also
     }),
     pgPolicy('customer_append', {
       to: 'customer',
       for: 'insert',
-      withCheck: sql`org_id = public.jwt_org_id ()`,
+      withCheck: sql`org_id = public.jwt_org_id ()`, // add userId and customerId also
     }),
   ],
 )
