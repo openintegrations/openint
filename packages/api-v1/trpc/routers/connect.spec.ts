@@ -2,6 +2,7 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import Elysia from 'elysia'
+import {extractId, Id} from '@openint/cdk'
 import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
@@ -238,6 +239,77 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.status).toBe('disconnected')
       // TODO: Fix the error here...
       expect(res.status_message).toBe('Unknown error')
+    })
+
+    // Reconnect
+    const rePreConnectRes = $test('reconnect: preConnect', async () => {
+      const res = await asCustomer.preConnect({
+        connector_config_id: ccfgRes.current.id,
+        options: {
+          connectionExternalId: extractId(
+            postConnectRes.current.id as Id['conn'],
+          )[2],
+        },
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          pre_connect_input: {},
+        },
+      })
+      const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
+      const authorizationUrl = new URL(parsed.authorization_url)
+      const state = zOauthState.parse(
+        safeJSONParse(authorizationUrl.searchParams.get('state')),
+      )
+      expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
+        redirectUri,
+      )
+      return {...parsed, state}
+    })
+
+    const reConnectRes = $test(
+      'reconnect: connect get 302 redirect',
+      async () => {
+        const request = new Request(rePreConnectRes.current.authorization_url, {
+          redirect: 'manual',
+        })
+        const response = await oauth2Server.handle(request)
+        expect(response.status).toBe(302)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const url = new URL(response.headers.get('Location')!)
+        expect(url.toString()).toContain(redirectUri)
+
+        return oauth2Schemas.connect_output.parse({
+          ...urlSearchParamsToJson(url.searchParams),
+          code_verifier: rePreConnectRes.current.code_verifier,
+        })
+      },
+    )
+
+    $test('reconnect: postConnect', async () => {
+      const res = await asCustomer.postConnect({
+        connector_config_id: ccfgRes.current.id,
+        options: {},
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          connect_output: reConnectRes.current,
+        },
+      })
+
+      const settings = oauth2Schemas.connection_settings.parse(res.settings)
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+      expect(res.customer_id).toBe('cus_222')
+      expect(res.id).toEqual(rePreConnectRes.current.state.connection_id)
+
+      const events = await asUser.listEvents()
+      const recentEvent = events.items.find(
+        (e) => e.name === 'connect.connection-connected',
+      )
+
+      expect(recentEvent).toBeDefined()
+      expect(recentEvent?.data?.connection_id).toBe(res.id)
+
+      return {id: res.id, settings}
     })
   })
 
