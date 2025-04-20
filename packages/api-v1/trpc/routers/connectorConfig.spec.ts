@@ -1,24 +1,26 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {$test} from '@openint/util/__tests__/test-utils'
+import {trpc} from '../_base'
 import {getTestTRPCClient} from '../../__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
 import {onError} from '../error-handling'
+import {connectionRouter} from './connection'
 import {connectorConfigRouter} from './connectorConfig'
 
 const logger = false
 
+const router = trpc.mergeRouters(connectorConfigRouter, connectionRouter)
+
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   /** Preferred approach */
   function getCaller(viewer: Viewer) {
-    return connectorConfigRouter.createCaller(
-      routerContextFromViewer({db, viewer}),
-      {onError},
-    )
+    return router.createCaller(routerContextFromViewer({db, viewer}), {onError})
   }
   /** Also possible */
   function getClient(viewer: Viewer) {
-    return getTestTRPCClient({db, router: connectorConfigRouter}, viewer)
+    return getTestTRPCClient({db, router}, viewer)
   }
   const asOrg = getCaller({role: 'org', orgId: 'org_222'})
   const asUser = getCaller({
@@ -39,7 +41,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   // Tests linearly depend on each other for performance and simplicty
 
-  test('create connector config', async () => {
+  const ccfgRes = $test('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'quickbooks',
       config: {
@@ -61,6 +63,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         envName: 'sandbox',
       },
     })
+    return res
   })
 
   // TODO: Test this better
@@ -97,10 +100,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('list connector config with expanded schemas', async () => {
     const res2 = await asOrg.listConnectorConfigs({
-      expand: ['connector.schemas'],
+      expand: ['connector.schemas', 'connection_count'],
     })
     expect(res2.items[0]?.connector).toBeDefined()
     expect(res2.items[0]?.connector?.schemas).toBeDefined()
+    expect(res2.items[0]?.connection_count).toEqual(0)
   })
 
   test('list connector config via custom client', async () => {
@@ -197,18 +201,29 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   //   })
   // })
 
-  // test('list connector config with expand connection_count', async () => {
-  //   const res = await getClient({
-  //     role: 'org',
-  //     orgId: 'org_222',
-  //   }).listConnectorConfigs.query({
-  //     expand: 'connection_count',
-  //   })
-  //   expect(res.items).toHaveLength(2)
+  test('connection_count includes related connections', async () => {
+    const conn = await asOrg.createConnection({
+      connector_config_id: ccfgRes.current.id,
+      customer_id: 'cus_222',
+      data: {
+        connector_name: 'quickbooks',
+        settings: {
+          oauth: {credentials: {access_token: 'xxx'}},
+          realmId: '9341453474484455',
+        },
+      },
+    })
+    expect(conn).toMatchObject({
+      id: expect.any(String),
+    })
 
-  //   expect(res.items[0]?.connection_count).toEqual(0)
-  //   expect(res.items[1]?.connection_count).toEqual(0)
-  // })
+    const res = await asOrg.listConnectorConfigs({
+      expand: ['connection_count'],
+    })
+    const ccfg = res.items.find((item) => item.id === ccfgRes.current.id)
+    // TODO: Add getConnectionConfig endpoint
+    expect(ccfg?.connection_count).toEqual(1)
+  })
 
   // test.skip('list connector config with expand connector and enabled_integrations', async () => {
   //   const res = await getClient({
