@@ -6,10 +6,12 @@ import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
 import {cache, Suspense} from 'react'
+import {ConnectionExpanded} from '@openint/api-v1/models'
 import {zConnectOptions} from '@openint/api-v1/trpc/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {asOrgIfCustomer} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
+import {getBaseURLs} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui'
 import {
@@ -197,6 +199,7 @@ export default async function ConnectPage(
                     <AddConnections
                       viewer={viewer}
                       connector_names={searchParams.connector_names}
+                      existingConnections={viewerConnections.items}
                     />
                   </Suspense>
                 </TabsContent>
@@ -213,9 +216,11 @@ export default async function ConnectPage(
 async function AddConnections({
   viewer,
   connector_names,
+  existingConnections,
 }: {
   viewer: Viewer
   connector_names?: ConnectorName[]
+  existingConnections: ConnectionExpanded[]
 }) {
   // We need to elevate the role to org  to list connector config here
   // Alternative we'd have to modify RLS rules to allow this
@@ -244,6 +249,30 @@ async function AddConnections({
       </div>
     )
   }
+
+  const availableToConnect = res.items.filter(
+    (ccfg) =>
+      !existingConnections.some(
+        (conn) => conn.connector_config_id === ccfg.id,
+      ) &&
+      ccfg.connector?.authType &&
+      ccfg.connector.authType !== 'CUSTOM',
+  )
+
+  if (!availableToConnect?.length || availableToConnect.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-8 text-center">
+        <p className="text-muted-foreground">
+          You have already connected all available integrations.
+        </p>
+        <Button asChild variant="default">
+          <Link href={new URL(getBaseURLs(null).connect + '?view=manage')}>
+            Manage Integrations
+          </Link>
+        </Button>
+      </div>
+    )
+  }
   // TODO: DO -> in case there are ccfgs but the user already has connected one of them
   // THEN -> Check if that ccfg allows multiple of those connections and if so enable them to add it
   // FINALLY -> if at the end of this its not possible to crease new connections show a user friendly message
@@ -251,7 +280,7 @@ async function AddConnections({
 
   return (
     <div className="flex flex-col gap-4">
-      {res.items.map((ccfg) => (
+      {availableToConnect.map((ccfg) => (
         <Suspense key={ccfg.id} fallback={<Fallback />}>
           <AddConnection
             key={ccfg.id}
