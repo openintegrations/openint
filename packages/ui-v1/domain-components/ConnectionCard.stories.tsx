@@ -66,12 +66,6 @@ export const NoIntegration: Story = {
   },
 }
 
-export const NoIntegrationNoConnector: Story = {
-  args: {
-    connection: FIXTURES.connections['no-integration-no-connector'],
-  },
-}
-
 export const Grid: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">

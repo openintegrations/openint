@@ -1,7 +1,6 @@
 'use client'
 
 import {useSuspenseQuery} from '@tanstack/react-query'
-import {RefreshCw} from 'lucide-react'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Button} from '@openint/shadcn/ui'
