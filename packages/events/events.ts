@@ -26,7 +26,7 @@ export type Events = Combine<
   ZodToStandardSchema<typeof eventMapForInngest>
 >
 
-// MARK: - Deprecated
+export type EventName = keyof typeof eventMap
 
 export const zEvent = z.discriminatedUnion(
   'name',

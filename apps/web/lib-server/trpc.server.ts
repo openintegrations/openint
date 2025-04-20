@@ -38,7 +38,7 @@ export const trpcOptionsProxy = createTRPCOptionsProxy({
 })
 
 // TODO: Move this to a separate file?
-export async function getServerComponentContext(pageProps: PageProps) {
+export async function getServerComponentContext(pageProps?: PageProps) {
   const {viewer, token, payload} = await currentViewer(pageProps)
   const ctx = serverComponentContextForViewer(viewer)
   return {...ctx, token, tokenPayload: payload}

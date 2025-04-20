@@ -7,6 +7,7 @@ import {
 } from '@openint/all-connectors/schemas'
 import {zStandard} from '@openint/cdk'
 import {schema} from '@openint/db'
+import {zEvent} from '@openint/events/events'
 import {z} from '@openint/util/zod-utils'
 import {zConnector, zConnectorName} from '../trpc/routers/connector.models'
 
@@ -17,13 +18,23 @@ const zMetadata = z.record(z.string(), z.unknown()).describe(`
   During updates this object will be shallowly merged
 `)
 
-const event_select = createSelectSchema(schema.event).openapi({
-  ref: 'core.event',
-})
+const event_select = z
+  .intersection(
+    createSelectSchema(schema.event).omit({name: true, data: true}),
+    zEvent,
+  )
+  .openapi({
+    ref: 'core.event',
+  })
 
-const event_insert = createInsertSchema(schema.event).openapi({
-  ref: 'core.event_insert',
-})
+const event_insert = z
+  .intersection(
+    createInsertSchema(schema.event).omit({name: true, data: true}),
+    zEvent,
+  )
+  .openapi({
+    ref: 'core.event_insert',
+  })
 
 const organization_select = createSelectSchema(schema.organization).openapi({
   ref: 'core.organization',

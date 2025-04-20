@@ -69,6 +69,7 @@ export const organizationRouter = router({
         id: z.string(),
         name: z.string(),
         referrer: z.string().nullish(),
+        /** @deprecated Use viewer.user_id instead */
         clerkUserId: z.string(),
       }),
     )

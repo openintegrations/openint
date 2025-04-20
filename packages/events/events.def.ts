@@ -27,19 +27,8 @@ export type OrgProperties = Z.infer<typeof zOrgProperties>
 
 // TODO: Can we learn from trpc to make all the events here easy to refactor across the codebase?
 export const eventMap = {
-  // New format for event name. Having `/` is not supported in event names due to slash having
-  // very specific meaning in openapi spec.
-  'sync.completed': {
-    pipeline_id: zId('pipe'),
-    source_id: zId('conn'),
-    destination_id: zId('conn'),
-  },
   // Backend events
   'debug.debug': {},
-  'sync.scheduler-debug': {},
-  'sync.pipeline-requested': {pipelineId: zId('pipe')},
-  'sync.connection-requested': {connectionId: zId('conn')},
-  'connect.connection-connected': {connectionId: zId('conn')},
   'webhook.received': {
     /** For debugging requests */
     traceId: z.string(),
@@ -52,14 +41,15 @@ export const eventMap = {
   // Analytics events
   'db.user-created': {},
   'db.user-deleted': {},
-  'db.connection-created': {connectionId: zId('conn')},
-  'db.connection-deleted': {connectionId: zId('conn')},
+  'db.connection-created': {connection_id: zId('conn')},
+  'db.connection-deleted': {connection_id: zId('conn')},
   'user.signin': {},
   'user.signout': {},
-  'connect.session-started': {connectorName: z.string(), meta: z.unknown()},
-  'connect.session-cancelled': {connectorName: z.string(), meta: z.unknown()},
-  'connect.session-succeeded': {connectorName: z.string(), meta: z.unknown()},
-  'connect.session-errored': {connectorName: z.string(), meta: z.unknown()},
+  'connect.session-started': {connector_name: z.string(), meta: z.unknown()},
+  'connect.session-cancelled': {connector_name: z.string(), meta: z.unknown()},
+  'connect.session-succeeded': {connector_name: z.string(), meta: z.unknown()},
+  'connect.session-errored': {connector_name: z.string(), meta: z.unknown()},
+  'connect.connection-connected': {connection_id: zId('conn')},
   'api.token-copied': {},
   'api.graphql-request': {},
   'api.rest-request': {},

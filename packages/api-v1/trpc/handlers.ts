@@ -1,4 +1,5 @@
 import type {AnyTRPCRouter} from '@trpc/server'
+import type {after} from 'next/server'
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 
@@ -14,8 +15,11 @@ export interface CreateFetchHandlerOptions {
   router?: AnyTRPCRouter
   // Think about the types a bit more, kind of confusing as is
   db: Database
+  // TODO: Dedupe these properties with routerContextFromRequest types
   /** Additional viewer to use for the request not part of the authorization header */
   getAdditionalViewer?: () => Promise<Viewer>
+  /** Await async tasks after the main request has completed */
+  after?: typeof after
 }
 
 export const createFetchHandlerTRPC =
