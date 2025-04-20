@@ -1,5 +1,6 @@
 import type {ConnectorName} from '@openint/all-connectors/name'
 import type {ZStandard} from '@openint/cdk'
+import type {EventName} from '@openint/events/events'
 
 import {sql} from 'drizzle-orm'
 import {
@@ -127,7 +128,8 @@ export const connection = pgTable(
       `,
     }),
 
-    pgPolicy('customer_access', { // technically this is customer_readonly_access
+    pgPolicy('customer_access', {
+      // technically this is customer_readonly_access
       to: 'customer',
       using: sql`
         (
@@ -410,7 +412,7 @@ export const event = pgTable(
       .default("concat('evt_', generate_ulid())")
       .primaryKey()
       .notNull(),
-    name: varchar().notNull(),
+    name: varchar().notNull().$type<EventName>(),
     data: jsonb().notNull().$type<any>(),
     timestamp: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
@@ -479,7 +481,24 @@ export const organization = pgTable(
     api_key: varchar().unique(),
     name: varchar(),
     slug: varchar(),
-    metadata: jsonb().$type<any>(),
+
+    // TODO: Move this out of org metadata... which are intended to be user-modifiable
+    metadata: jsonb().$type<{
+      // into proper data...
+      webhook_url?: string
+      /** ISO string for the date */
+      api_key_used?: string
+
+      clerk_import?: boolean
+
+      onboarding_marked_complete?: boolean
+
+      test?: boolean
+
+      clerk_user_id?: string | null
+
+      referrer?: string | null
+    }>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),

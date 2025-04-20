@@ -57,20 +57,19 @@ export function useSession() {
   )
 }
 
-export const DynamicOrganizationSwitcher = dynamic(
+const DynamicOrganizationSwitcher = dynamic(
   () => Promise.resolve(ClerkOrganizationSwitcher),
   {ssr: false},
 )
 
-export const DynamicUserButton = dynamic(
-  () => Promise.resolve(ClerkUserButton),
-  {ssr: false},
-)
+const DynamicUserButton = dynamic(() => Promise.resolve(ClerkUserButton), {
+  ssr: false,
+})
 
 export function OrganizationSwitcher() {
   const {isDark} = useTheme()
   return (
-    <ClerkOrganizationSwitcher
+    <DynamicOrganizationSwitcher
       hidePersonal={true}
       appearance={{baseTheme: isDark ? darkTheme : undefined}}
     />
@@ -80,7 +79,7 @@ export function OrganizationSwitcher() {
 export function UserButton() {
   const {isDark} = useTheme()
   return (
-    <ClerkUserButton
+    <DynamicUserButton
       showName
       appearance={{baseTheme: isDark ? darkTheme : undefined}}
     />

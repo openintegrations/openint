@@ -2,7 +2,6 @@ import type {PageProps} from '@/lib-common/next-utils'
 
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {SettingsContent} from './page.client'
-
 export default async function SettingsPage(props: PageProps) {
   const {viewer, queryClient, trpc} = await getServerComponentContext(props)
 

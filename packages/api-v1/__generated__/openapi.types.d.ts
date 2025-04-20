@@ -152,6 +152,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/event": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["createEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -2506,6 +2522,121 @@ export interface components {
          * @enum {string}
          */
         "core.connector.name": "acme-oauth2" | "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesloft" | "saltedge" | "sharepoint" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zoho-desk";
+        /** event */
+        "core.event": {
+            id: string;
+            timestamp: string;
+            user: (string | number | boolean | null) | {
+                [key: string]: unknown;
+            } | unknown[] | null;
+            v: string | null;
+            org_id: string | null;
+            user_id: string | null;
+            customer_id: string | null;
+        } & ({
+            /** @constant */
+            name: "debug.debug";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "webhook.received";
+            data: {
+                traceId: string;
+                method: string;
+                path: string;
+                query: {
+                    [key: string]: unknown;
+                };
+                headers: {
+                    [key: string]: unknown;
+                };
+                body?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "db.user-created";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "db.user-deleted";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "db.connection-created";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "db.connection-deleted";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "user.signin";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "user.signout";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "connect.session-started";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-cancelled";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-succeeded";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-errored";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.connection-connected";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "api.token-copied";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "api.graphql-request";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "api.rest-request";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "pageview";
+            data: {
+                current_url: string;
+                path: string;
+            };
+        });
         /** integration_select */
         "core.integration_select": {
             id: string;
@@ -3431,6 +3562,171 @@ export interface operations {
                         status?: "healthy" | "disconnected" | "error" | "manual" | "unknown" | null;
                         status_message?: string | null;
                     };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    createEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    event: {
+                        /** @constant */
+                        name: "debug.debug";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "webhook.received";
+                        data: {
+                            traceId: string;
+                            method: string;
+                            path: string;
+                            query: {
+                                [key: string]: unknown;
+                            };
+                            headers: {
+                                [key: string]: unknown;
+                            };
+                            body?: unknown;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "db.user-created";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "db.user-deleted";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "db.connection-created";
+                        data: {
+                            /** @description Must start with 'conn_' */
+                            connection_id: string;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "db.connection-deleted";
+                        data: {
+                            /** @description Must start with 'conn_' */
+                            connection_id: string;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "user.signin";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "user.signout";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "connect.session-started";
+                        data: {
+                            connector_name: string;
+                            meta?: unknown;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "connect.session-cancelled";
+                        data: {
+                            connector_name: string;
+                            meta?: unknown;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "connect.session-succeeded";
+                        data: {
+                            connector_name: string;
+                            meta?: unknown;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "connect.session-errored";
+                        data: {
+                            connector_name: string;
+                            meta?: unknown;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "connect.connection-connected";
+                        data: {
+                            /** @description Must start with 'conn_' */
+                            connection_id: string;
+                        };
+                    } | {
+                        /** @constant */
+                        name: "api.token-copied";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "api.graphql-request";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "api.rest-request";
+                        data: Record<string, never>;
+                    } | {
+                        /** @constant */
+                        name: "pageview";
+                        data: {
+                            current_url: string;
+                            path: string;
+                        };
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.event"];
                 };
             };
             /** @description Invalid input data */

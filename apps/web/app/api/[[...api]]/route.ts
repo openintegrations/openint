@@ -1,4 +1,5 @@
 import {modifyRequest} from '@opensdks/fetch-links'
+import {after} from 'next/server'
 import {createApp} from '@openint/api-v1'
 import {currentViewerFromCookie} from '@/lib-server/auth.server'
 import {db} from '@/lib-server/globals'
@@ -7,6 +8,7 @@ const app = createApp({
   db,
   getAdditionalViewer: () =>
     currentViewerFromCookie().then(({viewer}) => viewer),
+  after,
 })
 
 /** Elysia will assume that it is the root route, so we need to modify the url to correspond to it */

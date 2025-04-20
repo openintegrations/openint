@@ -8,12 +8,14 @@ interface WebhookInputProps {
   defaultValue: string
   onSave: (value: string) => void
   isSaving: boolean
+  sendDebugEvent: () => unknown
 }
 
 export function WebhookInput({
   defaultValue,
   onSave,
   isSaving,
+  sendDebugEvent,
 }: WebhookInputProps) {
   const [webhookValue, setWebhookValue] = useState(defaultValue)
   const [lastSavedValue, setLastSavedValue] = useState(defaultValue)
@@ -52,7 +54,7 @@ export function WebhookInput({
   }
 
   return (
-    <div className="w-full max-w-sm space-y-2">
+    <div className="space-y-2">
       <Label className="text-md font-bold" htmlFor="webhookInput">
         Webhook URL
       </Label>
@@ -96,6 +98,15 @@ export function WebhookInput({
               'Save'
             )}
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="ml-2"
+            disabled={!isValidUrl}
+            onClick={sendDebugEvent}
+            aria-label="Send debug event">
+            Send Debug Event
+          </Button>
         </div>
         {showError && (
           <p className="text-sm text-red-500">
@@ -106,4 +117,3 @@ export function WebhookInput({
     </div>
   )
 }
-

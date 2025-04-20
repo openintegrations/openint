@@ -1,18 +1,25 @@
+import type {after} from 'next/server'
 import type {Viewer} from '@openint/cdk'
 import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
+import type {Event} from '@openint/events/events'
+import type {Core} from '../models'
 import type {RouterContextOnError} from './error-handling'
 
 import {asOrgIfCustomer, resolveViewer} from '@openint/cdk'
+import {createServerDispatcher} from '../createServerDispatcher'
 import {viewerFromRequest} from './authentication'
 
 export interface ViewerContext<T extends Viewer = Viewer> {
   viewer: T
   db: AnyDrizzle
+  dispatch: (event: Event) => Promise<Core['event_select']>
 }
 
 interface RouterContextExtra {
   /** Custom fetch, typically for testing purposes */
   fetch?: (req: Request) => Promise<Response>
+  /** Await async tasks after the main request has completed */
+  after?: typeof after
 }
 
 export interface RouterContext<T extends Viewer = Viewer>
@@ -59,7 +66,13 @@ export function routerContextFromViewer<T extends Viewer>({
     if (!dbForViewer) {
       throw new Error(`${db.driverType} does not support asViewer`)
     }
-    return {viewer, db: dbForViewer}
+    const dispatcher = createServerDispatcher({db, after: extra.after})
+
+    return {
+      viewer,
+      db: dbForViewer,
+      dispatch: (event: Event) => dispatcher.dispatch(event, viewer),
+    }
   }
 
   return {
