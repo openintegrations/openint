@@ -1,4 +1,5 @@
 import {createEnv} from '@t3-oss/env-nextjs'
+import {makeUlid} from '@openint/util/id-utils'
 import {proxyReadOnly, proxyRequired} from '@openint/util/proxy-utils'
 import {z} from '@openint/util/zod-utils'
 
@@ -12,7 +13,8 @@ export const envConfig = {
       .string()
       .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
-    JWT_SECRET: z.string().optional(),
+    /** placeholder here for testing purposes. This needs to be set in order for tokens to actually be valid across server restarts */
+    JWT_SECRET: z.string().default(`placeholder_jwt_secret_${makeUlid()}`),
 
     CLERK_SECRET_KEY: z.string().optional(),
 
@@ -120,8 +122,8 @@ export const env = proxyReadOnly(envMutable)
 
 /** Proxy env throw on missing values */
 export const envRequired = proxyRequired(env, {
-  formatError(key) {
-    return new Error(`Missing required env var: ${key}`)
+  formatError(opts) {
+    return new Error(`Missing required env var: ${opts.key} ${opts.reason}`)
   },
 })
 

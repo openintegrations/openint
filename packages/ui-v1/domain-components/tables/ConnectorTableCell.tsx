@@ -24,7 +24,7 @@ export const ConnectorTableCell = ({
   }
 
   // For debugging
-  console.log('ConnectorTableCell received connector:', connector)
+  // console.log('ConnectorTableCell received connector:', connector)
 
   // Create a safe connector object with fallbacks for all required properties
   const safeConnector = {

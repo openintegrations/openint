@@ -42,7 +42,7 @@ const zOAuthConnectionSettings = z.object({
       token_type: z.string().optional(),
       // the data returned by the oauth provider in its raw form, currently used to parse the credentials object
       // useful to access domain specific fields such as authed_user in slack https://api.slack.com/methods/oauth.v2.access#examples
-      raw: z.record(z.unknown()),
+      raw: z.record(z.unknown()).optional(),
     })
     .optional()
     .describe('Output of the postConnect hook for oauth2 connectors'),

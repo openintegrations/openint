@@ -59,13 +59,15 @@ export const connectorConfigRouter = router({
             FROM
               ${schema.connection}
             WHERE
-              ${schema.connection}.connector_config_id = ${schema
-            .connector_config.id}
+              ${schema.connection}.connector_config_id = connector_config.id
           )
         `.as('connection_count'),
+        // TODO: How to fix this issue with not being able to reference column name
+        // in the query substitution? using ${schema.connector_config.id} results in just `id`
+        // which fails the query...
       }
 
-      const items = await ctx.db.query.connector_config.findMany({
+      const query = ctx.db.query.connector_config.findMany({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
           // TODO: Fix typing to make connection_count optional
@@ -100,7 +102,9 @@ export const connectorConfigRouter = router({
         limit: params?.limit ?? 50,
         offset: params?.offset ?? 0,
       })
+      console.log('query', query.toSQL().sql)
 
+      const items = await query
       const limit = params?.limit ?? 50
       const offset = params?.offset ?? 0
       const total = items[0]?.total ?? 0
