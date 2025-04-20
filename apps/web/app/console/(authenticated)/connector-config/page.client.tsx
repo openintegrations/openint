@@ -85,27 +85,37 @@ export function ConnectorConfigList() {
     initialData: selectedCcfg,
   }
 
-  const connectorColumns: Array<
+  const columns: Array<
     ColumnDef<
       ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
     >
   > = [
     {
-      id: 'connector',
       header: 'Connector',
-      accessorKey: 'display_name',
+      accessorKey: 'connector_name',
       cell: ({row}) => {
         const connector = row.original.connector
         return connector ? <ConnectorTableCell connector={connector} /> : null
       },
     },
     {
-      id: 'connections',
-      header: 'Connections',
-      cell: ({row}) => row.original.connection_count,
+      accessorKey: 'config.oauth.client_id', // how do we get this to be typesafe?
+      header: 'Client ID',
     },
     {
-      id: 'status',
+      accessorKey: 'config.oauth.redirect_uri', // how do we get this to be typesafe?
+      header: 'Redirect URI',
+      meta: {
+        initialVisibility: false,
+      },
+    },
+    // Add column for whether we are using the default credentials
+    {
+      accessorKey: 'connection_count',
+      header: '# Connections',
+    },
+    {
+      accessorKey: 'disabled',
       header: 'Status',
       cell: ({row}) => (
         <span className="flex items-center gap-2">
@@ -230,12 +240,13 @@ export function ConnectorConfigList() {
         string | number | string[]
       >
         data={connectorConfigs}
-        columns={connectorColumns}
+        columns={columns}
         onRowClick={handleRowClick}>
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
           <Button
+            className="ml-4"
             onClick={() => {
               setSheetOpen(true)
             }}>

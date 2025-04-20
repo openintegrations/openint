@@ -91,7 +91,26 @@ export function DataTable<TData, TValue>({
   )
   // Hide id column by default... We need a better way to do this though
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>(
+      Object.fromEntries(
+        // TODO: there has got to be a better way to specify initial column visibility
+        // than this convoluted method, with custom accessorKey stringification function
+        _columns
+          .map(
+            (col) =>
+              [
+                col.id ??
+                  ('accessorKey' in col
+                    ? col.accessorKey.toString().replaceAll('.', '_')
+                    : undefined),
+                (col.meta as {initialVisibility?: boolean} | undefined)
+                  ?.initialVisibility,
+              ] as [string, boolean],
+          )
+          .filter(([id, hidden]) => !!id && hidden != null),
+      ),
+    )
+
   const [rowSelection, setRowSelection] = React.useState({})
 
   const columns = React.useMemo(
