@@ -123,7 +123,8 @@ export function makeManualConnectorClientComponent(
             deferredRef.current = undefined
           }
         }}>
-        <DialogContent>
+        {/* Leave z-20 here to ensure it shows when ConnectOpWrapper blurs the background */}
+        <DialogContent className="z-20">
           <DialogHeader>
             <DialogTitle>Configure {connector_name}</DialogTitle>
           </DialogHeader>

@@ -102,14 +102,12 @@ export const connectorConfigRouter = router({
         limit: params?.limit ?? 50,
         offset: params?.offset ?? 0,
       })
-      console.log('query', query.toSQL().sql)
 
       const items = await query
       const limit = params?.limit ?? 50
       const offset = params?.offset ?? 0
       const total = items[0]?.total ?? 0
 
-      console.log(items)
       const expandedItems = items.map((item) => {
         const ccfg: ConnectorConfig = item
         if (
