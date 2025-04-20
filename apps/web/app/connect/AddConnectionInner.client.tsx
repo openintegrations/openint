@@ -10,7 +10,6 @@ import {
 } from '@tanstack/react-query'
 import {useRouter} from 'next/navigation'
 import React from 'react'
-import {router} from '@openint/api-v1/trpc/_base'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Label, toast} from '@openint/shadcn/ui'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
