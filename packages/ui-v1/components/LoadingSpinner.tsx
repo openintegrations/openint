@@ -13,15 +13,17 @@ export function LoadingSpinner({size = 'md', className}: LoadingSpinnerProps) {
   }
 
   return (
-    <div
-      className={cn(
-        'animate-spin rounded-full border-2 border-current border-t-transparent',
-        sizeClasses[size],
-        className,
-      )}
-      role="status"
-      aria-label="Loading">
-      <span className="sr-only">Loading...</span>
+    <div className="min-h-100 flex h-full w-full items-center justify-center">
+      <div
+        className={cn(
+          'animate-spin rounded-full border-2 border-current border-t-transparent',
+          sizeClasses[size],
+          className,
+        )}
+        role="status"
+        aria-label="Loading">
+        <span className="sr-only">Loading...</span>
+      </div>
     </div>
   )
 }
