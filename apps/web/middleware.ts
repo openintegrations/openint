@@ -8,9 +8,10 @@ const clerkMiddlewareFn = clerkMiddleware()
 
 export const middleware: NextMiddleware = (req, ev) => {
   if (env.VERCEL_ENV === 'production') {
+    // Avoid the extra clerk latency for connect requests in production
     if (
-      req.nextUrl.pathname.startsWith('/connect') ||
-      req.nextUrl.host === 'connect.openint.dev'
+      env.NEXT_PUBLIC_CONNECT_URL &&
+      req.url.startsWith(env.NEXT_PUBLIC_CONNECT_URL)
     ) {
       return NextResponse.next()
     }
