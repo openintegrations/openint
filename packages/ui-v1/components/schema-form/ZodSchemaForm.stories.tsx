@@ -60,17 +60,6 @@ export const Union: Story = {
   },
 }
 
-// // Salesforce connector configuration example using actual schema
-// export const SalesforceConnectorConfig: Story = {
-//   args: {
-//     schema: defConnectors.salesforce.schemas.connector_config,
-//     onSubmit: (data) => {
-//       console.log('Salesforce Connector Config submitted:', data)
-//       alert('Salesforce Connector Config submitted! Check console for details.')
-//     },
-//   },
-// }
-
 // // Plaid connector configuration example using actual schema
 // export const PlaidConnectorConfig: Story = {
 //   args: {

@@ -114,8 +114,8 @@ export const WithDifferentVariants: Story = {
       <ConnectorConfigTableCell
         connectorConfig={{
           id: '123456',
-          display_name: 'Salesforce Connector Config',
-          connector_name: 'salesforce',
+          display_name: 'Google Drive Connector Config',
+          connector_name: 'google-drive',
           created_at: '2023-09-12T12:00:00Z',
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,

@@ -10,3 +10,24 @@ export function formatIsoDateString(isoDateString: string) {
     })
     .replace(',', '')
 }
+
+export function timeSince(isoDateString: string): string {
+  const date = new Date(isoDateString)
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - date.getTime())
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
+  const diffMinutes = Math.floor(diffTime / (1000 * 60))
+  const diffSeconds = Math.floor(diffTime / 1000)
+
+  if (diffDays > 0) {
+    return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`
+  }
+  if (diffHours > 0) {
+    return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`
+  }
+  if (diffMinutes > 0) {
+    return `${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ago`
+  }
+  return `${diffSeconds} ${diffSeconds === 1 ? 'second' : 'seconds'} ago`
+}

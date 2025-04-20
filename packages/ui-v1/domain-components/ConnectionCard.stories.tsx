@@ -23,14 +23,14 @@ type Story = StoryObj<typeof ConnectionCard>
 
 export const Healthy: Story = {
   args: {
-    connection: FIXTURES.connections['salesforce-basic'],
+    connection: FIXTURES.connections['google-drive-basic'],
   },
 }
 
 export const Error: Story = {
   args: {
     connection: {
-      ...FIXTURES.connections['salesforce-basic'],
+      ...FIXTURES.connections['google-drive-basic'],
       status: 'error',
     },
   },
@@ -39,7 +39,7 @@ export const Error: Story = {
 export const Disconnected: Story = {
   args: {
     connection: {
-      ...FIXTURES.connections['salesforce-basic'],
+      ...FIXTURES.connections['google-drive-basic'],
       status: 'disconnected',
     },
   },
@@ -48,7 +48,7 @@ export const Disconnected: Story = {
 export const Manual: Story = {
   args: {
     connection: {
-      ...FIXTURES.connections['salesforce-basic'],
+      ...FIXTURES.connections['google-drive-basic'],
       status: 'manual',
     },
   },
@@ -56,13 +56,13 @@ export const Manual: Story = {
 
 export const NoLogo: Story = {
   args: {
-    connection: FIXTURES.connections['salesforce-without-logo'],
+    connection: FIXTURES.connections['google-drive-without-logo'],
   },
 }
 
 export const NoIntegration: Story = {
   args: {
-    connection: FIXTURES.connections['salesforce-basic'],
+    connection: FIXTURES.connections['google-drive-basic'],
   },
 }
 

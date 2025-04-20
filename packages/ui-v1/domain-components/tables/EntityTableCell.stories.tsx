@@ -68,7 +68,7 @@ export const Compact: Story = {
   args: {
     entityType: 'integration_select',
     id: 'int_456',
-    name: 'Salesforce Integration',
+    name: 'Google Drive Integration',
     compact: true,
   },
 }

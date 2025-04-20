@@ -1,9 +1,9 @@
 import type {Meta, StoryObj} from '@storybook/react'
 
-import {ConnectionStatusBadge} from './ConnectionStatus'
+import {ConnectionStatusPill} from './ConnectionStatus'
 
 const meta = {
-  component: ConnectionStatusBadge,
+  component: ConnectionStatusPill,
   parameters: {
     layout: 'centered',
   },
@@ -19,7 +19,7 @@ const meta = {
       description: 'Additional CSS classes to apply to the badge',
     },
   },
-} satisfies Meta<typeof ConnectionStatusBadge>
+} satisfies Meta<typeof ConnectionStatusPill>
 
 export default meta
 type Story = StoryObj<typeof meta>
