@@ -8,6 +8,8 @@ export type LinkProps = React.ComponentProps<typeof NextLink>
 
 export type UrlObject = Exclude<LinkProps['href'], string>
 
+export type TypedHref = RouteImpl<string>
+
 export function Link<RouteType>({
   href: _href,
   absolute,
