@@ -15,6 +15,7 @@ import {Label, toast} from '@openint/shadcn/ui'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {prettyConnectorName} from '@openint/ui-v1/utils'
 import {useTRPC} from '@/lib-client/TRPCApp'
+import {useConnectContext} from './ConnectContextProvider'
 import {
   ConnectorClientComponents,
   makeManualConnectorClientComponent,
@@ -32,7 +33,7 @@ export function AddConnectionInner({
   connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
 }) {
-  const [isConnecting, setIsConnecting] = React.useState(false)
+  const {isConnecting, setIsConnecting} = useConnectContext()
 
   const name = connectorConfig.connector_name as ConnectorName
 
@@ -168,7 +169,12 @@ export function AddConnectionInner({
         displayNameLocation="right"
         // TODO: fix this
         connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
-        onPress={() => handleConnect()}>
+        onPress={() => {
+          if (isConnecting || postConnect.isPending) {
+            return
+          }
+          handleConnect()
+        }}>
         <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
           {isConnecting || postConnect.isPending ? 'Connecting...' : 'Connect'}
         </Label>

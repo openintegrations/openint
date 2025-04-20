@@ -33,6 +33,8 @@ import {
   serverComponentContextForViewer,
 } from '@/lib-server/trpc.server'
 import {AddConnectionInner} from './AddConnectionInner.client'
+import {ConnectContextProvider} from './ConnectContextProvider'
+import {ConnectOpWrapper} from './ConnectOpWrapper'
 import {MyConnectionsClient} from './MyConnections.client'
 import {TabsClient} from './page.client'
 
@@ -105,104 +107,113 @@ export default async function ConnectPage(
     <TRPCApp token={token}>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <GlobalCommandBarProvider>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `
+          <ConnectContextProvider>
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
           :root {
             ${Object.entries(themeVariables)
               .map(([key, value]) => `${key}: ${value};`)
               .join('\n')}
           }
         `,
-            }}
-          />
-          {searchParams.debug && (
-            <pre>
-              {JSON.stringify(
-                {
-                  viewer,
-                  searchParams,
-                  token,
-                },
-                null,
-                2,
-              )}
-            </pre>
-          )}
-          <div className="flex min-h-screen w-full">
-            {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
-            <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
-              <div className="flex flex-col items-start p-8">
-                <Suspense
-                  fallback={
-                    <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
-                  }>
-                  <OrganizationImage orgId={viewer.orgId} className="lg:pt-6" />
-                </Suspense>
-
-                <h1 className="mb-4 mt-16 text-2xl font-bold">
-                  Connect Your Services
-                </h1>
-                <p className="text-muted-foreground">
-                  Integrate your favorite tools and services with our platform.
-                  Manage all your connections in one place.
-                </p>
-                <Button variant="ghost" className="mt-8">
-                  <Link href="/console" className="flex items-center gap-2">
-                    <ChevronLeftIcon className="h-4 w-4" />
-                    Back to{' '}
-                    <Suspense fallback="OpenInt Console">
-                      <OrganizationName orgId={viewer.orgId} />
+              }}
+            />
+            {searchParams.debug && (
+              <pre>
+                {JSON.stringify(
+                  {
+                    viewer,
+                    searchParams,
+                    token,
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            )}
+            <ConnectOpWrapper>
+              <div className="flex min-h-screen w-full">
+                {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
+                <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
+                  <div className="flex flex-col items-start p-8">
+                    <Suspense
+                      fallback={
+                        <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
+                      }>
+                      <OrganizationImage
+                        orgId={viewer.orgId}
+                        className="lg:pt-6"
+                      />
                     </Suspense>
-                  </Link>
-                </Button>
 
-                <div className="text-muted-foreground mt-auto flex items-center gap-0.5 self-end text-sm">
-                  <span>Powered by</span>
-                  {/* TODO: in future take to a specific landing page for that customer saying XX uses OpenInt to power their integrations */}
-                  <a
-                    href="https://openint.dev?ref=connect"
-                    target="_blank"
-                    rel="noopener"
-                    className="font-semibold">
-                    OpenInt
-                  </a>
+                    <h1 className="mb-4 mt-16 text-2xl font-bold">
+                      Connect Your Services
+                    </h1>
+                    <p className="text-muted-foreground">
+                      Integrate your favorite tools and services with our
+                      platform. Manage all your connections in one place.
+                    </p>
+                    <Button variant="ghost" className="mt-8">
+                      <Link href="/console" className="flex items-center gap-2">
+                        <ChevronLeftIcon className="h-4 w-4" />
+                        Back to{' '}
+                        <Suspense fallback="OpenInt Console">
+                          <OrganizationName orgId={viewer.orgId} />
+                        </Suspense>
+                      </Link>
+                    </Button>
+
+                    <div className="text-muted-foreground mt-auto flex items-center gap-0.5 self-end text-sm">
+                      <span>Powered by</span>
+                      {/* TODO: in future take to a specific landing page for that customer saying XX uses OpenInt to power their integrations */}
+                      <a
+                        href="https://openint.dev?ref=connect"
+                        target="_blank"
+                        rel="noopener"
+                        className="font-semibold">
+                        OpenInt
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
+                {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
-            <TabsClient
-              defaultValue={
-                viewerConnections.items.length > 0 ? 'manage' : 'add'
-              }
-              paramKey="view"
-              className="flex-1 p-4 lg:pt-12">
-              <div className="mx-auto w-full max-w-4xl">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="manage">Manage Integrations</TabsTrigger>
-                  <TabsTrigger value="add">Add New Integration</TabsTrigger>
-                </TabsList>
-                <TabsContent value="manage" className="pt-6">
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <MyConnectionsClient
-                      connector_names={searchParams.connector_names}
-                    />
-                  </Suspense>
-                </TabsContent>
-                <TabsContent value="add" className="pt-6">
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <AddConnections
-                      viewer={viewer}
-                      connector_names={searchParams.connector_names}
-                      existingConnections={viewerConnections.items}
-                    />
-                  </Suspense>
-                </TabsContent>
+                <TabsClient
+                  defaultValue={
+                    viewerConnections.items.length > 0 ? 'manage' : 'add'
+                  }
+                  paramKey="view"
+                  className="flex-1 p-4 lg:pt-12">
+                  <div className="mx-auto w-full max-w-4xl">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="manage">
+                        Manage Integrations
+                      </TabsTrigger>
+                      <TabsTrigger value="add">Add New Integration</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="manage" className="pt-6">
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <MyConnectionsClient
+                          connector_names={searchParams.connector_names}
+                        />
+                      </Suspense>
+                    </TabsContent>
+                    <TabsContent value="add" className="pt-6">
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <AddConnections
+                          viewer={viewer}
+                          connector_names={searchParams.connector_names}
+                          existingConnections={viewerConnections.items}
+                        />
+                      </Suspense>
+                    </TabsContent>
+                  </div>
+                </TabsClient>
               </div>
-            </TabsClient>
-          </div>
+            </ConnectOpWrapper>
+          </ConnectContextProvider>
         </GlobalCommandBarProvider>
       </HydrationBoundary>
     </TRPCApp>
@@ -228,7 +239,7 @@ async function AddConnections({
   const res = await queryClient.fetchQuery(
     trpc.listConnectorConfigs.queryOptions({
       connector_names,
-      expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
+      expand: ['connector.schemas'],
     }),
   )
 
@@ -249,11 +260,13 @@ async function AddConnections({
 
   const availableToConnect = res.items.filter(
     (ccfg) =>
-      !existingConnections.some(
+      // Allow custom connectors to be added multiple times
+      ccfg.connector?.authType === 'CUSTOM' ||
+      // For non-custom connectors, only include if they don't already exist
+      (!existingConnections.some(
         (conn) => conn.connector_config_id === ccfg.id,
       ) &&
-      ccfg.connector?.authType &&
-      ccfg.connector.authType !== 'CUSTOM',
+        ccfg.connector?.authType),
   )
 
   if (!availableToConnect?.length || availableToConnect.length === 0) {
