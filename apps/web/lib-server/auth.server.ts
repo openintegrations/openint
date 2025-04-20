@@ -18,7 +18,14 @@ export type ServerSession = {
 }
 
 export async function currentViewerFromCookie() {
-  const viewer = await viewerFromCookie()
+  const viewer = await viewerFromCookie().catch((err: unknown): Viewer => {
+    // prettier-ignore
+    if (String(err).includes("auth() was called but Clerk can't detect usage of clerkMiddleware")) {
+      return {role: 'anon'}
+    }
+    throw err
+  })
+
   // how do we get the token as well without signing again?
   // TODO: we need a way to ensure api calling token does not expire while user is still logged in
   // and that's why we don't want to sign separate token but rather
