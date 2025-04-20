@@ -111,6 +111,8 @@ export function Confetti({
 
     const timeoutId = setTimeout(() => {
       cancelAnimationFrame(animationFrameId)
+      console.log('clearing canvas after timeout')
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
     }, duration)
 
     return () => {
