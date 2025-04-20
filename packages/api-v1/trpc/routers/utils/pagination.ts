@@ -98,8 +98,10 @@ export function applyPaginationAndOrder<
     orderDirection === 'desc' ? desc(orderByColumn) : orderByColumn,
   ) as T
 
-  // Apply pagination
-  modifiedQuery = modifiedQuery.limit(limit).offset(offset) as T
+  // TODO: reenable pagination once we handle it in our clients
+  if (params?.limit) {
+    modifiedQuery = modifiedQuery.limit(limit).offset(offset) as T
+  }
 
   return {query: modifiedQuery, limit, offset}
 }
