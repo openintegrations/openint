@@ -158,13 +158,13 @@ function useConnectionCommands() {
   const checkConnection = useMutation(
     trpc.checkConnection.mutationOptions({
       onMutate: (_variables) => {
-        toast.loading('Checking connection...')
+        toast.loading('Ensuring connection is still valid...')
       },
       onSuccess: () => {
-        toast.success('Connection check successful!')
+        toast.success('Your connection is still valid!')
       },
       onError: (error) => {
-        toast.error(`Connection check failed: ${error.message}`)
+        toast.error(`Connection validation failed: ${error.message}`)
       },
       onSettled: () => {
         void queryClient.invalidateQueries({
@@ -206,10 +206,10 @@ function useConnectionCommands() {
     }),
 
     'connection:check': cmd.identity({
-      title: 'Check Connection',
-      icon: 'CheckCircle',
+      title: 'Validate Connection',
+      icon: 'CircleAlert',
       params: z.object({
-        connection_id: z.string().describe('The ID of the connection to check'),
+        connection_id: z.string().describe('The ID of the connection to sync'),
       }),
       execute: async ({params}) => {
         await checkConnection.mutateAsync({id: params.connection_id})
