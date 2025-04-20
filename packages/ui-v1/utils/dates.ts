@@ -20,7 +20,7 @@ export function timeSince(isoDateString: string): string {
   const diffMinutes = Math.floor(diffTime / (1000 * 60))
 
   if (diffDays > 0) {
-    return `${diffDays} ${diffDays === 1 ? 'yesterday' : 'days'} ago`
+    return diffDays === 1 ? 'yesterday' : `${diffDays} days ago`
   }
   if (diffHours > 0) {
     return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`
