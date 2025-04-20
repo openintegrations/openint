@@ -51,7 +51,7 @@ export const getConnectionStatusStyles = (
         pillColor: 'bg-amber-500',
         borderColor: 'border-amber-200',
         message:
-          'Your integration has disconnected. Please check your connection and if need be delete and connect it again.',
+          'Your integration has disconnected. Please validate your connection and if need be delete and connect it again.',
       }
     case 'manual':
       return {
@@ -61,7 +61,7 @@ export const getConnectionStatusStyles = (
         pillColor: 'bg-slate-500',
         borderColor: 'border-slate-200',
         message:
-          'Your integration was manually imported so we cannot verify its status. Please check your connection and if need be delete and connect it again.',
+          'Your integration was manually imported so we cannot verify its status. Please validate your connection and if need be delete and connect it again.',
       }
     case 'unknown':
     default:
@@ -72,7 +72,7 @@ export const getConnectionStatusStyles = (
         pillColor: 'bg-slate-500',
         borderColor: 'border-slate-200',
         message:
-          'Your integration status is unknown. This usually resolves on its own but feel free to manually check your connection.',
+          'Your integration status is unknown. This usually resolves on its own but feel free to manually validate your connection.',
       }
   }
 }
