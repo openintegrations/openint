@@ -172,6 +172,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.customer_id).toBe('cus_222')
       expect(res.id).toEqual(preConnectRes.current.state.connection_id)
 
+      const events = await asUser.listEvents()
+      const recentEvent = events.items.find(
+        (e) => e.name === 'connect.connection-connected',
+      )
+
+      expect(recentEvent).toBeDefined()
+      expect(recentEvent?.data?.connection_id).toBe(res.id)
+
       return {id: res.id, settings}
     })
 

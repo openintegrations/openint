@@ -321,6 +321,11 @@ export const connectRouter = router({
         {keyColumns: ['id']},
       ).returning()
 
+      await ctx.dispatch({
+        name: 'connect.connection-connected',
+        data: {connection_id: conn!.id as `conn_${string}`},
+      })
+
       return {
         ...conn!,
         // NOTE: its not clear to me why it doesn't take the dbUpsertOne customer_id
