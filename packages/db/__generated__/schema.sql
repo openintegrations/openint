@@ -38,60 +38,60 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE FUNCTION public.generate_ulid() RETURNS text
     LANGUAGE plpgsql
     AS $$
-DECLARE
-  -- Crockford's Base32
-  encoding   BYTEA = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
-  timestamp  BYTEA = E'\\000\\000\\000\\000\\000\\000';
-  output     TEXT = '';
+  DECLARE
+    -- Crockford's Base32
+    encoding   BYTEA = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+    timestamp  BYTEA = E'\\000\\000\\000\\000\\000\\000';
+    output     TEXT = '';
 
-  unix_time  BIGINT;
-  ulid       BYTEA;
-BEGIN
-  -- 6 timestamp bytes
-  unix_time = (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT;
-  timestamp = SET_BYTE(timestamp, 0, (unix_time >> 40)::BIT(8)::INTEGER);
-  timestamp = SET_BYTE(timestamp, 1, (unix_time >> 32)::BIT(8)::INTEGER);
-  timestamp = SET_BYTE(timestamp, 2, (unix_time >> 24)::BIT(8)::INTEGER);
-  timestamp = SET_BYTE(timestamp, 3, (unix_time >> 16)::BIT(8)::INTEGER);
-  timestamp = SET_BYTE(timestamp, 4, (unix_time >> 8)::BIT(8)::INTEGER);
-  timestamp = SET_BYTE(timestamp, 5, unix_time::BIT(8)::INTEGER);
+    unix_time  BIGINT;
+    ulid       BYTEA;
+  BEGIN
+    -- 6 timestamp bytes
+    unix_time = (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT;
+    timestamp = SET_BYTE(timestamp, 0, (unix_time >> 40)::BIT(8)::INTEGER);
+    timestamp = SET_BYTE(timestamp, 1, (unix_time >> 32)::BIT(8)::INTEGER);
+    timestamp = SET_BYTE(timestamp, 2, (unix_time >> 24)::BIT(8)::INTEGER);
+    timestamp = SET_BYTE(timestamp, 3, (unix_time >> 16)::BIT(8)::INTEGER);
+    timestamp = SET_BYTE(timestamp, 4, (unix_time >> 8)::BIT(8)::INTEGER);
+    timestamp = SET_BYTE(timestamp, 5, unix_time::BIT(8)::INTEGER);
 
-  -- 10 entropy bytes
-  ulid = timestamp || gen_random_bytes(10);
+    -- 10 entropy bytes
+    ulid = timestamp || gen_random_bytes(10);
 
-  -- Encode the timestamp
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 224) >> 5));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 31)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 1) & 248) >> 3));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 1) & 7) << 2) | ((GET_BYTE(ulid, 2) & 192) >> 6)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 2) & 62) >> 1));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 2) & 1) << 4) | ((GET_BYTE(ulid, 3) & 240) >> 4)));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 3) & 15) << 1) | ((GET_BYTE(ulid, 4) & 128) >> 7)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 4) & 124) >> 2));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 4) & 3) << 3) | ((GET_BYTE(ulid, 5) & 224) >> 5)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 5) & 31)));
+    -- Encode the timestamp
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 224) >> 5));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 31)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 1) & 248) >> 3));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 1) & 7) << 2) | ((GET_BYTE(ulid, 2) & 192) >> 6)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 2) & 62) >> 1));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 2) & 1) << 4) | ((GET_BYTE(ulid, 3) & 240) >> 4)));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 3) & 15) << 1) | ((GET_BYTE(ulid, 4) & 128) >> 7)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 4) & 124) >> 2));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 4) & 3) << 3) | ((GET_BYTE(ulid, 5) & 224) >> 5)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 5) & 31)));
 
-  -- Encode the entropy
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 6) & 248) >> 3));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 6) & 7) << 2) | ((GET_BYTE(ulid, 7) & 192) >> 6)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 7) & 62) >> 1));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 7) & 1) << 4) | ((GET_BYTE(ulid, 8) & 240) >> 4)));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 8) & 15) << 1) | ((GET_BYTE(ulid, 9) & 128) >> 7)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 9) & 124) >> 2));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 9) & 3) << 3) | ((GET_BYTE(ulid, 10) & 224) >> 5)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 10) & 31)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 11) & 248) >> 3));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 11) & 7) << 2) | ((GET_BYTE(ulid, 12) & 192) >> 6)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 12) & 62) >> 1));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 12) & 1) << 4) | ((GET_BYTE(ulid, 13) & 240) >> 4)));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 13) & 15) << 1) | ((GET_BYTE(ulid, 14) & 128) >> 7)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 14) & 124) >> 2));
-  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 14) & 3) << 3) | ((GET_BYTE(ulid, 15) & 224) >> 5)));
-  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 15) & 31)));
+    -- Encode the entropy
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 6) & 248) >> 3));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 6) & 7) << 2) | ((GET_BYTE(ulid, 7) & 192) >> 6)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 7) & 62) >> 1));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 7) & 1) << 4) | ((GET_BYTE(ulid, 8) & 240) >> 4)));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 8) & 15) << 1) | ((GET_BYTE(ulid, 9) & 128) >> 7)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 9) & 124) >> 2));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 9) & 3) << 3) | ((GET_BYTE(ulid, 10) & 224) >> 5)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 10) & 31)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 11) & 248) >> 3));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 11) & 7) << 2) | ((GET_BYTE(ulid, 12) & 192) >> 6)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 12) & 62) >> 1));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 12) & 1) << 4) | ((GET_BYTE(ulid, 13) & 240) >> 4)));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 13) & 15) << 1) | ((GET_BYTE(ulid, 14) & 128) >> 7)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 14) & 124) >> 2));
+    output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 14) & 3) << 3) | ((GET_BYTE(ulid, 15) & 224) >> 5)));
+    output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 15) & 31)));
 
-  RETURN output;
-END
-$$;
+    RETURN output;
+  END
+  $$;
 
 
 --
@@ -141,38 +141,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: __drizzle_migrations; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.__drizzle_migrations (
-    id integer NOT NULL,
-    hash text NOT NULL,
-    created_at bigint,
-    created_at_timestamp timestamp without time zone GENERATED ALWAYS AS (to_timestamp(((created_at / 1000))::double precision)) STORED
-);
-
-
---
--- Name: __drizzle_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.__drizzle_migrations_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: __drizzle_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.__drizzle_migrations_id_seq OWNED BY public.__drizzle_migrations.id;
-
-
---
 -- Name: connection; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -189,6 +157,8 @@ CREATE TABLE public.connection (
     display_name character varying,
     disabled boolean DEFAULT false,
     metadata jsonb,
+    status character varying,
+    status_message character varying,
     CONSTRAINT connection_id_prefix_check CHECK (starts_with((id)::text, 'conn_'::text))
 );
 
@@ -217,6 +187,19 @@ CREATE TABLE public.connector_config (
 
 
 --
+-- Name: customer; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.customer (
+    org_id character varying NOT NULL,
+    id character varying DEFAULT 'concat(''cus_'', generate_ulid())'::character varying NOT NULL,
+    metadata jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: event; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -229,7 +212,7 @@ CREATE TABLE public.event (
     v character varying,
     org_id character varying GENERATED ALWAYS AS (("user" ->> 'org_id'::text)) STORED,
     user_id character varying GENERATED ALWAYS AS (("user" ->> 'user_id'::text)) STORED,
-    customer_id character varying GENERATED ALWAYS AS (("user" ->> 'customer_id'::text)) STORED,
+    customer_id character varying GENERATED ALWAYS AS (COALESCE(("user" ->> 'cus_id'::text), ("user" ->> 'customer_id'::text))) STORED,
     CONSTRAINT event_id_prefix_check CHECK (starts_with((id)::text, 'evt_'::text))
 );
 
@@ -246,6 +229,21 @@ CREATE TABLE public.integration (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT integration_id_prefix_check CHECK (starts_with((id)::text, 'int_'::text))
+);
+
+
+--
+-- Name: organization; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization (
+    id character varying DEFAULT 'concat(''org_'', generate_ulid())'::character varying NOT NULL,
+    api_key character varying,
+    name character varying,
+    slug character varying,
+    metadata jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -274,18 +272,11 @@ CREATE TABLE public.pipeline (
 
 
 --
--- Name: __drizzle_migrations id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: customer customer_org_id_id_pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.__drizzle_migrations ALTER COLUMN id SET DEFAULT nextval('public.__drizzle_migrations_id_seq'::regclass);
-
-
---
--- Name: __drizzle_migrations __drizzle_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.__drizzle_migrations
-    ADD CONSTRAINT __drizzle_migrations_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_org_id_id_pk PRIMARY KEY (org_id, id);
 
 
 --
@@ -294,6 +285,22 @@ ALTER TABLE ONLY public.__drizzle_migrations
 
 ALTER TABLE ONLY public.event
     ADD CONSTRAINT event_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organization organization_api_key_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization
+    ADD CONSTRAINT organization_api_key_unique UNIQUE (api_key);
+
+
+--
+-- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization
+    ADD CONSTRAINT organization_pkey PRIMARY KEY (id);
 
 
 --
@@ -354,13 +361,6 @@ CREATE INDEX connection_provider_name ON public.connection USING btree (connecto
 --
 
 CREATE INDEX connection_updated_at ON public.connection USING btree (updated_at);
-
-
---
--- Name: event_customer_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX event_customer_id ON public.event USING btree (customer_id);
 
 
 --
@@ -462,6 +462,14 @@ CREATE INDEX pipeline_updated_at ON public.pipeline USING btree (updated_at);
 
 
 --
+-- Name: customer customer_org_id_organization_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_org_id_organization_id_fk FOREIGN KEY (org_id) REFERENCES public.organization(id);
+
+
+--
 -- Name: connection fk_connector_config_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -536,6 +544,12 @@ ALTER TABLE public.connection ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.connector_config ENABLE ROW LEVEL SECURITY;
 
 --
+-- Name: customer; Type: ROW SECURITY; Schema: public; Owner: -
+--
+
+ALTER TABLE public.customer ENABLE ROW LEVEL SECURITY;
+
+--
 -- Name: connection customer_access; Type: POLICY; Schema: public; Owner: -
 --
 
@@ -567,6 +581,13 @@ CREATE POLICY customer_access ON public.pipeline TO customer USING (( SELECT (AR
 --
 
 CREATE POLICY customer_append ON public.event FOR INSERT TO customer WITH CHECK (((org_id)::text = (public.jwt_org_id())::text));
+
+
+--
+-- Name: customer customer_read; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY customer_read ON public.customer TO customer USING ((((org_id)::text = (public.jwt_org_id())::text) AND ((id)::text = (public.jwt_customer_id())::text)));
 
 
 --
@@ -604,6 +625,13 @@ CREATE POLICY org_access ON public.connection TO org USING (((connector_config_i
 --
 
 CREATE POLICY org_access ON public.connector_config TO org USING (((org_id)::text = (public.jwt_org_id())::text)) WITH CHECK (((org_id)::text = (public.jwt_org_id())::text));
+
+
+--
+-- Name: customer org_access; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY org_access ON public.customer TO org USING (((org_id)::text = (public.jwt_org_id())::text)) WITH CHECK (((org_id)::text = (public.jwt_org_id())::text));
 
 
 --
@@ -645,6 +673,13 @@ CREATE POLICY org_member_access ON public.connector_config TO authenticated USIN
 
 
 --
+-- Name: customer org_member_access; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY org_member_access ON public.customer TO authenticated USING (((org_id)::text = (public.jwt_org_id())::text)) WITH CHECK (((org_id)::text = (public.jwt_org_id())::text));
+
+
+--
 -- Name: pipeline org_member_access; Type: POLICY; Schema: public; Owner: -
 --
 
@@ -672,10 +707,24 @@ CREATE POLICY org_member_read ON public.event FOR SELECT TO authenticated USING 
 
 
 --
+-- Name: organization org_member_read; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY org_member_read ON public.organization FOR SELECT TO authenticated USING (((id)::text = (public.jwt_org_id())::text));
+
+
+--
 -- Name: event org_read; Type: POLICY; Schema: public; Owner: -
 --
 
 CREATE POLICY org_read ON public.event FOR SELECT TO org USING (((org_id)::text = (public.jwt_org_id())::text));
+
+
+--
+-- Name: organization org_read; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY org_read ON public.organization FOR SELECT TO org USING (((id)::text = (public.jwt_org_id())::text));
 
 
 --
@@ -684,6 +733,12 @@ CREATE POLICY org_read ON public.event FOR SELECT TO org USING (((org_id)::text 
 
 CREATE POLICY org_write_access ON public.integration USING (true) WITH CHECK (true);
 
+
+--
+-- Name: organization; Type: ROW SECURITY; Schema: public; Owner: -
+--
+
+ALTER TABLE public.organization ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: pipeline; Type: ROW SECURITY; Schema: public; Owner: -
@@ -705,14 +760,6 @@ CREATE POLICY public_readonly_access ON public.integration FOR SELECT USING (tru
 GRANT USAGE ON SCHEMA public TO authenticated;
 GRANT USAGE ON SCHEMA public TO customer;
 GRANT USAGE ON SCHEMA public TO org;
-
-
---
--- Name: TABLE __drizzle_migrations; Type: ACL; Schema: public; Owner: -
---
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.__drizzle_migrations TO org;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.__drizzle_migrations TO authenticated;
 
 
 --
