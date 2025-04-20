@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {LoadingSpinner} from '@openint/ui-v1'
 import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
@@ -34,10 +35,6 @@ import {
 import {AddConnectionInner} from './AddConnectionInner.client'
 import {MyConnectionsClient} from './MyConnections.client'
 import {TabsClient} from './page.client'
-
-function Fallback() {
-  return <div>Loading...</div>
-}
 
 export default async function ConnectPage(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
@@ -187,15 +184,15 @@ export default async function ConnectPage(
                   <TabsTrigger value="manage">Manage Integrations</TabsTrigger>
                   <TabsTrigger value="add">Add New Integration</TabsTrigger>
                 </TabsList>
-                <TabsContent value="manage" className="pt-2">
-                  <Suspense fallback={<Fallback />}>
+                <TabsContent value="manage" className="pt-6">
+                  <Suspense fallback={<LoadingSpinner />}>
                     <MyConnectionsClient
                       connector_names={searchParams.connector_names}
                     />
                   </Suspense>
                 </TabsContent>
-                <TabsContent value="add" className="pt-2">
-                  <Suspense fallback={<Fallback />}>
+                <TabsContent value="add" className="pt-6">
+                  <Suspense fallback={<LoadingSpinner />}>
                     <AddConnections
                       viewer={viewer}
                       connector_names={searchParams.connector_names}
@@ -280,8 +277,8 @@ async function AddConnections({
 
   return (
     <div className="flex flex-col gap-4">
-      {availableToConnect.map((ccfg) => (
-        <Suspense key={ccfg.id} fallback={<Fallback />}>
+      <Suspense fallback={<LoadingSpinner />}>
+        {availableToConnect.map((ccfg) => (
           <AddConnection
             key={ccfg.id}
             connectorConfig={{
@@ -293,8 +290,8 @@ async function AddConnections({
             }}
             viewer={viewer}
           />
-        </Suspense>
-      ))}
+        ))}
+      </Suspense>
     </div>
   )
 }
