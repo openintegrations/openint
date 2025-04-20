@@ -135,15 +135,18 @@ function useConnectionCommands() {
 
   const queryClient = useQueryClient()
 
+  let loadingToastId: string | number = ''
   const deleteConnection = useMutation(
     trpc.deleteConnection.mutationOptions({
       onMutate: () => {
-        toast.loading('Deleting connection...')
+        loadingToastId = toast.loading('Deleting connection...')
       },
       onSuccess: () => {
+        toast.dismiss(loadingToastId)
         toast.success('Connection deleted successfully!')
       },
       onError: (error) => {
+        toast.dismiss(loadingToastId)
         toast.error(`Connection deletion failed: ${error.message}`)
       },
       onSettled: () => {

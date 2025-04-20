@@ -8,10 +8,13 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query'
+import {useRouter} from 'next/navigation'
 import React from 'react'
+import {router} from '@openint/api-v1/trpc/_base'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Label, toast} from '@openint/shadcn/ui'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
+import {prettyConnectorName} from '@openint/ui-v1/utils'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {
   ConnectorClientComponents,
@@ -65,6 +68,8 @@ export function AddConnectionInner({
     }),
   )
 
+  const router = useRouter()
+
   const handleConnect = React.useCallback(async () => {
     try {
       setIsConnecting(true)
@@ -100,6 +105,13 @@ export function AddConnectionInner({
       })
 
       // TODO: update local cache state with result from postConnect
+      toast.success(
+        `${postConnectRes.display_name || prettyConnectorName(name)} connected successfully.`,
+      )
+
+      const url = new URL(window.location.href)
+      url.searchParams.set('view', 'manage')
+      router.replace(url.search || `?view=manage`)
       return postConnectRes
     } catch (error) {
       console.error('Error connecting', error)
