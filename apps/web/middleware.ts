@@ -1,11 +1,20 @@
 import {clerkMiddleware} from '@openint/console-auth/server'
+import {env} from '@openint/env'
 
 // Disable redirects
 export default clerkMiddleware()
 
+const excludedPaths = [
+  '_next/static',
+  '_next/image',
+  'favicon.ico',
+  'sitemap.xml',
+  'robots.txt',
+  env.VERCEL_ENV !== 'production' && 'connect',
+].filter((p) => !!p)
+
 export const config = {
   matcher: [
-
     // // This it the primary route we want to protect with clerk
     // '/console/:path*',
     // // for dev purposes we want to be able to use connect as the console user
@@ -15,6 +24,6 @@ export const config = {
     // // Allow access to the root page for dev purposes
     // '/',
     // Need to match all routes due to the way we handle subdomain deployments
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!' + excludedPaths.join('|') + ').*)',
   ],
 }
