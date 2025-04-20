@@ -56,13 +56,15 @@ const nextConfig = {
       },
       // connect.openint.dev/* -> /connect/*
       {
-        source: nonSpecialPath,
+        // Allow connect.openint.dev/api/* to pass through without rewrites
+        source: '/:path((?!_next|favicon.ico|sitemap.xml|robots.txt|api).*)',
         has: [{type: 'host', value: 'connect.openint.dev'}],
         destination: '/connect/:path*',
       },
       // console.openint.dev/* -> /console/*
       {
-        source: nonSpecialPath,
+        // Allow console.openint.dev/api/* to pass through without rewrites
+        source: '/:path((?!_next|favicon.ico|sitemap.xml|robots.txt|api).*)',
         has: [{type: 'host', value: 'console.openint.dev'}],
         destination: '/console/:path*',
       },

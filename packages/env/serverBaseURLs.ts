@@ -26,7 +26,7 @@ export interface GetServerUrlOptions {
 }
 
 /** @internal Use resolveRoute instead or getBaseURLs instead */
-export function _getServerUrl(opts: GetServerUrlOptions | null | undefined) {
+export function getServerUrl(opts: GetServerUrlOptions | null | undefined) {
   return trimTrailingSlash(
     (typeof window !== 'undefined' &&
       `${window.location.protocol}//${window.location.host}`) ||
@@ -43,7 +43,7 @@ export function _getServerUrl(opts: GetServerUrlOptions | null | undefined) {
 const bases = ['api', 'console', 'connect'] as const
 
 export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
-  const serverUrl = _getServerUrl(opts)
+  const serverUrl = getServerUrl(opts)
   // TODO: Add support for custom domains for each of these services
   return R.mapToObj(bases, (base) => [
     base,
@@ -80,5 +80,5 @@ export function resolveRoute(
           ]
     }
   }
-  return [route, _getServerUrl(opts)]
+  return [route, getServerUrl(opts)]
 }

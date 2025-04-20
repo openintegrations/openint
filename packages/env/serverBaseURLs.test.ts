@@ -4,7 +4,7 @@ import {describe, expect, test} from '@jest/globals'
 import {temporarilyModifyEnv} from './env'
 import {
   getConnectorDefaultCredentials,
-  _getServerUrl,
+  getServerUrl,
   resolveRoute,
 } from './serverBaseURLs'
 
@@ -96,7 +96,7 @@ describe('getServerUrl', () => {
       location: {protocol: 'https:', host: 'example.com'},
     } as any
 
-    const result = _getServerUrl(null)
+    const result = getServerUrl(null)
     expect(result).toBe('https://example.com')
   })
 
@@ -108,7 +108,7 @@ describe('getServerUrl', () => {
     const req = new Request('https://example.com', {headers})
     const ctx = {req}
 
-    const result = _getServerUrl(ctx)
+    const result = getServerUrl(ctx)
     expect(result).toBe('https://api.example.com')
   })
 
@@ -119,7 +119,7 @@ describe('getServerUrl', () => {
     const req = new Request('https://example.com', {headers})
     const ctx = {req}
 
-    const result = _getServerUrl(ctx)
+    const result = getServerUrl(ctx)
     expect(result).toBe('http://api.example.com')
   })
 
@@ -129,7 +129,7 @@ describe('getServerUrl', () => {
         NEXT_PUBLIC_SERVER_URL: 'https://custom-server.com',
       },
       () => {
-        const result = _getServerUrl(null)
+        const result = getServerUrl(null)
         expect(result).toBe('https://custom-server.com')
       },
     )
@@ -141,7 +141,7 @@ describe('getServerUrl', () => {
         VERCEL_URL: 'my-app.vercel.app',
       },
       () => {
-        const result = _getServerUrl(null)
+        const result = getServerUrl(null)
         expect(result).toBe('https://my-app.vercel.app')
       },
     )
@@ -153,7 +153,7 @@ describe('getServerUrl', () => {
         PORT: '8080',
       },
       () => {
-        const result = _getServerUrl(null)
+        const result = getServerUrl(null)
         expect(result).toBe('http://localhost:8080')
       },
     )
@@ -165,14 +165,14 @@ describe('getServerUrl', () => {
         NEXT_PUBLIC_PORT: '4000',
       },
       () => {
-        const result = _getServerUrl(null)
+        const result = getServerUrl(null)
         expect(result).toBe('http://localhost:4000')
       },
     )
   })
 
   test('should fall back to localhost:3000 when no port is specified', () => {
-    const result = _getServerUrl(null)
+    const result = getServerUrl(null)
     expect(result).toBe('http://localhost:3000')
   })
 
@@ -189,7 +189,7 @@ describe('getServerUrl', () => {
     const req = new Request('https://example.com', {headers})
     const ctx = {req}
 
-    const result = _getServerUrl(ctx)
+    const result = getServerUrl(ctx)
     expect(result).toBe('https://example.com')
   })
 
@@ -206,7 +206,7 @@ describe('getServerUrl', () => {
         const req = new Request('https://example.com', {headers})
         const ctx = {req}
 
-        const result = _getServerUrl(ctx)
+        const result = getServerUrl(ctx)
         expect(result).toBe('https://api.example.com')
       },
     )

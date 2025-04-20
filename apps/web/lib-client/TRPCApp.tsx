@@ -8,7 +8,7 @@ import {ReactQueryStreamedHydration} from '@tanstack/react-query-next-experiment
 import {createTRPCClient, httpLink} from '@trpc/client'
 import {createTRPCContext} from '@trpc/tanstack-react-query'
 import React from 'react'
-import {resolveRoute} from '@openint/env'
+import {getServerUrl} from '@openint/env'
 import {getQueryClient} from '@/lib-common/trpc.common'
 
 const {TRPCProvider, useTRPC, useTRPCClient} = createTRPCContext<AppRouter>()
@@ -63,7 +63,10 @@ export function TRPCApp({
         links: [
           httpLink({
             // TODO: if SRR, bypass http link completely, is that possibe?
-            url: new URL(...resolveRoute('/api/v1/trpc', null)).toString(),
+            // We cannot use resolveRoute here because we want to bypass CORS
+            // request by using relative url relative to server root, not going to the
+            // api.openint.dev subdomain
+            url: new URL('/api/v1/trpc', getServerUrl(null)).toString(),
             // Rely on cookie auth when explicit token is not provided
             headers: {
               ...(token ? {authorization: `Bearer ${token}`} : {}),
