@@ -1,15 +1,17 @@
 'use client'
 
 import {
-  OrganizationSwitcher,
+  OrganizationSwitcher as ClerkOrganizationSwitcher,
+  UserButton as ClerkUserButton,
   useClerk,
   useSession as useClerkSession,
   useOrganization,
-  UserButton,
   useUser,
 } from '@clerk/nextjs'
+import {dark as darkTheme} from '@clerk/themes'
 import dynamic from 'next/dynamic'
 import React from 'react'
+import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 
 export {
   ClerkProvider as AuthProvider,
@@ -17,12 +19,12 @@ export {
   SignIn,
   /** TODO: Move these to noSsr also to avoid hydration errors */
   SignUp,
+  /** @deprecated use useSession instead */
+  useAuth,
   useOrganization,
   useOrganizationList,
   /** @deprecated use useSession instead */
   useUser,
-  /** @deprecated use useSession instead */
-  useAuth,
 } from '@clerk/nextjs'
 
 export type ClientSession = ReturnType<typeof useSession>
@@ -56,10 +58,31 @@ export function useSession() {
 }
 
 export const DynamicOrganizationSwitcher = dynamic(
-  () => Promise.resolve(OrganizationSwitcher),
+  () => Promise.resolve(ClerkOrganizationSwitcher),
   {ssr: false},
 )
 
-export const DynamicUserButton = dynamic(() => Promise.resolve(UserButton), {
-  ssr: false,
-})
+export const DynamicUserButton = dynamic(
+  () => Promise.resolve(ClerkUserButton),
+  {ssr: false},
+)
+
+export function OrganizationSwitcher() {
+  const {isDark} = useTheme()
+  return (
+    <ClerkOrganizationSwitcher
+      hidePersonal={true}
+      appearance={{baseTheme: isDark ? darkTheme : undefined}}
+    />
+  )
+}
+
+export function UserButton() {
+  const {isDark} = useTheme()
+  return (
+    <ClerkUserButton
+      showName
+      appearance={{baseTheme: isDark ? darkTheme : undefined}}
+    />
+  )
+}

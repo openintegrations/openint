@@ -1,8 +1,5 @@
 'use client'
 
-import {Moon, Sun} from 'lucide-react'
-import {ThemeProvider as NextThemesProvider, useTheme} from 'next-themes'
-import React from 'react'
 import {Button} from '@openint/shadcn/ui/button'
 import {
   DropdownMenu,
@@ -10,6 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@openint/shadcn/ui/dropdown-menu'
+import {Moon, Sun} from 'lucide-react'
+import {
+  ThemeProvider as NextThemesProvider,
+  useTheme as useNextTheme,
+} from 'next-themes'
+import React from 'react'
 
 /**
  * Wrapper around NextThemesProvider to ensure that the theme
@@ -20,6 +23,26 @@ export function ThemeProvider({
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+
+type ResolvedTheme = 'light' | 'dark'
+type Theme = ResolvedTheme | 'system'
+
+export function useTheme() {
+  const nextTheme = useNextTheme()
+  const isDark = nextTheme.resolvedTheme === 'dark'
+
+  return React.useMemo(
+    () => ({
+      ...nextTheme,
+      isDark,
+      theme: nextTheme.theme as Theme | undefined,
+      resolvedTheme: nextTheme.resolvedTheme as ResolvedTheme | undefined,
+      setTheme: nextTheme.setTheme as (theme: Theme) => void,
+      // also themes, forcedTheme props, not sure how they work though.
+    }),
+    [nextTheme, isDark],
+  )
 }
 
 export function ThemeButton() {
@@ -49,5 +72,3 @@ export function ThemeButton() {
     </DropdownMenu>
   )
 }
-
-export {useTheme}
