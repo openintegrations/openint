@@ -1,12 +1,15 @@
-import type {ConnectionExpanded} from '@openint/api-v1/models'
+import type {ConnectionExpanded, ConnectorName} from '@openint/api-v1/models'
 
 import {Settings} from 'lucide-react'
-import Image from 'next/image'
 import {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
-import {ConnectionStatusBadge, getConnectionStatusStyles} from './ConnectionStatusBadge'
+import {
+  ConnectionStatusPill,
+  getConnectionStatusStyles,
+} from './ConnectionStatus'
+import {ConnectorLogo} from './ConnectorLogo'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -25,9 +28,6 @@ export function ConnectionCard({
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const logoUrl =
-    connection.integration?.logo_url || connection.connector?.logo_url
-
   const displayName =
     connection.integration?.name ||
     connection.connector?.display_name ||
@@ -41,7 +41,7 @@ export function ConnectionCard({
         'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
         onPress &&
           'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out',
-        borderColor,
+        connection.status !== 'healthy' && borderColor,
         className,
       )}
       onMouseEnter={() => onPress && setIsHovered(true)}
@@ -59,15 +59,12 @@ export function ConnectionCard({
             </div>
           ) : (
             <>
-              {logoUrl && (
-                <Image
-                  src={logoUrl}
-                  alt="Logo"
-                  width={64}
-                  height={64}
-                  className="rounded-lg"
-                />
-              )}
+              <ConnectorLogo
+                connectorName={connection.connector_name as ConnectorName}
+                width={54}
+                height={54}
+                skipFallbackText
+              />
               <p className="mt-2 w-full break-words text-center text-sm font-semibold">
                 {displayName}
               </p>
@@ -78,7 +75,9 @@ export function ConnectionCard({
                   {connection.id}
                 </pre>
               )}
-              <ConnectionStatusBadge status={connection.status} />
+              {connection.status && (
+                <ConnectionStatusPill status={connection.status} />
+              )}
             </>
           )}
         </div>

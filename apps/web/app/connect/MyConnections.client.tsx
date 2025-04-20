@@ -6,11 +6,13 @@ import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Button} from '@openint/shadcn/ui'
 import {
   CommandPopover,
+  ConnectionStatusPill,
   DataTileView,
   Spinner,
   useMutableSearchParams,
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
+import {timeSince} from '@openint/ui-v1/utils'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider'
 
@@ -74,6 +76,16 @@ export function MyConnectionsClient(props: {
             }}
             ctx={{}}
             definitions={definitions}
+            header={
+              <>
+                <div className="flex items-center justify-center gap-1 text-center">
+                  <ConnectionStatusPill status={conn.status} />
+                  <span className="text-muted-foreground text-xs">
+                    ({timeSince(conn.updated_at)})
+                  </span>
+                </div>
+              </>
+            }
           />
         </ConnectionCard>
       )}

@@ -53,9 +53,11 @@ export function CommandInline(props: CommandComponentProps) {
 /** Rename to CommandMenuButton or CommandPopoverButton */
 export function CommandPopover({
   className,
+  header,
   ...props
 }: CommandComponentProps & {
   className?: string
+  header?: React.ReactNode
 }) {
   const [open, setOpen] = React.useState(false)
   return (
@@ -67,6 +69,7 @@ export function CommandPopover({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[250px] p-0" align="start">
+        {header && <div className="p-2">{header}</div>}
         <Command>
           <CommandContent
             {...props}

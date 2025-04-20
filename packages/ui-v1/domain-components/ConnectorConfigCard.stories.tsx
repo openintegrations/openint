@@ -17,13 +17,13 @@ type Story = StoryObj<typeof ConnectorConfigCard>
 
 export const Default: Story = {
   args: {
-    connectorConfig: FIXTURES.connectorConfigs['salesforce'],
+    connectorConfig: FIXTURES.connectorConfigs['google-drive'],
   },
 }
 
 export const WithOnPress: Story = {
   args: {
-    connectorConfig: FIXTURES.connectorConfigs['salesforce'],
+    connectorConfig: FIXTURES.connectorConfigs['google-drive'],
     onPress: () => {
       alert('Card pressed!')
     },
@@ -32,14 +32,14 @@ export const WithOnPress: Story = {
 
 export const DisplayNameRight: Story = {
   args: {
-    connectorConfig: FIXTURES.connectorConfigs['salesforce'],
+    connectorConfig: FIXTURES.connectorConfigs['google-drive'],
     displayNameLocation: 'right',
   },
 }
 
 export const WithChildren: Story = {
   args: {
-    connectorConfig: FIXTURES.connectorConfigs['salesforce'],
+    connectorConfig: FIXTURES.connectorConfigs['google-drive'],
     children: (
       <div className="text-muted-foreground text-xs">5 connections</div>
     ),
@@ -48,7 +48,7 @@ export const WithChildren: Story = {
 
 export const DisplayNameRightWithChildren: Story = {
   args: {
-    connectorConfig: FIXTURES.connectorConfigs['salesforce'],
+    connectorConfig: FIXTURES.connectorConfigs['google-drive'],
     displayNameLocation: 'right',
     children: <Button variant="default">Connect</Button>,
   },

@@ -20,7 +20,7 @@ const mockConnection: ConnectionExpanded = {
   id: 'conn_123',
   customer_id: 'cust_456',
   connector_config_id: 'config_789',
-  connector_name: 'salesforce',
+  connector_name: 'google-drive',
   status: 'healthy',
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
@@ -83,13 +83,6 @@ export const MultipleConnections: Story = {
       <ConnectionsCardView
         connection={{
           ...mockConnection,
-          connector_name: 'salesforce',
-          status: 'healthy',
-        }}
-      />
-      <ConnectionsCardView
-        connection={{
-          ...mockConnection,
           connector_name: 'plaid',
           status: 'disconnected',
         }}
@@ -122,7 +115,7 @@ export const AllVariants: Story = {
           <ConnectionsCardView
             connection={{
               ...mockConnection,
-              connector_name: 'salesforce',
+              connector_name: 'google-drive',
               status: 'healthy',
             }}
           />
