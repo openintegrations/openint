@@ -66,7 +66,7 @@ export function routerContextFromViewer<T extends Viewer>({
       throw new Error(`${db.driverType} does not support asViewer`)
     }
     const dbForViewer = db.$asViewer(viewer)
-     // When dispatching events, we need to use the org db for the customer
+    // When dispatching events, we need to use the org db for the customer
     // maybe belongs on the router context instead of viewer context?
     const dispatcher = createServerDispatcher({
       db: db.$asViewer(asOrgIfCustomer(viewer)),

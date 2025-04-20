@@ -35,13 +35,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           data: {},
         },
       })
-      console.log(res)
+
       return res
     })
 
     $test('list events', async () => {
       const res = await caller.listEvents()
-      console.log(res)
+
       expect(res.items).toHaveLength(1)
       expect(res.items[0]?.id).toBe(eventRes.current?.id)
     })
