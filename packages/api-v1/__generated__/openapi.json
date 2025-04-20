@@ -1943,6 +1943,11 @@
                       }
                     },
                     "description": "Connector specific data"
+                  },
+                  "check_connection": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Perform a synchronous connection check before creating it."
                   }
                 },
                 "required": [
