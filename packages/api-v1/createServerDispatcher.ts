@@ -26,7 +26,13 @@ export function createServerDispatcher({
           id: makeId('evt', makeUlid()),
           name: event.name,
           data: event.data,
-          user: viewer,
+          // TODO: Change to snake_case from camelCase for viewer,
+          // but will need to update functions in postgres to correspond as well
+          user: {
+            org_id: viewer.orgId,
+            user_id: viewer.userId,
+            customer_id: viewer.customerId,
+          },
         })
         .returning()
       console.log('Event inserted', evt)
