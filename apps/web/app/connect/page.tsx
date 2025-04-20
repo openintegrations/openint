@@ -130,7 +130,7 @@ export default async function ConnectPage(
               )}
             </pre>
           )}
-          <div className="flex h-screen w-full">
+          <div className="flex min-h-screen w-full">
             {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
             <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
               <div className="flex flex-col items-start p-8">
