@@ -1,6 +1,7 @@
 import {redirect} from 'next/navigation'
 import React from 'react'
 import {OrganizationSwitcher, UserButton} from '@openint/console-auth/client'
+import {getBaseURLs} from '@openint/env'
 import {AppLayout} from '@openint/ui-v1'
 import {currentViewer} from '@/lib-server/auth.server'
 import {GlobalCommandBarProvider} from '../../../lib-client/GlobalCommandBarProvider'
@@ -15,7 +16,7 @@ export default async function AuthenticatedLayout({
   const {viewer} = await currentViewer()
   console.log('AuthenticatedLayout viewer', viewer)
   if (viewer.role !== 'user') {
-    return redirect('/console/sign-in')
+    return redirect(getBaseURLs(null).console + '/sign-in')
   }
 
   const shouldShowOnboarding = viewer.role === 'user' && !viewer.orgId
