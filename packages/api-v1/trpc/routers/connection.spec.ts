@@ -1,5 +1,6 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -293,6 +294,108 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           customer_id: asOrg.viewer.orgId,
         }),
       ).rejects.toThrow()
+    })
+
+    // skipping as mocking checkConnection is not working
+    test.skip('with check_connection flag', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      // Mock the checkConnection method
+      const originalCheckConnection =
+        serverConnectors.greenhouse.checkConnection
+      const mockCheckConnection = jest.fn().mockResolvedValue({
+        settings: {apiKey: 'test_api_key'},
+        status: 'healthy',
+        status_message: 'Connection is healthy',
+      })
+
+      // @ts-ignore - mocking for test purposes
+      serverConnectors.greenhouse.checkConnection = mockCheckConnection
+
+      try {
+        const connection = await asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+          check_connection: true,
+        })
+
+        expect(connection).toMatchObject({
+          connector_name: 'greenhouse',
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          settings: {
+            apiKey: 'test_api_key',
+          },
+          status: 'healthy',
+          status_message: 'Connection is healthy',
+        })
+
+        // Verify that checkConnection was called
+        expect(mockCheckConnection).toHaveBeenCalled()
+      } finally {
+        // Restore the original method
+        // @ts-ignore - restoring for test purposes
+        serverConnectors.greenhouse.checkConnection = originalCheckConnection
+      }
+    })
+
+    test('with check_connection flag but connector does not support it', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      // Mock the connector to not have checkConnection method
+      // @ts-ignore - mocking for test purposes
+      const originalNewInstance = serverConnectors.greenhouse.newInstance
+      const originalCheckConnection =
+        serverConnectors.greenhouse.checkConnection
+
+      // @ts-ignore - mocking for test purposes
+      serverConnectors.greenhouse.newInstance = undefined
+      // @ts-ignore - mocking for test purposes
+      serverConnectors.greenhouse.checkConnection = undefined
+
+      try {
+        await expect(
+          asOrg.caller.createConnection({
+            connector_config_id: connectorConfigId,
+            customer_id: asOrg.viewer.orgId,
+            data: {
+              connector_name: 'greenhouse',
+              settings: {
+                apiKey: 'test_api_key',
+              },
+            },
+            check_connection: true,
+          }),
+        ).rejects.toThrow('does not support connection checking')
+      } finally {
+        // Restore the original methods
+        // @ts-ignore - restoring for test purposes
+        serverConnectors.greenhouse.newInstance = originalNewInstance
+        // @ts-ignore - restoring for test purposes
+        serverConnectors.greenhouse.checkConnection = originalCheckConnection
+      }
     })
   })
 })

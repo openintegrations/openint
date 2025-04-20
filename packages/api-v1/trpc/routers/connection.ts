@@ -308,6 +308,10 @@ export const connectionRouter = router({
         metadata: z.record(z.unknown()).optional(),
         customer_id: zCustomerId,
         data: zDiscriminatedSettings,
+        check_connection: z.boolean().optional().default(false).openapi({
+          description:
+            'Perform a synchronous connection check before creating it.',
+        }),
       }),
     )
     .output(core.connection_select)
@@ -332,10 +336,9 @@ export const connectionRouter = router({
       }
 
       // Get connector implementation
-      const connector =
-        serverConnectors[
-          input.data.connector_name as keyof typeof serverConnectors
-        ]
+      const connector = serverConnectors[
+        input.data.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -343,7 +346,46 @@ export const connectionRouter = router({
         })
       }
 
-      // TODO: Launch an async job to check connection here
+      let settings = input.data.settings
+      let status = null
+      let status_message = null
+      if (input.check_connection) {
+        if (
+          !('newInstance' in connector) ||
+          typeof connector.newInstance !== 'function' ||
+          !('checkConnection' in connector) ||
+          typeof connector.checkConnection !== 'function'
+        ) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: `Connector ${input.data.connector_name} does not support connection checking`,
+          })
+        }
+        const context = {
+          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          extCustomerId: ctx.viewer.userId as ExtCustomerId,
+          fetch: ctx.fetch,
+          baseURLs: getBaseURLs(null),
+        }
+
+        const instance = connector.newInstance?.({
+          config: ccfg.config,
+          settings: input.data.settings,
+          context,
+          fetchLinks: [],
+          onSettingsChange: () => {}, // noop
+        })
+        const connUpdate = await connector.checkConnection({
+          settings,
+          config: ccfg.config,
+          options: {},
+          instance,
+          context,
+        })
+        settings = connUpdate.settings
+        status = connUpdate.status
+        status_message = connUpdate.status_message
+      }
 
       // Create connection record
       const id = makeId('conn', input.data.connector_name, makeUlid())
@@ -356,6 +398,8 @@ export const connectionRouter = router({
           connector_config_id: input.connector_config_id,
           customer_id: input.customer_id,
           metadata: input.metadata,
+          status,
+          status_message,
         },
         {keyColumns: ['id']},
       ).returning()
