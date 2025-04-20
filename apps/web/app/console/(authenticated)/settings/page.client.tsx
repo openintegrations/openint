@@ -9,14 +9,12 @@ interface SettingsContentProps {
   orgId: string
   apiKey: string
   webhookUrl: string
-  sendDebugEventAction: () => unknown
 }
 
 export function SettingsContent({
   orgId,
   apiKey,
   webhookUrl,
-  sendDebugEventAction,
 }: SettingsContentProps) {
   const trpc = useTRPC()
   const setWebhook = useMutation(
@@ -34,6 +32,8 @@ export function SettingsContent({
     setWebhook.mutate({webhookUrl: value})
   }
 
+  const createEvent = useMutation(trpc.createEvent.mutationOptions({}))
+
   return (
     <div className="max-w-3xl p-6">
       <h2 className="mb-4 text-2xl font-bold tracking-tight">Settings</h2>
@@ -49,7 +49,22 @@ export function SettingsContent({
           defaultValue={webhookUrl}
           onSave={handleSave}
           isSaving={setWebhook.isPending}
-          sendDebugEvent={sendDebugEventAction}
+          sendDebugEvent={() => {
+            const looadingToastId = toast.loading('Sending debug event...')
+            createEvent
+              .mutateAsync({
+                name: 'debug.debug',
+                data: {},
+              })
+              .then((evt) => {
+                toast.dismiss(looadingToastId)
+                toast.success(`Debug event sent id=${evt.id}`)
+              })
+              .catch((error) => {
+                toast.dismiss(looadingToastId)
+                toast.error(`Error: ${error.message}`)
+              })
+          }}
         />
       </div>
     </div>

@@ -28,6 +28,7 @@
     "@jest/globals": "^29.7.0",
     "@openint/all-connectors": "workspace:*",
     "@openint/cdk": "workspace:*",
+    "@openint/events": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@types/json-stable-stringify": "^1.1.0",
     "@types/pg": "^8.11.11",

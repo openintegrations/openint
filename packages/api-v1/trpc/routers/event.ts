@@ -1,4 +1,5 @@
 import {schema, sql} from '@openint/db'
+import {zEvent} from '@openint/events/events'
 import {orgProcedure, router} from '../_base'
 import {core} from '../../models/core'
 import {
@@ -10,19 +11,18 @@ import {
 
 export const eventRouter = router({
   // NOTE: why publish this API?
-  // createEvent: publicProcedure
-  //   .meta({
-  //     openapi: {method: 'POST', path: '/event'},
-  //   })
-  //   .input(core.event_insert) // Ref does not work for input params for now in zod-openapi. So will be inlined in the spec unfortunately
-  //   .output(core.event)
-  //   .mutation(async ({ctx, input}) => {
-  //     const [event] = await ctx.db
-  //       .insert(schema.event)
-  //       .values(input)
-  //       .returning()
-  //     return event!
-  //   }),
+  createEvent: orgProcedure
+    .meta({
+      openapi: {method: 'POST', path: '/event'},
+    })
+    .input(zEvent) // Ref does not work for input params for now in zod-openapi. So will be inlined in the spec unfortunately
+    .output(core.event_select)
+    .mutation(async ({ctx, input}) => ctx.dispatch(input)),
+
+  // Creat eevent
+  // trigger webhook for event
+  // use ofetch for webhook
+  // proper schema validation for the event
   listEvents: orgProcedure
     .meta({
       openapi: {
