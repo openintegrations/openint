@@ -20,10 +20,10 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
+        'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
       stage: 'ga',
       platforms: ['web', 'mobile', 'desktop'],
     },
@@ -78,8 +78,8 @@ export const ManyPlatforms: Story = {
 export const CardGrid: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',
@@ -89,16 +89,6 @@ export const CardGrid: Story = {
   render: () => (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {[
-        {
-          name: 'salesforce',
-          display_name: 'Salesforce',
-          logo_url:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
-          stage: 'ga' as 'ga' | 'beta' | 'alpha',
-          platforms: ['web', 'mobile', 'desktop'] as Array<
-            'web' | 'mobile' | 'desktop'
-          >,
-        },
         {
           name: 'google-drive',
           display_name: 'Google Drive',
@@ -136,8 +126,8 @@ export const CardGrid: Story = {
 export const ResponsiveGrid: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',
@@ -160,10 +150,10 @@ export const ResponsiveGrid: Story = {
 export const TableCell: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
+        'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
       stage: 'ga',
       platforms: ['web', 'mobile', 'desktop'],
     },

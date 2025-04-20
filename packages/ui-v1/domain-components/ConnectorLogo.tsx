@@ -13,12 +13,14 @@ export function ConnectorLogo({
   width,
   height,
   forceFallback,
+  skipFallbackText,
 }: {
   connectorName: ConnectorName
   className?: string
   width?: number
   height?: number
   forceFallback?: boolean
+  skipFallbackText?: boolean
 }) {
   const def = defConnectors[connectorName]
   if (!def) {
@@ -31,16 +33,17 @@ export function ConnectorLogo({
   const fallbackLogoUrl = `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/openint-icon.svg`
   const [useFallbackImage, setUseFallbackImage] = useState(false)
 
-  const fallbackText = (
-    connectorName.split('-').length > 1
-      ? connectorName
-          .split('-')
-          .map((word) => word[0])
-          .join('')
-      : connectorName
-  )
-    .substring(0, 2)
-    .toUpperCase()
+  const fallbackText = skipFallbackText
+    ? ''
+    : (connectorName.split('-').length > 1
+        ? connectorName
+            .split('-')
+            .map((word) => word[0])
+            .join('')
+        : connectorName
+      )
+        .substring(0, 2)
+        .toUpperCase()
   return useFallbackImage || forceFallback ? (
     <div className="flex h-full w-full flex-col items-center justify-center gap-1">
       <Image

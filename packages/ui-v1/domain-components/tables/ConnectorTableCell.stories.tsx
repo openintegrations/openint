@@ -16,8 +16,8 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',
@@ -58,8 +58,8 @@ export const AlphaConnector: Story = {
 export const WithoutStage: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',
@@ -73,8 +73,8 @@ export const WithoutStage: Story = {
 export const WithoutPlatforms: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',
@@ -88,8 +88,8 @@ export const WithoutPlatforms: Story = {
 export const WithoutBadges: Story = {
   args: {
     connector: {
-      name: 'salesforce',
-      display_name: 'Salesforce',
+      name: 'google-drive',
+      display_name: 'Google Drive',
       logo_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
       stage: 'ga',

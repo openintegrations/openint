@@ -14,8 +14,8 @@ import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 const connectorConfigs: Array<Core['connector_config_select']> = [
   {
     id: '101',
-    display_name: 'Salesforce',
-    connector_name: 'salesforce',
+    display_name: 'Google Drive',
+    connector_name: 'google-drive',
     disabled: false,
     config: {
       environment: 'production',
