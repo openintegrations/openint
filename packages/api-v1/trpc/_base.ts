@@ -27,7 +27,7 @@ export const customerProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
   if (!hasRole(viewer, ['customer', 'user'])) {
     // TODO: Figure out how to user impersonating as customer
-    throw new TRPCError({code: 'FORBIDDEN', message: 'Customer only'})
+    throw new TRPCError({code: 'FORBIDDEN', message: 'Org customer only'})
   }
   return next({ctx: {...ctx, viewer}})
 })
@@ -35,7 +35,7 @@ export const customerProcedure = publicProcedure.use(({next, ctx}) => {
 export const orgProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
   if (!hasRole(viewer, ['user', 'org'])) {
-    throw new TRPCError({code: 'FORBIDDEN', message: 'Admin only'})
+    throw new TRPCError({code: 'FORBIDDEN', message: 'Org admin only'})
   }
   if (!viewer.orgId) {
     throw new TRPCError({

@@ -71,6 +71,13 @@
       "when": 1744987985869,
       "tag": "0009_connection_status",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1745189085229,
+      "tag": "0010_event_rls",
+      "breakpoints": true
     }
   ]
 }
