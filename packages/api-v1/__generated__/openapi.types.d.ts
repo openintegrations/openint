@@ -232,7 +232,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -282,7 +282,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -421,7 +421,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -471,7 +471,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -521,7 +521,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -682,7 +682,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -732,7 +732,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -784,7 +784,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -834,7 +834,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -884,7 +884,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -934,7 +934,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -984,7 +984,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1074,7 +1074,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1124,7 +1124,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1174,7 +1174,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1224,7 +1224,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1274,7 +1274,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1324,7 +1324,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1374,7 +1374,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1513,7 +1513,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1591,7 +1591,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1641,7 +1641,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1766,7 +1766,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1849,7 +1849,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1899,7 +1899,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -1971,7 +1971,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -2021,7 +2021,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -2218,7 +2218,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -2318,7 +2318,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };
@@ -2418,7 +2418,7 @@ export interface components {
                         expires_in?: number;
                         expires_at?: string;
                         token_type?: string;
-                        raw: {
+                        raw?: {
                             [key: string]: unknown;
                         };
                     };

@@ -504,6 +504,7 @@ paths:
                           - disconnected
                           - error
                           - manual
+                          - unknown
                           - null
                       metadata:
                         type:
@@ -908,6 +909,7 @@ paths:
                                 - disconnected
                                 - error
                                 - manual
+                                - unknown
                                 - null
                             metadata:
                               type:
@@ -1273,6 +1275,10 @@ paths:
                       wise: '#/components/schemas/connector.wise.discriminated_connection_settings'
                       yodlee: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
                   description: Connector specific data
+                check_connection:
+                  type: boolean
+                  default: false
+                  description: Perform a synchronous connection check before creating it.
               required:
                 - connector_config_id
                 - customer_id
@@ -1616,6 +1622,7 @@ paths:
                       - disconnected
                       - error
                       - manual
+                      - unknown
                       - null
                   status_message:
                     type:
@@ -1775,7 +1782,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -1871,7 +1877,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2108,7 +2113,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2204,7 +2208,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2300,7 +2303,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2609,7 +2611,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2705,7 +2706,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2806,7 +2806,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2902,7 +2901,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -2998,7 +2996,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3094,7 +3091,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3190,7 +3186,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3346,7 +3341,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3442,7 +3436,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3538,7 +3531,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3634,7 +3626,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3730,7 +3721,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3826,7 +3816,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -3922,7 +3911,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4157,7 +4145,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4307,7 +4294,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4403,7 +4389,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4614,16 +4599,6 @@ components:
           properties:
             databaseURL:
               type: string
-            sourceQueries:
-              type: object
-              properties:
-                invoice:
-                  type:
-                    - string
-                    - 'null'
-                  description: Should order by lastModifiedAt and id descending
-          required:
-            - databaseURL
       required:
         - connector_name
         - settings
@@ -4676,7 +4651,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4830,7 +4804,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -4926,7 +4899,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -5056,7 +5028,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -5152,7 +5123,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -5537,7 +5507,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -5718,7 +5687,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -5940,7 +5908,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - scope
                     - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
@@ -6049,6 +6016,7 @@ components:
                 - disconnected
                 - error
                 - manual
+                - unknown
                 - null
             metadata:
               type:
