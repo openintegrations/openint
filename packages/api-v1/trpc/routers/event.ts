@@ -1,8 +1,8 @@
 import {schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {z} from '@openint/util/zod-utils'
+import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
-import {orgProcedure, router} from '../_base'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -12,7 +12,7 @@ import {
 
 export const eventRouter = router({
   // NOTE: why publish this API?
-  createEvent: orgProcedure
+  createEvent: authenticatedProcedure
     .meta({
       openapi: {method: 'POST', path: '/event'},
     })
@@ -28,7 +28,7 @@ export const eventRouter = router({
   // trigger webhook for event
   // use ofetch for webhook
   // proper schema validation for the event
-  listEvents: orgProcedure
+  listEvents: authenticatedProcedure
     .meta({
       openapi: {
         method: 'GET',

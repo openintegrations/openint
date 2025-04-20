@@ -20,6 +20,7 @@ export function createServerDispatcher({
 
   const dispatcher = {
     async dispatch(event: Event, viewer: Viewer) {
+      // TODO: Should we perhaps use a zFunction to be able to validate the event inp;ut?
       const [evt] = await db
         .insert(schema.event)
         .values({
