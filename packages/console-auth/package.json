@@ -5,8 +5,10 @@
   "scripts": {},
   "dependencies": {
     "@clerk/nextjs": "^6.13.0",
+    "@clerk/themes": "^2.2.34",
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
+    "@openint/ui-v1": "workspace:*",
     "@openint/util": "workspace:*",
     "next": "15.2.3"
   },
