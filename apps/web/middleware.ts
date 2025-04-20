@@ -1,29 +1,34 @@
+import type {NextMiddleware} from 'next/server'
+
+import {NextResponse} from 'next/server'
 import {clerkMiddleware} from '@openint/console-auth/server'
 import {env} from '@openint/env'
 
-// Disable redirects
-export default clerkMiddleware()
+const clerkMiddlewareFn = clerkMiddleware()
 
-const excludedPaths = [
-  '_next/static',
-  '_next/image',
-  'favicon.ico',
-  'sitemap.xml',
-  'robots.txt',
-  env.VERCEL_ENV !== 'production' && 'connect',
-].filter((p) => !!p)
+export const middleware: NextMiddleware = (req, ev) => {
+  // console.log('middleware', req.nextUrl)
+  // bypass clerk for connect page in production
+  if (
+    req.nextUrl.pathname.startsWith('/connect') &&
+    env.VERCEL_ENV === 'production'
+  ) {
+    return NextResponse.next()
+  }
+
+  return clerkMiddlewareFn(req, ev)
+}
 
 export const config = {
+  // matcher has to be a constant without any variables or even functions like filter...
   matcher: [
-    // // This it the primary route we want to protect with clerk
-    // '/console/:path*',
-    // // for dev purposes we want to be able to use connect as the console user
-    // '/connect/:path*',
-    // // Make it easier to test the api
-    // '/api/:path*',
-    // // Allow access to the root page for dev purposes
-    // '/',
-    // Need to match all routes due to the way we handle subdomain deployments
-    '/((?!' + excludedPaths.join('|') + ').*)',
+    // This it the primary route we want to protect with clerk
+    '/console/:path*',
+    // we need this for authenticated api requests using cookie
+    '/api/:path*',
+    // Dev only
+    '/connect/:path*',
+    // Catch all route
+    // '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 }

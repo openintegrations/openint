@@ -70,10 +70,11 @@ const nextConfig = {
       },
       // uncomment this for local testing
       // {
-      //   source: nonSpecialPath,
+      //   source: '/:path*',
       //   has: [{type: 'host', value: 'local.openint.dev'}],
       //   // Update this to test any routes
-      //   destination: '/connect/:path*',
+      //   // destination: '/connect/:path*',
+      //   destination: 'https://docs.openint.dev/:path*',
       // },
     ],
     afterFiles: [],
