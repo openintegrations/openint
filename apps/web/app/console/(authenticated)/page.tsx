@@ -5,6 +5,7 @@ import type {PageProps} from '@/lib-common/next-utils'
 import {ArrowRight, Check, Code, Globe, Webhook} from 'lucide-react'
 import {Button} from '@openint/shadcn/ui/button'
 import {Progress} from '@openint/shadcn/ui/progress'
+import {Confetti} from '@openint/ui-v1/components/Confetti'
 import {Link} from '@/lib-common/Link'
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 
@@ -19,10 +20,6 @@ interface Step {
 
 export default async function GettingStartedSteps(pageProps: PageProps) {
   const {queryClient, trpc} = await getServerComponentContext(pageProps)
-
-  const abc = await queryClient.fetchQuery(
-    trpc.listConnectorConfigs.queryOptions({limit: 1}),
-  )
 
   const ccfgsPromise = queryClient.fetchQuery(
     trpc.listConnectorConfigs.queryOptions({limit: 1}),
@@ -81,6 +78,8 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
 
   return (
     <div className="max-w-2xl space-y-6 p-4">
+      <Confetti isActive={completedCount === totalSteps} duration={3000} />
+
       <div className="mb-4">
         <Progress value={progressPercentage} className="h-2" />
         <p className="text-muted-foreground mt-2 text-sm">
