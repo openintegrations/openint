@@ -9,11 +9,13 @@ const clerkMiddlewareFn = clerkMiddleware()
 export const middleware: NextMiddleware = (req, ev) => {
   // console.log('middleware', req.nextUrl)
   // bypass clerk for connect page in production
-  if (
-    req.nextUrl.pathname.startsWith('/connect') &&
-    env.VERCEL_ENV === 'production'
-  ) {
-    return NextResponse.next()
+  if (env.VERCEL_ENV === 'production') {
+    if (
+      req.nextUrl.pathname.startsWith('/connect') ||
+      req.nextUrl.host === 'connect.openint.dev'
+    ) {
+      return NextResponse.next()
+    }
   }
 
   return clerkMiddlewareFn(req, ev)
