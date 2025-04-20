@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {useSession} from '@openint/console-auth/client'
+import {getBaseURLs} from '@openint/env'
 import {FullScreenCenter} from '@openint/ui-v1/components/FullScreenCenter'
 
 export default function SignOutScreen() {
@@ -9,7 +10,7 @@ export default function SignOutScreen() {
 
   React.useEffect(() => {
     void signOut().then(() => {
-      window.location.href = '/console/sign-in'
+      window.location.href = getBaseURLs(null).console + '/sign-in'
     })
   }, [signOut])
 

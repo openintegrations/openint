@@ -1,5 +1,6 @@
 import {redirect} from 'next/navigation'
 import {SignIn} from '@openint/console-auth/client'
+import {getBaseURLs} from '@openint/env'
 import {FullScreenCenter} from '@openint/ui-v1/components/FullScreenCenter'
 import {currentViewer} from '@/lib-server/auth.server'
 
@@ -10,7 +11,10 @@ export default async function SignInScreen() {
   }
   return (
     <FullScreenCenter>
-      <SignIn signUpUrl="/console/sign-up" forceRedirectUrl="/console" />
+      <SignIn
+        signUpUrl={getBaseURLs(null).console + '/sign-up'}
+        forceRedirectUrl={getBaseURLs(null).console}
+      />
     </FullScreenCenter>
   )
 }
