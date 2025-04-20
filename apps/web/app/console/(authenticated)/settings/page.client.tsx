@@ -53,8 +53,7 @@ export function SettingsContent({
             const looadingToastId = toast.loading('Sending debug event...')
             createEvent
               .mutateAsync({
-                name: 'debug.debug',
-                data: {},
+                event: {name: 'debug.debug', data: {}},
               })
               .then((evt) => {
                 toast.dismiss(looadingToastId)
