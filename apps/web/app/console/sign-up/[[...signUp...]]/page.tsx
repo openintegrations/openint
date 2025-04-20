@@ -12,7 +12,7 @@ export default async function SignInScreen() {
   return (
     <FullScreenCenter>
       <SignUp
-        signInUrl={getBaseURLs(null).console + '/sign-up'}
+        signInUrl={getBaseURLs(null).console + '/sign-in'}
         signInForceRedirectUrl={getBaseURLs(null).console}
       />
     </FullScreenCenter>
