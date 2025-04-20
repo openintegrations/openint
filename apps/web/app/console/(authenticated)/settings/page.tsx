@@ -1,6 +1,6 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
-import {serverDispatcher} from '@/lib-server/event.server'
+import {serverAfterDispatch} from '@/lib-server/event.server'
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {SettingsContent} from './page.client'
 
@@ -12,7 +12,7 @@ export default async function SettingsPage(props: PageProps) {
   async function sendDebugEvent() {
     'use server'
     console.log('Sending debug event')
-    await serverDispatcher.dispatch({name: 'debug.debug', data: {}}, viewer)
+    await serverAfterDispatch.dispatch({name: 'debug.debug', data: {}}, viewer)
     console.log('Event sent')
   }
 
