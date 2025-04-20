@@ -1,4 +1,4 @@
-import type {ConnectionExpanded} from '@openint/api-v1/models'
+import type {ConnectionExpanded, ConnectorName} from '@openint/api-v1/models'
 
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
@@ -6,7 +6,11 @@ import {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
-import {ConnectionStatusBadge, getConnectionStatusStyles} from './ConnectionStatusBadge'
+import {
+  ConnectionStatusBadge,
+  getConnectionStatusStyles,
+} from './ConnectionStatusBadge'
+import {ConnectorLogo} from './ConnectorLogo'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -59,15 +63,12 @@ export function ConnectionCard({
             </div>
           ) : (
             <>
-              {logoUrl && (
-                <Image
-                  src={logoUrl}
-                  alt="Logo"
-                  width={64}
-                  height={64}
-                  className="rounded-lg"
-                />
-              )}
+              <ConnectorLogo
+                connectorName={connection.connector_name as ConnectorName}
+                width={54}
+                height={54}
+                skipFallbackText
+              />
               <p className="mt-2 w-full break-words text-center text-sm font-semibold">
                 {displayName}
               </p>
