@@ -48,8 +48,12 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      # TODO: Add generate for 
+      # 1) typed routes
+      # 2) schema.sql
       - name: Run generate
         run: pnpm generate
+        
       # - name: Setup upterm session
       #   if: always()
       #   uses: lhotari/action-upterm@v1
