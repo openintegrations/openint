@@ -97,6 +97,11 @@ export const zOauthState = z.object({
   redirect_uri: z.string().optional(),
 })
 
+export const zOauthCallbackSearchParams = z.object({
+  code: z.string(),
+  state: z.string(),
+})
+
 // MARK; - JSON Def schemas
 
 export const zAuthParamsConfig = z.object({
