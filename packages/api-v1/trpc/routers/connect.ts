@@ -535,10 +535,16 @@ export const connectRouter = router({
         instance,
       })
 
+      const [updatedConn] = await ctx.asOrgIfCustomer.db
+        .update(schema.connection)
+        .set({
+          status: 'disconnected',
+          status_message: 'Conection revoked via OpenInt',
+        })
+        .where(eq(schema.connection.id, conn.id))
+        .returning()
+
       // TODO: make sure statis is updated
-      return {
-        ...conn,
-        customer_id: conn.customer_id!, // Fix me
-      }
+      return updatedConn!
     }),
 })

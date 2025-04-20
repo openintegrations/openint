@@ -95,6 +95,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     process.env['TEST'] === 'oauth2' ? describe.only : describe
 
   describeMaybeOnly.each(Object.keys(oauthConfigs))('oauth2 %s', (key) => {
+    // Only run one when limiting ourselvses
+    if (process.env['TEST'] === 'oauth2' && key !== 'default') {
+      return
+    }
     const oauthConfig: OAuthConnectorConfig =
       oauthConfigs[key as keyof typeof oauthConfigs]
     const redirectUri =
@@ -215,12 +219,26 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       expect(res.status).toBe('healthy')
       expect(res.status_message).toBeNull()
+      // TODO: Check if we used introspection or refresh token as part of check connection
     })
 
     // Simulate expiration
-    test.todo('revoke connection')
+    test('revoke connection', async () => {
+      const revokeRes = await asCustomer.revokeConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(revokeRes).toMatchObject({id: postConnectRes.current.id})
+      expect(revokeRes.status).toBe('disconnected')
+      expect(revokeRes.status_message).toBe('Conection revoked via OpenInt')
 
-    test.todo('handle status update after external revoke')
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      // TODO: Do we need an `outdated` status to distinguish between revoked and expired?
+      expect(res.status).toBe('disconnected')
+      // TODO: Fix the error here...
+      expect(res.status_message).toBe('Unknown error')
+    })
   })
 
   // MARK: - APIKEY BASED AUTH

@@ -14,6 +14,16 @@ export function safeJSONParse(str: string | null | undefined) {
   }
 }
 
+export function safeJSONParseObject<T extends Record<string, unknown>>(
+  str: string | null | undefined,
+): T | undefined {
+  const res = safeJSONParse(str)
+  if (res && typeof res === 'object' && !Array.isArray(res)) {
+    return res as T
+  }
+  return undefined
+}
+
 export function safeJSONStringify(obj: unknown) {
   try {
     return obj === undefined ? undefined : JSON.stringify(obj)
