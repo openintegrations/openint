@@ -23,22 +23,19 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
 import {redirect} from 'next/navigation'
-import {zOauthState} from '@openint/cnext/auth-oauth2/schemas'
-import {getBaseURLs} from '@openint/env'
-import {z} from '@openint/util/zod-utils'
+import {
+  zOauthCallbackSearchParams,
+  zOauthState,
+} from '@openint/cnext/auth-oauth2/schemas'
+import {getBaseURLs, isProduction} from '@openint/env'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {ConnectCallbackClient} from './page.client'
-
-const zOauthCallbackSearchParams = z.object({
-  code: z.string(),
-  state: z.string(),
-  // connector_name: z.enum(['hi', 'there']),
-})
 
 export default async function ConnectCallback(pageProps: PageProps) {
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: zOauthCallbackSearchParams,
   })
+
   const state = zOauthState.parse(JSON.parse(searchParams.state))
   if (
     state.redirect_uri &&
@@ -51,5 +48,5 @@ export default async function ConnectCallback(pageProps: PageProps) {
     return redirect(url.toString())
   }
 
-  return <ConnectCallbackClient data={searchParams} />
+  return <ConnectCallbackClient data={searchParams} debug={!isProduction} />
 }
