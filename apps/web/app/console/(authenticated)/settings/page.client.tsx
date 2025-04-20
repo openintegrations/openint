@@ -9,12 +9,14 @@ interface SettingsContentProps {
   orgId: string
   apiKey: string
   webhookUrl: string
+  sendDebugEventAction: () => unknown
 }
 
 export function SettingsContent({
   orgId,
   apiKey,
   webhookUrl,
+  sendDebugEventAction,
 }: SettingsContentProps) {
   const trpc = useTRPC()
   const setWebhook = useMutation(
@@ -33,20 +35,21 @@ export function SettingsContent({
   }
 
   return (
-    <div className="p-6">
+    <div className="max-w-3xl p-6">
       <h2 className="mb-4 text-2xl font-bold tracking-tight">Settings</h2>
       <div className="mb-4 font-bold">
         <SecureInput label="Organization Id" value={orgId} showValue={true} />
       </div>
 
-      <div className="mt-4 flex items-center">
+      <div className="mt-4">
         <SecureInput label="API Key" readOnly value={apiKey} />
       </div>
-      <div className="mt-4 flex items-center">
+      <div className="mt-4">
         <WebhookInput
           defaultValue={webhookUrl}
           onSave={handleSave}
           isSaving={setWebhook.isPending}
+          sendDebugEvent={sendDebugEventAction}
         />
       </div>
     </div>

@@ -47,7 +47,7 @@ export function SecureInput({
   }
 
   return (
-    <div className="w-full max-w-sm space-y-2">
+    <div className="space-y-2">
       <Label className="text-md font-bold" htmlFor="secureInput">
         {label}
       </Label>

@@ -127,7 +127,8 @@ export const connection = pgTable(
       `,
     }),
 
-    pgPolicy('customer_access', { // technically this is customer_readonly_access
+    pgPolicy('customer_access', {
+      // technically this is customer_readonly_access
       to: 'customer',
       using: sql`
         (
@@ -479,7 +480,11 @@ export const organization = pgTable(
     api_key: varchar().unique(),
     name: varchar(),
     slug: varchar(),
-    metadata: jsonb().$type<any>(),
+    metadata: jsonb().$type<{
+      // TODO: Move this out of org metadata...
+      // into proper data...
+      webhook_url?: string
+    }>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),
