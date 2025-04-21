@@ -21,11 +21,10 @@ export function AppHeader(props: {userButton: React.ReactNode}) {
   // component that is already being used
   // Extract title from path
   let title = 'Dashboard'
-  const consoleMatch = path?.match(/\/console(?:\/(.+))?/)
 
-  if (consoleMatch && consoleMatch[1]) {
+  if (path.split('/').length > 1) {
     // Extract the last segment after /console/
-    const lastSegment = consoleMatch[1].split('/').pop() || ''
+    const lastSegment = path.split('/').pop() || ''
 
     // Format the title: capitalize first letter of each word separated by '-'
     title = lastSegment
