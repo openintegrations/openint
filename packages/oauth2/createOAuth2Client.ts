@@ -1,6 +1,6 @@
 import type {Z} from '@openint/util/zod-utils'
 
-import {safeJSONParse, safeJSONParseObject} from '@openint/util/json-utils'
+import {safeJSONParseObject} from '@openint/util/json-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
 import {z} from '@openint/util/zod-utils'
