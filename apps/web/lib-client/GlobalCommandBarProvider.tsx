@@ -179,9 +179,41 @@ function useConnectionCommands() {
     }),
   )
 
+  const revokeConnection = useMutation(
+    trpc.revokeConnection.mutationOptions({
+      onMutate: () => {
+        loadingToastId = toast.loading('Revoking connection...')
+      },
+      onSuccess: () => {
+        toast.dismiss(loadingToastId)
+        toast.success('Connection revoked successfully!')
+      },
+      onError: (error) => {
+        toast.dismiss(loadingToastId)
+        toast.error(`Connection revocation failed: ${error.message}`)
+      },
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnections.queryKey(),
+        })
+      },
+    }),
+  )
+
   const cmd = cmdInit()
 
   return {
+    'connection:copyId': cmd.identity({
+      title: 'Copy connection ID',
+      icon: 'Clipboard',
+      params: z.object({
+        connection_id: z.string().describe('The ID of the connection to copy'),
+      }),
+      execute: async ({params}) => {
+        await navigator.clipboard.writeText(params.connection_id)
+        toast.success(`Copied connection ID: ${params.connection_id}`)
+      },
+    }),
     'connection:delete': cmd.identity({
       title: 'Delete Connection',
       icon: 'Trash',
@@ -198,26 +230,31 @@ function useConnectionCommands() {
         }
       },
     }),
-    'connection:copyId': cmd.identity({
-      title: 'Copy connection ID',
-      icon: 'Clipboard',
-      params: z.object({
-        connection_id: z.string().describe('The ID of the connection to copy'),
-      }),
-      execute: async ({params}) => {
-        await navigator.clipboard.writeText(params.connection_id)
-        toast.success(`Copied connection ID: ${params.connection_id}`)
-      },
-    }),
-
     'connection:check': cmd.identity({
-      title: 'Validate Connection',
-      icon: 'CircleAlert',
+      title: 'Refresh Connection',
+      icon: 'RefreshCcw',
       params: z.object({
-        connection_id: z.string().describe('The ID of the connection to sync'),
+        connection_id: z.string().describe('The ID of the connection to check'),
       }),
       execute: async ({params}) => {
         await checkConnection.mutateAsync({id: params.connection_id})
+      },
+    }),
+
+    'connection:revoke': cmd.identity({
+      title: 'Revoke Connection',
+      icon: 'Unlink',
+      params: z.object({
+        connection_id: z
+          .string()
+          .describe('The ID of the connection to revoke'),
+      }),
+      execute: async ({params}) => {
+        if (
+          window.confirm('Are you sure you want to revoke this connection?')
+        ) {
+          await revokeConnection.mutateAsync({id: params.connection_id})
+        }
       },
     }),
   } satisfies CommandDefinitionMap

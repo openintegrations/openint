@@ -40,6 +40,7 @@ export const envConfig = {
     NODE_ENV: z.enum(['production', 'development', 'test']).optional(),
   },
   client: {
+    NEXT_PUBLIC_VERCEL_ENV: z.string().optional(),
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
     NEXT_PUBLIC_API_URL: z
       .string()
@@ -78,6 +79,8 @@ export const envConfig = {
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
+    NEXT_PUBLIC_VERCEL_ENV:
+      process.env['NEXT_PUBLIC_VERCEL_ENV'] || process.env['VERCEL_ENV'], // Should be unnecessary but just in case
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
     NEXT_PUBLIC_CONSOLE_URL: process.env['NEXT_PUBLIC_CONSOLE_URL'],

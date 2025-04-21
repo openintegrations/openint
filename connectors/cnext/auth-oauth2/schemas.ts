@@ -69,6 +69,7 @@ export const oauth2Schemas = {
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
   pre_connect_input: z.object({
+    /** @deprecated. This is part of the connectContext, not pre-connect input */
     connection_id: z
       .string()
       .optional()

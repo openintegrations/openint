@@ -11,6 +11,8 @@ export default {
     code_challenge_method: 'S256',
     authorization_request_url: '{{baseURLs.api}}/acme-oauth2/authorize',
     token_request_url: '{{baseURLs.api}}/acme-oauth2/token',
+    introspection_request_url: '{{baseURLs.api}}/acme-oauth2/token/introspect',
+    revocation_request_url: '{{baseURLs.api}}/acme-oauth2/token/revoke',
     scope_separator: ' ',
     params_config: {},
     openint_scopes: ['read:profile'],

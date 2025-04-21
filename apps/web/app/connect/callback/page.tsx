@@ -47,6 +47,12 @@ export default async function ConnectCallback(pageProps: PageProps) {
     }
     return redirect(url.toString())
   }
+  const isAcme = state.connection_id.startsWith('conn_acme')
 
-  return <ConnectCallbackClient data={searchParams} debug={!isProduction} />
+  return (
+    <ConnectCallbackClient
+      data={searchParams}
+      debug={!isProduction || isAcme}
+    />
+  )
 }

@@ -3,6 +3,7 @@
 import {useSuspenseQuery} from '@tanstack/react-query'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
+import {Id} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
 import {
   CommandPopover,
@@ -15,6 +16,7 @@ import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {timeSince} from '@openint/ui-v1/utils'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider'
+import {ConnectorConnectContainer} from './ConnectorConnect.client'
 
 export function MyConnectionsClient(props: {
   connector_names?: ConnectorName[]
@@ -66,29 +68,48 @@ export function MyConnectionsClient(props: {
       data={res.data.items}
       columns={[]}
       getItemId={(conn) => conn.id}
-      renderItem={(conn) => (
-        <ConnectionCard connection={conn} className="relative">
-          <CommandPopover
-            className="absolute right-2 top-2"
-            hideGroupHeadings
-            initialParams={{
-              connection_id: conn.id,
-            }}
-            ctx={{}}
-            definitions={definitions}
-            header={
-              <>
-                <div className="flex items-center justify-center gap-1 text-center">
-                  <ConnectionStatusPill status={conn.status} />
-                  <span className="text-muted-foreground text-xs">
-                    ({timeSince(conn.updated_at)})
-                  </span>
-                </div>
-              </>
-            }
-          />
-        </ConnectionCard>
-      )}
+      renderItem={(conn) => {
+        const renderCard = ({handleConnect}: {handleConnect?: () => void}) => (
+          <ConnectionCard
+            connection={conn}
+            className="relative"
+            onReconnect={handleConnect}>
+            <CommandPopover
+              className="absolute right-2 top-2"
+              hideGroupHeadings
+              initialParams={{
+                connection_id: conn.id,
+              }}
+              ctx={{}}
+              definitions={definitions}
+              header={
+                <>
+                  <div className="flex items-center justify-center gap-1 text-center">
+                    <ConnectionStatusPill status={conn.status} />
+                    <span className="text-muted-foreground text-xs">
+                      ({timeSince(conn.updated_at)})
+                    </span>
+                  </div>
+                </>
+              }
+            />
+          </ConnectionCard>
+        )
+
+        if (conn.status !== 'disconnected') {
+          return renderCard({handleConnect: undefined})
+        }
+
+        return (
+          <ConnectorConnectContainer
+            connectorName={conn.connector_name as ConnectorName}
+            connector={{authType: 'OAUTH2'} as any}
+            connectorConfigId={conn.connector_config_id as Id['ccfg']}
+            connectionId={conn.id as Id['conn']}>
+            {renderCard}
+          </ConnectorConnectContainer>
+        )
+      }}
     />
   )
 }
