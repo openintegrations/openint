@@ -124,8 +124,9 @@ export function createOAuth2Client(
         status_text: response.statusText,
         // Can headers be arrays like search params?
         headers: Object.fromEntries(response.headers.entries()),
-        request_url: url,
         ...(errorJSON ?? {error_text: errorText}),
+        request_url: url,
+        request_body: body,
       }
       throw new OAuth2Error(
         config.errorToString?.(errPayload) ?? JSON.stringify(errPayload),
@@ -133,9 +134,9 @@ export function createOAuth2Client(
         {
           status: response.status,
           statusText: response.statusText,
-          url,
           method: 'POST',
           headers: Object.fromEntries(response.headers.entries()),
+          url,
         },
       )
     }

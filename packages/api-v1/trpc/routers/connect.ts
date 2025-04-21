@@ -181,6 +181,7 @@ export const connectRouter = router({
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
+        connectionExternalId: input.options?.connectionExternalId,
         fetch: ctx.fetch,
         baseURLs: getBaseURLs(null),
       }

@@ -2,7 +2,7 @@ import type {ConnectionExpanded} from '@openint/api-v1/models'
 
 import {AlertCircle, CheckCircle2, HelpCircle, XCircle} from 'lucide-react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Badge} from '@openint/shadcn/ui'
+import {Badge, Button} from '@openint/shadcn/ui'
 
 export interface ConnectionStatusBadgeProps {
   status: ConnectionExpanded['status']
@@ -94,9 +94,11 @@ export function ConnectionStatusBadge({
 export function ConnectionStatusPill({
   status,
   className,
+  onClick,
 }: {
   status: ConnectionExpanded['status']
   className?: string
+  onClick?: () => void
 }) {
   const {
     icon: StatusIcon,
@@ -109,10 +111,16 @@ export function ConnectionStatusPill({
     <div className={cn('group relative inline-flex', className)}>
       <div className={cn('flex items-center gap-1')}>
         <div className={cn('h-2 w-2 rounded-full', pillColor)} />
-        <div className="text-xs text-gray-500">{label}</div>
+        {status !== 'disconnected' ? (
+          <div className="text-xs text-gray-500">{label}</div>
+        ) : (
+          <Button variant="ghost" onClick={onClick}>
+            Reconnect
+          </Button>
+        )}
       </div>
-      <div className="absolute left-0 top-full z-10 mt-1 hidden min-w-[200px] rounded-md bg-white px-2 py-1 text-xs shadow-md group-hover:block">
-        <StatusIcon className="h-2 w-2 text-white" />
+      <div className="absolute left-0 top-full z-10 mt-1 hidden min-w-[200px] rounded-md bg-white p-3 text-xs shadow-md group-hover:block">
+        <StatusIcon className="mb-2 h-4 w-4" />
         {message}
       </div>
     </div>

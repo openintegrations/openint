@@ -14,6 +14,7 @@ import {ConnectorLogo} from './ConnectorLogo'
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
   onPress?: () => void
+  onReconnect?: () => void
   className?: string
   variant?: 'default' | 'developer'
   children?: React.ReactNode
@@ -22,6 +23,7 @@ export interface ConnectionCardProps {
 export function ConnectionCard({
   connection,
   onPress,
+  onReconnect,
   className,
   variant = 'default',
   children,
@@ -76,7 +78,10 @@ export function ConnectionCard({
                 </pre>
               )}
               {connection.status && (
-                <ConnectionStatusPill status={connection.status} />
+                <ConnectionStatusPill
+                  status={connection.status}
+                  onClick={onReconnect}
+                />
               )}
             </>
           )}

@@ -263,6 +263,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
         redirectUri,
       )
+      // expect(state.connection_id).toEqual(postConnectRes.current.id)
       return {...parsed, state}
     })
 

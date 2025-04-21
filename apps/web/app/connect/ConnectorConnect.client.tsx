@@ -1,7 +1,6 @@
 'use client'
 
 import type {Core} from '@openint/api-v1/models'
-import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
 import type {Id} from '@openint/cdk'
 import type {ConnectFn} from './ConnectorClientComponents.client'
 
@@ -14,8 +13,7 @@ import {useRouter} from 'next/navigation'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {extractId} from '@openint/cdk'
-import {Label, toast} from '@openint/shadcn/ui'
-import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
+import {toast} from '@openint/shadcn/ui'
 import {prettyConnectorName} from '@openint/ui-v1/utils'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {useConnectContext} from './ConnectContextProvider'
@@ -24,42 +22,6 @@ import {
   makeManualConnectorClientComponent,
   makeNativeOauthConnectorClientComponent,
 } from './ConnectorClientComponents.client'
-
-export type ConnectorConfigForCustomer = Pick<
-  ConnectorConfig<'connector'>,
-  'id' | 'connector_name' | 'connector'
->
-
-export function AddConnectionInner({
-  connectorConfig,
-}: {
-  connectorConfig: ConnectorConfigForCustomer
-  onReady?: (ctx: {state: string}, name: string) => void
-}) {
-  return (
-    <ConnectorConnectContainer
-      connectorName={connectorConfig.connector_name as ConnectorName}
-      connector={connectorConfig.connector!}
-      connectorConfigId={connectorConfig.id as Id['ccfg']}>
-      {({isConnecting, handleConnect}) => (
-        <ConnectorConfigCard
-          displayNameLocation="right"
-          // TODO: fix this
-          connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
-          onPress={() => {
-            if (isConnecting) {
-              return
-            }
-            handleConnect()
-          }}>
-          <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
-            {isConnecting ? 'Connecting...' : 'Connect'}
-          </Label>
-        </ConnectorConfigCard>
-      )}
-    </ConnectorConnectContainer>
-  )
-}
 
 export function ConnectorConnectContainer({
   connectorName,
@@ -104,7 +66,7 @@ export function ConnectorConnectContainer({
         : {},
     }),
   )
-  // console.log('preConnectRes', preConnectRes)
+  console.log('preConnectRes', preConnectRes)
 
   const queryClient = useQueryClient()
 

@@ -1,6 +1,6 @@
 import type {Id, Viewer} from '@openint/cdk'
 import type {PageProps} from '@/lib-common/next-utils'
-import type {ConnectorConfigForCustomer} from './AddConnectionInner.client'
+import type {ConnectorConfigForCustomer} from './AddConnection.client'
 
 import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
 import {ChevronLeftIcon} from 'lucide-react'
@@ -32,7 +32,7 @@ import {
   getServerComponentContext,
   serverComponentContextForViewer,
 } from '@/lib-server/trpc.server'
-import {AddConnectionInner} from './AddConnectionInner.client'
+import {AddConnectionCard} from './AddConnection.client'
 import {ConnectContextProvider} from './ConnectContextProvider'
 import {ConnectOpWrapper} from './ConnectOpWrapper'
 import {MyConnectionsClient} from './MyConnections.client'
@@ -292,7 +292,7 @@ async function AddConnections({
     <div className="flex flex-col gap-4">
       <Suspense fallback={<LoadingSpinner />}>
         {availableToConnect.map((ccfg) => (
-          <AddConnection
+          <AddConnectionCardPrefetch
             key={ccfg.id}
             connectorConfig={{
               // NOTE: Be extremely careful that sensitive data is not exposed here
@@ -309,7 +309,7 @@ async function AddConnections({
   )
 }
 
-function AddConnection({
+function AddConnectionCardPrefetch({
   viewer,
   connectorConfig,
 }: {
@@ -331,7 +331,7 @@ function AddConnection({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AddConnectionInner connectorConfig={connectorConfig} />
+      <AddConnectionCard connectorConfig={connectorConfig} />
     </HydrationBoundary>
   )
 }
