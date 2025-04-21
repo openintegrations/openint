@@ -1682,6 +1682,294 @@ paths:
                 "conn_",
             )
             print(response.id)
+  /event:
+    post:
+      operationId: createEvent
+      security:
+        - ApiKey: []
+        - CustomerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  oneOf:
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: debug.debug
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: webhook.received
+                        data:
+                          type: object
+                          properties:
+                            traceId:
+                              type: string
+                            method:
+                              type: string
+                            path:
+                              type: string
+                            query:
+                              type: object
+                              additionalProperties: {}
+                            headers:
+                              type: object
+                              additionalProperties: {}
+                            body: {}
+                          required:
+                            - traceId
+                            - method
+                            - path
+                            - query
+                            - headers
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: db.user-created
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: db.user-deleted
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: db.connection-created
+                        data:
+                          type: object
+                          properties:
+                            connection_id:
+                              type: string
+                              description: Must start with 'conn_'
+                          required:
+                            - connection_id
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: db.connection-deleted
+                        data:
+                          type: object
+                          properties:
+                            connection_id:
+                              type: string
+                              description: Must start with 'conn_'
+                          required:
+                            - connection_id
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: user.signin
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: user.signout
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: connect.session-started
+                        data:
+                          type: object
+                          properties:
+                            connector_name:
+                              type: string
+                            meta: {}
+                          required:
+                            - connector_name
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: connect.session-cancelled
+                        data:
+                          type: object
+                          properties:
+                            connector_name:
+                              type: string
+                            meta: {}
+                          required:
+                            - connector_name
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: connect.session-succeeded
+                        data:
+                          type: object
+                          properties:
+                            connector_name:
+                              type: string
+                            meta: {}
+                          required:
+                            - connector_name
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: connect.session-errored
+                        data:
+                          type: object
+                          properties:
+                            connector_name:
+                              type: string
+                            meta: {}
+                          required:
+                            - connector_name
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: connect.connection-connected
+                        data:
+                          type: object
+                          properties:
+                            connection_id:
+                              type: string
+                              description: Must start with 'conn_'
+                          required:
+                            - connection_id
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: api.token-copied
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: api.graphql-request
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: api.rest-request
+                        data:
+                          type: object
+                      required:
+                        - name
+                        - data
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          const: pageview
+                        data:
+                          type: object
+                          properties:
+                            current_url:
+                              type: string
+                            path:
+                              type: string
+                          required:
+                            - current_url
+                            - path
+                      required:
+                        - name
+                        - data
+              required:
+                - event
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/core.event'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
   /webhook/{connector_name}:
     post:
       operationId: handleWebhook
@@ -1782,7 +2070,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -1877,7 +2164,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2113,7 +2399,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2208,7 +2493,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2303,7 +2587,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2611,7 +2894,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2706,7 +2988,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2806,7 +3087,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2901,7 +3181,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -2996,7 +3275,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3091,7 +3369,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3186,7 +3463,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3341,7 +3617,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3436,7 +3711,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3531,7 +3805,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3626,7 +3899,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3721,7 +3993,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3816,7 +4087,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -3911,7 +4181,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4145,7 +4414,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4294,7 +4562,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4389,7 +4656,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4651,7 +4917,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4804,7 +5069,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -4899,7 +5163,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -5028,7 +5291,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -5123,7 +5385,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -5507,7 +5768,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -5687,7 +5947,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -5908,7 +6167,6 @@ components:
                       additionalProperties: {}
                   required:
                     - access_token
-                    - raw
                   description: Output of the postConnect hook for oauth2 connectors
                 created_at:
                   type: string
@@ -6281,6 +6539,292 @@ components:
         - yodlee
         - zoho-desk
       title: connector
+    core.event:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: string
+            user:
+              anyOf:
+                - anyOf:
+                    - type: string
+                    - type: number
+                    - type: boolean
+                    - type: 'null'
+                - type: object
+                  additionalProperties: {}
+                - type: array
+                  items: {}
+                - type: 'null'
+            v:
+              type:
+                - string
+                - 'null'
+            org_id:
+              type:
+                - string
+                - 'null'
+            user_id:
+              type:
+                - string
+                - 'null'
+            customer_id:
+              type:
+                - string
+                - 'null'
+          required:
+            - id
+            - timestamp
+            - user
+            - v
+            - org_id
+            - user_id
+            - customer_id
+        - oneOf:
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: debug.debug
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: webhook.received
+                data:
+                  type: object
+                  properties:
+                    traceId:
+                      type: string
+                    method:
+                      type: string
+                    path:
+                      type: string
+                    query:
+                      type: object
+                      additionalProperties: {}
+                    headers:
+                      type: object
+                      additionalProperties: {}
+                    body: {}
+                  required:
+                    - traceId
+                    - method
+                    - path
+                    - query
+                    - headers
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.user-created
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.user-deleted
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.connection-created
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                  required:
+                    - connection_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.connection-deleted
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                  required:
+                    - connection_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: user.signin
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: user.signout
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-started
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-cancelled
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-succeeded
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-errored
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.connection-connected
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                  required:
+                    - connection_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.token-copied
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.graphql-request
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.rest-request
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: pageview
+                data:
+                  type: object
+                  properties:
+                    current_url:
+                      type: string
+                    path:
+                      type: string
+                  required:
+                    - current_url
+                    - path
+              required:
+                - name
+                - data
+      title: event
     core.integration_select:
       type: object
       properties:
