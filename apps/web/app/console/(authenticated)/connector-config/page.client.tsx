@@ -23,6 +23,8 @@ import {
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
+const DATA_PER_PAGE = 20
+
 export function ConnectorConfigList() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<
@@ -41,8 +43,8 @@ export function ConnectorConfigList() {
     queries: [
       trpc.listConnectorConfigs.queryOptions({
         expand: ['connection_count', 'connector.schemas'],
-        limit: 10,
-        offset: pageIndex * 10,
+        limit: DATA_PER_PAGE,
+        offset: pageIndex * DATA_PER_PAGE,
       }),
       trpc.listConnectors.queryOptions({
         expand: ['schemas'],

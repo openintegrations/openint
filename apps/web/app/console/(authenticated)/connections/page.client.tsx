@@ -55,6 +55,8 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 ]
 
+const DATA_PER_PAGE = 20
+
 export function ConnectionsPage() {
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -66,8 +68,8 @@ export function ConnectionsPage() {
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
       expand: ['connector'],
-      limit: 10,
-      offset: pageIndex * 10,
+      limit: DATA_PER_PAGE,
+      offset: pageIndex * DATA_PER_PAGE,
     }),
   )
 
