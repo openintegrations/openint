@@ -3,6 +3,10 @@
     {
       "path": "/api/jobs/refresh-stale-connections",
       "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/debug",
+      "schedule": "*/1 * * * *"
     }
   ]
 }
