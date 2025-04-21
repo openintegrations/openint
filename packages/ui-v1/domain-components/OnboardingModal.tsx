@@ -205,7 +205,7 @@ export function OnboardingModal({
                   <Image
                     width={147}
                     height={41}
-                    src="/openint-logo.svg"
+                    src="/_assets/openint-logo.svg"
                     alt="OpenInt Logo"
                     priority
                   />
@@ -286,7 +286,7 @@ export function OnboardingModal({
                   <Image
                     width={147}
                     height={41}
-                    src="/openint-logo.svg"
+                    src="/_assets/openint-logo.svg"
                     alt="OpenInt Logo"
                     priority
                   />
