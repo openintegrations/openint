@@ -181,6 +181,7 @@ export const connectRouter = router({
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
+        connectionExternalId: input.options?.connectionExternalId,
         fetch: ctx.fetch,
         baseURLs: getBaseURLs(null),
       }
@@ -537,10 +538,16 @@ export const connectRouter = router({
         instance,
       })
 
+      const [updatedConn] = await ctx.asOrgIfCustomer.db
+        .update(schema.connection)
+        .set({
+          status: 'disconnected',
+          status_message: 'Conection revoked via OpenInt',
+        })
+        .where(eq(schema.connection.id, conn.id))
+        .returning()
+
       // TODO: make sure statis is updated
-      return {
-        ...conn,
-        customer_id: conn.customer_id!, // Fix me
-      }
+      return updatedConn!
     }),
 })

@@ -182,9 +182,15 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
     },
 
     async isRefreshTokenRevoked(refreshToken) {
-      return !tokens.some(
-        (token) => token.refreshToken === refreshToken.refreshToken,
-      )
+      return !tokens.some((token) => {
+        if (!token) {
+          throw new Error('Invariant violation: stored token is null')
+        }
+        if (!refreshToken) {
+          throw new Error('Invariant violation: input refresh token is null')
+        }
+        return token.refreshToken === refreshToken.refreshToken
+      })
     },
 
     async getByRefreshToken(refreshTokenToken) {

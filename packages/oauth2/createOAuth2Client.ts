@@ -1,6 +1,6 @@
 import type {Z} from '@openint/util/zod-utils'
 
-import {safeJSONParse} from '@openint/util/json-utils'
+import {safeJSONParseObject} from '@openint/util/json-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
 import {z} from '@openint/util/zod-utils'
@@ -111,17 +111,32 @@ export function createOAuth2Client(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => null)
-      // console.log(`errorText`, errorText)
-      const errorJSON = safeJSONParse(errorText)
+      // console.log(
+      //   `oauth2 errorText`,
+      //   response.status,
+      //   response.statusText,
+      //   response.headers,
+      //   errorText,
+      // )
+      const errorJSON = safeJSONParseObject(errorText)
+      const errPayload = {
+        status: response.status,
+        status_text: response.statusText,
+        // Can headers be arrays like search params?
+        headers: Object.fromEntries(response.headers.entries()),
+        ...(errorJSON ?? {error_text: errorText}),
+        request_url: url,
+        request_body: body,
+      }
       throw new OAuth2Error(
-        config.errorToString?.(errorJSON) ?? JSON.stringify(errorJSON),
-        errorJSON,
+        config.errorToString?.(errPayload) ?? JSON.stringify(errPayload),
+        errPayload,
         {
           status: response.status,
           statusText: response.statusText,
-          url,
           method: 'POST',
           headers: Object.fromEntries(response.headers.entries()),
+          url,
         },
       )
     }

@@ -2,6 +2,7 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import Elysia from 'elysia'
+import {extractId, Id} from '@openint/cdk'
 import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
@@ -95,6 +96,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     process.env['TEST'] === 'oauth2' ? describe.only : describe
 
   describeMaybeOnly.each(Object.keys(oauthConfigs))('oauth2 %s', (key) => {
+    // Only run one when limiting ourselvses
+    if (process.env['TEST'] === 'oauth2' && key !== 'default') {
+      return
+    }
     const oauthConfig: OAuthConnectorConfig =
       oauthConfigs[key as keyof typeof oauthConfigs]
     const redirectUri =
@@ -215,12 +220,98 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       expect(res.status).toBe('healthy')
       expect(res.status_message).toBeNull()
+      // TODO: Check if we used introspection or refresh token as part of check connection
     })
 
     // Simulate expiration
-    test.todo('revoke connection')
+    test('revoke connection', async () => {
+      const revokeRes = await asCustomer.revokeConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(revokeRes).toMatchObject({id: postConnectRes.current.id})
+      expect(revokeRes.status).toBe('disconnected')
+      expect(revokeRes.status_message).toBe('Conection revoked via OpenInt')
 
-    test.todo('handle status update after external revoke')
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      // TODO: Do we need an `outdated` status to distinguish between revoked and expired?
+      expect(res.status).toBe('disconnected')
+      // TODO: Fix the error here...
+      expect(res.status_message).toBe('Unknown error')
+    })
+
+    // Reconnect
+    const rePreConnectRes = $test('reconnect: preConnect', async () => {
+      const res = await asCustomer.preConnect({
+        connector_config_id: ccfgRes.current.id,
+        options: {
+          connectionExternalId: extractId(
+            postConnectRes.current.id as Id['conn'],
+          )[2],
+        },
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          pre_connect_input: {},
+        },
+      })
+      const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
+      const authorizationUrl = new URL(parsed.authorization_url)
+      const state = zOauthState.parse(
+        safeJSONParse(authorizationUrl.searchParams.get('state')),
+      )
+      expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
+        redirectUri,
+      )
+      expect(state.connection_id).toEqual(postConnectRes.current.id)
+      return {...parsed, state}
+    })
+
+    const reConnectRes = $test(
+      'reconnect: connect get 302 redirect',
+      async () => {
+        const request = new Request(rePreConnectRes.current.authorization_url, {
+          redirect: 'manual',
+        })
+        const response = await oauth2Server.handle(request)
+        expect(response.status).toBe(302)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const url = new URL(response.headers.get('Location')!)
+        expect(url.toString()).toContain(redirectUri)
+
+        return oauth2Schemas.connect_output.parse({
+          ...urlSearchParamsToJson(url.searchParams),
+          code_verifier: rePreConnectRes.current.code_verifier,
+        })
+      },
+    )
+
+    $test('reconnect: postConnect', async () => {
+      const res = await asCustomer.postConnect({
+        connector_config_id: ccfgRes.current.id,
+        options: {},
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          connect_output: reConnectRes.current,
+        },
+      })
+
+      const settings = oauth2Schemas.connection_settings.parse(res.settings)
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+      expect(res.customer_id).toBe('cus_222')
+      expect(res.id).toEqual(rePreConnectRes.current.state.connection_id)
+
+      const events = await asUser.listEvents()
+      const recentEvent = events.items.find(
+        (e) => e.name === 'connect.connection-connected',
+      )
+
+      expect(recentEvent).toBeDefined()
+      expect(recentEvent?.data?.connection_id).toBe(res.id)
+
+      return {id: res.id, settings}
+    })
   })
 
   // MARK: - APIKEY BASED AUTH
