@@ -77,7 +77,12 @@ export function AppSidebar({
           Book A Demo
           <Icon name="ExternalLink" className="mr-2 h-4 w-4" />
         </Button>
-        <Image width={146} height={40} src="/openint-logo.svg" alt="OpenInt" />
+        <Image
+          width={146}
+          height={40}
+          src="/_assets/openint-logo.svg"
+          alt="OpenInt"
+        />
       </div>
       <SidebarRail />
     </Sidebar>
