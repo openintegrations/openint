@@ -30,7 +30,7 @@ export function ConnectorLogo({
     includeSchemas: true,
   })
 
-  const fallbackLogoUrl = `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/openint-icon.svg`
+  const fallbackLogoUrl = `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/openint-icon.svg`
   const [useFallbackImage, setUseFallbackImage] = useState(false)
 
   const fallbackText = skipFallbackText
