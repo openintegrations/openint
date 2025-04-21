@@ -22,8 +22,8 @@ const mockRefreshConnection = jest.fn().mockImplementation(({settings}) => {
 
 // Create mock connectors - only googledrive implements refreshConnection
 const mockConnectors = {
-  googledrive: {
-    refreshConnection: mockRefreshConnection,
+  'google-drive': {
+    checkConnection: mockRefreshConnection,
   } as unknown as ConnectorServer,
   greenhouse: {
     // No refreshConnection method
@@ -33,7 +33,7 @@ const mockConnectors = {
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
-  describe.skip('refreshStaleConnections', () => {
+  describe('refreshStaleConnections', () => {
     beforeEach(async () => {
       // Clear any existing data
       await db.delete(schema.connection)
@@ -43,17 +43,19 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     test('refreshes only connections with connectors that implement refreshConnection', async () => {
       // Create test connector configs
-      const googledriveConfigId = makeId('ccfg', 'googledrive', makeUlid())
+      const googledriveConfigId = makeId('ccfg', 'google-drive', makeUlid())
       const greenhouseConfigId = makeId('ccfg', 'greenhouse', makeUlid())
 
       await db.insert(schema.connector_config).values([
         {
           id: googledriveConfigId,
           org_id: 'org_test',
+          config: {},
         },
         {
           id: greenhouseConfigId,
           org_id: 'org_test',
+          config: {},
         },
       ])
 
@@ -61,7 +63,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const expiringConnections = [
         // Googledrive connection - should be refreshed
         {
-          id: makeId('conn', 'googledrive', makeUlid()),
+          id: makeId('conn', 'google-drive', makeUlid()),
           connector_config_id: googledriveConfigId,
           settings: {
             oauth: {
@@ -91,7 +93,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         },
         // Another googledrive connection - should be refreshed
         {
-          id: makeId('conn', 'googledrive', makeUlid()),
+          id: makeId('conn', 'google-drive', makeUlid()),
           connector_config_id: googledriveConfigId,
           settings: {
             oauth: {
@@ -110,7 +112,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
       // Create a non-expiring connection
       await db.insert(schema.connection).values({
-        id: makeId('conn', 'googledrive', makeUlid()),
+        id: makeId('conn', 'google-drive', makeUlid()),
         connector_config_id: googledriveConfigId,
         settings: {
           oauth: {
@@ -142,7 +144,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         .select()
         .from(schema.connection)
         .where(sql`
-          id LIKE 'conn_googledrive%'
+          id LIKE 'conn_google-drive%'
           AND (
             settings -> 'oauth' -> 'credentials' ->> 'refresh_token' IN ('test_refresh_token_gd', 'test_refresh_token_gd2')
           )
