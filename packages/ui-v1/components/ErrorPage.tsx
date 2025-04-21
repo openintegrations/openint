@@ -1,17 +1,4 @@
-'use client'
-
-// Error boundaries must be Client Components
-
-// We error.tsx instead of global-errors.tsx
-// because we dont' want to have to separately render a html element
-// as global-error bypasses root layout
-// Also global error does not have a reset function
-// but it does show issues right away on page load, while individual error.tsx
-// does not show issues right away on page load but it is acessible in the bottom
-// left corner of the screen instead.
-import * as Sentry from '@sentry/nextjs'
-import React from 'react'
-import {formatError, parseError} from '@openint/events/errors'
+import {cn} from '@openint/shadcn/lib/utils'
 import {
   Accordion,
   AccordionContent,
@@ -19,8 +6,11 @@ import {
   AccordionTrigger,
   Button,
 } from '@openint/shadcn/ui'
-import {CopyID, FullScreenCenter, Icon} from '@openint/ui-v1'
+import {CopyID} from './CopyID'
+import {FullScreenCenter} from './FullScreenCenter'
+import {Icon} from './Icon'
 
+// Generic error type for use in stories and external systems
 export type PageError = Error & {
   /**
    * Name of the original error prior to serialization
@@ -40,41 +30,61 @@ export type PageError = Error & {
   environmentName?: string
 }
 
-/** @see https://nextjs.org/docs/app/api-reference/file-conventions/error#props */
-export interface PageErrorProps {
-  error: PageError
+export interface ErrorPageProps<TError = unknown> {
   /**
-   * The cause of an error can sometimes be temporary. In these cases, trying again
-   * might resolve the issue.
-   * An error component can use the reset() function to prompt the user to attempt
-   * to recover from the error. When executed, the function will try to re-render
-   * the error boundary's contents. If successful, the fallback error component is
-   * replaced with the result of the re-render.
-   *
-   * Empirically, this does not always exist. In particular it does not seem to exist
-   * inside global-error.tsx.
+   * The error object to display
+   */
+  error: TError
+  /**
+   * Optional reset function to try to recover from the error
    */
   reset?: () => void
+  /**
+   * Optional formatter function for the error message
+   */
+  formatError?: (error: TError) => string
+  /**
+   * Optional className for additional styling
+   */
+  className?: string
 }
 
-/** @see https://nextjs.org/docs/app/api-reference/file-conventions/error */
-export default function DefaultPageError({error, reset}: PageErrorProps) {
-  React.useEffect(() => {
-    Sentry.captureException(error)
-  }, [error])
+/**
+ * A reusable error page component that displays error details and provides recovery options
+ */
+export function ErrorPage<TError = unknown>({
+  error,
+  reset,
+  formatError,
+  className,
+}: ErrorPageProps<TError>) {
+  // Default error formatter just returns the error message if it exists
+  const defaultFormatter = (err: unknown) => {
+    if (err instanceof Error) return err.message
+    if (typeof err === 'object' && err !== null && 'message' in err) {
+      return String((err as {message: unknown}).message)
+    }
+    return String(err)
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  ;(window as any).error = error
-  const err = parseError(error)
-  ;(window as any).err = err
+  // Use provided formatter or fallback to default
+  const formattedError = formatError
+    ? formatError(error)
+    : defaultFormatter(error)
 
-  // Use the formatError function to get the properly formatted error message
-  const formattedError = formatError(err)
+  // Try to extract error ID information from different error formats
+  const getErrorId = () => {
+    const err = error as Record<string, unknown>
+    const digest = err['digest'] as string | undefined
+    const environmentName = err['environmentName'] as string | undefined
 
-  const errorId = `${err.environmentName || 'Client'}:${error.digest || 'unknown'}`
+    return `${environmentName || 'Client'}:${digest || 'unknown'}`
+  }
+
+  const errorId = getErrorId()
 
   return (
-    <FullScreenCenter className="justify-start pt-12">
+    <FullScreenCenter className={cn('justify-start pt-12', className)}>
       <div className="flex max-w-xl flex-col items-center gap-5 p-4 text-center">
         <div className="mb-3">
           <Icon
@@ -122,7 +132,7 @@ export default function DefaultPageError({error, reset}: PageErrorProps) {
                 <div className="bg-secondary-foreground overflow-hidden rounded-md shadow-inner">
                   <div className="p-4 text-sm">
                     <div className="text-background whitespace-pre-wrap break-words font-mono">
-                      {JSON.stringify(err, null, 2)}
+                      {JSON.stringify(error, null, 2)}
                     </div>
                   </div>
                 </div>
