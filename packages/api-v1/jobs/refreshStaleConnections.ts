@@ -5,7 +5,9 @@ import type {Database} from '@openint/db'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
-import {envRequired, isProduction} from '@openint/env'
+import {envRequired, getBaseURLs, isProduction} from '@openint/env'
+import {makeSentryClient} from '../lib/sentry.client'
+import {getApiV1URL} from '../lib/typed-routes'
 
 interface RefreshResult {
   totalConnections: number
@@ -81,18 +83,39 @@ export async function refreshStaleConnections(
             connection.connection.connector_name as keyof typeof connectors
           ] as ConnectorServer
           if (!connector?.checkConnection) {
+            console.warn(
+              `Connector ${connection.connection.connector_name} does not implement checkConnection`,
+              JSON.stringify(connector, null, 2),
+            )
             return
           }
 
           try {
+            const context = {
+              webhookBaseUrl: getApiV1URL(
+                `/webhook/${connection.connection.connector_name}`,
+              ),
+              extCustomerId: null,
+              fetch: fetch,
+              baseURLs: getBaseURLs(null),
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const instance = connector.newInstance?.({
+              config: connection.connector_config.config,
+              settings: undefined,
+              context,
+              fetchLinks: [],
+              onSettingsChange: () => {}, // noop
+            })
+
             // TODO: Fix em
 
             const connUpdate = await connector.checkConnection({
               settings: connection.connection.settings,
               config: connection.connector_config.config,
               options: {},
-              instance: undefined,
-              context: {} as never,
+              instance,
+              context,
             })
             await db
               .update(schema.connection)
@@ -145,10 +168,17 @@ export const handleRefreshStaleConnections: Handler = async ({request}) => {
   }
 
   const db = initDbNeon(envRequired.DATABASE_URL)
+  const sentry = makeSentryClient({dsn: envRequired.NEXT_PUBLIC_SENTRY_DSN})
 
-  const result = await refreshStaleConnections(db, {
-    concurrencyLimit: Number(envRequired.REFRESH_CONNECTION_CONCURRENCY) || 3,
-  })
+  const result = await sentry.withCheckin(
+    envRequired.SENTRY_CRON_MONITOR_URL,
+    async () => {
+      return refreshStaleConnections(db, {
+        concurrencyLimit:
+          Number(envRequired.REFRESH_CONNECTION_CONCURRENCY) || 3,
+      })
+    },
+  )
 
   return Response.json(result)
 }
