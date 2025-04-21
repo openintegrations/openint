@@ -1,6 +1,8 @@
 'use client'
 
+import type {Core} from '@openint/api-v1/models'
 import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
+import type {Id} from '@openint/cdk'
 import type {ConnectFn} from './ConnectorClientComponents.client'
 
 import {
@@ -11,6 +13,7 @@ import {
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
+import {extractId} from '@openint/cdk'
 import {Label, toast} from '@openint/shadcn/ui'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {prettyConnectorName} from '@openint/ui-v1/utils'
@@ -33,12 +36,54 @@ export function AddConnectionInner({
   connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
 }) {
-  const {isConnecting, setIsConnecting} = useConnectContext()
+  return (
+    <ConnectorConnectContainer
+      connectorName={connectorConfig.connector_name as ConnectorName}
+      connector={connectorConfig.connector!}
+      connectorConfigId={connectorConfig.id as Id['ccfg']}>
+      {({isConnecting, handleConnect}) => (
+        <ConnectorConfigCard
+          displayNameLocation="right"
+          // TODO: fix this
+          connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
+          onPress={() => {
+            if (isConnecting) {
+              return
+            }
+            handleConnect()
+          }}>
+          <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
+            {isConnecting ? 'Connecting...' : 'Connect'}
+          </Label>
+        </ConnectorConfigCard>
+      )}
+    </ConnectorConnectContainer>
+  )
+}
 
-  const name = connectorConfig.connector_name as ConnectorName
+export function ConnectorConnectContainer({
+  connectorName,
+  connector,
+  connectorConfigId,
+  /** For reconnecting to an existing connection. How do we ensure it matches the connector config though? */
+  connectionId,
+  children,
+}: {
+  connectorName: ConnectorName
+  connector: Core['connector']
+  connectorConfigId: Id['ccfg']
+  connectionId?: Id['conn']
+  children: (props: {
+    isConnecting: boolean
+    handleConnect: () => unknown
+  }) => React.ReactNode
+}) {
+  const {isConnecting: _isConnecting, setIsConnecting} = useConnectContext()
 
-  if (!connectorConfig.connector) {
-    throw new Error(`Connector missing in AddConnectionInner`)
+  const name = connectorName
+
+  if (!connector) {
+    throw new Error(`Connector missing in ConnectorConnectContainer`)
   }
 
   // console.log('AddConnectionInner rendering', name, connectorConfig)
@@ -49,12 +94,14 @@ export function AddConnectionInner({
   // Should load script immediately (via useConnectHook) rather than waiting for suspense query?
   const preConnectRes = useSuspenseQuery(
     trpc.preConnect.queryOptions({
-      connector_config_id: connectorConfig.id,
+      connector_config_id: connectorConfigId,
       discriminated_data: {
         connector_name: name,
         pre_connect_input: {},
       },
-      options: {},
+      options: connectionId
+        ? {connectionExternalId: extractId(connectionId)[2]}
+        : {},
     }),
   )
   // console.log('preConnectRes', preConnectRes)
@@ -75,7 +122,7 @@ export function AddConnectionInner({
       setIsConnecting(true)
       // console.log('ref.current', ref.current)
       const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
-        connectorConfigId: connectorConfig.id as `ccfg_${string}`,
+        connectorConfigId: connectorConfigId as `ccfg_${string}`,
         connectionExternalId: undefined,
         integrationExternalId: undefined,
       })
@@ -83,7 +130,7 @@ export function AddConnectionInner({
       /// todo: always validate schema even if pre/post connect are not
       // implemented
       const postConnectRes = await postConnect.mutateAsync({
-        connector_config_id: connectorConfig.id,
+        connector_config_id: connectorConfigId,
         discriminated_data: {
           connector_name: name,
           connect_output: connectRes,
@@ -111,7 +158,7 @@ export function AddConnectionInner({
 
       const url = new URL(window.location.href)
       url.searchParams.set('view', 'manage')
-      router.replace(url.search || `?view=manage`)
+      router.replace((url.search || `?view=manage`) as never) // FIXME: This typing is problematic
       return postConnectRes
     } catch (error) {
       console.error('Error connecting', error)
@@ -122,12 +169,13 @@ export function AddConnectionInner({
     } finally {
       setIsConnecting(false)
     }
-  }, [connectorConfig, preConnectRes])
+    // TODO: This is not exhaustive. WHat do we need to do to fix it here
+  }, [connectorConfigId, preConnectRes])
 
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component && connectorConfig.connector?.authType === 'OAUTH2') {
+  if (!Component && connector?.authType === 'OAUTH2') {
     Component = makeNativeOauthConnectorClientComponent(
       preConnectRes.data.connect_input,
     )
@@ -135,14 +183,14 @@ export function AddConnectionInner({
     // TODO: handle me, for thigns like oauth connectors
     // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)
-    const settingsJsonSchema =
-      connectorConfig.connector?.schemas?.connection_settings
+    const settingsJsonSchema = connector?.schemas?.connection_settings
     if (settingsJsonSchema) {
       Component = makeManualConnectorClientComponent(settingsJsonSchema)
     } else {
       console.warn(`No Component for connector: ${name}`)
     }
   }
+  const isConnecting = _isConnecting || postConnect.isPending
 
   return (
     <>
@@ -165,20 +213,7 @@ export function AddConnectionInner({
         />
       )}
 
-      <ConnectorConfigCard
-        displayNameLocation="right"
-        // TODO: fix this
-        connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
-        onPress={() => {
-          if (isConnecting || postConnect.isPending) {
-            return
-          }
-          handleConnect()
-        }}>
-        <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
-          {isConnecting || postConnect.isPending ? 'Connecting...' : 'Connect'}
-        </Label>
-      </ConnectorConfigCard>
+      {children({isConnecting, handleConnect})}
     </>
   )
 }
