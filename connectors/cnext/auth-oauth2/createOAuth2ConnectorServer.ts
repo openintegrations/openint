@@ -42,9 +42,19 @@ export function createOAuth2ConnectorServer<
         baseURLs: context.baseURLs,
       }),
 
-    async preConnect({config, input, instance: {client, oauthConfig}}) {
+    async preConnect({
+      config,
+      input,
+      instance: {client, oauthConfig},
+      context,
+    }) {
       const connectionId =
-        input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
+        input.connection_id ??
+        makeId(
+          'conn',
+          connectorDef.name,
+          context.connectionExternalId ?? makeUlid(),
+        )
 
       // console.log(
       //   `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
