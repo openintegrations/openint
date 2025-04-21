@@ -1,12 +1,11 @@
 'use client'
 
 import React from 'react'
-import {env} from '@openint/env'
 import {Button} from '@openint/shadcn/ui'
 
 export function ConnectCallbackClient({
   data,
-  debug = env.NEXT_PUBLIC_VERCEL_ENV !== 'production',
+  debug = true,
 }: {
   data: unknown
   debug?: boolean
