@@ -6,6 +6,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired, getBaseURLs, isProduction} from '@openint/env'
+import {makeSentryClient} from '../lib/sentry.client'
 import {getApiV1URL} from '../lib/typed-routes'
 
 interface RefreshResult {
@@ -167,10 +168,17 @@ export const handleRefreshStaleConnections: Handler = async ({request}) => {
   }
 
   const db = initDbNeon(envRequired.DATABASE_URL)
+  const sentry = makeSentryClient({dsn: envRequired.NEXT_PUBLIC_SENTRY_DSN})
 
-  const result = await refreshStaleConnections(db, {
-    concurrencyLimit: Number(envRequired.REFRESH_CONNECTION_CONCURRENCY) || 3,
-  })
+  const result = await sentry.withCheckin(
+    envRequired.SENTRY_CRON_MONITOR_URL,
+    async () => {
+      return refreshStaleConnections(db, {
+        concurrencyLimit:
+          Number(envRequired.REFRESH_CONNECTION_CONCURRENCY) || 3,
+      })
+    },
+  )
 
   return Response.json(result)
 }
