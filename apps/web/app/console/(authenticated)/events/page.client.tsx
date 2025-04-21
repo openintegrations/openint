@@ -22,16 +22,37 @@ const columns: Array<ColumnDef<Event>> = [
   {
     id: 'timestamp',
     header: 'Timestamp',
-    accessorKey: 'timestamp',
+    cell: ({row}) => (
+      <div className="text-gray-500">
+        {new Date(row.original.timestamp)
+          .toLocaleString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })
+          .replace(',', '')}
+      </div>
+    ),
   },
 ]
+
+const DATA_PER_PAGE = 20
 
 export function EventsList() {
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+  const [pageIndex, setPageIndex] = useState(0)
 
-  const eventData = useSuspenseQuery(trpc.listEvents.queryOptions({}))
+  const eventData = useSuspenseQuery(
+    trpc.listEvents.queryOptions({
+      limit: DATA_PER_PAGE,
+      offset: pageIndex * DATA_PER_PAGE,
+    }),
+  )
 
   const handleRowClick = (event: Event) => {
     console.log('row click event', event)
@@ -39,26 +60,19 @@ export function EventsList() {
     setSheetOpen(true)
   }
 
+  const handlePageChange = (newPageIndex: number) => {
+    setPageIndex(newPageIndex)
+  }
+
   return (
     <>
       <DataTable<Event, string | number | string[]>
-        data={eventData.data.items.map((event) => ({
-          ...event,
-          // TODO: move to new EvenTable component and call formatIsoDateString util
-          timestamp: new Date(event.timestamp)
-            .toLocaleString('en-US', {
-              month: 'short',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: true,
-            })
-            .replace(',', ''),
-        }))}
+        data={eventData.data}
         columns={columns}
         onRowClick={handleRowClick}
-        enableSelect={false}>
+        enableSelect={false}
+        onPageChange={handlePageChange}
+        isLoading={eventData.isFetching || eventData.isLoading}>
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />

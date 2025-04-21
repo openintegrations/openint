@@ -372,7 +372,8 @@ export function DataTableFooter({children}: {children: React.ReactNode}) {
 export function Pagination() {
   const {table, isPaginated, isLoading, paginationInfo} = useDataTableContext()
 
-  if (!isPaginated || !paginationInfo) return null
+  if (!isPaginated || !paginationInfo || paginationInfo?.totalCount === 0)
+    return null
 
   const {currentPage, totalCount, pageSize} = paginationInfo
 
