@@ -1,5 +1,5 @@
 import type {Handler} from 'elysia'
-import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
+import type {ConnectorServer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
