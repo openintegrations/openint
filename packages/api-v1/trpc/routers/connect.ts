@@ -433,6 +433,7 @@ export const connectRouter = router({
           await ctx.asOrgIfCustomer.db
             .update(schema.connection)
             .set({
+              updated_at: new Date().toISOString(),
               status: res.status,
               status_message: res.status_message,
               ...(res.settings && {settings: res.settings}),
@@ -453,6 +454,7 @@ export const connectRouter = router({
             .set({
               status: 'error',
               status_message: 'Unable to check connection',
+              updated_at: new Date().toISOString(),
             })
             .where(eq(schema.connection.id, conn.id))
           return {
