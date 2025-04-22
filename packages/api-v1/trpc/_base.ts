@@ -17,7 +17,7 @@ export const publicProcedure = trpc.procedure
 
 export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
-  if (!hasRole(viewer, ['customer', 'user', 'org'])) {
+  if (!hasRole(viewer, ['customer', 'user', 'org', 'system'])) {
     throw new TRPCError({code: 'FORBIDDEN', message: 'Authentication required'})
   }
   return next({ctx: {...ctx, viewer}})
