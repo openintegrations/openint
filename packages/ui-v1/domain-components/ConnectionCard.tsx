@@ -83,7 +83,7 @@ export function ConnectionCard({
                 className={cn(
                   'flex flex-col items-center justify-center',
                   'transition-all duration-300 ease-out',
-                  isHovered && 'scale-[1.03]',
+                  isHovered && onPress && 'scale-[1.03]',
                 )}>
                 <ConnectorLogo
                   connectorName={connection.connector_name as ConnectorName}
