@@ -23,6 +23,8 @@ import {
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
+const DATA_PER_PAGE = 20
+
 export function ConnectorConfigList() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<
@@ -32,6 +34,7 @@ export function ConnectorConfigList() {
     'connector' | 'integrations' | 'connection_count'
   > | null>(null)
   const formRef = useRef<JSONSchemaFormRef>(null)
+  const [pageIndex, setPageIndex] = useState(0)
 
   const trpc = useTRPC()
 
@@ -40,6 +43,8 @@ export function ConnectorConfigList() {
     queries: [
       trpc.listConnectorConfigs.queryOptions({
         expand: ['connection_count', 'connector.schemas'],
+        limit: DATA_PER_PAGE,
+        offset: pageIndex * DATA_PER_PAGE,
       }),
       trpc.listConnectors.queryOptions({
         expand: ['schemas'],
@@ -47,7 +52,11 @@ export function ConnectorConfigList() {
     ],
   })
 
-  const connectorConfigs = res.data?.items
+  const handlePageChange = (newPageIndex: number) => {
+    setPageIndex(newPageIndex)
+  }
+
+  const connectorConfigs = res.data
 
   const formSchema = {
     type: 'object' as const,
@@ -241,7 +250,9 @@ export function ConnectorConfigList() {
       >
         data={connectorConfigs}
         columns={columns}
-        onRowClick={handleRowClick}>
+        onRowClick={handleRowClick}
+        onPageChange={handlePageChange}
+        isLoading={res.isFetching || res.isLoading}>
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
