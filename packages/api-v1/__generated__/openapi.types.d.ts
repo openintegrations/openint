@@ -24,6 +24,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    [path: `/connector-config/${string}`]: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getConnectorConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/connector-config": {
         parameters: {
             query?: never;
@@ -31,10 +47,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * List Configured Connectors
-         * @description List the connectors that are configured in your account and available for your customers
-         */
+        /** List Configured Connectors */
         get: operations["listConnectorConfigs"];
         put?: never;
         post?: never;
@@ -2840,6 +2853,97 @@ export interface operations {
                          * @default 0
                          */
                         offset: number;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    getConnectorConfig: {
+        parameters: {
+            query?: {
+                expand?: ("connector" | "connector.schemas" | "connection_count")[];
+            };
+            header?: never;
+            path: {
+                /** @description The id of the connector config, starts with `ccfg_` */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: string;
+                        created_at: string;
+                        updated_at: string;
+                        org_id: string;
+                        display_name: string | null;
+                        disabled: boolean | null;
+                        /** @description
+                         *       JSON object can can be used to associate arbitrary metadata to
+                         *       avoid needing a separate 1-1 table just for simple key values in your application.
+                         *       During updates this object will be shallowly merged
+                         *      */
+                        metadata?: {
+                            [key: string]: unknown;
+                        } | null;
+                    } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
+                        connector?: components["schemas"]["core.connector"];
+                        integrations?: {
+                            [key: string]: components["schemas"]["core.integration_select"];
+                        };
+                        connection_count?: number;
                     };
                 };
             };

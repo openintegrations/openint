@@ -147,11 +147,411 @@
         }
       }
     },
+    "/connector-config/{id}": {
+      "get": {
+        "operationId": "getConnectorConfig",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The id of the connector config, starts with `ccfg_`",
+            "schema": {
+              "type": "string",
+              "pattern": "^ccfg_",
+              "description": "The id of the connector config, starts with `ccfg_`"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "connector",
+                  "connector.schemas",
+                  "connection_count"
+                ],
+                "description": "Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "org_id": {
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "disabled": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        },
+                        "metadata": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": {},
+                          "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "created_at",
+                        "updated_at",
+                        "org_id",
+                        "display_name",
+                        "disabled"
+                      ]
+                    },
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.confluence.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.discord.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.facebook.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.github.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.gong.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-calendar.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-docs.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-drive.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-mail.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-sheet.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.hubspot.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.instagram.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.lever.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.linear.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.linkedin.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.notion.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.outreach.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.pipedrive.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.quickbooks.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.reddit.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.sharepoint.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.slack.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.twitter.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.xero.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.airtable.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.apollo.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.brex.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.coda.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.finch.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.firebase.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.foreceipt.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.heron.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.mercury.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.merge.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.moota.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.onebrick.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.plaid.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.postgres.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.ramp.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.saltedge.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.splitwise.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.stripe.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.teller.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.toggl.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.twenty.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.venmo.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.wise.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.yodlee.discriminated_connector_config"
+                        }
+                      ],
+                      "discriminator": {
+                        "propertyName": "connector_name",
+                        "mapping": {
+                          "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
+                          "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
+                          "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
+                          "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
+                          "facebook": "#/components/schemas/connector.facebook.discriminated_connector_config",
+                          "github": "#/components/schemas/connector.github.discriminated_connector_config",
+                          "gong": "#/components/schemas/connector.gong.discriminated_connector_config",
+                          "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connector_config",
+                          "google-docs": "#/components/schemas/connector.google-docs.discriminated_connector_config",
+                          "google-drive": "#/components/schemas/connector.google-drive.discriminated_connector_config",
+                          "google-mail": "#/components/schemas/connector.google-mail.discriminated_connector_config",
+                          "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
+                          "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
+                          "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
+                          "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
+                          "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
+                          "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
+                          "linear": "#/components/schemas/connector.linear.discriminated_connector_config",
+                          "linkedin": "#/components/schemas/connector.linkedin.discriminated_connector_config",
+                          "notion": "#/components/schemas/connector.notion.discriminated_connector_config",
+                          "outreach": "#/components/schemas/connector.outreach.discriminated_connector_config",
+                          "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connector_config",
+                          "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
+                          "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
+                          "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
+                          "sharepoint": "#/components/schemas/connector.sharepoint.discriminated_connector_config",
+                          "slack": "#/components/schemas/connector.slack.discriminated_connector_config",
+                          "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
+                          "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
+                          "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connector_config",
+                          "airtable": "#/components/schemas/connector.airtable.discriminated_connector_config",
+                          "apollo": "#/components/schemas/connector.apollo.discriminated_connector_config",
+                          "brex": "#/components/schemas/connector.brex.discriminated_connector_config",
+                          "coda": "#/components/schemas/connector.coda.discriminated_connector_config",
+                          "finch": "#/components/schemas/connector.finch.discriminated_connector_config",
+                          "firebase": "#/components/schemas/connector.firebase.discriminated_connector_config",
+                          "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connector_config",
+                          "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
+                          "heron": "#/components/schemas/connector.heron.discriminated_connector_config",
+                          "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connector_config",
+                          "mercury": "#/components/schemas/connector.mercury.discriminated_connector_config",
+                          "merge": "#/components/schemas/connector.merge.discriminated_connector_config",
+                          "moota": "#/components/schemas/connector.moota.discriminated_connector_config",
+                          "onebrick": "#/components/schemas/connector.onebrick.discriminated_connector_config",
+                          "plaid": "#/components/schemas/connector.plaid.discriminated_connector_config",
+                          "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
+                          "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
+                          "saltedge": "#/components/schemas/connector.saltedge.discriminated_connector_config",
+                          "splitwise": "#/components/schemas/connector.splitwise.discriminated_connector_config",
+                          "stripe": "#/components/schemas/connector.stripe.discriminated_connector_config",
+                          "teller": "#/components/schemas/connector.teller.discriminated_connector_config",
+                          "toggl": "#/components/schemas/connector.toggl.discriminated_connector_config",
+                          "twenty": "#/components/schemas/connector.twenty.discriminated_connector_config",
+                          "venmo": "#/components/schemas/connector.venmo.discriminated_connector_config",
+                          "wise": "#/components/schemas/connector.wise.discriminated_connector_config",
+                          "yodlee": "#/components/schemas/connector.yodlee.discriminated_connector_config"
+                        }
+                      },
+                      "description": "Connector specific data"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "connector": {
+                          "$ref": "#/components/schemas/core.connector"
+                        },
+                        "integrations": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/components/schemas/core.integration_select"
+                          }
+                        },
+                        "connection_count": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/connector-config": {
       "get": {
         "operationId": "listConnectorConfigs",
         "summary": "List Configured Connectors",
-        "description": "List the connectors that are configured in your account and available for your customers",
         "security": [
           {
             "ApiKey": []

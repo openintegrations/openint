@@ -16,14 +16,69 @@ import {getConnectorModelByName, zConnectorName} from './connector.models'
 import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
 
+const connectionCountExtra = {
+  // Need to cast to double precision to avoid being used as string
+  connection_count: sql<number>`
+    (
+      SELECT
+        COUNT(*)
+      FROM
+        ${schema.connection}
+      WHERE
+        ${schema.connection}.connector_config_id = connector_config.id
+    )
+  `.as('connection_count'),
+  // TODO: How to fix this issue with not being able to reference column name
+  // in the query substitution? using ${schema.connector_config.id} results in just `id`
+  // which fails the query...
+}
+
 export const connectorConfigRouter = router({
+  getConnectorConfig: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/connector-config/{id}',
+      },
+    })
+    .input(
+      z.object({
+        id: zConnectorConfigId,
+        expand: z.array(zConnectorConfigExpandOption).optional(),
+      }),
+    )
+    .output(connectorConfigExtended)
+    .query(async ({ctx, input}) => {
+      const {id, expand} = input
+      const ccfg = await ctx.db.query.connector_config.findFirst({
+        where: eq(schema.connector_config.id, id),
+        extras: {
+          // TODO: Fix typing to make connection_count optional
+          ...((expand?.includes('connection_count') &&
+            connectionCountExtra) as typeof connectionCountExtra),
+        },
+      })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+      if (expand?.includes('connector')) {
+        return {
+          ...ccfg,
+          connector: getConnectorModelByName(ccfg.connector_name, {
+            includeSchemas: expand?.includes('connector.schemas'),
+          }),
+        }
+      }
+      return ccfg
+    }),
   listConnectorConfigs: authenticatedProcedure
     .meta({
       openapi: {
         method: 'GET',
         path: '/connector-config',
-        description:
-          'List the connectors that are configured in your account and available for your customers',
         summary: 'List Configured Connectors',
       },
     })
@@ -49,23 +104,6 @@ export const connectorConfigRouter = router({
       //   ctx.viewer?.connectOptions?.connector_names ?? []
 
       const currentlySupportedConnectorNames = Object.keys(defConnectors ?? {})
-
-      const connectionCountExtra = {
-        // Need to cast to double precision to avoid being used as string
-        connection_count: sql<number>`
-          (
-            SELECT
-              COUNT(*)
-            FROM
-              ${schema.connection}
-            WHERE
-              ${schema.connection}.connector_config_id = connector_config.id
-          )
-        `.as('connection_count'),
-        // TODO: How to fix this issue with not being able to reference column name
-        // in the query substitution? using ${schema.connector_config.id} results in just `id`
-        // which fails the query...
-      }
 
       const query = ctx.db.query.connector_config.findMany({
         extras: {
@@ -119,6 +157,11 @@ export const connectorConfigRouter = router({
           })
         }
         return ccfg
+      })
+
+      expandedItems.forEach((item) => {
+        connectorConfigExtended.parse(item)
+        console.log('success parsing', item.id)
       })
 
       // this is done as v0 had scopes as a string and we've moved it to an array in v1
