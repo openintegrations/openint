@@ -179,27 +179,6 @@ function useConnectionCommands() {
     }),
   )
 
-  const revokeConnection = useMutation(
-    trpc.revokeConnection.mutationOptions({
-      onMutate: () => {
-        loadingToastId = toast.loading('Revoking connection...')
-      },
-      onSuccess: () => {
-        toast.dismiss(loadingToastId)
-        toast.success('Connection revoked successfully!')
-      },
-      onError: (error) => {
-        toast.dismiss(loadingToastId)
-        toast.error(`Connection revocation failed: ${error.message}`)
-      },
-      onSettled: () => {
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listConnections.queryKey(),
-        })
-      },
-    }),
-  )
-
   const cmd = cmdInit()
 
   return {
@@ -238,23 +217,6 @@ function useConnectionCommands() {
       }),
       execute: async ({params}) => {
         await checkConnection.mutateAsync({id: params.connection_id})
-      },
-    }),
-
-    'connection:revoke': cmd.identity({
-      title: 'Revoke Connection',
-      icon: 'Unlink',
-      params: z.object({
-        connection_id: z
-          .string()
-          .describe('The ID of the connection to revoke'),
-      }),
-      execute: async ({params}) => {
-        if (
-          window.confirm('Are you sure you want to revoke this connection?')
-        ) {
-          await revokeConnection.mutateAsync({id: params.connection_id})
-        }
       },
     }),
   } satisfies CommandDefinitionMap
