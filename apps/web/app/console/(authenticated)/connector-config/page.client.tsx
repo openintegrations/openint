@@ -5,9 +5,15 @@ import type {JSONSchemaFormRef} from '@openint/ui-v1'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSuspenseQueries} from '@tanstack/react-query'
-import {Plus} from 'lucide-react'
+import {AlertCircle, Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
-import {Button, toast} from '@openint/shadcn/ui'
+import {
+  Button,
+  toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@openint/shadcn/ui'
 import {
   Sheet,
   SheetContent,
@@ -333,12 +339,30 @@ export function ConnectorConfigList() {
           {selectedConnector && (
             <SheetFooter className="mt-auto border-t p-4">
               <div className="flex w-full flex-row justify-between">
-                <Button
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={!selectedCcfg || deleteConfig.isPending}>
-                  {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
-                </Button>
+                <div className="flex flex-row items-center gap-2">
+                  {selectedCcfg?.connection_count ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <AlertCircle className="text-destructive size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Cannot delete connector config because it has active
+                        connections, delete the connections before deleting the
+                        connector config.
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : null}
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={
+                      !selectedCcfg ||
+                      deleteConfig.isPending ||
+                      (selectedCcfg.connection_count ?? 0) > 0
+                    }>
+                    {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </div>
                 <Button
                   onClick={handleFormSubmit}
                   disabled={createConfig.isPending || updateConfig.isPending}>
