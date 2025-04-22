@@ -88,10 +88,10 @@ export function ConnectorConfigList() {
     : {}
 
   const formContext = {
-    connectorName: selectedConnector?.display_name ?? '',
     openint_scopes: selectedConnector?.openint_scopes ?? [],
     scopes: selectedConnector?.scopes ?? [],
     initialData: selectedCcfg,
+    connector: selectedConnector,
   }
 
   const columns: Array<
@@ -237,6 +237,16 @@ export function ConnectorConfigList() {
       // TODO: We need to show a toast here
     }
   }
+
+  const saveButtonLabel =
+    createConfig.isPending || updateConfig.isPending
+      ? selectedCcfg
+        ? 'Updating...'
+        : 'Creating...'
+      : selectedCcfg
+        ? `Edit ${selectedConnector?.display_name} Connector`
+        : `Create ${selectedConnector?.display_name} Connector`
+
   // initial flash of no data....
   if (!res.data.items || !connectorRes.data.items) {
     return null
@@ -286,7 +296,7 @@ export function ConnectorConfigList() {
           <div className="p-4 pb-0">
             <SheetHeader>
               <SheetTitle className="text-lg">
-                {selectedConnector ? 'Edit Connector' : 'Add Connector'}
+                {selectedCcfg ? 'Edit Connector' : 'Add Connector'}
               </SheetTitle>
             </SheetHeader>
           </div>
@@ -322,9 +332,7 @@ export function ConnectorConfigList() {
                 <Button
                   onClick={handleFormSubmit}
                   disabled={createConfig.isPending || updateConfig.isPending}>
-                  {createConfig.isPending || updateConfig.isPending
-                    ? 'Saving...'
-                    : 'Save'}
+                  {saveButtonLabel}
                 </Button>
               </div>
             </SheetFooter>
