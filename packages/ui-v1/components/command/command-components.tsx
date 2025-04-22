@@ -63,7 +63,10 @@ export function CommandPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className={cn('h-8 w-8 p-0', className)}>
+        <Button
+          variant="ghost"
+          className={cn('h-8 w-8 p-0', className)}
+          onClick={(e) => e.stopPropagation()}>
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>

@@ -121,8 +121,7 @@ export function ConnectionsPage() {
         <DataTable<ConnectionExpanded, string | number | string[]>
           data={connectionData.data}
           columns={columnsWithActions}
-          // Disable row click for now as it interferes with the command popover
-          onRowClick={false ? handleRowClick : undefined}
+          onRowClick={handleRowClick}
           onPageChange={handlePageChange}
           isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
