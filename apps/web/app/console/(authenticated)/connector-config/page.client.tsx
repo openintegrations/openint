@@ -7,7 +7,7 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useSuspenseQueries} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
-import {Button} from '@openint/shadcn/ui'
+import {Button, toast} from '@openint/shadcn/ui'
 import {
   Sheet,
   SheetContent,
@@ -184,7 +184,7 @@ export function ConnectorConfigList() {
 
     try {
       if (selectedCcfg) {
-        await updateConfig.mutateAsync({
+        const res = await updateConfig.mutateAsync({
           id: selectedCcfg.id,
           display_name: displayName,
           disabled,
@@ -193,8 +193,9 @@ export function ConnectorConfigList() {
             ...rest,
           },
         })
+        toast.success(`Connector ${res.id} updated successfully`)
       } else {
-        await createConfig.mutateAsync({
+        const res = await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
           display_name: displayName,
           disabled,
@@ -203,6 +204,7 @@ export function ConnectorConfigList() {
             ...rest,
           },
         })
+        toast.success(`Connector ${res.id} created successfully`)
       }
 
       setSheetOpen(false)
@@ -210,7 +212,9 @@ export function ConnectorConfigList() {
       setSelectedCcfg(null)
       await res.refetch()
     } catch (error) {
-      console.error('Error saving configuration:', error)
+      toast.error(
+        `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
+      )
     }
   }
 
@@ -231,10 +235,12 @@ export function ConnectorConfigList() {
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
+      toast.success(`Connector config ${selectedCcfg?.id} deleted successfully`)
       await res.refetch()
     } catch (error) {
-      console.error('Failed to delete connector config:', error)
-      // TODO: We need to show a toast here
+      toast.error(
+        `Failed to delete connector config ${selectedCcfg?.id}: ${error instanceof Error ? error.message : error}`,
+      )
     }
   }
 
