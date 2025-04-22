@@ -10,7 +10,9 @@ async function main() {
   const caller = appRouter.createCaller(context)
 
   if (process.argv[2] === 'list') {
-    const res = await caller.listConnectorConfigs()
+    const res = await caller.listConnectorConfigs({
+      limit: 500,
+    })
     console.log(res)
   } else if (process.argv[2] === 'get') {
     const res = await caller.getConnectorConfig({
