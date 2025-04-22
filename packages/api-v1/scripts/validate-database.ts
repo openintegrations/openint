@@ -9,11 +9,15 @@ async function main() {
   const context = routerContextFromViewer({db, viewer: {role: 'system'}})
   const caller = appRouter.createCaller(context)
 
-  // const res = await caller.listConnectorConfigs()
-  const res = await caller.getConnectorConfig({
-    id: 'ccfg_slack_01JPTJADVQ3H8VF82QYR2P9EQV',
-  })
-  console.log(res)
+  if (process.argv[2] === 'list') {
+    const res = await caller.listConnectorConfigs()
+    console.log(res)
+  } else if (process.argv[2] === 'get') {
+    const res = await caller.getConnectorConfig({
+      id: process.argv[3] as string,
+    })
+    console.log(res)
+  }
 }
 
 main()
