@@ -290,10 +290,14 @@ export function ConnectorConfigList() {
       <Sheet
         open={sheetOpen}
         onOpenChange={(open) => {
-          setSheetOpen(open)
-          if (!open) {
+          if (selectedConnector && !selectedCcfg) {
+            setSelectedConnector(null)
+          } else if (selectedCcfg) {
             setSelectedConnector(null)
             setSelectedCcfg(null)
+            setSheetOpen(open)
+          } else {
+            setSheetOpen(open)
           }
         }}>
         <SheetContent
