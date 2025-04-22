@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
-import React from 'react'
+import React, {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -44,7 +44,7 @@ export type {ColumnDef}
 export type Columns<TItem, TValue> = Array<ColumnDef<TItem, TValue>>
 
 export interface DataTableProps<TItem, TValue> {
-  data: TItem[]
+  data: TItem[] | PaginatedData<TItem>
   isRefetching?: boolean
   columns: Array<ColumnDef<TItem, TValue>>
   enableSelect?: boolean
@@ -52,6 +52,8 @@ export interface DataTableProps<TItem, TValue> {
   onRowClick?: (data: TItem) => void
   children?: React.ReactNode
   className?: string
+  onPageChange?: (pageIndex: number) => void
+  isLoading?: boolean // Only when data is paginated and fetching
 }
 
 type DataTableContextValue<TData, TValue> = {
@@ -60,6 +62,13 @@ type DataTableContextValue<TData, TValue> = {
   isRefetching?: boolean
   filter: (data: TData) => boolean
   onRowClick?: (data: TData) => void
+  isPaginated: boolean
+  isLoading: boolean
+  paginationInfo?: {
+    currentPage: number
+    totalCount: number
+    pageSize: number
+  }
 }
 
 const DataTableContext = React.createContext<
@@ -75,6 +84,13 @@ export function useDataTableContext() {
   return context
 }
 
+export type PaginatedData<T> = {
+  items: T[]
+  total: number
+  limit: number
+  offset: number
+}
+
 export function DataTable<TData, TValue>({
   columns: _columns,
   data,
@@ -83,6 +99,8 @@ export function DataTable<TData, TValue>({
   filter = defaultFilter,
   onRowClick,
   children,
+  onPageChange,
+  isLoading,
   ...props
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -112,6 +130,15 @@ export function DataTable<TData, TValue>({
     )
 
   const [rowSelection, setRowSelection] = React.useState({})
+
+  // Check if data is paginated
+  const isPaginated = 'items' in data && 'total' in data
+  const items = isPaginated ? data.items : data
+  const totalCount = isPaginated ? data.total : items.length
+  const pageSize = isPaginated ? data.limit : items.length
+  const currentPage = isPaginated ? Math.floor(data.offset / data.limit) : 0
+
+  const [pageIndex, setPageIndex] = useState(currentPage)
 
   const columns = React.useMemo(
     () =>
@@ -148,7 +175,7 @@ export function DataTable<TData, TValue>({
   )
 
   const table = useReactTable({
-    data,
+    data: items,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -163,7 +190,22 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
     },
+    manualPagination: isPaginated, // Only enable manual pagination if data is paginated
+    pageCount: isPaginated ? Math.ceil(totalCount / pageSize) : 1,
+    onPaginationChange: isPaginated
+      ? (updater) => {
+          if (typeof updater === 'function') {
+            const newState = updater({pageIndex, pageSize})
+            setPageIndex(newState.pageIndex)
+            onPageChange?.(newState.pageIndex)
+          }
+        }
+      : undefined,
   })
   return (
     <DataTableContext.Provider
@@ -173,7 +215,22 @@ export function DataTable<TData, TValue>({
       //   () => ({table, columns, isRefetching, filter, onRowClick}),
       //   [table, columns, isRefetching, filter, onRowClick],
       // )}>
-      value={{table, columns, isRefetching, filter, onRowClick}}>
+      value={{
+        table,
+        columns,
+        isRefetching,
+        filter,
+        onRowClick,
+        isPaginated,
+        isLoading: isLoading ?? false,
+        paginationInfo: isPaginated
+          ? {
+              currentPage,
+              totalCount,
+              pageSize,
+            }
+          : undefined,
+      }}>
       <div className={cn('w-full', props.className)}>{children}</div>
     </DataTableContext.Provider>
   )
@@ -313,7 +370,12 @@ export function DataTableFooter({children}: {children: React.ReactNode}) {
 }
 
 export function Pagination() {
-  const {table} = useDataTableContext()
+  const {table, isPaginated, isLoading, paginationInfo} = useDataTableContext()
+
+  if (!isPaginated || !paginationInfo || paginationInfo?.totalCount === 0)
+    return null
+
+  const {currentPage, totalCount, pageSize} = paginationInfo
 
   return (
     <>
@@ -323,24 +385,25 @@ export function Pagination() {
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
       )}
-      {(table.getCanPreviousPage() || table.getCanNextPage()) && (
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
-      )}
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage() || isLoading}>
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage() || isLoading}>
+          Next
+        </Button>
+        <span>
+          Page {currentPage + 1} of {Math.ceil(totalCount / pageSize)}
+        </span>
+      </div>
     </>
   )
 }

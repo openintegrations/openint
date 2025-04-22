@@ -149,8 +149,7 @@ export async function processTypedPaginatedResponse<T>(query: Query): Promise<{
   total: number
 }> {
   const result = await query
-  const total = result.length > 0 ? Number(result[0]?.['total'] ?? 0) : 0
-
+  const total = result.length
   const items = result.map((r) => r as T)
 
   return {

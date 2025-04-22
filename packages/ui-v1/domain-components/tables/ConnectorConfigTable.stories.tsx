@@ -10,74 +10,85 @@ import {
 import {columns, ConnectorConfigTable} from './ConnectorConfigTable'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
-// Sample data for the connector config table
-const connectorConfigs: Array<Core['connector_config_select']> = [
-  {
-    id: '101',
-    display_name: 'Google Drive',
-    connector_name: 'google-drive',
-    disabled: false,
-    config: {
-      environment: 'production',
+type PaginatedData<T> = {
+  items: T[]
+  total: number
+  limit: number
+  offset: number
+}
+
+const connectorConfigs: PaginatedData<Core['connector_config_select']> = {
+  items: [
+    {
+      id: '101',
+      display_name: 'Google Drive',
+      connector_name: 'google-drive',
+      disabled: false,
+      config: {
+        environment: 'production',
+      },
+      created_at: '2025-05-12T12:00:00Z',
+      updated_at: '2025-05-12T12:00:00Z',
+      org_id: 'org-123',
+      metadata: {},
     },
-    created_at: '2025-05-12T12:00:00Z',
-    updated_at: '2025-05-12T12:00:00Z',
-    org_id: 'org-123',
-    metadata: {},
-  },
-  {
-    id: '102',
-    display_name: 'HubSpot',
-    connector_name: 'hubspot',
-    disabled: false,
-    config: {
-      environment: 'sandbox',
+    {
+      id: '102',
+      display_name: 'HubSpot',
+      connector_name: 'hubspot',
+      disabled: false,
+      config: {
+        environment: 'sandbox',
+      },
+      created_at: '2025-05-10T12:00:00Z',
+      updated_at: '2025-05-10T12:00:00Z',
+      org_id: 'org-123',
+      metadata: {},
     },
-    created_at: '2025-05-10T12:00:00Z',
-    updated_at: '2025-05-10T12:00:00Z',
-    org_id: 'org-123',
-    metadata: {},
-  },
-  {
-    id: '103',
-    display_name: 'Stripe',
-    connector_name: 'stripe',
-    disabled: true,
-    config: {
-      environment: 'production',
+    {
+      id: '103',
+      display_name: 'Stripe',
+      connector_name: 'stripe',
+      disabled: true,
+      config: {
+        environment: 'production',
+      },
+      created_at: '2025-05-08T12:00:00Z',
+      updated_at: '2025-05-08T12:00:00Z',
+      org_id: 'org-123',
+      metadata: {},
     },
-    created_at: '2025-05-08T12:00:00Z',
-    updated_at: '2025-05-08T12:00:00Z',
-    org_id: 'org-123',
-    metadata: {},
-  },
-  {
-    id: '104',
-    display_name: 'Google Drive',
-    connector_name: 'google-drive',
-    disabled: false,
-    config: {
-      environment: 'sandbox',
+    {
+      id: '104',
+      display_name: 'Google Drive',
+      connector_name: 'google-drive',
+      disabled: false,
+      config: {
+        environment: 'sandbox',
+      },
+      created_at: '2025-05-06T12:00:00Z',
+      updated_at: '2025-05-06T12:00:00Z',
+      org_id: 'org-123',
+      metadata: {},
     },
-    created_at: '2025-05-06T12:00:00Z',
-    updated_at: '2025-05-06T12:00:00Z',
-    org_id: 'org-123',
-    metadata: {},
-  },
-  {
-    id: '105',
-    display_name: 'Microsoft OneDrive',
-    connector_name: 'onedrive',
-    disabled: true,
-    config: {
-      environment: 'production',
+    {
+      id: '105',
+      display_name: 'Microsoft OneDrive',
+      connector_name: 'onedrive',
+      disabled: true,
+      config: {
+        environment: 'production',
+      },
+      created_at: '2025-05-04T12:00:00Z',
+      updated_at: '2025-05-04T12:00:00Z',
+      org_id: 'org-123',
+      metadata: {},
     },
-    created_at: '2025-05-04T12:00:00Z',
-    updated_at: '2025-05-04T12:00:00Z',
-    org_id: 'org-123',
-    metadata: {},
-  },
-]
+  ],
+  total: 5,
+  limit: 10,
+  offset: 0,
+}
 
 const meta = {
   title: 'Domain Components/ConnectorConfigTable',
@@ -88,36 +99,53 @@ const meta = {
 } satisfies Meta<typeof ConnectorConfigTable>
 
 export default meta
+
 type Story = StoryObj<
-  | typeof DataTable<Core['connector_config_select'], unknown>
-  | typeof ConnectorConfigTable
+  typeof DataTable<Core['connector_config_select'], unknown>
 >
 
 type StoryArgs = {
-  data: Array<Core['connector_config_select']>
+  data:
+    | Core['connector_config_select'][]
+    | PaginatedData<Core['connector_config_select']>
   columns: Array<ColumnDef<Core['connector_config_select']>>
   enableSelect?: boolean
+  onRowClick?: (connectorConfig: Core['connector_config_select']) => void
+}
+
+const CcfgTable = (props: StoryArgs) => {
+  return (
+    <DataTable
+      {...props}
+      data={props.data}
+      isLoading={false}
+      onPageChange={() => {}}>
+      <DataTable.Header>
+        <DataTable.SearchInput />
+        <DataTable.ColumnVisibilityToggle />
+      </DataTable.Header>
+      <DataTable.Table />
+      <DataTable.Footer>
+        <DataTable.Pagination />
+      </DataTable.Footer>
+    </DataTable>
+  )
 }
 
 export const Default: Story = {
   args: {
+    data: connectorConfigs.items,
+    columns,
+  },
+  render: (args) => <CcfgTable {...args} />,
+}
+
+export const WithPagination: Story = {
+  args: {
     data: connectorConfigs,
     columns,
   },
-  render: (args: StoryArgs) => (
-    <div className="overflow-hidden rounded-lg border shadow-sm">
-      <DataTable {...args}>
-        <DataTable.Header>
-          <DataTable.SearchInput />
-          <DataTable.ColumnVisibilityToggle />
-        </DataTable.Header>
-        <DataTable.Table />
-        <DataTable.Footer>
-          <DataTable.Pagination />
-        </DataTable.Footer>
-      </DataTable>
-    </div>
-  ),
+  render: (args) => <CcfgTable {...args} />,
 }
 
 // Create a component that displays the MultiSelectActionBar when rows are selected
@@ -154,7 +182,7 @@ const SelectionActionsBar = () => {
 // Add a story that shows selecting rows with MultiSelectActionBar
 export const WithRowSelection: Story = {
   args: {
-    data: connectorConfigs,
+    data: connectorConfigs.items,
     columns,
     enableSelect: true,
   },
@@ -237,7 +265,7 @@ const compactColumns: Array<ColumnDef<Core['connector_config_select']>> = [
 // Add a story that shows compact cells
 export const WithCompactCells: Story = {
   args: {
-    data: connectorConfigs,
+    data: connectorConfigs.items,
     columns: compactColumns,
   },
   render: (args: StoryArgs) => (
@@ -259,7 +287,7 @@ export const WithCompactCells: Story = {
 // Add a story that shows compact cells with row selection
 export const WithCompactCellsAndRowSelection: Story = {
   args: {
-    data: connectorConfigs,
+    data: connectorConfigs.items,
     columns: compactColumns,
     enableSelect: true,
   },

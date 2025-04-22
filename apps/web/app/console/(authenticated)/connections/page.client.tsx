@@ -55,16 +55,27 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 ]
 
+const DATA_PER_PAGE = 20
+
 export function ConnectionsPage() {
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnection, setSelectedConnection] = useState<
     Core['connection_select'] | null
   >(null)
+  const [pageIndex, setPageIndex] = useState(0)
 
   const connectionData = useSuspenseQuery(
-    trpc.listConnections.queryOptions({expand: ['connector']}),
+    trpc.listConnections.queryOptions({
+      expand: ['connector'],
+      limit: DATA_PER_PAGE,
+      offset: pageIndex * DATA_PER_PAGE,
+    }),
   )
+
+  const handlePageChange = (newPageIndex: number) => {
+    setPageIndex(newPageIndex)
+  }
 
   const deleteConn = useMutation(
     trpc.deleteConnection.mutationOptions({
@@ -108,10 +119,12 @@ export function ConnectionsPage() {
     <>
       <div>
         <DataTable<ConnectionExpanded, string | number | string[]>
-          data={connectionData.data.items}
+          data={connectionData.data}
           columns={columnsWithActions}
           // Disable row click for now as it interferes with the command popover
-          onRowClick={false ? handleRowClick : undefined}>
+          onRowClick={false ? handleRowClick : undefined}
+          onPageChange={handlePageChange}
+          isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
             <DataTable.SearchInput />
             <DataTable.ColumnVisibilityToggle />
