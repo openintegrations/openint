@@ -1,11 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/jobs/refresh-stale-connections",
+      "path": "/jobs/refresh-stale-connections",
       "schedule": "*/30 * * * *"
     },
     {
-      "path": "/api/debug",
+      "path": "/debug",
       "schedule": "*/1 * * * *"
     }
   ]
