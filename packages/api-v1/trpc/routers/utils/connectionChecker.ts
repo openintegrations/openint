@@ -19,13 +19,28 @@ export function connectionExpired(
   return new Date(expiresAt) < new Date()
 }
 
-export async function checkConnection(
+export function connectionCanBeChecked(
   connection: Z.infer<typeof core.connection_select>,
-  ctx: RouterContext,
 ) {
   const connector = serverConnectors[
     connection.connector_name as keyof typeof serverConnectors
   ] as ConnectorServer
+  if (!connector) {
+    return false
+  }
+  return !!connector.checkConnection
+}
+
+export async function checkConnection(
+  connection: Z.infer<typeof core.connection_select>,
+  ctx: RouterContext,
+  _connector?: ConnectorServer, // for tests
+) {
+  const connector =
+    _connector ??
+    (serverConnectors[
+      connection.connector_name as keyof typeof serverConnectors
+    ] as ConnectorServer)
   if (!connector) {
     throw new TRPCError({
       code: 'NOT_FOUND',
@@ -52,7 +67,7 @@ export async function checkConnection(
       webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
       extCustomerId: (ctx.viewer.role === 'customer'
         ? ctx.viewer.customerId
-        : ctx.viewer.userId) as ExtCustomerId,
+        : (ctx.viewer.userId ?? '')) as ExtCustomerId,
       fetch: ctx.fetch,
       baseURLs: getBaseURLs(null),
     }
