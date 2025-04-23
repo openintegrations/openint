@@ -154,6 +154,9 @@ function useConnectionCommands() {
         void queryClient.invalidateQueries({
           queryKey: trpc.listConnections.queryKey(),
         })
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnectorConfigs.queryKey(),
+        })
       },
     }),
   )
