@@ -6,11 +6,10 @@ export function getConnectorDefaultCredentials(
   connectorName: string,
 ): Record<string, string> | undefined {
   const credentials: Record<string, string> = {}
+  const prefix = `ccfg_${connectorName.replaceAll(/-/g, '_')}_`
   for (const key in process.env) {
-    if (key.startsWith(`ccfg_${connectorName}_`)) {
-      const credentialKey = key
-        .replace(`ccfg_${connectorName}_`, '')
-        .toLowerCase()
+    if (key.startsWith(prefix)) {
+      const credentialKey = key.replace(prefix, '').toLowerCase()
       credentials[credentialKey] = process.env[key] as string
     }
   }
