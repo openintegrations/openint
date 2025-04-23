@@ -72,14 +72,11 @@
                     "limit": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
                       "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
                       "minimum": 0,
-                      "default": 0,
                       "description": "Offset the items returned"
                     }
                   },
@@ -567,7 +564,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 100
+              "maximum": 500
             }
           },
           {
@@ -924,14 +921,11 @@
                     "limit": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
                       "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
                       "minimum": 0,
-                      "default": 0,
                       "description": "Offset the items returned"
                     }
                   },
@@ -1581,7 +1575,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 100
+              "maximum": 500
             }
           },
           {
@@ -2004,14 +1998,11 @@
                     "limit": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
                       "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
                       "minimum": 0,
-                      "default": 0,
                       "description": "Offset the items returned"
                     }
                   },
@@ -3252,6 +3243,216 @@
             }
           }
         }
+      },
+      "get": {
+        "operationId": "listEvents",
+        "summary": "List Organization Events",
+        "description": "List all events for an organization",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 500
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/core.event"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Total number of items in the database for the organization"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Limit the number of items returned"
+                    },
+                    "offset": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Offset the items returned"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "limit",
+                    "offset"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event/{id}": {
+      "get": {
+        "operationId": "getEvent",
+        "summary": "Get Event",
+        "description": "Get a single event by ID",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/core.event"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/health": {
@@ -3698,10 +3899,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -3836,10 +4034,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -4180,10 +4375,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -4318,10 +4510,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -4456,10 +4645,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -4904,10 +5090,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5048,10 +5231,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5186,10 +5366,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5324,10 +5501,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5462,10 +5636,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5600,10 +5771,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5738,10 +5906,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -5962,10 +6127,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6100,10 +6262,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6238,10 +6397,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6376,10 +6532,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6514,10 +6667,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6652,10 +6802,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -6790,10 +6937,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -7131,10 +7275,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -7347,10 +7488,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -7491,10 +7629,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -7857,7 +7992,6 @@
               }
             },
             "required": [
-              "oauth",
               "envName"
             ]
           }
@@ -8062,10 +8196,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -8200,10 +8331,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -8387,10 +8515,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -8525,10 +8650,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -9081,10 +9203,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -9342,10 +9461,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [
@@ -9669,10 +9785,7 @@
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
               }
-            },
-            "required": [
-              "oauth"
-            ]
+            }
           }
         },
         "required": [

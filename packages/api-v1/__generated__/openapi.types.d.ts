@@ -172,9 +172,33 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * List Organization Events
+         * @description List all events for an organization
+         */
+        get: operations["listEvents"];
         put?: never;
         post: operations["createEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    [path: `/event/${string}`]: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Event
+         * @description Get a single event by ID
+         */
+        get: operations["getEvent"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -283,7 +307,7 @@ export interface components {
             connector_name: "acme-oauth2";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -333,7 +357,7 @@ export interface components {
             connector_name: "aircall";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -472,7 +496,7 @@ export interface components {
             connector_name: "confluence";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -522,7 +546,7 @@ export interface components {
             connector_name: "discord";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -572,7 +596,7 @@ export interface components {
             connector_name: "facebook";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -733,7 +757,7 @@ export interface components {
             connector_name: "github";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -785,7 +809,7 @@ export interface components {
             connector_name: "gong";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -835,7 +859,7 @@ export interface components {
             connector_name: "google-calendar";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -885,7 +909,7 @@ export interface components {
             connector_name: "google-docs";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -935,7 +959,7 @@ export interface components {
             connector_name: "google-drive";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -985,7 +1009,7 @@ export interface components {
             connector_name: "google-mail";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1035,7 +1059,7 @@ export interface components {
             connector_name: "google-sheet";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1125,7 +1149,7 @@ export interface components {
             connector_name: "hubspot";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1175,7 +1199,7 @@ export interface components {
             connector_name: "instagram";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1225,7 +1249,7 @@ export interface components {
             connector_name: "intercom";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1275,7 +1299,7 @@ export interface components {
             connector_name: "jira";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1325,7 +1349,7 @@ export interface components {
             connector_name: "lever";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1375,7 +1399,7 @@ export interface components {
             connector_name: "linear";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1425,7 +1449,7 @@ export interface components {
             connector_name: "linkedin";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1564,7 +1588,7 @@ export interface components {
             connector_name: "notion";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1642,7 +1666,7 @@ export interface components {
             connector_name: "outreach";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1694,7 +1718,7 @@ export interface components {
             connector_name: "pipedrive";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1819,7 +1843,7 @@ export interface components {
             connector_name: "quickbooks";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1900,7 +1924,7 @@ export interface components {
             connector_name: "reddit";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -1950,7 +1974,7 @@ export interface components {
             connector_name: "salesloft";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2022,7 +2046,7 @@ export interface components {
             connector_name: "sharepoint";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2072,7 +2096,7 @@ export interface components {
             connector_name: "slack";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2269,7 +2293,7 @@ export interface components {
             connector_name: "twitter";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2369,7 +2393,7 @@ export interface components {
             connector_name: "xero";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2471,7 +2495,7 @@ export interface components {
             connector_name: "zoho-desk";
             config: {
                 /** @description Base oauth configuration for the connector */
-                oauth: {
+                oauth?: {
                     client_id?: string | null;
                     client_secret?: string | null;
                     scopes?: string[] | null;
@@ -2843,15 +2867,9 @@ export interface operations {
                         } & components["schemas"]["core.connector"])[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
+                        /** @description Limit the number of items returned */
                         limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
+                        /** @description Offset the items returned */
                         offset: number;
                     };
                 };
@@ -3039,15 +3057,9 @@ export interface operations {
                         })[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
+                        /** @description Limit the number of items returned */
                         limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
+                        /** @description Offset the items returned */
                         offset: number;
                     };
                 };
@@ -3320,15 +3332,9 @@ export interface operations {
                         })[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
+                        /** @description Limit the number of items returned */
                         limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
+                        /** @description Offset the items returned */
                         offset: number;
                     };
                 };
@@ -3706,6 +3712,82 @@ export interface operations {
             };
         };
     };
+    listEvents: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["core.event"][];
+                        /** @description Total number of items in the database for the organization */
+                        total: number;
+                        /** @description Limit the number of items returned */
+                        limit: number;
+                        /** @description Offset the items returned */
+                        offset: number;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
     createEvent: {
         parameters: {
             query?: never;
@@ -3858,6 +3940,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    getEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.event"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
