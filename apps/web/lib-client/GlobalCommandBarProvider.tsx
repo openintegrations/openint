@@ -164,15 +164,15 @@ function useConnectionCommands() {
   const checkConnection = useMutation(
     trpc.checkConnection.mutationOptions({
       onMutate: (_variables) => {
-        loadingToastId = toast.loading('Ensuring connection is still valid...')
+        loadingToastId = toast.loading('Attempting to refresh connection...')
       },
       onSuccess: () => {
         toast.dismiss(loadingToastId)
-        toast.success('Your connection is still valid!')
+        toast.success('Connection refreshed successfully!')
       },
       onError: (error) => {
         toast.dismiss(loadingToastId)
-        toast.error(`Connection validation failed: ${error.message}`)
+        toast.error(`Connection refresh failed: ${error.message}`)
       },
       onSettled: () => {
         void queryClient.invalidateQueries({
