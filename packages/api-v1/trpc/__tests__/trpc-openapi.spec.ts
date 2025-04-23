@@ -22,6 +22,13 @@ const router = trpc.router({
     .query(({input}) => {
       return input
     }),
+  getEndpoint: trpc.procedure
+    .meta({openapi: {method: 'GET', path: '/get-endpoint'}})
+    .input(z.object({optionalParam: z.string().optional()}))
+    .output(z.unknown())
+    .query(({input}) => {
+      return input
+    }),
   postEndpoint: trpc.procedure
     .meta({openapi: {method: 'POST', path: '/post-endpoint/{id}'}})
     .input(z.object({id: z.string()}))
@@ -39,6 +46,18 @@ const router = trpc.router({
 })
 const handler = (req: Request) =>
   createOpenApiFetchHandler({endpoint: '/', req, router})
+
+test('handle optional param get endpoint', async () => {
+  const res = await handler(new Request('http://localhost:3000/get-endpoint'))
+  expect(res.status).toBe(200)
+  expect(await res.json()).toEqual({})
+
+  const resWithParam = await handler(
+    new Request('http://localhost:3000/get-endpoint?optionalParam=test'),
+  )
+  expect(resWithParam.status).toBe(200)
+  expect(await resWithParam.json()).toEqual({optionalParam: 'test'})
+})
 
 test('handle single value', async () => {
   const res = await handler(

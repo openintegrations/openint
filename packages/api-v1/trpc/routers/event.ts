@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {eq, schema, sql} from '@openint/db'
+import {any, eq, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
@@ -72,10 +72,7 @@ export const eventRouter = router({
           .from(schema.event)
           .where(
             // filter out deprecated events, preventing parse errors
-            eq(
-              schema.event.name,
-              sql`ANY (${sql.param(Object.keys(eventMap))})`,
-            ),
+            eq(schema.event.name, any(Object.keys(eventMap))),
           ),
         schema.event.timestamp,
         input,
