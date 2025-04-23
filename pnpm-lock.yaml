@@ -26115,7 +26115,7 @@ snapshots:
 
   markdown-table@3.0.3: {}
 
-  markdown-to-jsx@7.2.0(react@19.0.0):
+  markdown-to-jsx@7.7.6(react@19.0.0):
     dependencies:
       react: 19.0.0
 
