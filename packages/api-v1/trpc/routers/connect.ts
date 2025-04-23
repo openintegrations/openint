@@ -24,6 +24,10 @@ import {asCustomerOfOrg, makeJwtClient} from '../../lib/makeJwtClient'
 import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {connection_select_base, core} from '../../models'
 import {connectRouterModels} from './connect.models'
+import {
+  checkConnection,
+  connectionCanBeChecked,
+} from './utils/connectionChecker'
 import {md} from './utils/md'
 import {zConnectionId} from './utils/types'
 
@@ -370,110 +374,16 @@ export const connectRouter = router({
         })
       }
 
-      const credentialsRequiresRefresh = conn.settings.oauth?.credentials
-        ?.expires_at
-        ? new Date(conn.settings.oauth.credentials.expires_at) < new Date()
-        : false
-
-      if (credentialsRequiresRefresh) {
-        // TODO: implement refresh logic here
-        console.warn('Connection requires refresh', credentialsRequiresRefresh)
-        // Add actual refresh implementation
-      }
-
-      const connector = serverConnectors[
-        conn.connector_name as keyof typeof serverConnectors
-      ] as ConnectorServer
-      if (!connector) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector not found for connection ${conn.id}`,
-        })
-      }
-
-      if (connector.checkConnection) {
-        const ccfg =
-          await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-            where: eq(schema.connector_config.id, conn.connector_config_id),
-          })
-        if (!ccfg) {
-          throw new TRPCError({
-            code: 'NOT_FOUND',
-            message: `Connector config ${conn.connector_config_id} not found`,
-          })
-        }
-        const context = {
-          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
-          extCustomerId: (ctx.viewer.role === 'customer'
-            ? ctx.viewer.customerId
-            : ctx.viewer.userId) as ExtCustomerId,
-          fetch: ctx.fetch,
-          baseURLs: getBaseURLs(null),
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const instance = connector.newInstance?.({
-          config: ccfg.config,
-          settings: undefined,
-          context,
-          fetchLinks: [],
-          onSettingsChange: () => {}, // noop
-        })
-
-        try {
-          const res = await connector.checkConnection({
-            settings: conn.settings,
-            config: ccfg.config,
-            options: {},
-            instance,
-            context,
-          })
-          // console.log('[connection] Check connection result', res)
-          // QQ: should this parse the results of checkConnection somehow?
-
-          // Can this happen after returning result? But what about read-after-write consistency?
-          await ctx.asOrgIfCustomer.db
-            .update(schema.connection)
-            .set({
-              updated_at: new Date().toISOString(),
-              status: res.status,
-              status_message: res.status_message,
-              ...(res.settings && {settings: res.settings}),
-            })
-            .where(eq(schema.connection.id, conn.id))
-
-          // TODO: persist the result of checkConnection for settings
-          return {
-            ...res,
-            id: conn.id,
-            status: res.status ?? null,
-            status_message: res.status_message ?? null,
-          }
-        } catch (error) {
-          console.error('[connection] Check connection failed', error)
-          await ctx.asOrgIfCustomer.db
-            .update(schema.connection)
-            .set({
-              status: 'error',
-              status_message: 'Unable to check connection',
-              updated_at: new Date().toISOString(),
-            })
-            .where(eq(schema.connection.id, conn.id))
-          return {
-            id: conn.id as `conn_${string}`,
-            status: 'disconnected',
-            status_message: 'Unknown error',
-          }
+      if (!connectionCanBeChecked(conn)) {
+        // mock a healthy connection but don't save it to the database
+        return {
+          id: conn.id as `conn_${string}`,
+          status: 'healthy',
+          status_message: null,
         }
       }
-
-      // QQ: should we return healthy by default even if there's no check connection implemented?
-      return {
-        id: conn.id as `conn_${string}`,
-        status: 'healthy',
-        status_message: null,
-      }
+      return checkConnection(conn, ctx)
     }),
-
   revokeConnection: authenticatedProcedure
     .meta({
       openapi: {

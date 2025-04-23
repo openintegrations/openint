@@ -87,7 +87,6 @@ export async function refreshStaleConnections(
             if (!connectionCanBeChecked(connection.connection)) {
               console.warn(
                 `Connector ${connection.connection.connector_name} does not implement checkConnection`,
-                JSON.stringify(connection.connection, null, 2),
               )
               return
             }
