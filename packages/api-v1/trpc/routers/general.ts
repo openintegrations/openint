@@ -3,6 +3,17 @@ import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
 
 export const generalRouter = router({
+  debug: publicProcedure
+    .meta({openapi: {method: 'GET', path: '/debug'}})
+    .input(z.object({crash: z.string().optional()}))
+    .output(z.object({ok: z.boolean()}))
+    .query(({input}) => {
+      if (input.crash) {
+        throw new Error(input.crash)
+      }
+      return {ok: true}
+    }),
+
   health: publicProcedure
     .meta({
       openapi: {

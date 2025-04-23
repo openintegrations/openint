@@ -14,6 +14,7 @@ import {
 import {JSONRPC2_TO_HTTP_CODE} from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
+import {notifySlackError} from '../lib/slack'
 
 /** For testing. Consider exporting from /trpc route instead? */
 export {TRPCClientError} from '@trpc/client'
@@ -161,8 +162,8 @@ export interface RouterContextOnError {
 export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   error,
   path,
-  // input,
-  // type,
+  input,
+  type,
   ctx,
 }) => {
   // Consider adding input and context to make error even more accurate
@@ -182,4 +183,11 @@ export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
       message: `[${error.code}] ${error.message}`,
     })
   }
+  void notifySlackError('TRPC error', {
+    err: error,
+    path,
+    input,
+    type,
+    viewer: (ctx as {viewer: unknown})?.viewer,
+  })
 }
