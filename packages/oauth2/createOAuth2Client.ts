@@ -70,9 +70,18 @@ export function createOAuth2Client(
 ) {
   const config = Object.freeze(zOAuth2ClientConfig.parse(_config))
 
-  function joinScopes(scopes: string[]) {
-    return scopes.join(config.scopeDelimiter ?? ' ')
-  }
+  /**
+   * workaround for old scope being string... We should migrate config.oauth.scope then fix this
+   */
+  const joinScopes = zFunction(
+    z.union([z.array(z.string()), z.string()]),
+    (scopes) => {
+      if (typeof scopes === 'string') {
+        return scopes
+      }
+      return scopes.join(config.scopeDelimiter ?? ' ')
+    },
+  )
 
   const post = async <T>(
     url: string,
