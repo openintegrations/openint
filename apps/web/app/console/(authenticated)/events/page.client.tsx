@@ -4,7 +4,6 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useState} from 'react'
 import {type Event} from '@openint/api-v1/models'
-import {cn} from '@openint/shadcn/lib/utils'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CopyID} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
