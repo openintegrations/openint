@@ -6,8 +6,14 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {eq, schema} from '@openint/db'
 import {getBaseURLs} from '@openint/env'
 import {getApiV1URL} from '../../../lib/typed-routes'
-import {core} from '../../../models'
+import {connection_select_base, core} from '../../../models'
 import {RouterContext} from '../../context'
+
+const checkConnectionResultSchema = connection_select_base.pick({
+  id: true,
+  status: true,
+  status_message: true,
+})
 
 export function connectionExpired(
   connection: Z.infer<typeof core.connection_select>,
@@ -35,7 +41,7 @@ export async function checkConnection(
   connection: Z.infer<typeof core.connection_select>,
   ctx: RouterContext,
   _connector?: ConnectorServer, // for tests
-) {
+): Promise<Z.infer<typeof checkConnectionResultSchema>> {
   const connector =
     _connector ??
     (serverConnectors[
@@ -80,33 +86,50 @@ export async function checkConnection(
       onSettingsChange: () => {}, // noop
     })
 
-    const res = await connector.checkConnection({
-      settings: connection.settings,
-      config: ccfg.config,
-      options: {},
-      instance,
-      context,
-    })
-    // console.log('[connection] Check connection result', res)
-    // QQ: should this parse the results of checkConnection somehow?
-
-    // Can this happen after returning result? But what about read-after-write consistency?
-    await ctx.asOrgIfCustomer.db
-      .update(schema.connection)
-      .set({
-        updated_at: new Date().toISOString(),
-        status: res.status,
-        status_message: res.status_message,
-        ...(res.settings && {settings: res.settings}),
+    try {
+      const res = await connector.checkConnection({
+        settings: connection.settings,
+        config: ccfg.config,
+        options: {},
+        instance,
+        context,
       })
-      .where(eq(schema.connection.id, connection.id))
+      // console.log('[connection] Check connection result', res)
+      // QQ: should this parse the results of checkConnection somehow?
 
-    // TODO: persist the result of checkConnection for settings
-    return {
-      ...res,
-      id: connection.id,
-      status: res.status ?? null,
-      status_message: res.status_message ?? null,
+      // Can this happen after returning result? But what about read-after-write consistency?
+      await ctx.asOrgIfCustomer.db
+        .update(schema.connection)
+        .set({
+          updated_at: new Date().toISOString(),
+          status: res.status,
+          status_message: res.status_message,
+          ...(res.settings && {settings: res.settings}),
+        })
+        .where(eq(schema.connection.id, connection.id))
+
+      // TODO: persist the result of checkConnection for settings
+      return {
+        ...res,
+        id: connection.id,
+        status: res.status ?? null,
+        status_message: res.status_message ?? null,
+      }
+    } catch (error) {
+      console.error('[connection] Check connection failed', error)
+      await ctx.asOrgIfCustomer.db
+        .update(schema.connection)
+        .set({
+          status: 'error',
+          status_message: 'Unable to check connection. Unknown error.',
+          updated_at: new Date().toISOString(),
+        })
+        .where(eq(schema.connection.id, connection.id))
+      return {
+        id: connection.id,
+        status: 'error',
+        status_message: 'Unable to check connection. Unknown error.',
+      }
     }
   } else {
     throw new TRPCError({
