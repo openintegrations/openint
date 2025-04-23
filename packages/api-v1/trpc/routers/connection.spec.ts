@@ -230,7 +230,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
             },
           },
         }),
-      ).rejects.toThrow('Input validation failed')
+      ).rejects.toThrow('invalid_type')
     })
 
     test('with metadata', async () => {
@@ -297,7 +297,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
 
     // skipping as mocking checkConnection is not working
-    test.skip('with check_connection flag', async () => {
+    test('with check_connection flag', async () => {
       const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
 
       await asOrg.db
@@ -388,7 +388,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
             },
             check_connection: true,
           }),
-        ).rejects.toThrow('does not support connection checking')
+        ).rejects.toThrow('does not support check_connection')
       } finally {
         // Restore the original methods
         // @ts-ignore - restoring for test purposes

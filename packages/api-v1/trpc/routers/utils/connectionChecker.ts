@@ -41,6 +41,7 @@ export async function checkConnection(
   connection: Z.infer<typeof core.connection_select>,
   ctx: RouterContext,
   _connector?: ConnectorServer, // for tests
+  skipUpdate?: boolean,
 ): Promise<Z.infer<typeof checkConnectionResultSchema>> {
   const connector =
     _connector ??
@@ -98,15 +99,17 @@ export async function checkConnection(
       // QQ: should this parse the results of checkConnection somehow?
 
       // Can this happen after returning result? But what about read-after-write consistency?
-      await ctx.asOrgIfCustomer.db
-        .update(schema.connection)
-        .set({
-          updated_at: new Date().toISOString(),
-          status: res.status,
-          status_message: res.status_message,
-          ...(res.settings && {settings: res.settings}),
-        })
-        .where(eq(schema.connection.id, connection.id))
+      if (!skipUpdate) {
+        await ctx.asOrgIfCustomer.db
+          .update(schema.connection)
+          .set({
+            updated_at: new Date().toISOString(),
+            status: res.status,
+            status_message: res.status_message,
+            ...(res.settings && {settings: res.settings}),
+          })
+          .where(eq(schema.connection.id, connection.id))
+      }
 
       // TODO: persist the result of checkConnection for settings
       return {
@@ -117,14 +120,16 @@ export async function checkConnection(
       }
     } catch (error) {
       console.error('[connection] Check connection failed', error)
-      await ctx.asOrgIfCustomer.db
-        .update(schema.connection)
-        .set({
-          status: 'error',
-          status_message: 'Unable to check connection. Unknown error.',
-          updated_at: new Date().toISOString(),
-        })
-        .where(eq(schema.connection.id, connection.id))
+      if (!skipUpdate) {
+        await ctx.asOrgIfCustomer.db
+          .update(schema.connection)
+          .set({
+            status: 'error',
+            status_message: 'Unable to check connection',
+            updated_at: new Date().toISOString(),
+          })
+          .where(eq(schema.connection.id, connection.id))
+      }
       return {
         id: connection.id,
         status: 'error',
