@@ -15,8 +15,9 @@ import {Icon} from './Icon'
  * - 'default': Largest size
  * - 'medium': Standard size (default)
  * - 'compact': Smallest size, for use in PropertyListView
+ * - 'justicon': Shows only the icon button without the text value
  */
-export type CopyIDSize = 'default' | 'medium' | 'compact'
+export type CopyIDSize = 'default' | 'medium' | 'compact' | 'justicon'
 
 interface CopyIDProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -88,6 +89,9 @@ export function CopyID({
   // For backwards compatibility
   const resolvedSize = compact ? 'compact' : size
 
+  // Check if we should render only the icon
+  const isJustIcon = resolvedSize === 'justicon'
+
   // Handle delayed mounting (useful for Popovers)
   useEffect(() => {
     if (mountDelay > 0) {
@@ -130,6 +134,9 @@ export function CopyID({
         return 'px-2 py-1'
       case 'medium':
         return 'px-2.5 py-1.5'
+      case 'justicon':
+        // Equal padding for a more balanced, square button
+        return 'px-1.5 py-1.5'
       default:
         return 'px-3 py-2'
     }
@@ -141,9 +148,69 @@ export function CopyID({
         return 14
       case 'medium':
         return 16
+      case 'justicon':
+        // Keep the icon same size as medium size
+        return 16
       default:
         return 18
     }
+  }
+
+  // If it's just the icon variant, only show the icon button
+  if (isJustIcon && mounted) {
+    // With custom tooltip implementation
+    if (disableTooltip) {
+      return (
+        <div
+          className={cn(
+            'relative rounded border border-gray-200 bg-gray-50',
+            getPadding(),
+            className,
+          )}
+          {...props}>
+          <button
+            onClick={copyToClipboard}
+            className="flex-shrink-0 text-gray-400 transition-colors hover:text-gray-600"
+            aria-label="Copy to clipboard"
+            onMouseEnter={() => !copied && setShowTooltip(true)}
+            onMouseLeave={() => !copied && setShowTooltip(false)}>
+            <Icon name={copied ? 'Check' : 'Copy'} size={getIconSize()} />
+          </button>
+
+          {showTooltip && (
+            <div className="absolute bottom-full right-0 mb-1.5">
+              <div className="bg-primary whitespace-nowrap rounded px-2 py-1 text-xs text-white shadow-sm">
+                {copied ? tooltipCopiedText : tooltipDefaultText}
+              </div>
+              <div className="bg-primary absolute right-[10px] top-full -mt-[2px] h-2 w-2 rotate-45 transform"></div>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    // With Shadcn/UI tooltip
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={copyToClipboard}
+              className={cn(
+                'flex-shrink-0 rounded border border-gray-200 bg-gray-50 text-gray-400 transition-colors hover:text-gray-600',
+                getPadding(),
+                className,
+              )}
+              aria-label="Copy to clipboard">
+              <Icon name={copied ? 'Check' : 'Copy'} size={getIconSize()} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {copied ? tooltipCopiedText : tooltipDefaultText}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
   }
 
   // If not yet mounted, show a placeholder that looks the same
