@@ -250,16 +250,36 @@ export const connectionRouter = router({
 
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
+      const expandedItems = items.map((conn) =>
+        formatConnection(
+          ctx,
+          conn as any,
+          input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+          input?.expand ?? [],
+        ),
+      )
+
+      // let failures = 0
+      // expandedItems.forEach((item) => {
+      //   try {
+      //     zConnectionExpanded.parse(item)
+      //     // console.log('success parsing', item.id)
+      //   } catch (error) {
+      //     console.error('Failed to parse connection:', item.id)
+      //     failures++
+      //   }
+      // })
+      // console.log('failures', failures)
+      // if (failures > 0) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: `Failed to parse ${failures} connections`,
+      //   })
+      // }
+
       return {
         // TODO: fix this to respect rls policy... Add corresponding tests also
-        items: items.map((conn) =>
-          formatConnection(
-            ctx,
-            conn as any,
-            input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-            input?.expand ?? [],
-          ),
-        ),
+        items: expandedItems,
         total,
         limit,
         offset,

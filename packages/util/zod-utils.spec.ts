@@ -1,5 +1,6 @@
 import {describe, expect, test} from '@jest/globals'
 import {safeJSONParse} from './json-utils'
+import {zodToOas31Schema} from './schema'
 import {getInputData, z, zCoerceBoolean} from './zod-utils'
 
 describe('z.coerce.boolean', () => {
@@ -76,20 +77,6 @@ test('parseAsync: extracts input from zod error', async () => {
   }
 })
 
-test('extract openapi metadata from zod type', () => {
-  const schema = z.unknown().openapi({
-    ref: 'mySchema',
-    description: 'my description',
-  })
-
-  // Does not set the schema description unfortunately
-  expect(schema.description).toBeUndefined()
-  expect(schema._def.zodOpenApi?.openapi).toEqual({
-    ref: 'mySchema',
-    description: 'my description',
-  })
-})
-
 test('discriminated union error does not contain the matched discriminator', () => {
   const catSchema = z.object({type: z.literal('cat'), meow: z.boolean()})
 
@@ -137,4 +124,64 @@ test('discriminated union error does not contain the matched discriminator', () 
       ).error?.issues,
     ),
   ).not.toContain('cat')
+})
+
+describe('zod-openapi', () => {
+  test('extract openapi metadata from zod type', () => {
+    const schema = z.unknown().openapi({
+      ref: 'mySchema',
+      description: 'my description',
+    })
+
+    // Does not set the schema description unfortunately
+    expect(schema.description).toBeUndefined()
+    expect(schema._def.zodOpenApi?.openapi).toEqual({
+      ref: 'mySchema',
+      description: 'my description',
+    })
+  })
+
+  test('preprocess has no impact on the oas schema', () => {
+    const schema = z.preprocess((val) => {
+      if (typeof val === 'string') {
+        return val.split(' ')
+      }
+      return val
+    }, z.array(z.string()))
+
+    const oasSchema = zodToOas31Schema(schema)
+    expect(oasSchema).toEqual({type: 'array', items: {type: 'string'}})
+  })
+
+  test('transform with input effect', () => {
+    const schema = z
+      .string()
+      .transform((val) => val.split(' '))
+      .openapi({effectType: 'input'})
+
+    const oasSchema = zodToOas31Schema(schema)
+    console.log(oasSchema)
+    expect(oasSchema).toEqual({type: 'string'})
+  })
+
+  //not sure how to do transform with output effect
+  test('transform with pipe', () => {
+    const schema = z
+      .string()
+      .transform((val) => val.split(' '))
+      .pipe(z.array(z.string()))
+
+    const oasSchema = zodToOas31Schema(schema)
+    expect(oasSchema).toEqual({type: 'array', items: {type: 'string'}})
+  })
+
+  test('pipe with input effect', () => {
+    const schema = z
+      .string()
+      .pipe(z.array(z.string()))
+      .openapi({effectType: 'input'})
+
+    const oasSchema = zodToOas31Schema(schema)
+    expect(oasSchema).toEqual({type: 'string'})
+  })
 })
