@@ -23,6 +23,7 @@ export const envConfig = {
     INNGEST_EVENT_KEY: z.string().optional(),
 
     // Optional
+    SENTRY_DSN: z.string().optional(),
     SENTRY_CRON_MONITOR_URL: z.string().optional(),
 
     // Turn on debug output, including drizzle. Should be a boolean tho
@@ -31,6 +32,7 @@ export const envConfig = {
     // Variables set by Vercel when deployed
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
+    VERCEL_GIT_COMMIT_REF: z.string().optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
 
     // Secret for cron jobs
@@ -40,6 +42,7 @@ export const envConfig = {
     NODE_ENV: z.enum(['production', 'development', 'test']).optional(),
 
     SLACK_INCOMING_WEBHOOK_URL: z.string().optional(),
+    VERCEL_BRANCH_URL: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_VERCEL_ENV: z.string().optional(),
@@ -73,14 +76,17 @@ export const envConfig = {
     NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY: z
       .string()
       .default('https://app.openint.dev/connect/callback'),
+    NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: z.string().optional(),
     // TODO: Reset to this once we have fully update the redirect URLs and sunset v0
     // .default('https://connect.openint.dev/callback'),
 
     // Useful later for when we switch to asymmetric jwt rather than symmetric ones
     // JWT_PRIVATE_KEY: z.string().optional(),
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
+    NEXT_PUBLIC_NODE_ENV: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
+    VERCEL_BRANCH_URL: process.env['VERCEL_BRANCH_URL'],
     NEXT_PUBLIC_VERCEL_ENV:
       process.env['NEXT_PUBLIC_VERCEL_ENV'] || process.env['VERCEL_ENV'], // Should be unnecessary but just in case
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
@@ -115,6 +121,11 @@ export const envConfig = {
     PORT: process.env['PORT'],
     NODE_ENV: process.env['NODE_ENV'],
     SLACK_INCOMING_WEBHOOK_URL: process.env['SLACK_INCOMING_WEBHOOK_URL'],
+    SENTRY_DSN: process.env['SENTRY_DSN'],
+    VERCEL_GIT_COMMIT_REF: process.env['VERCEL_GIT_COMMIT_REF'],
+    NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF:
+      process.env['NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF'],
+    NEXT_PUBLIC_NODE_ENV: process.env['NEXT_PUBLIC_NODE_ENV'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
@@ -135,6 +146,19 @@ export const envRequired = proxyRequired(env, {
 
 export const isProduction =
   env['NODE_ENV'] === 'production' || env['VERCEL_ENV'] === 'production'
+
+export function getSentryEnvironment() {
+  const serverUrl =
+    process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
+  const vercelBranchUrl = process.env['VERCEL_BRANCH_URL']
+  const vercelBranchIsMainOrProduction =
+    vercelBranchUrl?.includes('main') || vercelBranchUrl?.includes('production')
+
+  if (!serverUrl || !vercelBranchIsMainOrProduction) {
+    return undefined
+  }
+  return serverUrl.split('://')[1]
+}
 
 export type Env = typeof env
 
