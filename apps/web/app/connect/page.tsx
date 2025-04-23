@@ -11,7 +11,6 @@ import {zConnectOptions} from '@openint/api-v1/trpc/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {asOrgIfCustomer} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
-import {getBaseURLs} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui'
 import {
@@ -25,7 +24,7 @@ import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {LoadingSpinner} from '@openint/ui-v1'
 import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
-import {Link} from '@/lib-common/Link'
+import {Link, resolveLinkPath} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {createQueryClient} from '@/lib-common/trpc.common'
 import {
@@ -276,7 +275,8 @@ async function AddConnections({
           You have already connected all available integrations.
         </p>
         <Button asChild variant="default">
-          <Link href={new URL(getBaseURLs(null).connect + '?view=manage')}>
+          {/* TODO: Make this more type safe */}
+          <Link href={resolveLinkPath('/connect') + '?view=manage'}>
             Manage Integrations
           </Link>
         </Button>

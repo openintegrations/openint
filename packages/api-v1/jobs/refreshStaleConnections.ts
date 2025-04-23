@@ -7,7 +7,7 @@ import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired, getBaseURLs, isProduction} from '@openint/env'
 import {makeSentryClient} from '../lib/sentry.client'
-import {getApiV1URL} from '../lib/typed-routes'
+import {getAbsoluteApiV1URL} from '../lib/typed-routes'
 
 interface RefreshResult {
   totalConnections: number
@@ -92,7 +92,7 @@ export async function refreshStaleConnections(
 
           try {
             const context = {
-              webhookBaseUrl: getApiV1URL(
+              webhookBaseUrl: getAbsoluteApiV1URL(
                 `/webhook/${connection.connection.connector_name}`,
               ),
               extCustomerId: null,

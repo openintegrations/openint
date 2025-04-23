@@ -21,7 +21,7 @@ import {
   router,
 } from '../_base'
 import {asCustomerOfOrg, makeJwtClient} from '../../lib/makeJwtClient'
-import {getApiV1URL} from '../../lib/typed-routes'
+import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {connection_select_base, core} from '../../models'
 import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
@@ -177,7 +177,7 @@ export const connectRouter = router({
       const preConnect = connector.preConnect ?? (() => ({}))
 
       const context = {
-        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
@@ -272,7 +272,7 @@ export const connectRouter = router({
         }))
 
       const context = {
-        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
@@ -403,7 +403,7 @@ export const connectRouter = router({
           })
         }
         const context = {
-          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
@@ -516,7 +516,7 @@ export const connectRouter = router({
         })
       }
       const context = {
-        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,

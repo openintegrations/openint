@@ -17,7 +17,7 @@ interface Step {
   title: string
   description: string
   icon: React.ReactNode
-  href: string
+  href: TypedHref
   isCompleted: boolean
 }
 
@@ -37,7 +37,7 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
       description:
         'Set up your first connector to being your integration journey.',
       icon: <Globe className="h-5 w-5" />,
-      href: '/connector-config',
+      href: '/console/connector-config',
       isCompleted: onboardingState.first_connector_configured,
     },
     {
@@ -45,7 +45,7 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
       title: 'Create a Connection',
       description: 'Create your first connection using @Connect.',
       icon: <Code className="h-5 w-5" />,
-      href: '/connect',
+      href: '/console/connect',
       isCompleted: onboardingState.first_connection_created,
     },
     {
@@ -54,7 +54,7 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
       description:
         'Generate a token with your API Key and embed @Connect in your application.',
       icon: <Share className="h-5 w-5" />,
-      href: '/settings',
+      href: '/console/settings',
       isCompleted: onboardingState.api_key_used,
     },
   ]
@@ -83,8 +83,7 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
         <div className="space-y-4 md:w-1/2">
           {steps.map((step) => {
             const isCompleted = step.isCompleted
-            const fullPath = `${getBaseURLs(null).console}${step.href}`
-            const [route] = resolveRoute(fullPath, null)
+            const [route] = resolveRoute(step.href, null)
 
             return (
               <div

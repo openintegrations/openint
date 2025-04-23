@@ -1,8 +1,9 @@
 import {cookies} from 'next/headers'
 import React from 'react'
 import {AuthProvider} from '@openint/console-auth/client'
-import {getBaseURLs, isProduction} from '@openint/env'
+import {isProduction} from '@openint/env'
 import {TRPCApp} from '@/lib-client/TRPCApp'
+import {resolveLinkPath} from '@/lib-common/Link'
 
 // TODO: react.cache currentViewer function
 
@@ -13,9 +14,9 @@ export default async function ConsoleLayout(props: {
   return (
     <AuthProvider
       dynamic
-      signUpUrl={getBaseURLs(null).console + '/sign-up'}
-      signInUrl={getBaseURLs(null).console + '/sign-in'}
-      afterSignOutUrl={getBaseURLs(null).console + '/sign-in'}
+      signUpUrl={resolveLinkPath('/console/sign-up/')}
+      signInUrl={resolveLinkPath('/console/sign-in/')}
+      afterSignOutUrl={resolveLinkPath('/console/sign-in/')}
       touchSession={isProduction}>
       <TRPCApp
         // needed for SSR of client components, which otherwise would not have
