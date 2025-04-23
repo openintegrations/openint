@@ -21,17 +21,17 @@ async function main() {
   if (action === 'list') {
     if (resource === 'connector-config') {
       const res = await caller.listConnectorConfigs({
-        limit: 5000,
+        limit: 500,
       })
       console.log(res)
     } else if (resource === 'connection') {
       const res = await caller.listConnections({
-        limit: 5000,
+        limit: 500,
       })
       console.log(res)
     } else if (resource === 'event') {
       const res = await caller.listEvents({
-        limit: 5000,
+        limit: 500,
       })
       console.log(res)
     }

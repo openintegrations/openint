@@ -1,6 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {eq, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
+import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
@@ -39,6 +40,7 @@ export const eventRouter = router({
     .query(async ({ctx, input}) => {
       const event = await ctx.db.query.event.findFirst({
         where: eq(schema.event.id, input.id),
+        // Include deprecated events, which would result in a parse error unfortunately
       })
       if (!event) {
         throw new TRPCError({
@@ -67,7 +69,14 @@ export const eventRouter = router({
             event: schema.event,
             total: sql`count(*) OVER ()`,
           })
-          .from(schema.event),
+          .from(schema.event)
+          .where(
+            // filter out deprecated events, preventing parse errors
+            eq(
+              schema.event.name,
+              sql`ANY (${sql.param(Object.keys(eventMap))})`,
+            ),
+          ),
         schema.event.timestamp,
         input,
       )

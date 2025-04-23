@@ -57,16 +57,4 @@ export const eventMap = {
     current_url: z.string(),
     path: z.string(),
   },
-
-  /** @deprecated */
-  'sync.completed': {
-    source_id: z.string(),
-    customer_id: z.string(),
-    pipeline_id: z.string(),
-    destination_id: z.string(),
-  },
-  /** @deprecated */
-  'sync.pipeline-requested': {},
-  /** @deprecated */
-  'sync.connection-requested': {},
 } satisfies Record<string, Z.ZodRawShape>
