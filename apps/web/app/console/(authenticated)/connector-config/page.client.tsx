@@ -67,6 +67,14 @@ export function ConnectorConfigList() {
   )
 
   useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     if (selectedCcfg != null && formState) {
       const {disabled, display_name, config} = selectedCcfg
       const changedFields = getChangedFields(formState, {
