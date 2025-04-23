@@ -1,4 +1,4 @@
-import type {ConnectorServer, CustomerId, Viewer} from '@openint/cdk'
+import type {CustomerId, Viewer} from '@openint/cdk'
 import type {RouterContext} from '../../context'
 
 import {
@@ -287,10 +287,12 @@ describeEachDatabase(
     })
 
     test('should throw NOT_IMPLEMENTED if connector does not implement checkConnection (greenhouse)', async () => {
-      const connGreenhouse = await asCustomer.db.query.connection.findFirst({
+      const initialConn = await asCustomer.db.query.connection.findFirst({
         where: eq(schema.connection.id, connIdGreenhouse),
       })
-      expect(connGreenhouse).toBeDefined()
+      expect(initialConn).toBeDefined()
+      expect(initialConn?.status).toBeNull() // Verify initial state
+      const initialUpdatedAt = initialConn?.updated_at // Store initial timestamp
 
       // Temporarily remove checkConnection for this specific test
       const originalCheckConnection =
@@ -298,18 +300,63 @@ describeEachDatabase(
       // @ts-expect-error - Intentionally modifying connector for test
       serverConnectors[connectorGreenhouse].checkConnection = undefined
 
-      // No spy needed - we expect the actual connector check to fail
-      await expect(
-        checkConnection(connGreenhouse!, asCustomer),
-      ).rejects.toThrow(
+      await expect(checkConnection(initialConn!, asCustomer)).rejects.toThrow(
         new TRPCError({
           code: 'NOT_IMPLEMENTED',
           message: `Connector ${connectorGreenhouse} does not support check_connection`,
         }),
       )
-      // Restore original method (though afterEach restoreAllMocks should also handle it)
+
+      // Restore original method (important to do this before DB check)
       serverConnectors[connectorGreenhouse].checkConnection =
         originalCheckConnection
+
+      // Verify the connection status was NOT updated in the database
+      const finalConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdGreenhouse),
+      })
+
+      expect(finalConn?.status).toBe(initialConn?.status)
+      expect(finalConn?.status_message).toBe(initialConn?.status_message)
+      expect(finalConn?.updated_at).toEqual(initialUpdatedAt)
+    })
+
+    test('should update connection status to error when checkConnection throws', async () => {
+      const initialConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+      expect(initialConn).toBeDefined()
+      expect(initialConn?.status).toBeNull()
+
+      const checkConnectionSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'checkConnection' as any)
+        .mockRejectedValue(new Error('Simulated check connection failure'))
+
+      const newInstanceSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'newInstance' as any)
+        .mockReturnValue({})
+
+      const result = await checkConnection(initialConn!, asCustomer)
+
+      // Verify the returned result from the utility function
+      expect(result).toEqual({
+        id: connIdAcme,
+        status: 'error',
+        status_message: 'Unable to check connection. Unknown error.',
+      })
+
+      // Verify the database was updated
+      const updatedConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+
+      expect(checkConnectionSpy).toHaveBeenCalledTimes(1)
+      expect(newInstanceSpy).toHaveBeenCalledTimes(1) // newInstance is called before checkConnection
+      expect(updatedConn?.status).toEqual('error')
+      expect(updatedConn?.status_message).toEqual(
+        'Unable to check connection. Unknown error.',
+      )
+      expect(updatedConn?.updated_at).not.toEqual(initialConn?.updated_at)
     })
 
     test('should throw TRPCError if connector_config_id is null', async () => {
