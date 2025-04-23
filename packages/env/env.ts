@@ -38,6 +38,8 @@ export const envConfig = {
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
     PORT: z.string().optional(),
     NODE_ENV: z.enum(['production', 'development', 'test']).optional(),
+
+    SLACK_INCOMING_WEBHOOK_URL: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_VERCEL_ENV: z.string().optional(),
@@ -112,6 +114,7 @@ export const envConfig = {
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
     PORT: process.env['PORT'],
     NODE_ENV: process.env['NODE_ENV'],
+    SLACK_INCOMING_WEBHOOK_URL: process.env['SLACK_INCOMING_WEBHOOK_URL'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 

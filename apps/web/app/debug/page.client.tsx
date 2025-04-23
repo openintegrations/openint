@@ -35,6 +35,13 @@ function DebugClientPage() {
         placeholder="Enter text..."
       />
       <p className="text-gray-600">Query result: {query.data.message}</p>
+      <button
+        onClick={() => {
+          throw new Error('Manual crash triggered')
+        }}
+        className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+        Crash App
+      </button>
     </div>
   )
 }
