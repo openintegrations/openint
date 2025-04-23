@@ -1,4 +1,5 @@
-import {schema, sql} from '@openint/db'
+import {TRPCError} from '@trpc/server'
+import {eq, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
@@ -24,10 +25,30 @@ export const eventRouter = router({
     .output(core.event_select)
     .mutation(async ({ctx, input}) => ctx.dispatch(input.event)),
 
-  // Creat eevent
-  // trigger webhook for event
-  // use ofetch for webhook
-  // proper schema validation for the event
+  getEvent: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/event/{id}',
+        description: 'Get a single event by ID',
+        summary: 'Get Event',
+      },
+    })
+    .input(z.object({id: z.string()}))
+    .output(core.event_select)
+    .query(async ({ctx, input}) => {
+      const event = await ctx.db.query.event.findFirst({
+        where: eq(schema.event.id, input.id),
+      })
+      if (!event) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Event with ID "${input.id}" not found`,
+        })
+      }
+      return event
+    }),
+
   listEvents: authenticatedProcedure
     .meta({
       openapi: {
@@ -35,7 +56,6 @@ export const eventRouter = router({
         path: '/event',
         description: 'List all events for an organization',
         summary: 'List Organization Events',
-        enabled: false,
       },
     })
     .input(zListParams.optional())
@@ -53,6 +73,22 @@ export const eventRouter = router({
       )
 
       const {items, total} = await processPaginatedResponse(query, 'event')
+
+      // const parseErrors: string[] = []
+      // items.forEach((item) => {
+      //   try {
+      //     core.event_select.parse(item)
+      //   } catch (err) {
+      //     parseErrors.push(item.id)
+      //     console.error('Failed to parse event:', item.id, item.name)
+      //   }
+      // })
+      // if (parseErrors.length > 0) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: `Failed to parse ${parseErrors.length} events`,
+      //   })
+      // }
 
       return {
         items,

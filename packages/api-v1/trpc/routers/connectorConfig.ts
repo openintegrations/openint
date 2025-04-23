@@ -159,10 +159,10 @@ export const connectorConfigRouter = router({
         return ccfg
       })
 
-      expandedItems.forEach((item) => {
-        connectorConfigExtended.parse(item)
-        console.log('success parsing', item.id)
-      })
+      // expandedItems.forEach((item) => {
+      //   connectorConfigExtended.parse(item)
+      //   console.log('success parsing', item.id)
+      // })
 
       // this is done as v0 had scopes as a string and we've moved it to an array in v1
       // but some connector names are called the same

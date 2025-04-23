@@ -9,16 +9,49 @@ async function main() {
   const context = routerContextFromViewer({db, viewer: {role: 'system'}})
   const caller = appRouter.createCaller(context)
 
-  if (process.argv[2] === 'list') {
-    const res = await caller.listConnectorConfigs({
-      limit: 500,
-    })
-    console.log(res)
-  } else if (process.argv[2] === 'get') {
-    const res = await caller.getConnectorConfig({
-      id: process.argv[3] as string,
-    })
-    console.log(res)
+  const resource = process.argv[2]
+  if (!['connector-config', 'connection', 'event'].includes(resource!)) {
+    console.error(
+      'First argument must be one of: connector-config, connection, event',
+    )
+    process.exit(1)
+  }
+
+  const action = process.argv[3]
+  if (action === 'list') {
+    if (resource === 'connector-config') {
+      const res = await caller.listConnectorConfigs({
+        limit: 5000,
+      })
+      console.log(res)
+    } else if (resource === 'connection') {
+      const res = await caller.listConnections({
+        limit: 5000,
+      })
+      console.log(res)
+    } else if (resource === 'event') {
+      const res = await caller.listEvents({
+        limit: 5000,
+      })
+      console.log(res)
+    }
+  } else if (action === 'get') {
+    if (resource === 'connector-config') {
+      const res = await caller.getConnectorConfig({
+        id: process.argv[4] as string,
+      })
+      console.log(res)
+    } else if (resource === 'connection') {
+      const res = await caller.getConnection({
+        id: process.argv[4] as string,
+      })
+      console.log(res)
+    } else if (resource === 'event') {
+      const res = await caller.getEvent({
+        id: process.argv[4] as string,
+      })
+      console.log(res)
+    }
   }
 }
 
