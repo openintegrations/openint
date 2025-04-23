@@ -10,6 +10,10 @@ export async function notifySlackError(
   if (!env.SLACK_INCOMING_WEBHOOK_URL) {
     return
   }
+  if (!env.VERCEL_ENV) {
+    console.warn('VERCEL_ENV not set, assuming local, skipping slack notif')
+    return
+  }
 
   const payload = {
     username: 'OpenInt',
@@ -20,7 +24,7 @@ export async function notifySlackError(
         text: {
           type: 'mrkdwn',
           text:
-            `[*${env.VERCEL_ENV ?? 'local'}* at *${env.NEXT_PUBLIC_SERVER_URL ?? 'local'}*] ${message}\n` +
+            `[*${env.VERCEL_ENV}* at *${env.NEXT_PUBLIC_SERVER_URL ?? 'local'}*] ${message}\n` +
             '```' +
             JSON.stringify(body, null, 2) +
             '```',

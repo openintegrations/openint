@@ -3,7 +3,7 @@ import type {InstrumentationModule} from 'next/dist/server/instrumentation/types
 import type {Env} from '@openint/env'
 
 import * as Sentry from '@sentry/nextjs'
-import {notifySlackError} from '@openint/api-v1/lib/slack'
+import {notifySlackError} from '@openint/api-v1/lib/notifySlackError'
 
 /** Type only import to avoid any issues during parsing messing up with instrumentation */
 const env = process.env as unknown as Env

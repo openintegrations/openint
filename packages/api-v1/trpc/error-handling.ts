@@ -14,7 +14,7 @@ import {
 import {JSONRPC2_TO_HTTP_CODE} from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
-import {notifySlackError} from '../lib/slack'
+import {notifySlackError} from '../lib/notifySlackError'
 
 /** For testing. Consider exporting from /trpc route instead? */
 export {TRPCClientError} from '@trpc/client'

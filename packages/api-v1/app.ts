@@ -7,7 +7,7 @@ import {initDbNeon} from '@openint/db/db.neon'
 import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
-import {notifySlackError} from './lib/slack'
+import {notifySlackError} from './lib/notifySlackError'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 import {
   createFetchHandlerOpenAPI,
