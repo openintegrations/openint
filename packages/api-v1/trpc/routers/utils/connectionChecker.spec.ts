@@ -1,96 +1,58 @@
-import type {
-  ConnectorServer,
-  CustomerId,
-  ExtCustomerId,
-  Viewer,
-} from '@openint/cdk'
-import type {Database} from '@openint/db'
+import type {ConnectorServer, CustomerId, Viewer} from '@openint/cdk'
 import type {RouterContext} from '../../context'
 
-import {beforeEach, describe, expect, jest, test} from '@jest/globals'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  jest,
+  test,
+} from '@jest/globals'
 import {TRPCError} from '@trpc/server'
-import * as allConnectors from '@openint/all-connectors/connectors.server'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
-import {schema} from '@openint/db'
-import * as env from '@openint/env'
-import {z, Z} from '@openint/util/zod-utils'
-import {getApiV1URL} from '../../../lib/typed-routes'
+import {eq, schema} from '@openint/db'
+import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {Z} from '@openint/util/zod-utils'
 import {core} from '../../../models'
+import {routerContextFromViewer} from '../../context'
 import {checkConnection, connectionExpired} from './connectionChecker'
 
-// Mocks
+// Mocks for functions used *within* checkConnection, but keep connectors themselves mostly real
+jest.mock('@openint/env', () => ({
+  getBaseURLs: jest.fn().mockReturnValue({api: '', console: '', connect: ''}),
+}))
+jest.mock('../../../lib/typed-routes', () => ({
+  getApiV1URL: jest.fn().mockReturnValue(''),
+}))
+// Mock the actual connector implementations partially
 jest.mock('@openint/all-connectors/connectors.server')
-jest.mock('@openint/env')
-jest.mock('../../../lib/typed-routes')
 
-// Use jest.mocked for correctly typed mocks
-const mockServerConnectors = jest.mocked(allConnectors.serverConnectors)
-const mockGetBaseURLs = jest.mocked(env.getBaseURLs)
-const mockGetApiV1URL = jest.mocked(getApiV1URL)
-
-// Simplified mock connection helper focusing on relevant fields
-const createMockConnection = (
-  overrides: Partial<Z.infer<typeof core.connection_select>> = {},
-): Z.infer<typeof core.connection_select> => ({
-  id: makeId('conn', 'test', '123'),
-  connector_name: 'greenhouse',
-  connector_config_id: makeId('ccfg', 'test', '123'),
-  customer_id: 'cus_test123' as CustomerId,
-  created_at: new Date(),
-  updated_at: new Date(),
-  status: null,
-  status_message: null,
-  settings: {},
-  metadata: null,
-  raw_state: null,
-  disabled: null,
-  display_name: null,
-  integration_id: null,
-  ...overrides,
-})
-
-// Simplified mock context helper focusing only on used properties
-const createMockContext = (
-  overrides: Partial<RouterContext> = {},
-): RouterContext => {
-  const mockViewer: Viewer = {
-    role: 'customer',
-    customerId: 'cus_test123' as CustomerId,
-    orgId: 'org_test123',
-  }
-
-  const mockWhere = jest.fn().mockResolvedValue({})
-  const mockSet = jest.fn().mockReturnValue({where: mockWhere})
-  const mockUpdate = jest.fn().mockReturnValue({set: mockSet})
-
-  const mockDb = {
-    query: {
-      connector_config: {
-        findFirst: jest.fn(),
-      },
-    },
-    update: mockUpdate,
-    set: mockSet,
-    where: mockWhere,
-  } as unknown as Database
-
-  const mockFetch = jest
-    .fn<typeof fetch>()
-    .mockResolvedValue(new Response(null, {status: 200}))
-
-  return {
-    viewer: mockViewer,
-    asOrgIfCustomer: {db: mockDb} as any,
-    fetch: mockFetch,
-    remoteProcedureContext: {},
-    db: mockDb,
-    ...overrides,
-  }
-}
-
+// --- Unit tests for connectionExpired (no DB needed) ---
 describe('connectionExpired', () => {
+  // Helper for connectionExpired tests
+  const createConnForExpiry = (
+    overrides: Partial<Z.infer<typeof core.connection_select>> = {},
+  ): Z.infer<typeof core.connection_select> => ({
+    id: 'conn_test123',
+    connector_name: 'test',
+    connector_config_id: 'ccfg_test123',
+    customer_id: 'cus_test123' as CustomerId,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    status: null,
+    status_message: null,
+    settings: {},
+    metadata: null,
+    disabled: false,
+    display_name: null,
+    integration_id: null,
+    ...overrides,
+  })
+
   test('should return true for expired OAuth credentials', () => {
-    const expiredConnection = createMockConnection({
+    const expiredConnection = createConnForExpiry({
       settings: {
         oauth: {
           credentials: {
@@ -104,7 +66,7 @@ describe('connectionExpired', () => {
   })
 
   test('should return false for valid OAuth credentials', () => {
-    const validConnection = createMockConnection({
+    const validConnection = createConnForExpiry({
       settings: {
         oauth: {
           credentials: {
@@ -118,12 +80,10 @@ describe('connectionExpired', () => {
   })
 
   test('should return false for missing expires_at', () => {
-    const connectionNoExpiry = createMockConnection({
+    const connectionNoExpiry = createConnForExpiry({
       settings: {
         oauth: {
-          credentials: {
-            access_token: 'token_no_expiry',
-          },
+          credentials: {access_token: 'token_no_expiry'},
         },
       },
     })
@@ -131,265 +91,257 @@ describe('connectionExpired', () => {
   })
 
   test('should return false for non-OAuth connection', () => {
-    const nonOauthConnection = createMockConnection({
+    const nonOauthConnection = createConnForExpiry({
       settings: {apiKey: 'some_key'},
     })
     expect(connectionExpired(nonOauthConnection)).toBe(false)
   })
 
   test('should return false for missing credentials', () => {
-    const missingCredsConnection = createMockConnection({
-      settings: {
-        oauth: {},
-      },
+    const missingCredsConnection = createConnForExpiry({
+      settings: {oauth: {}}, // Missing credentials
     })
     expect(connectionExpired(missingCredsConnection)).toBe(false)
   })
 
   test('should return false for null settings', () => {
-    const nullSettingsConnection = createMockConnection({
-      settings: null,
-    })
+    const nullSettingsConnection = createConnForExpiry({settings: null})
     expect(connectionExpired(nullSettingsConnection)).toBe(false)
   })
 })
 
-describe('checkConnection', () => {
-  let mockCtx: RouterContext
-  let mockCheckConnectionFn: jest.Mock
-  let mockNewInstanceFn: jest.Mock
-  let mockConnectorConfig: NonNullable<
-    Awaited<ReturnType<Database['query']['connector_config']['findFirst']>>
-  >
-
-  beforeEach(() => {
-    jest.clearAllMocks()
-    mockCtx = createMockContext()
-    mockCheckConnectionFn = jest.fn()
-    mockNewInstanceFn = jest.fn().mockReturnValue({})
-
-    const connectorName = 'greenhouse'
-
-    // @ts-expect-error - Assigning mock for test
-    mockServerConnectors[connectorName] = {
-      checkConnection: mockCheckConnectionFn,
-      newInstance: mockNewInstanceFn,
-      schemas: {
-        config: z.object({}),
-        settings: z.object({}),
-        connectOutput: z.object({}),
-        resourceSettings: z.object({}).optional(),
-      },
-    } as unknown as ConnectorServer
-
-    mockGetBaseURLs.mockReturnValue({
-      api: 'http://localhost/api',
-      console: 'http://localhost/console',
-      connect: 'http://localhost/connect',
-    })
-    mockGetApiV1URL.mockReturnValue(
-      `http://localhost/api/v1/webhook/${connectorName}`,
-    )
-
-    mockConnectorConfig = {
-      id: makeId('ccfg', connectorName, 'test1234'),
-      org_id: mockCtx.viewer.orgId,
-      connector_name: connectorName,
-      config: {someConfig: 'value'},
-      created_at: new Date(),
-      updated_at: new Date(),
-      env_name: null,
+// --- Integration tests for checkConnection (requires DB) ---
+describeEachDatabase(
+  {drivers: ['pglite'], migrate: true, logger: false},
+  (db) => {
+    function getTestContext(viewer: Viewer): RouterContext {
+      const ctx = routerContextFromViewer({db, viewer})
+      return {
+        ...ctx,
+        fetch: jest.fn<typeof fetch>().mockResolvedValue(new Response()),
+      }
     }
-    ;(
-      mockCtx.asOrgIfCustomer.db.query.connector_config.findFirst as jest.Mock
-    ).mockResolvedValue(mockConnectorConfig)
-    ;(mockCtx.asOrgIfCustomer.db.update as jest.Mock).mockClear()
-    ;(mockCtx.asOrgIfCustomer.db.set as jest.Mock).mockClear()
-    ;(mockCtx.asOrgIfCustomer.db.where as jest.Mock).mockClear()
-  })
 
-  test.skip('should call connector.checkConnection and update status on success', async () => {
-    const connection = createMockConnection()
-    const checkResult = {
-      status: 'healthy' as const,
-      status_message: 'All good!',
-      settings: {refreshed: 'data'},
-    }
-    mockCheckConnectionFn.mockResolvedValue(checkResult)
+    const orgId = 'org_check_conn_integ'
+    const customerId = 'cus_check_conn_integ' as CustomerId
+    const asOrg = getTestContext({role: 'org', orgId})
+    const asCustomer = getTestContext({role: 'customer', customerId, orgId})
 
-    const result = await checkConnection(connection, mockCtx)
+    // IDs for the connector that implements checkConnection
+    let ccfgIdAcme: string
+    let connIdAcme: string
+    const connectorAcme = 'acme-oauth2'
 
-    expect(mockNewInstanceFn).toHaveBeenCalledWith(
-      expect.objectContaining({
-        config: mockConnectorConfig.config,
-        settings: undefined,
-        context: expect.objectContaining({
-          webhookBaseUrl: `http://localhost/api/v1/webhook/${connection.connector_name}`,
-          extCustomerId: mockCtx.viewer.customerId,
+    // IDs for the connector that does NOT implement checkConnection
+    let ccfgIdGreenhouse: string
+    let connIdGreenhouse: string
+    const connectorGreenhouse = 'greenhouse'
+
+    beforeEach(async () => {
+      jest.restoreAllMocks() // Restore any spies
+
+      const ccfgAcme = await asOrg.db
+        .insert(schema.connector_config)
+        // @ts-expect-error - Intentionally modifying connector for test
+        .values({
+          org_id: orgId,
+          connector_name: connectorAcme,
+          config: {client_id: 'acme-client', client_secret: 'acme-secret'},
+        })
+        .returning()
+      ccfgIdAcme = ccfgAcme[0]!.id
+
+      const connAcme = await asOrg.db
+        .insert(schema.connection)
+        // @ts-expect-error - Intentionally modifying connector for test
+        .values({
+          id: makeId('conn', connectorAcme, 'test1'),
+          connector_config_id: ccfgIdAcme,
+          customer_id: customerId,
+          integration_id: null,
+          connector_name: connectorAcme,
+          org_id: orgId,
+          settings: {oauth: {credentials: {access_token: 'acme-token'}}},
+        })
+        .returning()
+      connIdAcme = connAcme[0]!.id
+
+      // --- Create records for greenhouse ---
+      const ccfgGreenhouse = await asOrg.db
+        .insert(schema.connector_config)
+        // @ts-expect-error - Intentionally modifying connector for test
+        .values({
+          org_id: orgId,
+          connector_name: connectorGreenhouse,
+          config: {apiKey: 'gh-key'}, // Config for greenhouse
+        })
+        .returning()
+      ccfgIdGreenhouse = ccfgGreenhouse[0]!.id
+
+      const connGreenhouse = await asOrg.db
+        .insert(schema.connection)
+        // @ts-expect-error - Intentionally modifying connector for test
+        .values({
+          id: makeId('conn', connectorGreenhouse, 'test2'),
+          connector_config_id: ccfgIdGreenhouse,
+          customer_id: customerId,
+          integration_id: null,
+          connector_name: connectorGreenhouse,
+          org_id: orgId,
+          settings: {apiKey: 'gh-key'}, // Settings for greenhouse
+        })
+        .returning()
+      connIdGreenhouse = connGreenhouse[0]!.id
+    })
+
+    afterEach(async () => {
+      jest.restoreAllMocks()
+      // Clean up database entries for both connectors
+      if (connIdAcme) {
+        await asOrg.db
+          .delete(schema.connection)
+          .where(eq(schema.connection.id, connIdAcme))
+      }
+      if (ccfgIdAcme) {
+        await asOrg.db
+          .delete(schema.connector_config)
+          .where(eq(schema.connector_config.id, ccfgIdAcme))
+      }
+      if (connIdGreenhouse) {
+        await asOrg.db
+          .delete(schema.connection)
+          .where(eq(schema.connection.id, connIdGreenhouse))
+      }
+      if (ccfgIdGreenhouse) {
+        await asOrg.db
+          .delete(schema.connector_config)
+          .where(eq(schema.connector_config.id, ccfgIdGreenhouse))
+      }
+    })
+
+    test('should update connection status on successful check (acme-oauth2)', async () => {
+      const initialConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+      expect(initialConn).toBeDefined()
+      expect(initialConn?.status).toBeNull()
+
+      const checkConnectionSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'checkConnection' as any)
+        .mockResolvedValue({
+          status: 'healthy',
+          status_message: 'Acme OK',
+          settings: {refreshed: 'acme-data'},
+        } as any)
+
+      const newInstanceSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'newInstance' as any)
+        .mockReturnValue({})
+
+      await checkConnection(initialConn!, asCustomer)
+
+      const updatedConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+
+      expect(checkConnectionSpy).toHaveBeenCalledTimes(1)
+      expect(newInstanceSpy).toHaveBeenCalledTimes(1)
+      expect(updatedConn?.status).toEqual('healthy')
+      expect(updatedConn?.status_message).toEqual('Acme OK')
+      expect((updatedConn?.settings as any)?.refreshed).toEqual('acme-data')
+      expect(updatedConn?.updated_at).not.toEqual(initialConn?.updated_at)
+    })
+
+    test('should handle null status/message from checkConnection result (acme-oauth2)', async () => {
+      const initialConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+      expect(initialConn).toBeDefined()
+
+      const checkConnectionSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'checkConnection' as any)
+        .mockResolvedValue({
+          status: null,
+          status_message: null,
+        } as any)
+
+      const newInstanceSpy = jest
+        .spyOn(serverConnectors[connectorAcme], 'newInstance' as any)
+        .mockReturnValue({} as any)
+
+      const result = await checkConnection(initialConn!, asCustomer)
+
+      const updatedConn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme),
+      })
+
+      expect(checkConnectionSpy).toHaveBeenCalledTimes(1)
+      expect(newInstanceSpy).toHaveBeenCalledTimes(1)
+      expect(updatedConn?.status).toBeNull()
+      expect(updatedConn?.status_message).toBeNull()
+      expect(updatedConn?.settings).toEqual({
+        oauth: {credentials: {access_token: 'acme-token'}},
+      }) // Settings unchanged
+      expect(result.status).toBeNull()
+      expect(result.status_message).toBeNull()
+    })
+
+    test('should throw NOT_IMPLEMENTED if connector does not implement checkConnection (greenhouse)', async () => {
+      const connGreenhouse = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdGreenhouse),
+      })
+      expect(connGreenhouse).toBeDefined()
+
+      // Temporarily remove checkConnection for this specific test
+      const originalCheckConnection =
+        serverConnectors[connectorGreenhouse].checkConnection
+      // @ts-expect-error - Intentionally modifying connector for test
+      serverConnectors[connectorGreenhouse].checkConnection = undefined
+
+      // No spy needed - we expect the actual connector check to fail
+      await expect(
+        checkConnection(connGreenhouse!, asCustomer),
+      ).rejects.toThrow(
+        new TRPCError({
+          code: 'NOT_IMPLEMENTED',
+          message: `Connector ${connectorGreenhouse} does not support check_connection`,
         }),
-      }),
-    )
-    expect(mockCheckConnectionFn).toHaveBeenCalledWith(
-      expect.objectContaining({
-        settings: connection.settings,
-        config: mockConnectorConfig.config,
-        instance: {},
-        context: expect.objectContaining({
-          webhookBaseUrl: `http://localhost/api/v1/webhook/${connection.connector_name}`,
+      )
+      // Restore original method (though afterEach restoreAllMocks should also handle it)
+      serverConnectors[connectorGreenhouse].checkConnection =
+        originalCheckConnection
+    })
+
+    test('should throw TRPCError if connector_config_id is null', async () => {
+      const conn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme), // Use Acme conn for this error case
+      })
+      conn!.connector_config_id = null
+
+      await expect(checkConnection(conn!, asCustomer)).rejects.toThrow(
+        new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config not found for connection ${connIdAcme}`,
         }),
-      }),
-    )
-    expect(mockCtx.asOrgIfCustomer.db.update).toHaveBeenCalledWith(
-      schema.connection,
-    )
-    expect(mockCtx.asOrgIfCustomer.db.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        status: checkResult.status,
-        status_message: checkResult.status_message,
-        settings: checkResult.settings,
-        updated_at: expect.any(String),
-      }),
-    )
-    expect(mockCtx.asOrgIfCustomer.db.where).toHaveBeenCalledWith(
-      expect.anything(),
-    )
-
-    expect(result).toEqual({
-      ...checkResult,
-      id: connection.id,
-      status: checkResult.status,
-      status_message: checkResult.status_message,
-    })
-  })
-
-  test.skip('should throw TRPCError if connector not found', async () => {
-    const connection = createMockConnection({connector_name: 'nonExistent'})
-    // @ts-expect-error - Deleting mock property for test
-    delete mockServerConnectors.nonExistent
-
-    await expect(checkConnection(connection, mockCtx)).rejects.toThrow(
-      new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Connector not found for connection ${connection.id}`,
-      }),
-    )
-  })
-
-  test.skip('should throw TRPCError if connector_config_id is missing', async () => {
-    const connection = createMockConnection({connector_config_id: null})
-
-    await expect(checkConnection(connection, mockCtx)).rejects.toThrow(
-      new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Connector config not found for connection ${connection.id}`,
-      }),
-    )
-  })
-
-  test.skip('should throw TRPCError if connector config not found in db', async () => {
-    const connection = createMockConnection()
-    ;(
-      mockCtx.asOrgIfCustomer.db.query.connector_config.findFirst as jest.Mock
-    ).mockResolvedValue(undefined)
-
-    await expect(checkConnection(connection, mockCtx)).rejects.toThrow(
-      new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Connector config ${connection.connector_config_id} not found`,
-      }),
-    )
-  })
-
-  test.skip('should throw TRPCError if connector does not implement checkConnection', async () => {
-    const connectorName = 'noCheckConn'
-    const connection = createMockConnection({
-      connector_name: connectorName,
-      connector_config_id: makeId('ccfg', connectorName, '456'),
+      )
     })
 
-    // @ts-expect-error - Assigning mock for test
-    mockServerConnectors[connectorName] = {
-      schemas: {config: z.object({}), settings: z.object({})},
-      newInstance: jest.fn(),
-    } as unknown as ConnectorServer
-    ;(
-      mockCtx.asOrgIfCustomer.db.query.connector_config.findFirst as jest.Mock
-    ).mockResolvedValue({
-      id: connection.connector_config_id,
-      org_id: mockCtx.viewer.orgId,
-      connector_name: connectorName,
-      config: {},
-      created_at: new Date(),
-      updated_at: new Date(),
-      env_name: null,
+    test('should throw TRPCError if connector config not found in db', async () => {
+      const conn = await asCustomer.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connIdAcme), // Use Acme conn for this error case
+      })
+      conn!.connector_config_id = makeId('ccfg', connectorAcme, 'not_real')
+
+      await expect(checkConnection(conn!, asCustomer)).rejects.toThrow(
+        new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${conn!.connector_config_id} not found`,
+        }),
+      )
     })
 
-    await expect(checkConnection(connection, mockCtx)).rejects.toThrow(
-      new TRPCError({
-        code: 'NOT_IMPLEMENTED',
-        message: `Connector ${connectorName} does not support check_connection`,
-      }),
-    )
-  })
-
-  test.skip('should handle checkConnection result with null status/message', async () => {
-    const connection = createMockConnection()
-    const checkResult = {status: null, status_message: null}
-    mockCheckConnectionFn.mockResolvedValue(checkResult)
-
-    const result = await checkConnection(connection, mockCtx)
-
-    expect(mockCtx.asOrgIfCustomer.db.update).toHaveBeenCalledWith(
-      schema.connection,
-    )
-    expect(mockCtx.asOrgIfCustomer.db.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        status: null,
-        status_message: null,
-        updated_at: expect.any(String),
-      }),
-    )
-    expect(mockCtx.asOrgIfCustomer.db.set).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        settings: expect.anything(),
-      }),
-    )
-
-    expect(result).toEqual({
-      id: connection.id,
-      status: null,
-      status_message: null,
-    })
-  })
-
-  test.skip('should handle checkConnection result without settings', async () => {
-    const connection = createMockConnection({settings: {initial: 'setting'}})
-    const checkResult = {status: 'healthy' as const, status_message: 'OK'}
-    mockCheckConnectionFn.mockResolvedValue(checkResult)
-
-    const result = await checkConnection(connection, mockCtx)
-
-    expect(mockCtx.asOrgIfCustomer.db.update).toHaveBeenCalledWith(
-      schema.connection,
-    )
-    expect(mockCtx.asOrgIfCustomer.db.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        status: checkResult.status,
-        status_message: checkResult.status_message,
-        updated_at: expect.any(String),
-      }),
-    )
-    expect(mockCtx.asOrgIfCustomer.db.set).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        settings: expect.anything(),
-      }),
-    )
-
-    expect(result).toEqual({
-      ...checkResult,
-      id: connection.id,
-      status: checkResult.status,
-      status_message: checkResult.status_message,
-    })
-  })
-})
+    // Note: Testing "Connector not found" requires manipulating the input
+    // `connection.connector_name` or mocking serverConnectors, which deviates
+    // from the minimal mocking approach here.
+  },
+)
