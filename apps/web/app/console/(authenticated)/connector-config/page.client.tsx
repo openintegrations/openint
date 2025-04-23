@@ -5,9 +5,15 @@ import type {JSONSchemaFormRef} from '@openint/ui-v1'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSuspenseQueries} from '@tanstack/react-query'
-import {Plus} from 'lucide-react'
+import {AlertCircle, Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
-import {Button} from '@openint/shadcn/ui'
+import {
+  Button,
+  toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@openint/shadcn/ui'
 import {
   Sheet,
   SheetContent,
@@ -88,10 +94,10 @@ export function ConnectorConfigList() {
     : {}
 
   const formContext = {
-    connectorName: selectedConnector?.display_name ?? '',
     openint_scopes: selectedConnector?.openint_scopes ?? [],
     scopes: selectedConnector?.scopes ?? [],
     initialData: selectedCcfg,
+    connector: selectedConnector,
   }
 
   const columns: Array<
@@ -184,7 +190,7 @@ export function ConnectorConfigList() {
 
     try {
       if (selectedCcfg) {
-        await updateConfig.mutateAsync({
+        const res = await updateConfig.mutateAsync({
           id: selectedCcfg.id,
           display_name: displayName,
           disabled,
@@ -193,8 +199,9 @@ export function ConnectorConfigList() {
             ...rest,
           },
         })
+        toast.success(`Connector ${res.id} updated successfully`)
       } else {
-        await createConfig.mutateAsync({
+        const res = await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
           display_name: displayName,
           disabled,
@@ -203,6 +210,7 @@ export function ConnectorConfigList() {
             ...rest,
           },
         })
+        toast.success(`Connector ${res.id} created successfully`)
       }
 
       setSheetOpen(false)
@@ -210,7 +218,9 @@ export function ConnectorConfigList() {
       setSelectedCcfg(null)
       await res.refetch()
     } catch (error) {
-      console.error('Error saving configuration:', error)
+      toast.error(
+        `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
+      )
     }
   }
 
@@ -231,12 +241,24 @@ export function ConnectorConfigList() {
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
+      toast.success(`Connector config ${selectedCcfg?.id} deleted successfully`)
       await res.refetch()
     } catch (error) {
-      console.error('Failed to delete connector config:', error)
-      // TODO: We need to show a toast here
+      toast.error(
+        `Failed to delete connector config ${selectedCcfg?.id}: ${error instanceof Error ? error.message : error}`,
+      )
     }
   }
+
+  const saveButtonLabel =
+    createConfig.isPending || updateConfig.isPending
+      ? selectedCcfg
+        ? 'Updating...'
+        : 'Creating...'
+      : selectedCcfg
+        ? `Edit ${selectedConnector?.display_name} Connector`
+        : `Create ${selectedConnector?.display_name} Connector`
+
   // initial flash of no data....
   if (!res.data.items || !connectorRes.data.items) {
     return null
@@ -274,10 +296,14 @@ export function ConnectorConfigList() {
       <Sheet
         open={sheetOpen}
         onOpenChange={(open) => {
-          setSheetOpen(open)
-          if (!open) {
+          if (selectedConnector && !selectedCcfg) {
+            setSelectedConnector(null)
+          } else if (selectedCcfg) {
             setSelectedConnector(null)
             setSelectedCcfg(null)
+            setSheetOpen(open)
+          } else {
+            setSheetOpen(open)
           }
         }}>
         <SheetContent
@@ -286,7 +312,7 @@ export function ConnectorConfigList() {
           <div className="p-4 pb-0">
             <SheetHeader>
               <SheetTitle className="text-lg">
-                {selectedConnector ? 'Edit Connector' : 'Add Connector'}
+                {selectedCcfg ? 'Edit Connector' : 'Add Connector'}
               </SheetTitle>
             </SheetHeader>
           </div>
@@ -313,18 +339,34 @@ export function ConnectorConfigList() {
           {selectedConnector && (
             <SheetFooter className="mt-auto border-t p-4">
               <div className="flex w-full flex-row justify-between">
-                <Button
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={!selectedCcfg || deleteConfig.isPending}>
-                  {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
-                </Button>
+                <div className="flex flex-row items-center gap-2">
+                  {selectedCcfg?.connection_count ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <AlertCircle className="text-destructive size-4" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Cannot delete connector config because it has active
+                        connections, delete the connections before deleting the
+                        connector config.
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : null}
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={
+                      !selectedCcfg ||
+                      deleteConfig.isPending ||
+                      (selectedCcfg.connection_count ?? 0) > 0
+                    }>
+                    {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </div>
                 <Button
                   onClick={handleFormSubmit}
                   disabled={createConfig.isPending || updateConfig.isPending}>
-                  {createConfig.isPending || updateConfig.isPending
-                    ? 'Saving...'
-                    : 'Save'}
+                  {saveButtonLabel}
                 </Button>
               </div>
             </SheetFooter>

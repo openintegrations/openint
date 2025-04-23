@@ -1,7 +1,8 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
-import type {ConnectorConfig} from '@openint/api-v1/models'
+import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
+import Image from 'next/image'
 import {useState} from 'react'
 import {env} from '@openint/env'
 import {Input, Switch} from '@openint/shadcn/ui'
@@ -19,13 +20,13 @@ interface Scope {
 interface OAuthFormContext {
   openint_scopes: string[]
   scopes: Scope[]
-  connectorName: string
   initialData: ConnectorConfig
+  connector: Core['connector']
 }
 
 export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
   const {formData, onChange, formContext} = props
-  const {openint_scopes, scopes, connectorName, initialData} =
+  const {openint_scopes, scopes, initialData, connector} =
     formContext as OAuthFormContext
 
   const scopeLookup =
@@ -73,7 +74,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
         <label
           htmlFor="use-openint-credentials"
           className="text-sm font-medium text-gray-700">
-          Use OpenInt {connectorName} credentials
+          Use OpenInt {connector?.display_name} credentials
         </label>
         <Switch
           id="use-openint-credentials"
@@ -157,27 +158,29 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
 
 export function DisabledField(props: FieldProps<boolean>) {
   const {formData, onChange, formContext} = props
-  const {initialData, connectorName} = formContext as OAuthFormContext
+  const {initialData, connector} = formContext as OAuthFormContext
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-2 space-y-1">
         <div className="flex items-center gap-2">
-          {initialData?.connector?.logo_url && (
-            <img
-              src={initialData.connector.logo_url}
-              alt={`${connectorName} logo`}
-              className="h-6 w-6 object-contain"
+          {connector?.logo_url && (
+            <Image
+              src={connector.logo_url}
+              alt={`${connector.display_name} logo`}
+              width={24}
+              height={24}
+              className="object-contain"
             />
           )}
-          <h3 className="font-medium">{connectorName}</h3>
+          <h3 className="font-medium">{connector?.display_name}</h3>
         </div>
         {initialData?.id && <CopyID value={initialData?.id} />}
 
         <div className="flex items-center space-x-2 text-sm">
           <ConnectorBadges
-            stage={initialData?.connector?.stage}
-            platforms={initialData?.connector?.platforms}
+            stage={connector?.stage}
+            platforms={connector?.platforms}
           />
         </div>
       </div>
