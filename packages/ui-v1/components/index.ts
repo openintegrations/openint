@@ -20,4 +20,5 @@ export * from './StatusDot'
 export * from './tabs'
 export * from './ThemeProvider'
 export * from './WebhookInput'
+export * from './VideoEmbed'
 // codegen:end
