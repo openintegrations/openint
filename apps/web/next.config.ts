@@ -38,7 +38,7 @@ const nextConfig = {
     beforeFiles: [
       // Proxy metrics requests to Posthog.
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
-      {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
+      {source: '/_posthog/:p*', destination: 'https://eu.i.posthog.com/:p*'},
 
       // Legacy api for compat
       // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
@@ -107,16 +107,18 @@ const nextConfig = {
     // Not compatible with turbopack for now...
     typedRoutes: process.env['TYPED_ROUTES'] === 'true',
     typedEnv: true,
-    turbo: {
-      // Define rules for file transformations (similar to webpack loaders)
-      rules: {
-        // For .node files
-        '*.node': {loaders: ['node-loader']},
-      },
-    },
     // TODO: Turn it on soon as we have a chance
     // reactCompiler: true
   },
+  turbopack: {
+    // Define rules for file transformations (similar to webpack loaders)
+    rules: {
+      // For .node files. but seems not needed anymore?
+      '*.node': {loaders: ['node-loader']},
+    },
+  },
+  // TODO: evaluate if we still need the custom webpack config here...
+  // or maybe they can be deleted?
   webpack: (config) => {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
