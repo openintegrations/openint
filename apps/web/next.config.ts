@@ -107,16 +107,18 @@ const nextConfig = {
     // Not compatible with turbopack for now...
     typedRoutes: process.env['TYPED_ROUTES'] === 'true',
     typedEnv: true,
-    turbo: {
-      // Define rules for file transformations (similar to webpack loaders)
-      rules: {
-        // For .node files
-        '*.node': {loaders: ['node-loader']},
-      },
-    },
     // TODO: Turn it on soon as we have a chance
     // reactCompiler: true
   },
+  turbopack: {
+    // Define rules for file transformations (similar to webpack loaders)
+    rules: {
+      // For .node files. but seems not needed anymore?
+      '*.node': {loaders: ['node-loader']},
+    },
+  },
+  // TODO: evaluate if we still need the custom webpack config here...
+  // or maybe they can be deleted?
   webpack: (config) => {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false

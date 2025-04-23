@@ -10,7 +10,7 @@
     "@openint/env": "workspace:*",
     "@openint/ui-v1": "workspace:*",
     "@openint/util": "workspace:*",
-    "next": "15.2.3"
+    "next": "^15.3.1"
   },
   "devDependencies": {
     "@types/react": "*"
