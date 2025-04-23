@@ -36,8 +36,8 @@
     "next": "^15.3.1",
     "nextjs-toploader": "1.4.2",
     "pg": "^8.13.3",
-    "posthog-js": "^1.166.1",
-    "posthog-node": "2.5.4",
+    "posthog-js": "^1.236.5",
+    "posthog-node": "^4.13.0",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
