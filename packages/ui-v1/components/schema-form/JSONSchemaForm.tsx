@@ -10,6 +10,8 @@ import type {
   RegistryFieldsType,
   RegistryWidgetsType,
   RJSFSchema,
+  UiSchema,
+  ValidatorType,
 } from '@rjsf/utils'
 import type {Oas31Schema} from '@openint/util/schema'
 
@@ -114,9 +116,12 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
       schema={jsonSchema}
       uiSchema={{
         ...(hideSubmitButton && {'ui:submitButtonOptions': {norender: true}}),
-        ...uiSchema,
-        ...props.uiSchema,
+        ...(uiSchema as UiSchema<TData, RJSFSchema, any>),
+        ...(props.uiSchema as UiSchema<TData, RJSFSchema, any>),
       }}
+      validator={validator as ValidatorType<TData, RJSFSchema, any>}
+      widgets={widgets as RegistryWidgetsType}
+      fields={fields as RegistryFieldsType}
       onChange={handleFormChange}
       onSubmit={(data) => {
         if (!data.formData) {
@@ -124,9 +129,6 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
         }
         onSubmit?.({formData: data.formData})
       }}
-      validator={validator}
-      widgets={widgets as RegistryWidgetsType}
-      fields={fields as RegistryFieldsType}
     />
   )
   return debugMode ? (
