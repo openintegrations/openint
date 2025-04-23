@@ -132,8 +132,10 @@ export async function checkConnection(
       }
       return {
         id: connection.id,
-        status: 'error',
-        status_message: 'Unable to check connection. Unknown error.',
+        status: connection.status ?? 'error',
+        status_message:
+          connection.status_message ??
+          'Unable to check connection. Unknown error.',
       }
     }
   } else {

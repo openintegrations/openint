@@ -452,7 +452,8 @@ export const connectRouter = router({
         .update(schema.connection)
         .set({
           status: 'disconnected',
-          status_message: 'Conection revoked via OpenInt',
+          status_message: 'Connection was revoked via OpenInt',
+          updated_at: new Date().toISOString(),
         })
         .where(eq(schema.connection.id, conn.id))
         .returning()
