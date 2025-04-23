@@ -7,6 +7,7 @@ import {initDbNeon} from '@openint/db/db.neon'
 import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
+import {notifySlackError} from './lib/notifySlackError'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 import {
   createFetchHandlerOpenAPI,
@@ -20,7 +21,19 @@ export interface CreateAppOptions
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
 export function createApp(opts: CreateAppOptions) {
   const app = new Elysia()
+    .onError(async ({code, error}) => {
+      await notifySlackError('Elysia crashed', {
+        err: {message: String(error)},
+        code: String(code),
+      })
+    })
     .use(cors())
+    .get('/elysia/debug', ({query}) => {
+      if (query['crash']) {
+        throw new Error(query['crash'])
+      }
+      return {ok: true}
+    })
     .get('/health', () => ({healthy: true}), {detail: {hide: true}})
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
       detail: {hide: true},
