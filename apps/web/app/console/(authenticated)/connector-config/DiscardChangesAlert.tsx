@@ -30,9 +30,8 @@ export function DiscardChangesAlert({
         <AlertDialogHeader>
           <AlertDialogTitle>Discard Changes</AlertDialogTitle>
           <AlertDialogDescription>
-            You have made changes to the {connectorName} connector . Are you
-            sure you want to discard these changes? All information will be
-            lost.
+            You have made changes to the {connectorName} connector. Are you sure
+            you want to discard these changes? All information will be lost.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
