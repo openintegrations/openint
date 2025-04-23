@@ -301,3 +301,18 @@ export function zCoerceBoolean(params?: Z.RawCreateParams) {
     return Boolean(val)
   }, z.boolean(params))
 }
+
+/**
+ * Coerce a string to an array of values.
+ *
+ * @param schema
+ * @returns
+ */
+export function zCoerceArray<T>(schema: Z.ZodType<T>) {
+  return z.preprocess((val) => {
+    if (typeof val === 'string') {
+      return val.split(',')
+    }
+    return val
+  }, z.array(schema))
+}

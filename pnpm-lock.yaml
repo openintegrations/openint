@@ -973,7 +973,7 @@ importers:
         specifier: workspace:*
         version: link:../oauth2
       '@openint/sdk':
-        specifier: 1.5.0
+        specifier: latest
         version: 1.5.0
       '@openint/util':
         specifier: workspace:*
