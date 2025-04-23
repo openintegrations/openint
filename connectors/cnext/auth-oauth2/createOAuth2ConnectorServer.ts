@@ -113,6 +113,20 @@ export function createOAuth2ConnectorServer<
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
+      // TODO: Handle error properly...
+      // .catch((err) => {
+      //   // Got to handle the 400 errors
+      //   if (err instanceof OAuth2Error) {
+      //     if (err.request.status < 500) {
+      //       throw new TRPCError({
+      //         code: 'BAD_REQUEST',
+      //         message: err.message,
+      //       })
+      //     }
+      //   }
+      //   throw err
+      // })
+      console.log('[oauth2] postConnect res', res, config)
 
       return {
         // TODO: Fix this connectionExternalId abstraction

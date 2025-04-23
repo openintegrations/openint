@@ -3,6 +3,7 @@ import type {after} from 'next/server'
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 
+import {modifyRequest} from '@opensdks/fetch-links'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 // Technically doesn't belong here as it introduces circular dependencies
@@ -37,8 +38,18 @@ export const createFetchHandlerTRPC =
 
 export const createFetchHandlerOpenAPI =
   ({endpoint, router, ...opts}: CreateFetchHandlerOptions) =>
-  (req: Request) => {
-    console.log('handleOpenApiRequest', req.url, endpoint)
+  async (_req: Request) => {
+    console.log('handleOpenApiRequest', _req.url, endpoint)
+
+    // Hack to ensure that the request body is always JSON for post request
+    let req = _req
+    if (req.method === 'POST' && req.headers.get('content-type') == null) {
+      const body = await req.text()
+      const headers = new Headers(req.headers)
+      headers.set('content-type', 'application/json')
+      req = modifyRequest(req, {body: body || JSON.stringify({}), headers})
+    }
+
     return createOpenApiFetchHandler({
       router: router ?? appRouter,
       createContext: () => routerContextFromRequest({...opts, req}),
