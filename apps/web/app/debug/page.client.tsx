@@ -6,8 +6,10 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import {ErrorBoundary} from 'next/dist/client/components/error-boundary'
+import {posthog} from 'posthog-js'
 import React, {Suspense} from 'react'
 import {delay} from '@openint/util/promise-utils'
+import {browserAnalytics} from '@/lib-client/analytics.client'
 
 const fetchDummyData = async (input: string) => {
   await delay(3000)
@@ -41,6 +43,17 @@ function DebugClientPage() {
         }}
         className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
         Crash App
+      </button>
+
+      <button
+        onClick={() => {
+          browserAnalytics.track({
+            name: 'debug.debug',
+            data: {timestamp: new Date().toISOString()},
+          })
+        }}
+        className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+        Track Event
       </button>
     </div>
   )

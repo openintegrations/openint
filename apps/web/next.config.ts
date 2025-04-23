@@ -38,7 +38,7 @@ const nextConfig = {
     beforeFiles: [
       // Proxy metrics requests to Posthog.
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
-      {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
+      {source: '/_posthog/:p*', destination: 'https://eu.i.posthog.com/:p*'},
 
       // Legacy api for compat
       // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
