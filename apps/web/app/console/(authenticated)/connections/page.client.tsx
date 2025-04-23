@@ -3,7 +3,7 @@
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import {useEffect, useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {
@@ -64,7 +64,6 @@ export function ConnectionsPage() {
     Core['connection_select'] | null
   >(null)
   const [pageIndex, setPageIndex] = useState(0)
-  const [animateIn, setAnimateIn] = useState(false)
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
@@ -95,23 +94,6 @@ export function ConnectionsPage() {
     setSelectedConnection(connection)
     setSheetOpen(true)
   }
-
-  // Add animation effect when sheet opens
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined
-
-    if (sheetOpen) {
-      timer = setTimeout(() => {
-        setAnimateIn(true)
-      }, 50)
-    } else {
-      setAnimateIn(false)
-    }
-
-    return () => {
-      if (timer) clearTimeout(timer)
-    }
-  }, [sheetOpen])
 
   const columnsWithActions = useMemo(
     () => [
@@ -173,11 +155,7 @@ export function ConnectionsPage() {
 
             {selectedConnection && (
               <div className="flex-1 overflow-y-auto">
-                <div
-                  className={cn(
-                    'space-y-5 p-5 opacity-0 transition-all duration-300',
-                    animateIn && 'opacity-100',
-                  )}>
+                <div className="space-y-5 p-5">
                   {/* Basic Connection Info */}
                   <section className="border-border/60 bg-card/30 overflow-hidden rounded-lg border">
                     <div className="border-border/40 bg-muted/30 border-b px-5 py-3">
