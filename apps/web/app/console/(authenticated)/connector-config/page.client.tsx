@@ -6,7 +6,7 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSuspenseQueries} from '@tanstack/react-query'
 import {AlertCircle, Plus} from 'lucide-react'
-import {useRef, useState} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
 import {
   Button,
   toast,
@@ -27,7 +27,10 @@ import {
   JSONSchemaForm,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
+import {getChangedFields} from '@openint/ui-v1/formUtils'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
+import {DiscardChangesAlert} from './DiscardChangesAlert'
+import {ReconnectAlert} from './ReconnectAlert'
 
 const DATA_PER_PAGE = 20
 
@@ -41,6 +44,39 @@ export function ConnectorConfigList() {
   > | null>(null)
   const formRef = useRef<JSONSchemaFormRef>(null)
   const [pageIndex, setPageIndex] = useState(0)
+  const [showReconnectDialog, setShowReconnectDialog] = useState(false)
+  const [showDiscardAlert, setShowDiscardAlert] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
+  const [formState, setFormState] = useState<Record<string, unknown> | null>(
+    null,
+  )
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleFormChange = useCallback(
+    (data: {formData?: Record<string, unknown>}) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
+        if (data.formData) {
+          setFormState(data.formData)
+        }
+      }, 300)
+    },
+    [],
+  )
+
+  useEffect(() => {
+    if (selectedCcfg != null && formState) {
+      const {disabled, display_name, config} = selectedCcfg
+      const changedFields = getChangedFields(formState, {
+        disabled,
+        displayName: display_name,
+        ...config,
+      })
+      setHasChanges(changedFields.length > 0)
+    }
+  }, [selectedCcfg, formState])
 
   const trpc = useTRPC()
 
@@ -176,7 +212,7 @@ export function ConnectorConfigList() {
     formData: {
       displayName: string
       disabled: boolean
-      config?: Record<string, unknown>
+      config?: Core['connector_config_insert']['config']
       [key: string]: unknown
     }
   }) => {
@@ -190,16 +226,27 @@ export function ConnectorConfigList() {
 
     try {
       if (selectedCcfg) {
-        const res = await updateConfig.mutateAsync({
-          id: selectedCcfg.id,
-          display_name: displayName,
+        const changedFields = getChangedFields(formState, {
           disabled,
-          config: {
-            ...config,
-            ...rest,
-          },
+          displayName: displayName,
+          ...config,
         })
-        toast.success(`Connector ${res.id} updated successfully`)
+        const hasOauthChanges = changedFields.some((field) => field === 'oauth')
+        if (hasOauthChanges) {
+          setShowReconnectDialog(hasOauthChanges)
+          return
+        } else {
+          const res = await updateConfig.mutateAsync({
+            id: selectedCcfg.id,
+            display_name: displayName,
+            disabled,
+            config: {
+              ...config,
+              ...rest,
+            },
+          })
+          toast.success(`Connector ${res.id} updated successfully`)
+        }
       } else {
         const res = await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
@@ -213,10 +260,42 @@ export function ConnectorConfigList() {
         toast.success(`Connector ${res.id} created successfully`)
       }
 
+      await res.refetch()
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
+      setHasChanges(false)
+    } catch (error) {
+      toast.error(
+        `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
+      )
+    }
+  }
+
+  const handleConfirmReconnect = async () => {
+    if (!hasChanges || !selectedConnector || !formState) return
+
+    try {
+      if (selectedCcfg) {
+        const res = await updateConfig.mutateAsync({
+          id: selectedCcfg.id,
+          display_name: formState['displayName'] as string,
+          disabled: formState['disabled'] as boolean,
+          config: {
+            ...formState,
+          },
+        })
+        toast.success(
+          `Connector ${res.id} updated successfully. Please reconnect your connections.`,
+        )
+      }
+
       await res.refetch()
+      setSheetOpen(false)
+      setSelectedConnector(null)
+      setSelectedCcfg(null)
+      setShowReconnectDialog(false)
+      setHasChanges(false)
     } catch (error) {
       toast.error(
         `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
@@ -299,6 +378,10 @@ export function ConnectorConfigList() {
           if (selectedConnector && !selectedCcfg) {
             setSelectedConnector(null)
           } else if (selectedCcfg) {
+            if (hasChanges) {
+              setShowDiscardAlert(true)
+              return
+            }
             setSelectedConnector(null)
             setSelectedCcfg(null)
             setSheetOpen(open)
@@ -327,6 +410,7 @@ export function ConnectorConfigList() {
                   hideSubmitButton
                   formData={formData}
                   formContext={formContext}
+                  onChange={handleFormChange}
                 />
               </div>
             ) : (
@@ -373,6 +457,23 @@ export function ConnectorConfigList() {
           )}
         </SheetContent>
       </Sheet>
+      <ReconnectAlert
+        showReconnectDialog={showReconnectDialog}
+        setShowReconnectDialog={setShowReconnectDialog}
+        handleConfirmReconnect={handleConfirmReconnect}
+      />
+      <DiscardChangesAlert
+        connectorName={selectedConnector?.display_name ?? ''}
+        showDiscardAlert={showDiscardAlert}
+        setShowDiscardAlert={setShowDiscardAlert}
+        discardChanges={() => {
+          setSheetOpen(false)
+          setSelectedConnector(null)
+          setSelectedCcfg(null)
+          setShowDiscardAlert(false)
+          setHasChanges(false)
+        }}
+      />
     </div>
   )
 }
