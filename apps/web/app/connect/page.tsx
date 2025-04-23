@@ -1,4 +1,6 @@
+import type {ConnectionExpanded} from '@openint/api-v1/models'
 import type {Id, Viewer} from '@openint/cdk'
+import type {TypedHref} from '@/lib-common/Link'
 import type {PageProps} from '@/lib-common/next-utils'
 import type {ConnectorConfigForCustomer} from './AddConnection.client'
 
@@ -6,7 +8,6 @@ import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
 import {cache, Suspense} from 'react'
-import {ConnectionExpanded} from '@openint/api-v1/models'
 import {zConnectOptions} from '@openint/api-v1/trpc/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {asOrgIfCustomer} from '@openint/cdk'
@@ -276,7 +277,8 @@ async function AddConnections({
         </p>
         <Button asChild variant="default">
           {/* TODO: Make this more type safe */}
-          <Link href={resolveLinkPath('/connect') + '?view=manage'}>
+          <Link
+            href={(resolveLinkPath('/connect') + '?view=manage') as TypedHref}>
             Manage Integrations
           </Link>
         </Button>

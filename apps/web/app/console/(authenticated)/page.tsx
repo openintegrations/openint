@@ -3,7 +3,7 @@ import type {TypedHref} from '@/lib-common/Link'
 import type {PageProps} from '@/lib-common/next-utils'
 
 import {ArrowRight, Check, Code, Globe, Share} from 'lucide-react'
-import {getBaseURLs, resolveRoute} from '@openint/env'
+import {resolveRoute} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui/button'
 import {Progress} from '@openint/shadcn/ui/progress'
