@@ -46,15 +46,7 @@ export const connectionRouter = router({
     )
     .output(zConnectionExpanded)
     .query(async ({ctx, input}) => {
-      // console.log(
-      //   'getConnection',
-      //   input.id,
-      //   input.include_secrets,
-      //   input.refresh_policy,
-      //   input.expand,
-      // )
-      let connection = await ctx.db.query.connection.findFirst({
-        columns: input.include_secrets ? undefined : {settings: false},
+      const connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
       })
 
