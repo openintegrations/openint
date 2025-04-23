@@ -5,7 +5,7 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
-import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
+import {and, any, dbUpsertOne, eq, schema, sql} from '@openint/db'
 import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
@@ -13,6 +13,7 @@ import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
 import {
+  expandConnection,
   formatConnection,
   zConnectionExpanded,
   zConnectionExpandOption,
@@ -20,12 +21,7 @@ import {
   zRefreshPolicy,
 } from './connection.models'
 import {zConnectorName} from './connector.models'
-import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
-  zListParams,
-  zListResponse,
-} from './utils/pagination'
+import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
@@ -42,7 +38,7 @@ export const connectionRouter = router({
     .input(
       z.object({
         id: zConnectionId,
-        include_secrets: zIncludeSecrets.optional().default('none'),
+        include_secrets: zIncludeSecrets.optional(),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
         expand: zCoerceArray(zConnectionExpandOption).optional().default([]),
       }),
@@ -159,13 +155,7 @@ export const connectionRouter = router({
         connection = updatedConnection as any
       }
 
-      return formatConnection(
-        ctx,
-        // TODO: fix this any casting
-        connection as any as Z.infer<typeof core.connection_select>,
-        input.include_secrets,
-        input.expand,
-      )
+      return expandConnection(connection!, input.expand)
     }),
   listConnections: authenticatedProcedure
     .meta({
@@ -178,112 +168,147 @@ export const connectionRouter = router({
       },
     })
     .input(
-      zListParams
-        .extend({
-          connector_names: zCoerceArray(zConnectorName).optional().openapi({
-            description: 'Filter list by connector names',
+      zListParams.extend({
+        connector_names: zCoerceArray(zConnectorName).optional().openapi({
+          description: 'Filter list by connector names',
+        }),
+        customer_id: zCustomerId.optional().openapi({
+          description: 'Filter list by customer id',
+        }),
+        connector_config_id: zConnectorConfigId.optional().openapi({
+          description: 'Filter list by connector config id',
+        }),
+        include_secrets: zIncludeSecrets.optional().openapi({
+          description: 'Include secret credentials in the response',
+        }),
+        expand: z
+          .array(zConnectionExpandOption)
+          .optional()
+          .default([])
+          .openapi({
+            description: 'Expand the response with additional optionals',
           }),
-          customer_id: zCustomerId.optional().openapi({
-            description: 'Filter list by customer id',
-          }),
-          connector_config_id: zConnectorConfigId.optional().openapi({
-            description: 'Filter list by connector config id',
-          }),
-          include_secrets: zIncludeSecrets.optional().default('none').openapi({
-            description: 'Include secret credentials in the response',
-          }),
-          expand: z
-            .array(zConnectionExpandOption)
-            .optional()
-            .default([])
-            .openapi({
-              description: 'Expand the response with additional optionals',
-            }),
-        })
-        .optional(),
+      }),
     )
     .output(
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
-      // @pellicceama: Have another way to validate
-      // const connectorNamesFromToken =
-      //   ctx.viewer?.connectOptions?.connector_names ?? []
-      const connectorNames = zConnectorName.options
-      const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            connection: schema.connection,
-            total: sql`count(*) OVER ()`,
-          })
-          .from(schema.connection)
-          .where(
-            and(
-              input?.connector_config_id
-                ? eq(
-                    schema.connection.connector_config_id,
-                    input.connector_config_id,
-                  )
-                : undefined,
-              input?.['customer_id']
-                ? eq(schema.connection.customer_id, input['customer_id'])
-                : undefined,
-              input?.['connector_names'] && input['connector_names'].length > 0
-                ? inArray(
-                    schema.connection.connector_name,
-                    input['connector_names'],
-                  )
-                : undefined,
-              // excluding data from old connectors that are no longer supported
-              inArray(schema.connection.connector_name, connectorNames),
-              // connectorNamesFromToken.length > 0
-              //   ? inArray(
-              //       schema.connection.connector_name,
-              //       connectorNamesFromToken,
-              //     )
-              //   : undefined,
-            ),
+      const query = ctx.db.query.connection.findMany({
+        where: and(
+          input.connector_config_id
+            ? eq(
+                schema.connection.connector_config_id,
+                input.connector_config_id,
+              )
+            : undefined,
+          input.customer_id
+            ? eq(schema.connection.customer_id, input.customer_id)
+            : undefined,
+          // excluding data from old connectors that are no longer supported
+          eq(
+            schema.connection.connector_name,
+            any(input.connector_names ?? zConnectorName.options),
           ),
-        schema.connection.created_at,
-        input,
-      )
-
-      const {items, total} = await processPaginatedResponse(query, 'connection')
-
-      const expandedItems = items.map((conn) =>
-        formatConnection(
-          ctx,
-          conn as any,
-          input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-          input?.expand ?? [],
+          // connectorNamesFromToken.length > 0
+          //   ? inArray(
+          //       schema.connection.connector_name,
+          //       connectorNamesFromToken,
+          //     )
+          //   : undefined,
         ),
-      )
+        extras: {
+          total: sql<number>`count(*) OVER ()`.as('total'),
+        },
+      })
 
-      // let failures = 0
-      // expandedItems.forEach((item) => {
-      //   try {
-      //     zConnectionExpanded.parse(item)
-      //     // console.log('success parsing', item.id)
-      //   } catch (error) {
-      //     console.error('Failed to parse connection:', item.id)
-      //     failures++
-      //   }
-      // })
-      // console.log('failures', failures)
-      // if (failures > 0) {
-      //   throw new TRPCError({
-      //     code: 'INTERNAL_SERVER_ERROR',
-      //     message: `Failed to parse ${failures} connections`,
-      //   })
-      // }
+      const res = await query
+      const total = res[0]?.total ?? 0
+      const items = res.map((conn) => expandConnection(conn, input.expand))
+
+      // const {items, total} = extractTotal(await query, 'total')
 
       return {
-        // TODO: fix this to respect rls policy... Add corresponding tests also
-        items: expandedItems,
+        items,
         total,
-        limit,
-        offset,
+        limit: input.limit ?? 50,
+        offset: input.offset ?? 0,
       }
+
+      // const {query, limit, offset} = applyPaginationAndOrder(
+      //   ctx.db
+      //     .select({
+      //       connection: schema.connection,
+      //       total: sql`count(*) OVER ()`,
+      //     })
+      //     .from(schema.connection)
+      //     .where(
+      //       and(
+      //         input?.connector_config_id
+      //           ? eq(
+      //               schema.connection.connector_config_id,
+      //               input.connector_config_id,
+      //             )
+      //           : undefined,
+      //         input?.['customer_id']
+      //           ? eq(schema.connection.customer_id, input['customer_id'])
+      //           : undefined,
+      //         input?.['connector_names'] && input['connector_names'].length > 0
+      //           ? inArray(
+      //               schema.connection.connector_name,
+      //               input['connector_names'],
+      //             )
+      //           : undefined,
+      //         // excluding data from old connectors that are no longer supported
+      //         inArray(schema.connection.connector_name, connectorNames),
+      //         // connectorNamesFromToken.length > 0
+      //         //   ? inArray(
+      //         //       schema.connection.connector_name,
+      //         //       connectorNamesFromToken,
+      //         //     )
+      //         //   : undefined,
+      //       ),
+      //     ),
+      //   schema.connection.created_at,
+      //   input,
+      // )
+
+      // const {items, total} = await processPaginatedResponse(query, 'connection')
+
+      // const expandedItems = items.map((conn) =>
+      //   formatConnection(
+      //     ctx,
+      //     conn as any,
+      //     input?.include_secrets,
+      //     input?.expand ?? [],
+      //   ),
+      // )
+
+      // // let failures = 0
+      // // expandedItems.forEach((item) => {
+      // //   try {
+      // //     zConnectionExpanded.parse(item)
+      // //     // console.log('success parsing', item.id)
+      // //   } catch (error) {
+      // //     console.error('Failed to parse connection:', item.id)
+      // //     failures++
+      // //   }
+      // // })
+      // // console.log('failures', failures)
+      // // if (failures > 0) {
+      // //   throw new TRPCError({
+      // //     code: 'INTERNAL_SERVER_ERROR',
+      // //     message: `Failed to parse ${failures} connections`,
+      // //   })
+      // // }
+
+      // return {
+      //   // TODO: fix this to respect rls policy... Add corresponding tests also
+      //   items: expandedItems,
+      //   total,
+      //   limit,
+      //   offset,
+      // }
     }),
 
   deleteConnection: authenticatedProcedure

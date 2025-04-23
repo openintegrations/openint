@@ -120,7 +120,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const conns = await asCustomer.caller.listConnections({
       // TODO: @openint-bot, add tests for include_secrets cases
-      include_secrets: 'all',
+      // include_secrets: 'all',
     })
     expect(conns.items).toHaveLength(1)
     expect(conns.items[0]).toMatchObject({
