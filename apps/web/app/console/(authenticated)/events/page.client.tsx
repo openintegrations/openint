@@ -5,7 +5,6 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useEffect, useState} from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Button} from '@openint/shadcn/ui/button'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CopyID} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
@@ -40,20 +39,6 @@ const columns: Array<ColumnDef<Event>> = [
 ]
 
 const DATA_PER_PAGE = 20
-
-// Mock event for testing
-const MOCK_EVENT: Event = {
-  id: 'evt_01JSCF09TJR1J1NRPXAKJMMH5B',
-  name: 'connect.connection-connected',
-  timestamp: new Date().toISOString(),
-  user: {
-    org_id: 'org_2owpNzLGQbIKvcpHnyfNivjXcDu',
-    customer_id: 'cust_123',
-  } as any,
-  data: {
-    connection_id: 'conn_google-mail_01JSCEYDNH24ZQKJRM2G2EBBWE',
-  } as any,
-} as Event
 
 export function EventsList() {
   const trpc = useTRPC()
@@ -108,16 +93,6 @@ export function EventsList() {
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
-          {/* Debug button to preview sheet */}
-          <Button
-            className="ml-auto"
-            variant="outline"
-            onClick={() => {
-              setSelectedEvent(MOCK_EVENT)
-              setSheetOpen(true)
-            }}>
-            Preview Sheet
-          </Button>
         </DataTable.Header>
         <DataTable.Table />
         <DataTable.Footer>
