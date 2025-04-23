@@ -53,6 +53,7 @@ export const connectionRouter = router({
       //   input.expand,
       // )
       let connection = await ctx.db.query.connection.findFirst({
+        columns: input.include_secrets ? undefined : {settings: false},
         where: eq(schema.connection.id, input.id),
       })
 
@@ -77,7 +78,7 @@ export const connectionRouter = router({
       const credentialsRequiresRefresh =
         input.refresh_policy === 'force' ||
         (input.refresh_policy === 'auto' &&
-        connection.settings.oauth?.credentials?.expires_at
+        connection.settings?.oauth?.credentials?.expires_at
           ? new Date(connection.settings.oauth.credentials.expires_at) <
             new Date()
           : false)
@@ -195,6 +196,7 @@ export const connectionRouter = router({
     )
     .query(async ({ctx, input}) => {
       const query = ctx.db.query.connection.findMany({
+        columns: input.include_secrets ? undefined : {settings: false},
         where: and(
           input.connector_config_id
             ? eq(
@@ -205,17 +207,11 @@ export const connectionRouter = router({
           input.customer_id
             ? eq(schema.connection.customer_id, input.customer_id)
             : undefined,
-          // excluding data from old connectors that are no longer supported
           eq(
             schema.connection.connector_name,
+            // excluding data from old connectors that are no longer supported
             any(input.connector_names ?? zConnectorName.options),
           ),
-          // connectorNamesFromToken.length > 0
-          //   ? inArray(
-          //       schema.connection.connector_name,
-          //       connectorNamesFromToken,
-          //     )
-          //   : undefined,
         ),
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),

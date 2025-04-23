@@ -67,7 +67,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         id: makeId('conn', 'greenhouse', makeUlid()),
         connector_config_id: connConfigIdRef.current,
         customer_id: asCustomer.viewer.customerId,
-        settings: {apiKey: ''},
+        settings: {apiKey: 'test_api_key'},
       })
       .returning()
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -83,7 +83,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           id: makeId('conn', 'greenhouse', makeUlid()),
           connector_config_id: connConfigIdRef.current,
           customer_id: asOtherCustomer.viewer.customerId,
-          settings: {apiKey: ''},
+          settings: {apiKey: 'test_api_key'},
         })
         .returning()
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -115,7 +115,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       connector_config_id: connConfigIdRef.current,
       customer_id: asCustomer.viewer.customerId,
     })
+  })
 
+  test('read connections with default params', async () => {
     // Via trpc
 
     const conns = await asCustomer.caller.listConnections({
@@ -127,19 +129,64 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       id: connIdRef.current,
       connector_config_id: connConfigIdRef.current,
     })
+
     expect(conns.items[0]?.connector).toBeUndefined()
+    expect(conns.items[0]?.settings).toBeUndefined()
+
+    // test get connection
+    const conn = await asCustomer.caller.getConnection({
+      id: connIdRef.current,
+    })
+    expect(conn).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+    })
+    expect(conn.settings).toBeUndefined()
+    expect(conn.connector).toBeUndefined()
   })
 
-  test('expand connector', async () => {
+  test('read expand connector', async () => {
     const conns = await asCustomer.caller.listConnections({
       expand: ['connector'],
     })
     expect(conns.items[0]).toMatchObject({
       id: connIdRef.current,
       connector_config_id: connConfigIdRef.current,
-      connector: {
-        name: 'greenhouse',
-      },
+      connector: {name: 'greenhouse'},
+    })
+    expect(conns.items[0]?.settings).toBeUndefined()
+
+    // test get connection
+    const conn = await asCustomer.caller.getConnection({
+      id: connIdRef.current,
+      expand: ['connector'],
+    })
+    expect(conn).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+      connector: {name: 'greenhouse'},
+    })
+    expect(conn.settings).toBeUndefined()
+  })
+
+  test('read include settings', async () => {
+    const conns = await asCustomer.caller.listConnections({
+      include_secrets: true,
+    })
+    expect(conns.items[0]).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+      settings: {apiKey: 'test_api_key'},
+    })
+    // test get connection
+    const conn = await asCustomer.caller.getConnection({
+      id: connIdRef.current,
+      include_secrets: true,
+    })
+    expect(conn).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+      settings: {apiKey: 'test_api_key'},
     })
   })
 
