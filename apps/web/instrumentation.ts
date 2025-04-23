@@ -19,7 +19,7 @@ export const register: InstrumentationModule['register'] = () => {
     console.warn('SENTRY_DSN not set, skipping sentry initialization')
   } else {
     Sentry.init({
-      enabled: NODE_ENV === 'production',
+      enabled: NODE_ENV === 'production' || !!env.DEBUG,
       dsn: SENTRY_DSN,
       // Adjust this value in production, or use tracesSampler for greater control
       tracesSampleRate: 1.0,

@@ -19,7 +19,8 @@ if (!SENTRY_DSN) {
   console.warn('SENTRY_DSN not set, skipping sentry initialization')
 } else {
   Sentry.init({
-    enabled: NODE_ENV === 'production',
+    enabled:
+      NODE_ENV === 'production' || window.location.href.includes('debug'),
     dsn: SENTRY_DSN,
     // Adjust this value in production, or use tracesSampler for greater control
     tracesSampleRate: 1.0,
@@ -61,3 +62,6 @@ if (!SENTRY_DSN) {
 
   console.log('[sentry.client] initialized')
 }
+
+// Can't find docs for this but got a log about this in terminal
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
