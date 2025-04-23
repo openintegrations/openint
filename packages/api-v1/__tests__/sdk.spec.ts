@@ -78,7 +78,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       await expect(wrongTokenClient.getCurrentUser()).rejects.toThrow()
     })
 
-    test('enum string array should work ', async () => {
+    test('enum string array should work', async () => {
       const baseUrl = 'http://localhost/v1'
       const assertFetchSdk = new Openint({
         apiKey,
