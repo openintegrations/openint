@@ -6,18 +6,24 @@ import {createOAuth2Client} from '@openint/oauth2/createOAuth2Client'
 import {type Z} from '@openint/util/zod-utils'
 import {renderTemplateObject} from '../lib/template'
 
-export function injectCcfgDefaultCredentials(
+export function injectCcfgDefaultCredentialsIfNeeded(
   connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
   connectorName: string,
   oauthConfig: Z.infer<typeof zOAuthConfig>,
 ): Z.infer<typeof oauth2Schemas.connector_config> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
-    !connectorConfig.oauth?.client_id &&
-    !connectorConfig.oauth?.client_secret &&
-    defaultCredentials?.['client_id'] &&
-    defaultCredentials?.['client_secret']
+    !connectorConfig.oauth?.client_id ||
+    !connectorConfig.oauth?.client_secret
   ) {
+    const client_id = defaultCredentials?.['client_id']
+    const client_secret = defaultCredentials?.['client_secret']
+    if (!client_id || !client_secret) {
+      throw new Error(
+        `Missing default credentials for connector ${connectorName}`,
+      )
+    }
+
     const configuredScopes = connectorConfig.oauth?.scopes ?? []
 
     if (
@@ -39,8 +45,8 @@ export function injectCcfgDefaultCredentials(
     return {
       ...connectorConfig,
       oauth: {
-        client_id: defaultCredentials?.['client_id'],
-        client_secret: defaultCredentials?.['client_secret'],
+        client_id,
+        client_secret,
         scopes: configuredScopes ?? [],
       },
     }
@@ -68,7 +74,7 @@ export function getClient({
     baseURLs: connectCtx.baseURLs,
   })
 
-  const ccfg = injectCcfgDefaultCredentials(
+  const ccfg = injectCcfgDefaultCredentialsIfNeeded(
     connectorConfig,
     connectorName,
     oauthConfig,
