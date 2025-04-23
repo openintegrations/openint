@@ -1,5 +1,5 @@
 import type {FieldProps} from '@rjsf/utils'
-import type {ConnectorConfig} from '@openint/api-v1/models'
+import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 
 import {useState} from 'react'
 import {Input} from '@openint/shadcn/ui/input'
@@ -12,7 +12,7 @@ type Credentials = {
 } | null
 
 interface CredentialsFormContext {
-  connectorName: string
+  connector: Core['connector']
   initialData: ConnectorConfig
 }
 
@@ -23,7 +23,7 @@ export function CredentialsField<T extends Credentials = Credentials>(
   props: FieldProps<T>,
 ) {
   const {formData, onChange, formContext} = props
-  const {connectorName, initialData} = formContext as CredentialsFormContext
+  const {connector, initialData} = formContext as CredentialsFormContext
   const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(
     !formData?.clientId && !formData?.clientSecret,
   )
@@ -53,7 +53,7 @@ export function CredentialsField<T extends Credentials = Credentials>(
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label>Use OpenInt {connectorName} credentials</Label>
+        <Label>Use OpenInt {connector?.display_name} credentials</Label>
         <Switch
           checked={useOpenIntCredentials}
           onCheckedChange={handleSwitchChange}
