@@ -19,7 +19,7 @@
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
     "@openint/oauth2": "workspace:*",
-    "@openint/sdk": "0.1.0-alpha.20",
+    "@openint/sdk": "latest",
     "@openint/util": "workspace:*",
     "@trpc/server": "^11.0.1",
     "drizzle-zod": "^0.7.0",

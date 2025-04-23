@@ -1,7 +1,7 @@
 import type {Z} from '@openint/util/zod-utils'
 
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models/core'
 import {getConnectorModel, zConnectorName} from './connector.models'
@@ -26,7 +26,9 @@ export const connectorRouter = router({
         summary: 'List Connectors',
       },
     })
-    .input(z.object({expand: z.array(zExpandOption).optional()}).optional())
+    .input(
+      z.object({expand: zCoerceArray(zExpandOption).optional()}).optional(),
+    )
     .output(zListResponse(zConnectorExtended).describe('List of connectors'))
     .query(async ({input}) => {
       const items = Object.values(defConnectors).map((def) =>
@@ -53,7 +55,7 @@ export const connectorRouter = router({
     .input(
       z.object({
         name: zConnectorName,
-        expand: z.array(zExpandOption).optional(),
+        expand: zCoerceArray(zExpandOption).optional(),
       }),
     )
     .output(zConnectorExtended)

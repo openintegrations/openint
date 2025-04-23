@@ -5,7 +5,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {
   connectorConfigExtended,
@@ -44,7 +44,7 @@ export const connectorConfigRouter = router({
     .input(
       z.object({
         id: zConnectorConfigId,
-        expand: z.array(zConnectorConfigExpandOption).optional(),
+        expand: zCoerceArray(zConnectorConfigExpandOption).optional(),
       }),
     )
     .output(connectorConfigExtended)
@@ -85,8 +85,8 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z.array(zConnectorConfigExpandOption).optional(),
-          connector_names: z.array(zConnectorName).optional().openapi({
+          expand: zCoerceArray(zConnectorConfigExpandOption).optional(),
+          connector_names: zCoerceArray(zConnectorName).optional().openapi({
             description: 'The names of the connectors to filter by',
           }),
         })

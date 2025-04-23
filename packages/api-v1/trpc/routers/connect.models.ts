@@ -1,5 +1,5 @@
 import {zCustomerId} from '@openint/cdk'
-import {z, zCoerceBoolean} from '@openint/util/zod-utils'
+import {z, zCoerceArray, zCoerceBoolean} from '@openint/util/zod-utils'
 import {zConnectorName} from './connector.models'
 
 export const zConnectOptions = z.object({
@@ -9,7 +9,7 @@ export const zConnectOptions = z.object({
     description:
       'Optional URL to return customers after adding a connection or if they press the Return To Organization button',
   }),
-  connector_names: z.array(zConnectorName).optional().openapi({
+  connector_names: zCoerceArray(zConnectorName).optional().openapi({
     title: 'Connector Names',
     description:
       'The names of the connectors to show in the connect page. If not provided, all connectors will be shown',

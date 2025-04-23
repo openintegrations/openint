@@ -8,7 +8,7 @@ import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {getApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
@@ -44,7 +44,7 @@ export const connectionRouter = router({
         id: zConnectionId,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
-        expand: z.array(zConnectionExpandOption).optional().default([]),
+        expand: zCoerceArray(zConnectionExpandOption).optional().default([]),
       }),
     )
     .output(zConnectionExpanded)
@@ -180,7 +180,7 @@ export const connectionRouter = router({
     .input(
       zListParams
         .extend({
-          connector_names: z.array(zConnectorName).optional().openapi({
+          connector_names: zCoerceArray(zConnectorName).optional().openapi({
             description: 'Filter list by connector names',
           }),
           customer_id: zCustomerId.optional().openapi({
