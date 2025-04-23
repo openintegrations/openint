@@ -9,7 +9,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body>
-        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          forcedTheme="light"
+          disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>
