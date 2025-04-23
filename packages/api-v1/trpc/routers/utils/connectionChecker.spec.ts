@@ -353,9 +353,7 @@ describeEachDatabase(
       expect(checkConnectionSpy).toHaveBeenCalledTimes(1)
       expect(newInstanceSpy).toHaveBeenCalledTimes(1) // newInstance is called before checkConnection
       expect(updatedConn?.status).toEqual('error')
-      expect(updatedConn?.status_message).toEqual(
-        'Unable to check connection. Unknown error.',
-      )
+      expect(updatedConn?.status_message).toEqual('Unable to check connection')
       expect(updatedConn?.updated_at).not.toEqual(initialConn?.updated_at)
     })
 

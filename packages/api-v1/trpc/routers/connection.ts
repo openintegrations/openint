@@ -1,4 +1,8 @@
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
+<<<<<<< HEAD
+=======
+import type {Z, Z} from '@openint/util/zod-utils'
+>>>>>>> a3545c1d (migrating create connection)
 
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
@@ -19,7 +23,17 @@ import {
   zRefreshPolicy,
 } from './connection.models'
 import {zConnectorName} from './connector.models'
+<<<<<<< HEAD
 import {zListParams, zListResponse} from './utils/pagination'
+=======
+import {checkConnection} from './utils/connectionChecker'
+import {
+  applyPaginationAndOrder,
+  processPaginatedResponse,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
+>>>>>>> a3545c1d (migrating create connection)
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
@@ -374,6 +388,7 @@ export const connectionRouter = router({
         })
       }
 
+<<<<<<< HEAD
       // Get connector implementation
       const connector = serverConnectors[
         input.data.connector_name as keyof typeof serverConnectors
@@ -427,7 +442,24 @@ export const connectionRouter = router({
       }
 
       // Create connection record
+=======
+>>>>>>> a3545c1d (migrating create connection)
       const id = makeId('conn', input.data.connector_name, makeUlid())
+
+      const {status, status_message} = await checkConnection(
+        {
+          id,
+          settings: input.data.settings,
+          connector_name: input.data.connector_name,
+          connector_config_id: input.connector_config_id,
+        } as Z.infer<typeof core.connection_select>,
+        ctx,
+        serverConnectors[
+          input.data.connector_name as keyof typeof serverConnectors
+        ] as ConnectorServer,
+        true,
+      )
+
       const [conn] = await dbUpsertOne(
         ctx.db,
         schema.connection,
