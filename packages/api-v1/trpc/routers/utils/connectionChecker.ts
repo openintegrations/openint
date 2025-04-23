@@ -12,7 +12,6 @@ import {RouterContext} from '../../context'
 export function connectionExpired(
   connection: Z.infer<typeof core.connection_select>,
 ) {
-  // Explicitly handle null settings or missing oauth/credentials/expires_at
   const expiresAt = connection.settings?.oauth?.credentials?.expires_at
   if (!expiresAt) {
     return false
