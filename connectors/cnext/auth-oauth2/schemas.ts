@@ -9,7 +9,13 @@ const _zOauthConnectorConfig = z
   .object({
     client_id: z.string().nullish(),
     client_secret: z.string().nullish(),
-    scopes: z.array(z.string()).nullish(),
+    // TODO: Once we finish database migration, we can remove the preprocess function
+    scopes: z.preprocess((val) => {
+      if (typeof val === 'string') {
+        return val.split(' ')
+      }
+      return val
+    }, z.array(z.string()).nullish()),
     // TODO: Is this needed?
     redirect_uri: z.string().nullish().openapi({
       description: 'Custom redirect URI',
@@ -60,7 +66,8 @@ export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 
 export const oauth2Schemas = {
   connector_config: z.object({
-    oauth: zOauthConnectorConfig.nullable(),
+    // If null, means to use default config
+    oauth: zOauthConnectorConfig.nullish(),
   }),
 
   connection_settings: z.object({

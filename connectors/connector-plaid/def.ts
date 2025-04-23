@@ -34,9 +34,10 @@ export const plaidSchemas = {
         'ui:fieldReplacesAnyOrOneOf': true,
       }),
     clientName: z
-      .string()
-      .max(30)
-      .default('This Application')
+      .preprocess(
+        (val) => (typeof val === 'string' ? val.slice(0, 30) : val),
+        z.string().max(30).default('This Application'),
+      )
       .describe(
         `The name of your application, as it should be displayed in Link.
         Maximum length of 30 characters.

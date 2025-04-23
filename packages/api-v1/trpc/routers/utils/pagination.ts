@@ -10,7 +10,7 @@ export const zListParams = z.object({
     .number()
     .int()
     .min(0)
-    .max(100)
+    .max(500)
     .optional()
     // .default(50)
     .describe('Limit the number of items returned'),
@@ -34,16 +34,9 @@ export function zListResponse<T extends Z.ZodTypeAny>(itemSchema: T) {
     limit: z
       .number()
       .int()
-      .nonnegative()
-      .max(100)
-      .default(50)
-      .describe('Limit the number of items returned'),
-    offset: z
-      .number()
-      .int()
       .min(0)
-      .default(0)
-      .describe('Offset the items returned'),
+      .describe('Limit the number of items returned'),
+    offset: z.number().int().min(0).describe('Offset the items returned'),
   })
 }
 
