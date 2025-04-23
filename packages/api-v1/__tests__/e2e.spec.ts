@@ -1,16 +1,17 @@
 import type {paths} from '../__generated__/openapi.types'
 
+import {applyLinks} from '@opensdks/fetch-links'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {createApp} from '../app'
 import {createTestOrganization} from './test-utils'
 
-describeEachDatabase({drivers: ['pglite'], migrate: true}, async (db) => {
+describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const app = createApp({db})
 
   const _inMemoryClient = createClient<paths>({
     baseUrl: 'http://localhost/v1',
-    fetch: app.handle,
+    fetch: (req) => applyLinks(req, [loopbackLink(), app.handle]),
   })
 
   const clients = {
@@ -51,5 +52,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, async (db) => {
     // console.log('error', res.error)
     expect(res.data).toBeTruthy()
     // console.log('res.data', res.data)
+  })
+
+  test('create customer token w/o content type', async () => {
+    // hmm this doesn't work typing wise
+    const res = await client['/customer/cus_123/token' as const]?.POST(
+      {} as never,
+    )
+    expect(res?.data?.token).toBeTruthy()
   })
 })
