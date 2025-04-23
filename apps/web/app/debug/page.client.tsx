@@ -6,7 +6,6 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import {ErrorBoundary} from 'next/dist/client/components/error-boundary'
-import {posthog} from 'posthog-js'
 import React, {Suspense} from 'react'
 import {delay} from '@openint/util/promise-utils'
 import {browserAnalytics} from '@/lib-client/analytics.client'
