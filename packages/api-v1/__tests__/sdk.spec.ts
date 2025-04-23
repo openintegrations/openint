@@ -1,3 +1,4 @@
+import {beforeAll, describe, expect, test} from '@jest/globals'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import Openint from '@openint/sdk'
@@ -75,6 +76,35 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       })
 
       await expect(wrongTokenClient.getCurrentUser()).rejects.toThrow()
+    })
+
+    test('enum string array should work ', async () => {
+      const baseUrl = 'http://localhost/v1'
+      const assertFetchSdk = new Openint({
+        apiKey,
+        baseURL: baseUrl,
+        fetch: (input) => {
+          const urlString =
+            input instanceof Request ? input.url : input.toString()
+          const url = new URL(urlString)
+          // ideally the SDK would support
+          // connector_names=greenhouse&connector_names=acme-oauth2
+          // but it doesn't, so we need to support this
+          // format ourselves
+          expect(url.searchParams.getAll('connector_names')).toEqual([
+            'greenhouse,acme-oauth2',
+          ])
+          expect(urlString).toBe(
+            `${baseUrl}/connection?connector_names=greenhouse%2Cacme-oauth2`,
+          )
+          // return a response to avoid actual network call
+          return Promise.resolve(new Response())
+        },
+      })
+
+      await assertFetchSdk.listConnections({
+        connector_names: ['greenhouse', 'acme-oauth2'],
+      })
     })
   })
 })
