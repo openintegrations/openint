@@ -1,14 +1,6 @@
-import type {Env} from '@openint/env'
-
 import * as Sentry from '@sentry/nextjs'
 import {posthog} from 'posthog-js'
-import {getSentryEnvironment} from '@openint/env'
-
-// This file configures the initialization of Sentry on the browser.
-// The config you add here will be used whenever a page is visited.
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/
-
-const env = process.env as unknown as Env
+import {env, getSentryEnvironment} from '@openint/env'
 
 const sentryDsn = env.NEXT_PUBLIC_SENTRY_DSN
 const nodeEnv = env.NEXT_PUBLIC_NODE_ENV
