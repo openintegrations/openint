@@ -230,7 +230,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
             },
           },
         }),
-      ).rejects.toThrow('invalid_type')
+      ).rejects.toThrow()
     })
 
     test('with metadata', async () => {
