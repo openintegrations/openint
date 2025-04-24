@@ -138,28 +138,27 @@ export function ConnectorConfigSheet({
 
     const baseData = {
       display_name: displayName,
-      disabled: disabled ?? false,
+      disabled,
       config: {
         ...config,
         ...rest,
       },
     }
     try {
-      let res
       if (selectedCcfg) {
-        res = await updateConfig.mutateAsync({
+        await updateConfig.mutateAsync({
           ...baseData,
           id: selectedCcfg.id,
         })
       } else {
-        res = await createConfig.mutateAsync({
+        await createConfig.mutateAsync({
           ...baseData,
           connector_name: selectedConnector.name,
         })
       }
 
       toast.success(
-        `Connector ${res.id} ${selectedCcfg ? 'updated' : 'created'} successfully`,
+        `${selectedConnector?.name} ${selectedCcfg ? 'updated' : 'added'} successfully`,
       )
 
       await refetch()
@@ -169,7 +168,7 @@ export function ConnectorConfigSheet({
       setChangedFields([])
     } catch (error) {
       toast.error(
-        `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
+        `Failed to save connector: ${error instanceof Error ? error.message : error}`,
       )
     }
   }
@@ -212,11 +211,11 @@ export function ConnectorConfigSheet({
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
-      toast.success(`Connector config ${selectedCcfg?.id} deleted successfully`)
+      toast.success(`${selectedCcfg?.connector_name} deleted successfully`)
       await refetch()
     } catch (error) {
       toast.error(
-        `Failed to delete connector config ${selectedCcfg?.id}: ${error instanceof Error ? error.message : error}`,
+        `Failed to delete connector ${selectedCcfg?.connector_name}: ${error instanceof Error ? error.message : error}`,
       )
     }
   }
