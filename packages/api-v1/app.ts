@@ -4,7 +4,7 @@ import {cors} from '@elysiajs/cors'
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
-import {env, envRequired, getBaseURLs} from '@openint/env'
+import {env, envRequired, resolveRoute} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {notifySlackError} from './lib/notifySlackError'
@@ -74,7 +74,7 @@ export function createApp(opts: CreateAppOptions) {
               secret: 'secret_1',
               redirectUris: [
                 env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
-                getBaseURLs(null).connect + '/callback',
+                new URL(...resolveRoute('/connect/callback/', null)).toString(),
               ],
               allowedGrants: [
                 'authorization_code',

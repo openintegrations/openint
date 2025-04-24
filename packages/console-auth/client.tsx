@@ -11,7 +11,7 @@ import {
 import {dark as darkTheme} from '@clerk/themes'
 import dynamic from 'next/dynamic'
 import React from 'react'
-import {getBaseURLs} from '@openint/env'
+import {resolveRoute} from '@openint/env'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 
 export {
@@ -83,7 +83,7 @@ export function UserButton() {
     <DynamicUserButton
       showName
       appearance={{baseTheme: isDark ? darkTheme : undefined}}
-      signInUrl={getBaseURLs(null).console + '/sign-in'}
+      signInUrl={resolveRoute('/console/sign-in/', null)[0]}
     />
   )
 }

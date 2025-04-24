@@ -10,7 +10,7 @@ import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {getApiV1URL} from '../../lib/typed-routes'
+import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
 import {
   formatConnection,
@@ -113,7 +113,7 @@ export const connectionRouter = router({
         }
 
         const context = {
-          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
@@ -382,7 +382,7 @@ export const connectionRouter = router({
           })
         }
         const context = {
-          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
           extCustomerId: ctx.viewer.userId as ExtCustomerId,
           fetch: ctx.fetch,
           baseURLs: getBaseURLs(null),
