@@ -6,3 +6,4 @@ export {type Database} from './db'
 
 export * from './lib/stripeNullByte'
 export * from './lib/upsert'
+export * from './lib/operators'

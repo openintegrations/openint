@@ -303,15 +303,12 @@ export function zCoerceBoolean(params?: Z.RawCreateParams) {
 }
 
 /**
- * Coerce a string to an array of values.
- *
- * @param schema
- * @returns
+ * Coerce a string to an array of values using a comma as a delimiter, ignoring whitespaces
  */
 export function zCoerceArray<T>(schema: Z.ZodType<T>) {
   return z.preprocess((val) => {
     if (typeof val === 'string') {
-      return val.split(',')
+      return val.split(',').filter((s) => !!s.trim())
     }
     return val
   }, z.array(schema))
