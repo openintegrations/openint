@@ -5,7 +5,6 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {eq, schema} from '@openint/db'
 import {getBaseURLs} from '@openint/env'
-import {getApiV1URL} from '../../../lib/typed-routes'
 import {connection_select_base, core} from '../../../models'
 import {RouterContext} from '../../context'
 
