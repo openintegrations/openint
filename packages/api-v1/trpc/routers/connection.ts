@@ -5,7 +5,11 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
+<<<<<<< HEAD
 import {and, any, dbUpsertOne, eq, schema, sql} from '@openint/db'
+=======
+import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
+>>>>>>> 87ffb5b167ed0bbfed9d74daae615510160eea72
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
@@ -22,7 +26,12 @@ import {
   checkConnection,
   connectionCanBeChecked,
 } from './utils/connectionChecker'
-import {zListParams, zListResponse} from './utils/pagination'
+import {
+  applyPaginationAndOrder,
+  processPaginatedResponse,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
