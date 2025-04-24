@@ -5,7 +5,7 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {eq, schema} from '@openint/db'
 import {getBaseURLs} from '@openint/env'
-import {getApiV1URL} from '../../../lib/typed-routes'
+import {getAbsoluteApiV1URL} from '../../../lib/typed-routes'
 import {connection_select_base, core} from '../../../models'
 import {RouterContext} from '../../context'
 
@@ -71,7 +71,7 @@ export async function checkConnection(
   }
   if (connector.checkConnection) {
     const context = {
-      webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+      webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
       extCustomerId: (ctx.viewer.role === 'customer'
         ? ctx.viewer.customerId
         : (ctx.viewer.userId ?? '')) as ExtCustomerId,
