@@ -1,5 +1,4 @@
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import type {Z} from '@openint/util/zod-utils'
 
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
@@ -14,7 +13,6 @@ import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
 import {
   expandConnection,
-  formatConnection,
   zConnectionExpanded,
   zConnectionExpandOption,
   zIncludeSecrets,

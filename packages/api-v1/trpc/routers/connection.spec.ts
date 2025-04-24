@@ -1,6 +1,5 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 
-import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
