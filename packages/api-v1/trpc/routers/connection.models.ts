@@ -11,9 +11,9 @@ import {getConnectorModelByName} from './connector.models'
 export const zIncludeSecrets = z
   // .enum(['none', 'basic', 'all']) // Make me an enum later...
   .boolean()
-  .describe(
-    'Controls secret inclusion: none (default), basic (auth only), or all secrets',
-  )
+// .describe(
+//   'Controls secret inclusion: none (default), basic (auth only), or all secrets',
+// )
 
 export const zRefreshPolicy = z
   .enum(['none', 'force', 'auto'])

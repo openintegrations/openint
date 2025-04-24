@@ -3130,7 +3130,6 @@ export interface operations {
     getConnection: {
         parameters: {
             query?: {
-                /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
                 include_secrets?: boolean;
                 /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
                 refresh_policy?: "none" | "force" | "auto";
@@ -3305,7 +3304,6 @@ export interface operations {
                 customer_id?: string;
                 /** @description The id of the connector config, starts with `ccfg_` */
                 connector_config_id?: string;
-                /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
                 include_secrets?: boolean;
                 expand?: "connector"[];
             };

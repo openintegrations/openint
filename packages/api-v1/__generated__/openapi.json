@@ -1021,10 +1021,8 @@
           {
             "in": "query",
             "name": "include_secrets",
-            "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
             "schema": {
-              "type": "boolean",
-              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets"
+              "type": "boolean"
             }
           },
           {
@@ -1612,10 +1610,8 @@
           {
             "in": "query",
             "name": "include_secrets",
-            "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
             "schema": {
-              "type": "boolean",
-              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets"
+              "type": "boolean"
             }
           },
           {
