@@ -1,15 +1,14 @@
-import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
+import type {ConnectorServer} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
 
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {and, any, dbUpsertOne, eq, schema, sql} from '@openint/db'
-import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
 import {
   expandConnection,
@@ -19,6 +18,10 @@ import {
   zRefreshPolicy,
 } from './connection.models'
 import {zConnectorName} from './connector.models'
+import {
+  checkConnection,
+  connectionCanBeChecked,
+} from './utils/connectionChecker'
 import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
@@ -43,14 +46,7 @@ export const connectionRouter = router({
     )
     .output(zConnectionExpanded)
     .query(async ({ctx, input}) => {
-      // console.log(
-      //   'getConnection',
-      //   input.id,
-      //   input.include_secrets,
-      //   input.refresh_policy,
-      //   input.expand,
-      // )
-      let connection = await ctx.db.query.connection.findFirst({
+      const connection = await ctx.db.query.connection.findFirst({
         columns: input.include_secrets ? undefined : {settings: false},
         where: eq(schema.connection.id, input.id),
       })
@@ -74,84 +70,12 @@ export const connectionRouter = router({
       }
 
       const credentialsRequiresRefresh =
-        input.refresh_policy === 'force' ||
-        (input.refresh_policy === 'auto' &&
-        connection.settings?.oauth?.credentials?.expires_at
-          ? new Date(connection.settings.oauth.credentials.expires_at) <
-            new Date()
-          : false)
+        input.refresh_policy === 'force' || input.refresh_policy === 'auto'
 
-      if (
-        credentialsRequiresRefresh &&
-        'checkConnection' in connector &&
-        typeof connector.checkConnection === 'function'
-      ) {
-        const ccfg = await ctx.db.query.connector_config.findFirst({
-          where: eq(
-            schema.connector_config.id,
-            connection.connector_config_id!,
-          ),
-          columns: {
-            id: true,
-            connector_name: true,
-            config: true,
-            created_at: true,
-            updated_at: true,
-          },
-        })
-
-        if (!ccfg) {
-          throw new TRPCError({
-            code: 'NOT_FOUND',
-            message: 'Connector config not found',
-          })
-        }
-
-        const context = {
-          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
-          extCustomerId: (ctx.viewer.role === 'customer'
-            ? ctx.viewer.customerId
-            : ctx.viewer.userId) as ExtCustomerId,
-          fetch: ctx.fetch,
-          baseURLs: getBaseURLs(null),
-        }
-
-        const instance = connector.newInstance?.({
-          config: ccfg.config,
-          settings: undefined,
-          context,
-          fetchLinks: [],
-          onSettingsChange: () => {}, // noop
-        })
-
-        const connUpdate = await connector.checkConnection({
-          settings: connection.settings,
-          config: ccfg.config,
-          options: {},
-          instance,
-          context,
-        })
-        const updatedConnection = await ctx.db
-          .update(schema.connection)
-          .set({
-            settings: connUpdate.settings,
-            status: connUpdate.status,
-            status_message: connUpdate.status_message,
-            updated_at: new Date().toISOString(),
-          })
-          .where(eq(schema.connection.id, connection.id))
-          .returning()
-          .then((rows) => rows[0])
-
-        if (!updatedConnection) {
-          throw new TRPCError({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Failed to update connection',
-          })
-        }
-
-        // the initial type of connection has an extra connector_config field so the type doesn't match, hence the any cast
-        connection = updatedConnection as any
+      if (credentialsRequiresRefresh && connectionCanBeChecked(connection)) {
+        const {status, status_message} = await checkConnection(connection, ctx)
+        connection.status = status
+        connection.status_message = status_message ?? null
       }
 
       return expandConnection(connection!, input.expand)
@@ -374,60 +298,22 @@ export const connectionRouter = router({
         })
       }
 
-      // Get connector implementation
-      const connector = serverConnectors[
-        input.data.connector_name as keyof typeof serverConnectors
-      ] as ConnectorServer
-      if (!connector) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector ${input.data.connector_name} not found`,
-        })
-      }
-
-      let settings = input.data.settings
-      let status = null
-      let status_message = null
-      if (input.check_connection) {
-        if (
-          !('newInstance' in connector) ||
-          typeof connector.newInstance !== 'function' ||
-          !('checkConnection' in connector) ||
-          typeof connector.checkConnection !== 'function'
-        ) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: `Connector ${input.data.connector_name} does not support connection checking`,
-          })
-        }
-        const context = {
-          webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),
-          extCustomerId: ctx.viewer.userId as ExtCustomerId,
-          fetch: ctx.fetch,
-          baseURLs: getBaseURLs(null),
-        }
-
-        const instance = connector.newInstance?.({
-          config: ccfg.config,
-          settings: input.data.settings,
-          context,
-          fetchLinks: [],
-          onSettingsChange: () => {}, // noop
-        })
-        const connUpdate = await connector.checkConnection({
-          settings,
-          config: ccfg.config,
-          options: {},
-          instance,
-          context,
-        })
-        settings = connUpdate.settings
-        status = connUpdate.status
-        status_message = connUpdate.status_message
-      }
-
-      // Create connection record
       const id = makeId('conn', input.data.connector_name, makeUlid())
+
+      const {status, status_message} = await checkConnection(
+        {
+          id,
+          settings: input.data.settings,
+          connector_name: input.data.connector_name,
+          connector_config_id: input.connector_config_id,
+        } as Z.infer<typeof core.connection_select>,
+        ctx,
+        serverConnectors[
+          input.data.connector_name as keyof typeof serverConnectors
+        ] as ConnectorServer,
+        true,
+      )
+
       const [conn] = await dbUpsertOne(
         ctx.db,
         schema.connection,
