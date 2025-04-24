@@ -5,9 +5,13 @@ import type {Database} from '@openint/db'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
-import {envRequired, getBaseURLs, isProduction} from '@openint/env'
+import {envRequired, isProduction} from '@openint/env'
 import {makeSentryClient} from '../lib/sentry.client'
-import {getAbsoluteApiV1URL} from '../lib/typed-routes'
+import {routerContextFromViewer} from '../trpc/context'
+import {
+  checkConnection,
+  connectionCanBeChecked,
+} from '../trpc/routers/utils/connectionChecker'
 
 interface RefreshResult {
   totalConnections: number
@@ -79,53 +83,21 @@ export async function refreshStaleConnections(
     for (const chunk of chunks) {
       await Promise.all(
         chunk.map(async (connection) => {
-          const connector = connectors[
-            connection.connection.connector_name as keyof typeof connectors
-          ] as ConnectorServer
-          if (!connector?.checkConnection) {
-            console.warn(
-              `Connector ${connection.connection.connector_name} does not implement checkConnection`,
-              JSON.stringify(connector, null, 2),
-            )
-            return
-          }
-
           try {
-            const context = {
-              webhookBaseUrl: getAbsoluteApiV1URL(
-                `/webhook/${connection.connection.connector_name}`,
-              ),
-              extCustomerId: null,
-              fetch: fetch,
-              baseURLs: getBaseURLs(null),
+            if (!connectionCanBeChecked(connection.connection)) {
+              console.warn(
+                `Connector ${connection.connection.connector_name} does not implement checkConnection`,
+                JSON.stringify(connection.connection, null, 2),
+              )
+              return
             }
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const instance = connector.newInstance?.({
-              config: connection.connector_config.config,
-              settings: undefined,
-              context,
-              fetchLinks: [],
-              onSettingsChange: () => {}, // noop
-            })
-
-            // TODO: Fix em
-
-            const connUpdate = await connector.checkConnection({
-              settings: connection.connection.settings,
-              config: connection.connector_config.config,
-              options: {},
-              instance,
-              context,
-            })
-            await db
-              .update(schema.connection)
-              .set({
-                settings: connUpdate.settings,
-                status: connUpdate.status,
-                status_message: connUpdate.status_message,
-                updated_at: new Date().toISOString(),
-              })
-              .where(eq(schema.connection.id, connection.connection.id))
+            await checkConnection(
+              connection.connection,
+              routerContextFromViewer({db, viewer: {role: 'system'}}),
+              connectors[
+                connection.connection.connector_name as keyof typeof connectors
+              ] as any,
+            )
 
             successfulRefreshes++
           } catch (error) {
