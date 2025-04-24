@@ -1,6 +1,13 @@
+import {TRPCError} from '@trpc/server'
+import {connection} from 'next/server'
 import {zViewerRole} from '@openint/cdk'
+import {eq, schema, sql} from '@openint/db'
+import {initDbNeon} from '@openint/db/db.neon'
+import {connector_config} from '@openint/db/schema/schema'
+import {envRequired} from '@openint/env'
 import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
+import {routerContextFromViewer} from '../context'
 
 export const generalRouter = router({
   debug: publicProcedure
@@ -29,7 +36,41 @@ export const generalRouter = router({
     })
     .input(z.void())
     .output(z.object({ok: z.boolean()}))
-    .query(() => ({ok: true})),
+    .query(async () => {
+      const db = initDbNeon(envRequired.DATABASE_URL)
+      const ctx = routerContextFromViewer({db, viewer: {role: 'system'}})
+      const INTEGRATION_TEST_ORG_ID = 'org_2owpNzLGQbIKvcpHnyfNivjXcDu'
+      const connections = await ctx.db
+        .select({
+          id: schema.connection.id,
+          status: schema.connection.status,
+        })
+        .from(schema.connection)
+        .innerJoin(
+          schema.connector_config,
+          eq(schema.connection.connector_config_id, schema.connector_config.id),
+        )
+        .where(eq(schema.connector_config.org_id, INTEGRATION_TEST_ORG_ID))
+
+      const unhealthyConnections = connections.filter(
+        (c) => c.status !== null && c.status !== 'healthy',
+      )
+
+      if (unhealthyConnections.length > 0) {
+        console.error(
+          'Unhealthy connections in integration test account',
+          unhealthyConnections,
+        )
+        throw new TRPCError({
+          code: 'SERVICE_UNAVAILABLE',
+          message: `Unhealthy connections in integration test account: ${unhealthyConnections.map((c) => c.id + ` (${c.status})`).join(', ')}`,
+        })
+      }
+
+      return {
+        ok: true,
+      }
+    }),
 
   healthEcho: publicProcedure
     // Normally these would be disabled as they are internal endpoints but
