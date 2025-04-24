@@ -71,7 +71,7 @@ export const zDiscriminatedSettings = z
         z
           .object({
             connector_name: s.shape.connector_name,
-            settings: s.shape.connection_settings,
+            settings: s.shape.connection_settings.optional(),
           })
           .openapi({
             ref: `connector.${s.shape.connector_name.value}.discriminated_connection_settings`,

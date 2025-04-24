@@ -4,15 +4,16 @@ import type {ConnectorName} from './connector.models'
 
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {core} from '../../models'
 import {getConnectorModelByName} from './connector.models'
 
 export const zIncludeSecrets = z
-  .enum(['none', 'basic', 'all'])
-  .describe(
-    'Controls secret inclusion: none (default), basic (auth only), or all secrets',
-  )
+  // .enum(['none', 'basic', 'all']) // Make me an enum later...
+  .boolean()
+// .describe(
+//   'Controls secret inclusion: none (default), basic (auth only), or all secrets',
+// )
 
 export const zRefreshPolicy = z
   .enum(['none', 'force', 'auto'])
@@ -34,28 +35,31 @@ export const zConnectionExpanded = z
     z.object({
       connector: core.connector.optional(),
       integration: core.integration_select.optional(),
+      // TODO: Add these into connection expanded
+      // interface ConnectionRelations {
+      //   connector_config: Core['connector_config_select']
+      //   customer: Core['customer_select']
+      // }
     }),
   )
   .describe('The connection details')
 
-// TODO: Add these into connection expanded
-// interface ConnectionRelations {
-//   connector_config: Core['connector_config_select']
-//   customer: Core['customer_select']
-//   connector: Core['connector']
-//   integration: Core['integration_select']
-// }
 export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 
-/**
- * Formats a connection for API responses
- */
-export function formatConnection(
-  _ctx: any,
+export const zConnectionReadParams = z.object({
+  include_secrets: zIncludeSecrets.optional(),
+  expand: zCoerceArray(zConnectionExpandOption).optional().default([]),
+  // refresh_policy: zRefreshPolicy.optional().default('auto'),
+})
+
+export function expandConnection(
   connection: Core['connection_select'],
-  _include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
   expand: Array<Z.infer<typeof zConnectionExpandOption>> = [],
 ) {
+  if (!expand.includes('connector')) {
+    return connection
+  }
+
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]
   if (!connector) {
@@ -65,47 +69,10 @@ export function formatConnection(
     })
   }
 
-  // console.log('include_secrets', include_secrets)
-
-  // Handle different levels of secret inclusion
-  // the default is 'none' at which point settings should be an empty object
-  // let settingsToInclude = {settings: {}}
-  // if (include_secrets === 'basic' && connection.settings.oauth) {
-  //   settingsToInclude = {
-  //     settings: {
-  //       ...connection.settings,
-  //       // NOTE: in future we should add other settings sensitive value
-  //       // stripping for things like api key here and abstract it
-  //       oauth: connection.settings?.oauth?.credentials
-  //         ? {
-  //             ...connection.settings.oauth,
-  //             credentials: stripSensitiveOauthCredentials(
-  //               connection.settings.oauth.credentials,
-  //             ),
-  //           }
-  //         : undefined,
-  //     },
-  //   }
-  // } else if (include_secrets === 'all') {
-  //   settingsToInclude = {settings: connection.settings}
-  // }
-
-  let expandedFields = {}
-  if (expand.includes('connector')) {
-    expandedFields = {
-      connector: getConnectorModelByName(
-        connection.connector_name as ConnectorName,
-      ),
-    }
-  }
-
-  const ret = {
+  return {
     ...connection,
-    // ...settingsToInclude, // buggy, fix me
-    ...expandedFields,
+    connector: getConnectorModelByName(
+      connection.connector_name as ConnectorName,
+    ),
   }
-  // DUring development, parse right here
-  // zConnectionExpanded.parse(ret)
-
-  return ret
 }

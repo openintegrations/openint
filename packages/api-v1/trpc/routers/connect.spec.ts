@@ -208,6 +208,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test('get connection', async () => {
       const res = await asCustomer.getConnection({
         id: postConnectRes.current.id,
+        include_secrets: true,
       })
       expect(res.settings).toEqual(postConnectRes.current.settings)
       expect(res.status).toBe('healthy')
@@ -362,6 +363,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test('get connection', async () => {
       const res = await asCustomer.getConnection({
         id: postConnectRes.current.id,
+        include_secrets: true,
       })
       expect(res.settings).toEqual(settings)
     })
@@ -428,6 +430,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test('get connection', async () => {
       const res = await asCustomer.getConnection({
         id: postConnectRes.current.id,
+        include_secrets: true,
       })
       expect(res.settings).toEqual(postConnectRes.current.settings)
     })

@@ -40,6 +40,19 @@ export function zListResponse<T extends Z.ZodTypeAny>(itemSchema: T) {
   })
 }
 
+export function extractTotal<T extends {total: number}, K extends keyof T>(
+  result: T[],
+  entityKey: K,
+): {items: Array<T[K]>; total: number} {
+  const total = result[0]?.total ?? 0
+  const items = result.map((r) => r[entityKey])
+
+  return {
+    items,
+    total,
+  }
+}
+
 export function applyPaginationAndOrder2<
   T extends {orderBy: Function; limit: Function; offset: Function},
   P extends {limit?: number; offset?: number} | undefined,
@@ -72,6 +85,8 @@ export function applyPaginationAndOrder2<
   return {query, limit, offset}
 }
 
+// MARK: - Deprecated, use functions above instead
+
 /** @deprecated Use applyPaginationAndOrder2 instead */
 export function applyPaginationAndOrder<
   T extends {orderBy: Function; limit: Function; offset: Function},
@@ -99,19 +114,6 @@ export function applyPaginationAndOrder<
   return {query: modifiedQuery, limit, offset}
 }
 
-export function extractTotal<T extends {total: number}, K extends keyof T>(
-  result: T[],
-  entityKey: K,
-): {items: Array<T[K]>; total: number} {
-  const total = result[0]?.total ?? 0
-  const items = result.map((r) => r[entityKey])
-
-  return {
-    items,
-    total,
-  }
-}
-
 /** @deprecated Use extractTotal instead */
 export async function processPaginatedResponse<T extends keyof typeof schema>(
   query: any,
@@ -137,6 +139,7 @@ export type Query = Omit<
   'where' | 'groupBy'
 >
 
+/** @deprecated Use extractTotal instead */
 export async function processTypedPaginatedResponse<T>(query: Query): Promise<{
   items: T[]
   total: number

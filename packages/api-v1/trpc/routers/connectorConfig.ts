@@ -3,7 +3,7 @@ import type {ConnectorConfig} from '../../models'
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
-import {and, asc, desc, eq, inArray, schema, sql} from '@openint/db'
+import {and, any, asc, desc, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
@@ -124,7 +124,7 @@ export const connectorConfigRouter = router({
           // ),
           eq(
             schema.connector_config.connector_name,
-            sql`ANY (${sql.param(currentlySupportedConnectorNames)})`,
+            any(currentlySupportedConnectorNames),
           ),
           // connectorNamesFromToken.length > 0
           //   ? inArray(
