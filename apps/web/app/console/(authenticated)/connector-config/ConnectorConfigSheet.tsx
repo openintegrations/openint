@@ -1,7 +1,6 @@
 'use client'
 
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
-import type {JSONSchemaFormRef} from '@openint/ui-v1'
 
 import {AlertCircle} from 'lucide-react'
 import {useCallback, useEffect, useRef, useState} from 'react'
@@ -42,6 +41,13 @@ interface ConnectorConfigSheetProps {
   connectors: Array<Core['connector']>
 }
 
+interface FormData {
+  displayName: string
+  disabled: boolean
+  config?: Core['connector_config_insert']['config']
+  [key: string]: unknown
+}
+
 export function ConnectorConfigSheet({
   sheetOpen,
   setSheetOpen,
@@ -53,13 +59,10 @@ export function ConnectorConfigSheet({
   connectors,
 }: ConnectorConfigSheetProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const formRef = useRef<JSONSchemaFormRef>(null)
-  const [formState, setFormState] = useState<Record<string, unknown> | null>(
-    null,
-  )
+  const [formState, setFormState] = useState<FormData | null>(null)
   const [showReconnectDialog, setShowReconnectDialog] = useState(false)
   const [showDiscardAlert, setShowDiscardAlert] = useState(false)
-  const [hasChanges, setHasChanges] = useState(false)
+  const [changedFields, setChangedFields] = useState<string[]>([])
 
   const trpc = useTRPC()
   const createConfig = useMutation(trpc.createConnectorConfig.mutationOptions())
@@ -74,7 +77,7 @@ export function ConnectorConfigSheet({
         displayName: display_name,
         ...config,
       })
-      setHasChanges(changedFields.length > 0)
+      setChangedFields(changedFields)
     }
   }, [selectedCcfg, formState])
 
@@ -106,36 +109,19 @@ export function ConnectorConfigSheet({
     },
   }
 
-  const handleFormSubmit = () => {
-    if (formRef.current) {
-      formRef.current.submit()
-    }
-  }
-
-  const handleSave = async (data: {
-    formData: {
-      displayName: string
-      disabled: boolean
-      config?: Core['connector_config_insert']['config']
-      [key: string]: unknown
-    }
-  }) => {
-    if (!selectedConnector) {
+  const handleSave = async () => {
+    if (!selectedConnector || !formState) {
       return
     }
 
-    const {
-      formData: {displayName, disabled, config = {}, ...rest},
-    } = data
+    const {displayName, disabled, config = {}, ...rest} = formState
 
     try {
       if (selectedCcfg) {
-        const changedFields: Array<
-          | keyof Core['connector_config_insert']
-          | keyof Core['connector_config_insert']['config']
-        > = getChangedFields(formState, {
+        const {disabled, display_name, config} = selectedCcfg
+        const changedFields = getChangedFields(formState, {
           disabled,
-          displayName: displayName,
+          displayName: display_name,
           ...config,
         })
         const hasOauthChanges = changedFields.some((field) => field === 'oauth')
@@ -146,7 +132,7 @@ export function ConnectorConfigSheet({
           const res = await updateConfig.mutateAsync({
             id: selectedCcfg.id,
             display_name: displayName,
-            disabled,
+            disabled: disabled ?? false,
             config: {
               ...config,
               ...rest,
@@ -171,7 +157,7 @@ export function ConnectorConfigSheet({
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
-      setHasChanges(false)
+      setChangedFields([])
     } catch (error) {
       toast.error(
         `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
@@ -179,8 +165,12 @@ export function ConnectorConfigSheet({
     }
   }
 
+  const handleFormSubmit = async () => {
+    if (!formState) return
+    await handleSave()
+  }
   const handleConfirmReconnect = async () => {
-    if (!hasChanges || !selectedConnector || !formState) return
+    if (changedFields.length === 0 || !selectedConnector || !formState) return
 
     try {
       if (selectedCcfg) {
@@ -202,7 +192,7 @@ export function ConnectorConfigSheet({
       setSelectedConnector(null)
       setSelectedCcfg(null)
       setShowReconnectDialog(false)
-      setHasChanges(false)
+      setChangedFields([])
     } catch (error) {
       toast.error(
         `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
@@ -235,19 +225,16 @@ export function ConnectorConfigSheet({
     setSelectedCcfg(null)
   }
 
-  const handleFormChange = useCallback(
-    (data: {formData?: Record<string, unknown>}) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+  const handleFormChange = useCallback((data: {formData?: FormData}) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
+      if (data.formData) {
+        setFormState(data.formData)
       }
-      timeoutRef.current = setTimeout(() => {
-        if (data.formData) {
-          setFormState(data.formData)
-        }
-      }, 300)
-    },
-    [],
-  )
+    }, 300)
+  }, [])
 
   const formData = selectedCcfg
     ? {
@@ -274,7 +261,7 @@ export function ConnectorConfigSheet({
           if (selectedConnector && !selectedCcfg) {
             setSelectedConnector(null)
           } else if (selectedCcfg) {
-            if (hasChanges) {
+            if (changedFields.length > 0) {
               setShowDiscardAlert(true)
               return
             }
@@ -300,9 +287,7 @@ export function ConnectorConfigSheet({
             {selectedConnector ? (
               <div className="px-8">
                 <JSONSchemaForm
-                  ref={formRef}
                   jsonSchema={formSchema}
-                  onSubmit={handleSave}
                   hideSubmitButton
                   formData={formData}
                   formContext={formContext}
@@ -345,7 +330,12 @@ export function ConnectorConfigSheet({
                 </div>
                 <Button
                   onClick={handleFormSubmit}
-                  disabled={createConfig.isPending || updateConfig.isPending}>
+                  disabled={
+                    createConfig.isPending ||
+                    updateConfig.isPending ||
+                    !formState ||
+                    changedFields.length === 0
+                  }>
                   {saveButtonLabel}
                 </Button>
               </div>
@@ -367,7 +357,7 @@ export function ConnectorConfigSheet({
           setSelectedConnector(null)
           setSelectedCcfg(null)
           setShowDiscardAlert(false)
-          setHasChanges(false)
+          setChangedFields([])
         }}
       />
     </>
