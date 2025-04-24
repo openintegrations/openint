@@ -239,11 +239,11 @@ export function ConnectorConfigSheet({
   const saveButtonLabel =
     createConfig.isPending || updateConfig.isPending
       ? selectedCcfg
-        ? 'Updating...'
-        : 'Creating...'
+        ? 'Saving...'
+        : 'Adding...'
       : selectedCcfg
-        ? `Edit ${selectedConnector?.display_name} Connector`
-        : `Create ${selectedConnector?.display_name} Connector`
+        ? `Save ${selectedConnector?.display_name} Connector`
+        : `Add ${selectedConnector?.display_name} Connector`
 
   return (
     <>
