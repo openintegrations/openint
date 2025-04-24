@@ -18,8 +18,11 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
-import {AddConnectorConfig, JSONSchemaForm} from '@openint/ui-v1'
-import {getChangedFields} from '@openint/ui-v1/formUtils'
+import {
+  AddConnectorConfig,
+  getChangedFields,
+  JSONSchemaForm,
+} from '@openint/ui-v1'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 import {DiscardChangesAlert} from './DiscardChangesAlert'
 import {ReconnectAlert} from './ReconnectAlert'

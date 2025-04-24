@@ -16,6 +16,7 @@ import type {
 import type {Oas31Schema} from '@openint/util/schema'
 
 import {withTheme} from '@rjsf/core'
+import {getChangedFields} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -29,6 +30,8 @@ import {transformJSONSchema} from '@openint/util/schema'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'
+
+export {getChangedFields}
 
 const theme: ThemeProps = {}
 
