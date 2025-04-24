@@ -109,49 +109,35 @@ export function ConnectorConfigSheet({
     },
   }
 
-  const handleSave = async () => {
-    if (!selectedConnector || !formState) {
-      return
-    }
-
+  const saveData = async () => {
+    if (!formState || !selectedConnector) return
     const {displayName, disabled, config = {}, ...rest} = formState
 
+    const baseData = {
+      display_name: displayName,
+      disabled: disabled ?? false,
+      config: {
+        ...config,
+        ...rest,
+      },
+    }
     try {
+      let res
       if (selectedCcfg) {
-        const {disabled, display_name, config} = selectedCcfg
-        const changedFields = getChangedFields(formState, {
-          disabled,
-          displayName: display_name,
-          ...config,
+        res = await updateConfig.mutateAsync({
+          ...baseData,
+          id: selectedCcfg.id,
         })
-        const hasOauthChanges = changedFields.some((field) => field === 'oauth')
-        if (hasOauthChanges) {
-          setShowReconnectDialog(hasOauthChanges)
-          return
-        } else {
-          const res = await updateConfig.mutateAsync({
-            id: selectedCcfg.id,
-            display_name: displayName,
-            disabled: disabled ?? false,
-            config: {
-              ...config,
-              ...rest,
-            },
-          })
-          toast.success(`Connector ${res.id} updated successfully`)
-        }
       } else {
-        const res = await createConfig.mutateAsync({
+        res = await createConfig.mutateAsync({
+          ...baseData,
           connector_name: selectedConnector.name,
-          display_name: displayName,
-          disabled,
-          config: {
-            ...config,
-            ...rest,
-          },
         })
-        toast.success(`Connector ${res.id} created successfully`)
       }
+
+      toast.success(
+        `Connector ${res.id} ${selectedCcfg ? 'updated' : 'created'} successfully`,
+      )
 
       await refetch()
       setSheetOpen(false)
@@ -165,39 +151,25 @@ export function ConnectorConfigSheet({
     }
   }
 
-  const handleFormSubmit = async () => {
-    if (!formState) return
-    await handleSave()
+  const handleSave = async () => {
+    const changedFields = getChangedFields(formState, {
+      disabled: selectedCcfg?.disabled,
+      displayName: selectedCcfg?.display_name,
+      ...selectedCcfg?.config,
+    })
+    const hasOauthChanges = changedFields.some((field) => field === 'oauth')
+    if (selectedCcfg && hasOauthChanges) {
+      setShowReconnectDialog(hasOauthChanges)
+      return
+    }
+    await saveData()
   }
+
   const handleConfirmReconnect = async () => {
     if (changedFields.length === 0 || !selectedConnector || !formState) return
 
-    try {
-      if (selectedCcfg) {
-        const res = await updateConfig.mutateAsync({
-          id: selectedCcfg.id,
-          display_name: formState['displayName'] as string,
-          disabled: formState['disabled'] as boolean,
-          config: {
-            ...formState,
-          },
-        })
-        toast.success(
-          `Connector ${res.id} updated successfully. Please reconnect your connections.`,
-        )
-      }
-
-      await refetch()
-      setSheetOpen(false)
-      setSelectedConnector(null)
-      setSelectedCcfg(null)
-      setShowReconnectDialog(false)
-      setChangedFields([])
-    } catch (error) {
-      toast.error(
-        `Failed to save connector configuration: ${error instanceof Error ? error.message : error}`,
-      )
-    }
+    await saveData()
+    setShowReconnectDialog(false)
   }
 
   const handleDelete = async () => {
@@ -329,12 +301,12 @@ export function ConnectorConfigSheet({
                   </Button>
                 </div>
                 <Button
-                  onClick={handleFormSubmit}
+                  onClick={handleSave}
                   disabled={
                     createConfig.isPending ||
                     updateConfig.isPending ||
                     !formState ||
-                    changedFields.length === 0
+                    (selectedCcfg != null && changedFields.length === 0)
                   }>
                   {saveButtonLabel}
                 </Button>
