@@ -23,9 +23,8 @@ import {
   getChangedFields,
   JSONSchemaForm,
 } from '@openint/ui-v1'
+import {useConfirm} from '@openint/ui-v1/components/Confirm'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
-import {DiscardChangesAlert} from './DiscardChangesAlert'
-import {ReconnectAlert} from './ReconnectAlert'
 
 interface ConnectorConfigSheetProps {
   sheetOpen: boolean
@@ -63,8 +62,6 @@ export function ConnectorConfigSheet({
 }: ConnectorConfigSheetProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [formState, setFormState] = useState<FormData | null>(null)
-  const [showReconnectDialog, setShowReconnectDialog] = useState(false)
-  const [showDiscardAlert, setShowDiscardAlert] = useState(false)
   const [changedFields, setChangedFields] = useState<string[]>([])
 
   const trpc = useTRPC()
@@ -72,17 +69,32 @@ export function ConnectorConfigSheet({
   const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
   const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
 
-  useEffect(() => {
+  const confirm = useConfirm()
+
+  const compareFormState = useCallback(() => {
     if (selectedCcfg != null && formState) {
       const {disabled, display_name, config} = selectedCcfg
-      const changedFields = getChangedFields(formState, {
+      return getChangedFields(formState, {
         disabled,
         displayName: display_name,
         ...config,
       })
-      setChangedFields(changedFields)
     }
+    return []
   }, [selectedCcfg, formState])
+
+  useEffect(() => {
+    const newChangedFields = compareFormState()
+    setChangedFields(newChangedFields)
+  }, [compareFormState])
+
+  const initialValues = selectedCcfg
+    ? {
+        ...selectedCcfg.config,
+        displayName: selectedCcfg.display_name ?? '',
+        disabled: selectedCcfg.disabled ?? false,
+      }
+    : {}
 
   const formContext = {
     openint_scopes: selectedConnector?.openint_scopes ?? [],
@@ -110,6 +122,14 @@ export function ConnectorConfigSheet({
         selectedConnector?.schemas?.connector_config as Record<string, unknown>
       )?.['properties'] || {}),
     },
+  }
+
+  const discardChanges = () => {
+    setSheetOpen(false)
+    setSelectedConnector(null)
+    setSelectedCcfg(null)
+    setChangedFields([])
+    setFormState(initialValues)
   }
 
   const saveData = async () => {
@@ -154,6 +174,12 @@ export function ConnectorConfigSheet({
     }
   }
 
+  const handleConfirmReconnect = async () => {
+    if (changedFields.length === 0 || !selectedConnector || !formState) return
+
+    await saveData()
+  }
+
   const handleSave = async () => {
     const changedFields = getChangedFields(formState, {
       disabled: selectedCcfg?.disabled,
@@ -162,17 +188,17 @@ export function ConnectorConfigSheet({
     })
     const hasOauthChanges = changedFields.some((field) => field === 'oauth')
     if (selectedCcfg && hasOauthChanges) {
-      setShowReconnectDialog(hasOauthChanges)
+      confirm({
+        title: 'OAuth Credentials Changed',
+        description:
+          'You have changed the OAuth credentials. This will require reconnecting any existing connections using these credentials. Are you sure you want to proceed?',
+        onConfirm: async () => {
+          await handleConfirmReconnect()
+        },
+      })
       return
     }
     await saveData()
-  }
-
-  const handleConfirmReconnect = async () => {
-    if (changedFields.length === 0 || !selectedConnector || !formState) return
-
-    await saveData()
-    setShowReconnectDialog(false)
   }
 
   const handleDelete = async () => {
@@ -211,14 +237,6 @@ export function ConnectorConfigSheet({
     }, 300)
   }, [])
 
-  const formData = selectedCcfg
-    ? {
-        ...selectedCcfg.config,
-        displayName: selectedCcfg.display_name ?? '',
-        disabled: selectedCcfg.disabled ?? false,
-      }
-    : {}
-
   const saveButtonLabel =
     createConfig.isPending || updateConfig.isPending
       ? selectedCcfg
@@ -237,7 +255,12 @@ export function ConnectorConfigSheet({
             setSelectedConnector(null)
           } else if (selectedCcfg) {
             if (changedFields.length > 0) {
-              setShowDiscardAlert(true)
+              confirm({
+                title: 'Discard Changes',
+                description:
+                  'You have unsaved changes. Are you sure you want to discard these changes? All information will be lost.',
+                onConfirm: discardChanges,
+              })
               return
             }
             setSelectedConnector(null)
@@ -264,7 +287,7 @@ export function ConnectorConfigSheet({
                 <JSONSchemaForm
                   jsonSchema={formSchema}
                   hideSubmitButton
-                  formData={formData}
+                  formData={initialValues}
                   formContext={formContext}
                   onChange={handleFormChange}
                 />
@@ -318,23 +341,6 @@ export function ConnectorConfigSheet({
           )}
         </SheetContent>
       </Sheet>
-      <ReconnectAlert
-        showReconnectDialog={showReconnectDialog}
-        setShowReconnectDialog={setShowReconnectDialog}
-        handleConfirmReconnect={handleConfirmReconnect}
-      />
-      <DiscardChangesAlert
-        connectorName={selectedConnector?.display_name ?? ''}
-        showDiscardAlert={showDiscardAlert}
-        setShowDiscardAlert={setShowDiscardAlert}
-        discardChanges={() => {
-          setSheetOpen(false)
-          setSelectedConnector(null)
-          setSelectedCcfg(null)
-          setShowDiscardAlert(false)
-          setChangedFields([])
-        }}
-      />
     </>
   )
 }
