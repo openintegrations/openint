@@ -289,7 +289,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "acme-oauth2";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -339,7 +339,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "aircall";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -389,7 +389,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "airtable";
-            settings: {
+            settings?: {
                 apiKey: string;
                 airtableBase: string;
             };
@@ -410,7 +410,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "apollo";
-            settings: {
+            settings?: {
                 api_key: string;
             };
         };
@@ -430,7 +430,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "brex";
-            settings: {
+            settings?: {
                 accessToken: string;
             };
         };
@@ -458,7 +458,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "coda";
-            settings: {
+            settings?: {
                 apiKey: string;
             };
         };
@@ -478,7 +478,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "confluence";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -528,7 +528,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "discord";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -578,7 +578,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "facebook";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -628,7 +628,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "finch";
-            settings: {
+            settings?: {
                 access_token: string;
             };
         };
@@ -655,7 +655,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "firebase";
-            settings: {
+            settings?: {
                 /** @constant */
                 role: "admin";
                 serviceAccount: {
@@ -716,7 +716,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "foreceipt";
-            settings: {
+            settings?: {
                 credentials?: unknown;
                 _id?: unknown;
                 /** @enum {string} */
@@ -739,7 +739,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "github";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -789,7 +789,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "gong";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -841,7 +841,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "google-calendar";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -891,7 +891,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "google-docs";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -941,7 +941,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "google-drive";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -991,7 +991,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "google-mail";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1041,7 +1041,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "google-sheet";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1091,7 +1091,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "greenhouse";
-            settings: {
+            settings?: {
                 apiKey: string;
             };
         };
@@ -1111,7 +1111,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "heron";
-            settings: Record<string, never>;
+            settings?: Record<string, never>;
         };
         /** heron */
         "connector.heron.discriminated_connector_config": {
@@ -1131,7 +1131,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "hubspot";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1181,7 +1181,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "instagram";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1231,7 +1231,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "intercom";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1281,7 +1281,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "jira";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1331,7 +1331,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "lever";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1381,7 +1381,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "linear";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1431,7 +1431,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "linkedin";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1481,7 +1481,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "lunchmoney";
-            settings: Record<string, never>;
+            settings?: Record<string, never>;
         };
         /** lunchmoney */
         "connector.lunchmoney.discriminated_connector_config": {
@@ -1501,7 +1501,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "mercury";
-            settings: Record<string, never>;
+            settings?: Record<string, never>;
         };
         /** mercury */
         "connector.mercury.discriminated_connector_config": {
@@ -1527,7 +1527,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "merge";
-            settings: {
+            settings?: {
                 accountToken: string;
                 accountDetails?: unknown;
             };
@@ -1550,7 +1550,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "moota";
-            settings: Record<string, never>;
+            settings?: Record<string, never>;
         };
         /** moota */
         "connector.moota.discriminated_connector_config": {
@@ -1570,7 +1570,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "notion";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1620,7 +1620,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "onebrick";
-            settings: {
+            settings?: {
                 accessToken: string;
             };
         };
@@ -1648,7 +1648,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "outreach";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1698,7 +1698,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "pipedrive";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1750,7 +1750,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "plaid";
-            settings: {
+            settings?: {
                 itemId?: string | null;
                 accessToken: string;
                 institution?: unknown;
@@ -1803,7 +1803,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "postgres";
-            settings: {
+            settings?: {
                 databaseURL?: string;
             };
         };
@@ -1823,7 +1823,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "quickbooks";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1880,7 +1880,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "ramp";
-            settings: {
+            settings?: {
                 accessToken?: string | null;
                 startAfterTransactionId?: string | null;
             };
@@ -1906,7 +1906,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "reddit";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -1956,7 +1956,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "salesloft";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -2028,7 +2028,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "sharepoint";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -2078,7 +2078,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "slack";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -2128,7 +2128,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "splitwise";
-            settings: {
+            settings?: {
                 currentUser?: {
                     country_code: string;
                     custom_picture: boolean;
@@ -2182,7 +2182,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "stripe";
-            settings: {
+            settings?: {
                 secretKey: string;
             };
         };
@@ -2210,7 +2210,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "teller";
-            settings: {
+            settings?: {
                 token: string;
             };
         };
@@ -2233,7 +2233,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "toggl";
-            settings: {
+            settings?: {
                 apiToken: string;
                 email?: string | null;
                 password?: string | null;
@@ -2255,7 +2255,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "twenty";
-            settings: {
+            settings?: {
                 access_token: string;
             };
         };
@@ -2275,7 +2275,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "twitter";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -2325,7 +2325,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "venmo";
-            settings: {
+            settings?: {
                 me?: unknown;
                 credentials?: unknown;
             };
@@ -2353,7 +2353,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "wise";
-            settings: {
+            settings?: {
                 /** @enum {string} */
                 envName: "sandbox" | "live";
                 apiToken?: string | null;
@@ -2375,7 +2375,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "xero";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -2425,7 +2425,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "yodlee";
-            settings: {
+            settings?: {
                 accessToken?: {
                     accessToken: string;
                     issuedAt: string;
@@ -2475,7 +2475,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "zoho-desk";
-            settings: {
+            settings?: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
@@ -3131,7 +3131,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
-                include_secrets?: "none" | "basic" | "all";
+                include_secrets?: boolean;
                 /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
                 refresh_policy?: "none" | "force" | "auto";
                 expand?: "connector"[];
@@ -3306,7 +3306,7 @@ export interface operations {
                 /** @description The id of the connector config, starts with `ccfg_` */
                 connector_config_id?: string;
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
-                include_secrets?: "none" | "basic" | "all";
+                include_secrets?: boolean;
                 expand?: "connector"[];
             };
             header?: never;

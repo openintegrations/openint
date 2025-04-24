@@ -1023,14 +1023,8 @@
             "name": "include_secrets",
             "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
             "schema": {
-              "type": "string",
-              "enum": [
-                "none",
-                "basic",
-                "all"
-              ],
-              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
-              "default": "none"
+              "type": "boolean",
+              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets"
             }
           },
           {
@@ -1620,14 +1614,8 @@
             "name": "include_secrets",
             "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
             "schema": {
-              "type": "string",
-              "enum": [
-                "none",
-                "basic",
-                "all"
-              ],
-              "description": "Include secret credentials in the response",
-              "default": "none"
+              "type": "boolean",
+              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets"
             }
           },
           {
@@ -3938,8 +3926,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "acme-oauth2"
       },
@@ -4073,8 +4060,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "aircall"
       },
@@ -4159,8 +4145,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "airtable"
       },
@@ -4202,8 +4187,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "apollo"
       },
@@ -4245,8 +4229,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "brex"
       },
@@ -4318,8 +4301,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "coda"
       },
@@ -4414,8 +4396,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "confluence"
       },
@@ -4549,8 +4530,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "discord"
       },
@@ -4684,8 +4664,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "facebook"
       },
@@ -4766,8 +4745,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "finch"
       },
@@ -4984,8 +4962,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "firebase"
       },
@@ -5033,8 +5010,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "foreceipt"
       },
@@ -5129,8 +5105,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "github"
       },
@@ -5270,8 +5245,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "gong"
       },
@@ -5405,8 +5379,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "google-calendar"
       },
@@ -5540,8 +5513,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "google-docs"
       },
@@ -5675,8 +5647,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "google-drive"
       },
@@ -5810,8 +5781,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "google-mail"
       },
@@ -5945,8 +5915,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "google-sheet"
       },
@@ -6027,8 +5996,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "greenhouse"
       },
@@ -6063,8 +6031,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "heron"
       },
@@ -6166,8 +6133,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "hubspot"
       },
@@ -6301,8 +6267,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "instagram"
       },
@@ -6436,8 +6401,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "intercom"
       },
@@ -6571,8 +6535,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "jira"
       },
@@ -6706,8 +6669,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "lever"
       },
@@ -6841,8 +6803,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "linear"
       },
@@ -6976,8 +6937,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "linkedin"
       },
@@ -7051,8 +7011,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "lunchmoney"
       },
@@ -7094,8 +7053,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "mercury"
       },
@@ -7168,8 +7126,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "merge"
       },
@@ -7211,8 +7168,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "moota"
       },
@@ -7314,8 +7270,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "notion"
       },
@@ -7396,8 +7351,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "onebrick"
       },
@@ -7527,8 +7481,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "outreach"
       },
@@ -7668,8 +7621,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "pipedrive"
       },
@@ -7762,8 +7714,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "plaid"
       },
@@ -7919,8 +7870,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "postgres"
       },
@@ -8021,8 +7971,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "quickbooks"
       },
@@ -8120,8 +8069,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "ramp"
       },
@@ -8235,8 +8183,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "reddit"
       },
@@ -8370,8 +8317,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "salesloft"
       },
@@ -8554,8 +8500,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "sharepoint"
       },
@@ -8689,8 +8634,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "slack"
       },
@@ -8919,8 +8863,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "splitwise"
       },
@@ -8962,8 +8905,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "stripe"
       },
@@ -9035,8 +8977,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "teller"
       },
@@ -9103,8 +9044,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "toggl"
       },
@@ -9146,8 +9086,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "twenty"
       },
@@ -9242,8 +9181,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "twitter"
       },
@@ -9320,8 +9258,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "venmo"
       },
@@ -9404,8 +9341,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "wise"
       },
@@ -9500,8 +9436,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "xero"
       },
@@ -9674,8 +9609,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "yodlee"
       },
@@ -9824,8 +9758,7 @@
           }
         },
         "required": [
-          "connector_name",
-          "settings"
+          "connector_name"
         ],
         "title": "zoho-desk"
       },
