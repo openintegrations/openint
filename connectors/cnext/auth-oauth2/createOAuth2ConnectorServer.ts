@@ -3,7 +3,7 @@ import type {Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
 
 import {extractId, makeId} from '@openint/cdk'
-import {env, getBaseURLs} from '@openint/env'
+import {env, resolveRoute} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {zOauthState} from './schemas'
@@ -82,7 +82,9 @@ export function createOAuth2ConnectorServer<
           : [],
         state: JSON.stringify({
           connection_id: connectionId,
-          redirect_uri: getBaseURLs(null).connect + '/callback',
+          redirect_uri: new URL(
+            ...resolveRoute('/connect/callback/', null),
+          ).toString(),
         }),
         code_challenge: codeChallenge,
         ...oauthConfig.params_config.authorize,
