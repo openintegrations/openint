@@ -25,7 +25,7 @@ const mockConnectors = {
   'google-drive': {
     checkConnection: mockRefreshConnection,
   } as unknown as ConnectorServer,
-  greenhouse: {
+  merge: {
     // No refreshConnection method
   } as unknown as ConnectorServer,
 }
@@ -44,7 +44,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test('refreshes only connections with connectors that implement refreshConnection', async () => {
       // Create test connector configs
       const googledriveConfigId = makeId('ccfg', 'google-drive', makeUlid())
-      const greenhouseConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+      const mergeConfigId = makeId('ccfg', 'merge', makeUlid())
 
       await db.insert(schema.connector_config).values([
         {
@@ -53,7 +53,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           config: {},
         },
         {
-          id: greenhouseConfigId,
+          id: mergeConfigId,
           org_id: 'org_test',
           config: {},
         },
@@ -67,6 +67,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           connector_config_id: googledriveConfigId,
           settings: {
             oauth: {
+              client_id: 'test_client_id_gd',
               credentials: {
                 refresh_token: 'test_refresh_token_gd',
                 expires_at: new Date(Date.now() - 1000 * 60).toISOString(), // Expired 1 minute ago
@@ -76,12 +77,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
-        // Greenhouse connection - should NOT be refreshed (no refresh method)
+        // merge connection - should NOT be refreshed (no refresh method)
         {
-          id: makeId('conn', 'greenhouse', makeUlid()),
-          connector_config_id: greenhouseConfigId,
+          id: makeId('conn', 'merge', makeUlid()),
+          connector_config_id: mergeConfigId,
           settings: {
             oauth: {
+              client_id: 'test_client_id_gh',
               credentials: {
                 refresh_token: 'test_refresh_token_gh',
                 expires_at: new Date(Date.now() - 1000 * 60).toISOString(), // Expired 1 minute ago
@@ -97,6 +99,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           connector_config_id: googledriveConfigId,
           settings: {
             oauth: {
+              client_id: 'test_client_id_gd',
               credentials: {
                 refresh_token: 'test_refresh_token_gd2',
                 expires_at: new Date(Date.now() + 1000 * 60 * 15).toISOString(), // Expires in 15 minutes
@@ -116,6 +119,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         connector_config_id: googledriveConfigId,
         settings: {
           oauth: {
+            client_id: 'test_client_id_gd',
             credentials: {
               refresh_token: 'test_refresh_token_nonexpiring',
               expires_at: new Date(Date.now() + 1000 * 60 * 60).toISOString(), // Expires in 1 hour
@@ -132,7 +136,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         connectors: mockConnectors,
       })
 
-      // We should have found 3 total connections (2 googledrive + 1 greenhouse)
+      // We should have found 3 total connections (2 googledrive + 1 merge)
       // But only refreshed 2 (the googledrive ones)
       expect(result).toEqual({
         totalConnections: 3,
@@ -152,18 +156,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
       expect(updatedGoogleDriveConnections).toHaveLength(2)
 
-      // Verify greenhouse connection was NOT updated (still has old expiry)
-      const greenhouseConnections = await db
+      // Verify merge connection was NOT updated (still has old expiry)
+      const mergeConnections = await db
         .select()
         .from(schema.connection)
         .where(sql`
-          connector_name = 'greenhouse'
+          connector_name = 'merge'
           AND (connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at')::timestamp < ${new Date(
             Date.now() + 1000 * 60 * 30,
           )}
         `)
 
-      expect(greenhouseConnections).toHaveLength(1)
+      expect(mergeConnections).toHaveLength(1)
 
       // Verify that the refreshConnection method was called exactly twice
       expect(mockRefreshConnection).toHaveBeenCalledTimes(2)

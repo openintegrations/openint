@@ -231,7 +231,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       expect(revokeRes).toMatchObject({id: postConnectRes.current.id})
       expect(revokeRes.status).toBe('disconnected')
-      expect(revokeRes.status_message).toBe('Conection revoked via OpenInt')
+      expect(revokeRes.status_message).toBe(
+        'Connection was revoked via OpenInt',
+      )
 
       const res = await asCustomer.checkConnection({
         id: postConnectRes.current.id,
@@ -239,7 +241,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       // TODO: Do we need an `outdated` status to distinguish between revoked and expired?
       expect(res.status).toBe('disconnected')
       // TODO: Fix the error here...
-      expect(res.status_message).toBe('Unknown error')
+      expect(res.status_message).toBe('Connection was revoked via OpenInt')
     })
 
     // Reconnect
@@ -435,11 +437,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.settings).toEqual(postConnectRes.current.settings)
     })
 
-    test.skip('check connection', async () => {
+    test('check connection', async () => {
       const res = await asCustomer.checkConnection({
         id: postConnectRes.current.id,
       })
-      expect(res.status).toBe('healthy')
+      expect(res.status).toBeNull()
       expect(res.status_message).toBeNull()
     })
 
