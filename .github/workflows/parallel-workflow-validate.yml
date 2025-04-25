@@ -49,7 +49,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run generate
-        run: pnpm generate
+        ## development so that it generates the OAS based on the local elysia app and not in a circular dependency with stainless
+        ## check out the generateDocsOas.bin.cjs file for more details
+        run: NODE_ENV=development pnpm generate
       # - name: Setup upterm session
       #   if: always()
       #   uses: lhotari/action-upterm@v1
