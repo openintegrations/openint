@@ -23,6 +23,11 @@ export const zConnectOptions = z.object({
     title: 'Debug',
     description: 'Whether to enable debug mode',
   }),
+  is_embedded: zCoerceBoolean().optional().openapi({
+    title: 'Is Embedded',
+    description:
+      'Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization',
+  }),
 })
 
 export const connectRouterModels = {

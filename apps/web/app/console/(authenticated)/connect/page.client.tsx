@@ -2,7 +2,8 @@
 
 import type {Z} from '@openint/util/zod-utils'
 
-import {useTRPC} from '@/lib-client/TRPCApp'
+import {useQuery} from '@tanstack/react-query'
+import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
 import {CustomerId} from '@openint/cdk'
 import {ConnectEmbed} from '@openint/connect'
@@ -11,8 +12,7 @@ import {Spinner} from '@openint/ui-v1'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {createURL} from '@openint/util/url-utils'
-import {useQuery} from '@tanstack/react-query'
-import React from 'react'
+import {useTRPC} from '@/lib-client/TRPCApp'
 
 // Define the type for the form data based on the schema
 type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
@@ -78,7 +78,10 @@ export function ConnectEmbedPreview(props: {
         </div>
       ) : tokenRes.status === 'error' ? (
         // TODO: Show a better error message
-        <div>Error {tokenRes.error.message}</div>
+        <div>
+          There was an error loading Connect. Please try again.
+          {tokenRes.error.message}
+        </div>
       ) : (
         <ConnectEmbed
           className="h-full w-full"

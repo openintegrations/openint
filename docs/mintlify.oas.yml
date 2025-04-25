@@ -644,15 +644,8 @@ paths:
           required: true
         - in: query
           name: include_secrets
-          description: 'Controls secret inclusion: none (default), basic (auth only), or all secrets'
           schema:
-            type: string
-            enum:
-              - none
-              - basic
-              - all
-            description: 'Controls secret inclusion: none (default), basic (auth only), or all secrets'
-            default: none
+            type: boolean
         - in: query
           name: refresh_policy
           description: 'Controls credential refresh: none (never), force (always), or auto (when expired, default)'
@@ -1054,15 +1047,8 @@ paths:
             description: The id of the connector config, starts with `ccfg_`
         - in: query
           name: include_secrets
-          description: 'Controls secret inclusion: none (default), basic (auth only), or all secrets'
           schema:
-            type: string
-            enum:
-              - none
-              - basic
-              - all
-            description: Include secret credentials in the response
-            default: none
+            type: boolean
         - in: query
           name: expand
           schema:
@@ -1542,7 +1528,7 @@ paths:
               const response = await client.createConnection({
                 connector_config_id: 'ccfg_',
                 customer_id: 'customer_id',
-                data: { connector_name: 'acme-oauth2', settings: { oauth: {} } },
+                data: { connector_name: 'acme-oauth2' },
               });
 
               console.log(response);
@@ -1561,10 +1547,7 @@ paths:
                 connector_config_id="ccfg_",
                 customer_id="customer_id",
                 data={
-                    "connector_name": "acme-oauth2",
-                    "settings": {
-                        "oauth": {}
-                    },
+                    "connector_name": "acme-oauth2"
                 },
             )
             print(response)
@@ -2483,7 +2466,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: acme-oauth2
     connector.acme-oauth2.discriminated_connector_config:
       type: object
@@ -2575,7 +2557,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: aircall
     connector.aircall.discriminated_connector_config:
       type: object
@@ -2634,7 +2615,6 @@ components:
             - airtableBase
       required:
         - connector_name
-        - settings
       title: airtable
     connector.airtable.discriminated_connector_config:
       type: object
@@ -2664,7 +2644,6 @@ components:
             - api_key
       required:
         - connector_name
-        - settings
       title: apollo
     connector.apollo.discriminated_connector_config:
       type: object
@@ -2694,7 +2673,6 @@ components:
             - accessToken
       required:
         - connector_name
-        - settings
       title: brex
     connector.brex.discriminated_connector_config:
       type: object
@@ -2742,7 +2720,6 @@ components:
             - apiKey
       required:
         - connector_name
-        - settings
       title: coda
     connector.coda.discriminated_connector_config:
       type: object
@@ -2808,7 +2785,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: confluence
     connector.confluence.discriminated_connector_config:
       type: object
@@ -2900,7 +2876,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: discord
     connector.discord.discriminated_connector_config:
       type: object
@@ -2992,7 +2967,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: facebook
     connector.facebook.discriminated_connector_config:
       type: object
@@ -3048,7 +3022,6 @@ components:
             - access_token
       required:
         - connector_name
-        - settings
       title: finch
     connector.finch.discriminated_connector_config:
       type: object
@@ -3196,7 +3169,6 @@ components:
                 - authData
       required:
         - connector_name
-        - settings
       title: firebase
     connector.firebase.discriminated_connector_config:
       type: object
@@ -3231,7 +3203,6 @@ components:
             - envName
       required:
         - connector_name
-        - settings
       title: foreceipt
     connector.foreceipt.discriminated_connector_config:
       type: object
@@ -3297,7 +3268,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: github
     connector.github.discriminated_connector_config:
       type: object
@@ -3394,7 +3364,6 @@ components:
             - api_base_url_for_customer
       required:
         - connector_name
-        - settings
       title: gong
     connector.gong.discriminated_connector_config:
       type: object
@@ -3486,7 +3455,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: google-calendar
     connector.google-calendar.discriminated_connector_config:
       type: object
@@ -3578,7 +3546,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: google-docs
     connector.google-docs.discriminated_connector_config:
       type: object
@@ -3670,7 +3637,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: google-drive
     connector.google-drive.discriminated_connector_config:
       type: object
@@ -3762,7 +3728,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: google-mail
     connector.google-mail.discriminated_connector_config:
       type: object
@@ -3854,7 +3819,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: google-sheet
     connector.google-sheet.discriminated_connector_config:
       type: object
@@ -3910,7 +3874,6 @@ components:
             - apiKey
       required:
         - connector_name
-        - settings
       title: greenhouse
     connector.greenhouse.discriminated_connector_config:
       type: object
@@ -3936,7 +3899,6 @@ components:
           additionalProperties: false
       required:
         - connector_name
-        - settings
       title: heron
     connector.heron.discriminated_connector_config:
       type: object
@@ -4006,7 +3968,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: hubspot
     connector.hubspot.discriminated_connector_config:
       type: object
@@ -4098,7 +4059,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: instagram
     connector.instagram.discriminated_connector_config:
       type: object
@@ -4190,7 +4150,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: intercom
     connector.intercom.discriminated_connector_config:
       type: object
@@ -4282,7 +4241,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: jira
     connector.jira.discriminated_connector_config:
       type: object
@@ -4374,7 +4332,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: lever
     connector.lever.discriminated_connector_config:
       type: object
@@ -4466,7 +4423,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: linear
     connector.linear.discriminated_connector_config:
       type: object
@@ -4558,7 +4514,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: linkedin
     connector.linkedin.discriminated_connector_config:
       type: object
@@ -4610,7 +4565,6 @@ components:
           additionalProperties: false
       required:
         - connector_name
-        - settings
       title: lunchmoney
     connector.lunchmoney.discriminated_connector_config:
       type: object
@@ -4640,7 +4594,6 @@ components:
           additionalProperties: false
       required:
         - connector_name
-        - settings
       title: mercury
     connector.mercury.discriminated_connector_config:
       type: object
@@ -4689,7 +4642,6 @@ components:
             - accountToken
       required:
         - connector_name
-        - settings
       title: merge
     connector.merge.discriminated_connector_config:
       type: object
@@ -4719,7 +4671,6 @@ components:
           additionalProperties: false
       required:
         - connector_name
-        - settings
       title: moota
     connector.moota.discriminated_connector_config:
       type: object
@@ -4789,7 +4740,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: notion
     connector.notion.discriminated_connector_config:
       type: object
@@ -4845,7 +4795,6 @@ components:
             - accessToken
       required:
         - connector_name
-        - settings
       title: onebrick
     connector.onebrick.discriminated_connector_config:
       type: object
@@ -4935,7 +4884,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: outreach
     connector.outreach.discriminated_connector_config:
       type: object
@@ -5032,7 +4980,6 @@ components:
             - api_domain
       required:
         - connector_name
-        - settings
       title: pipedrive
     connector.pipedrive.discriminated_connector_config:
       type: object
@@ -5097,7 +5044,6 @@ components:
             - accessToken
       required:
         - connector_name
-        - settings
       title: plaid
     connector.plaid.discriminated_connector_config:
       type: object
@@ -5220,7 +5166,6 @@ components:
               type: string
       required:
         - connector_name
-        - settings
       title: postgres
     connector.postgres.discriminated_connector_config:
       type: object
@@ -5291,7 +5236,6 @@ components:
             - realmId
       required:
         - connector_name
-        - settings
       title: quickbooks
     connector.quickbooks.discriminated_connector_config:
       type: object
@@ -5359,7 +5303,6 @@ components:
                 - 'null'
       required:
         - connector_name
-        - settings
       title: ramp
     connector.ramp.discriminated_connector_config:
       type: object
@@ -5437,7 +5380,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: reddit
     connector.reddit.discriminated_connector_config:
       type: object
@@ -5529,7 +5471,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: salesloft
     connector.salesloft.discriminated_connector_config:
       type: object
@@ -5655,7 +5596,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: sharepoint
     connector.sharepoint.discriminated_connector_config:
       type: object
@@ -5747,7 +5687,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: slack
     connector.slack.discriminated_connector_config:
       type: object
@@ -5908,7 +5847,6 @@ components:
             - accessToken
       required:
         - connector_name
-        - settings
       title: splitwise
     connector.splitwise.discriminated_connector_config:
       type: object
@@ -5938,7 +5876,6 @@ components:
             - secretKey
       required:
         - connector_name
-        - settings
       title: stripe
     connector.stripe.discriminated_connector_config:
       type: object
@@ -5986,7 +5923,6 @@ components:
             - token
       required:
         - connector_name
-        - settings
       title: teller
     connector.teller.discriminated_connector_config:
       type: object
@@ -6032,7 +5968,6 @@ components:
             - apiToken
       required:
         - connector_name
-        - settings
       title: toggl
     connector.toggl.discriminated_connector_config:
       type: object
@@ -6062,7 +5997,6 @@ components:
             - access_token
       required:
         - connector_name
-        - settings
       title: twenty
     connector.twenty.discriminated_connector_config:
       type: object
@@ -6128,7 +6062,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: twitter
     connector.twitter.discriminated_connector_config:
       type: object
@@ -6182,7 +6115,6 @@ components:
             credentials: {}
       required:
         - connector_name
-        - settings
       title: venmo
     connector.venmo.discriminated_connector_config:
       type: object
@@ -6239,7 +6171,6 @@ components:
             - envName
       required:
         - connector_name
-        - settings
       title: wise
     connector.wise.discriminated_connector_config:
       type: object
@@ -6305,7 +6236,6 @@ components:
             - oauth
       required:
         - connector_name
-        - settings
       title: xero
     connector.xero.discriminated_connector_config:
       type: object
@@ -6424,7 +6354,6 @@ components:
             - providerAccountId
       required:
         - connector_name
-        - settings
       title: yodlee
     connector.yodlee.discriminated_connector_config:
       type: object
@@ -6528,7 +6457,6 @@ components:
             - extension
       required:
         - connector_name
-        - settings
       title: zoho-desk
     connector.zoho-desk.discriminated_connector_config:
       type: object

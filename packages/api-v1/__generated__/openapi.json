@@ -2455,6 +2455,11 @@
                         "type": "boolean",
                         "title": "Debug",
                         "description": "Whether to enable debug mode"
+                      },
+                      "is_embedded": {
+                        "type": "boolean",
+                        "title": "Is Embedded",
+                        "description": "Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization"
                       }
                     }
                   }
@@ -2592,6 +2597,11 @@
                         "type": "boolean",
                         "title": "Debug",
                         "description": "Whether to enable debug mode"
+                      },
+                      "is_embedded": {
+                        "type": "boolean",
+                        "title": "Is Embedded",
+                        "description": "Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization"
                       }
                     }
                   }
