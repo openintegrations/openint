@@ -3515,6 +3515,11 @@ export interface operations {
                          * @description Whether to enable debug mode
                          */
                         debug?: boolean;
+                        /**
+                         * Is Embedded
+                         * @description Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
+                         */
+                        is_embedded?: boolean;
                     };
                 };
             };
@@ -3607,6 +3612,11 @@ export interface operations {
                          * @description Whether to enable debug mode
                          */
                         debug?: boolean;
+                        /**
+                         * Is Embedded
+                         * @description Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
+                         */
+                        is_embedded?: boolean;
                     };
                 };
             };
