@@ -28,12 +28,12 @@ export function createApp(opts: CreateAppOptions) {
       })
     })
     .use(cors())
-    .get('/elysia/debug', ({query}) => {
-      if (query['crash']) {
-        throw new Error(query['crash'])
-      }
-      return {ok: true}
-    })
+    // .get('/elysia/debug', ({query}) => {
+    //   if (query['crash']) {
+    //     throw new Error(query['crash'])
+    //   }
+    //   return {ok: true}
+    // })
     .get('/health', () => ({healthy: true}), {detail: {hide: true}})
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
       detail: {hide: true},
