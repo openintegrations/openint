@@ -74,7 +74,7 @@ export function createApp(opts: CreateAppOptions) {
               secret: 'secret_1',
               redirectUris: [
                 env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
-                new URL(...resolveRoute('/connect/callback/', null)).toString(),
+                new URL(...resolveRoute('/connect/callback', null)).toString(),
               ],
               allowedGrants: [
                 'authorization_code',

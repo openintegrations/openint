@@ -58,6 +58,7 @@ export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
  * Resolve relative route strings
  * Can pass resulting route and baseURL to new URL(route, baseURL) to get the absolute URL
  * Would be nice if this is also typed though
+ * TODO: Make me typesafe
  */
 export function resolveRoute(
   route: string,

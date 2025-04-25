@@ -83,7 +83,7 @@ export function createOAuth2ConnectorServer<
         state: JSON.stringify({
           connection_id: connectionId,
           redirect_uri: new URL(
-            ...resolveRoute('/connect/callback/', null),
+            ...resolveRoute('/connect/callback', null),
           ).toString(),
         }),
         code_challenge: codeChallenge,
