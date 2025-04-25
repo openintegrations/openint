@@ -11,7 +11,7 @@ import {
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
 import {AddConnectorConfig, ConnectorConfigForm} from '@openint/ui-v1'
-import {useConfirm} from '@openint/ui-v1/components/Confirm'
+import {useConfirm} from '@openint/ui-v1/components/ConfirmAlert'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
 interface ConnectorConfigSheetProps {
@@ -48,7 +48,7 @@ export function ConnectorConfigSheet({
   const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
   const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
 
-  const confirm = useConfirm()
+  const confirmAlert = useConfirm()
 
   const discardChanges = () => {
     setSheetOpen(false)
@@ -128,7 +128,7 @@ export function ConnectorConfigSheet({
       setSelectedConnector(null)
     } else if (selectedCcfg) {
       if (changedFields.length > 0) {
-        confirm({
+        confirmAlert({
           title: 'Discard Changes',
           description:
             'You have unsaved changes. Are you sure you want to discard these changes? All information will be lost.',

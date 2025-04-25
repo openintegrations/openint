@@ -11,7 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@openint/shadcn/ui'
-import {useConfirm} from '../components/Confirm'
+import {useConfirm} from '../components/ConfirmAlert'
 import {getChangedFields, JSONSchemaForm} from '../components/schema-form'
 
 export interface FormData {
@@ -95,7 +95,7 @@ export function ConnectorConfigForm({
 }: ConnectorConfigFormProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [formState, setFormState] = useState<FormData | null>(null)
-  const confirm = useConfirm()
+  const confirmAlert = useConfirm()
 
   const compareFormState = useCallback(() => {
     if (formState) {
@@ -204,7 +204,7 @@ export function ConnectorConfigForm({
     }
     const hasOauthChanges = changedFields.some((field) => field === 'oauth')
     if (connectorConfig && hasOauthChanges) {
-      confirm({
+      confirmAlert({
         title: 'OAuth Credentials Changed',
         description:
           'You have changed the OAuth credentials. This will require reconnecting any existing connections using these credentials. Are you sure you want to proceed?',
@@ -219,7 +219,7 @@ export function ConnectorConfigForm({
     setChangedFields([])
   }, [
     changedFields,
-    confirm,
+    confirmAlert,
     connector,
     connectorConfig,
     formState,

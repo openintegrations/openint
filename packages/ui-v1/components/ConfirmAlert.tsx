@@ -1,6 +1,6 @@
 'use client'
 
-import {createContext, useContext, useState} from 'react'
+import {createContext, useCallback, useContext, useState} from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +22,7 @@ interface ConfirmationOptions {
 }
 
 interface ConfirmationContextType {
-  confirm: (options: ConfirmationOptions) => void
+  confirmAlert: (options: ConfirmationOptions) => void
 }
 
 const ConfirmationContext = createContext<ConfirmationContextType | null>(null)
@@ -31,10 +31,13 @@ export function ConfirmationProvider({children}: {children: React.ReactNode}) {
   const [isOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState<ConfirmationOptions | null>(null)
 
-  const confirm = (options: ConfirmationOptions) => {
-    setOptions(options)
-    setIsOpen(true)
-  }
+  const confirmAlert = useCallback(
+    (options: ConfirmationOptions) => {
+      setOptions(options)
+      setIsOpen(true)
+    },
+    [setOptions, setIsOpen],
+  )
 
   const handleConfirm = () => {
     options?.onConfirm()
@@ -42,7 +45,7 @@ export function ConfirmationProvider({children}: {children: React.ReactNode}) {
   }
 
   return (
-    <ConfirmationContext.Provider value={{confirm}}>
+    <ConfirmationContext.Provider value={{confirmAlert}}>
       {children}
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
         <AlertDialogContent>
@@ -77,5 +80,5 @@ export function useConfirm() {
       'ConfirmationProvider not found. Please wrap your app with ConfirmationProvider',
     )
   }
-  return context.confirm
+  return context.confirmAlert
 }

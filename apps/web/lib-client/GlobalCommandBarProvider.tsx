@@ -17,7 +17,7 @@ import {
 } from '@openint/console-auth/client'
 import {toast, Toaster} from '@openint/shadcn/ui/sonner'
 import {CommandBar, CommandContext} from '@openint/ui-v1'
-import {ConfirmationProvider} from '@openint/ui-v1/components/Confirm'
+import {ConfirmationProvider} from '@openint/ui-v1/components/ConfirmAlert'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {z} from '@openint/util/zod-utils'
 import {SIDEBAR_NAV_ITEMS} from '@/app/console/(authenticated)/sidebar-nav-items'
