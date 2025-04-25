@@ -27,7 +27,7 @@ import {
   zOauthCallbackSearchParams,
   zOauthState,
 } from '@openint/cnext/auth-oauth2/schemas'
-import {getBaseURLs, isProduction} from '@openint/env'
+import {isProduction, resolveRoute} from '@openint/env'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {ConnectCallbackClient} from './page.client'
 
@@ -39,7 +39,12 @@ export default async function ConnectCallback(pageProps: PageProps) {
   const state = zOauthState.parse(JSON.parse(searchParams.state))
   if (
     state.redirect_uri &&
-    state.redirect_uri !== getBaseURLs(null).connect + '/callback'
+    // TODO: Normalize the redirect_uri to account for final `/` differences
+    // See https://github.com/openintegrations/openint/blob/48b207376157259c0a3d0bf66fde9ee1d91e6336/connectors/cnext/auth-oauth2/createOAuth2ConnectorServer.ts#L86
+
+    // TODO: Stop constructing URLs in not typesafe way...
+    state.redirect_uri !==
+      new URL(...resolveRoute('/connect/callback', null)).toString()
   ) {
     const url = new URL(state.redirect_uri)
     for (const [key, value] of Object.entries(searchParams)) {
