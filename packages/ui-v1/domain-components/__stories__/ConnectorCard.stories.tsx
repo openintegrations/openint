@@ -11,6 +11,17 @@ const meta = {
     layout: 'centered',
   },
   // tags: ['autodocs'],
+  argTypes: {
+    mode: {
+      control: 'select',
+      options: ['card', 'row'],
+      description: 'The layout mode of the connector card',
+    },
+    ctaText: {
+      control: 'text',
+      description: 'Text to display on the CTA button',
+    },
+  },
 } satisfies Meta<typeof ConnectorCard>
 
 export default meta
@@ -27,6 +38,45 @@ export const Default: Story = {
       stage: 'ga',
       platforms: ['web', 'mobile', 'desktop'],
     },
+  },
+}
+
+// Row mode ConnectorCard
+export const RowMode: Story = {
+  args: {
+    connector: {
+      name: 'google-drive',
+      display_name: 'Google Drive',
+      logo_url:
+        'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
+      stage: 'ga',
+      platforms: ['web', 'mobile', 'desktop'],
+    },
+    mode: 'row',
+    onCtaClick: () => alert('Connect button clicked'),
+  },
+  parameters: {
+    layout: 'padded',
+  },
+}
+
+// Row mode ConnectorCard with custom CTA
+export const RowModeCustomCTA: Story = {
+  args: {
+    connector: {
+      name: 'google-drive',
+      display_name: 'Google Drive',
+      logo_url:
+        'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
+      stage: 'ga',
+      platforms: ['web', 'mobile', 'desktop'],
+    },
+    mode: 'row',
+    ctaText: 'View Details',
+    onCtaClick: () => alert('View Details button clicked'),
+  },
+  parameters: {
+    layout: 'padded',
   },
 }
 
@@ -120,6 +170,35 @@ export const CardGrid: Story = {
       ))}
     </div>
   ),
+}
+
+// Row List with CTA
+export const RowListWithCTA: Story = {
+  args: {
+    connector: {
+      name: 'google-drive',
+      display_name: 'Google Drive',
+      logo_url:
+        'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
+      stage: 'ga',
+      platforms: ['web', 'mobile', 'desktop'],
+    },
+  },
+  render: () => (
+    <div className="flex w-full max-w-4xl flex-col gap-2">
+      {Object.values(FIXTURES.connectors).map((connector, index) => (
+        <ConnectorCard
+          key={index}
+          connector={connector}
+          mode="row"
+          onCtaClick={() => alert(`Connect to ${connector.name}`)}
+        />
+      ))}
+    </div>
+  ),
+  parameters: {
+    layout: 'padded',
+  },
 }
 
 // Responsive grid demonstration
