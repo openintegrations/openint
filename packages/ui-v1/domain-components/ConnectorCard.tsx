@@ -98,16 +98,7 @@ const ConnectorCard = ({
             {ctaText}
           </Button>
         </div>
-      ) : (
-        !isRowMode &&
-        false && (
-          <ConnectorBadges
-            stage={connector.stage}
-            platforms={connector.platforms}
-            className={isRowMode ? 'ml-auto' : undefined}
-          />
-        )
-      )}
+      ) : null}
     </div>
   )
 }
