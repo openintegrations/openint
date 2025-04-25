@@ -66,8 +66,6 @@ export function ConnectorConnectContainer({
         : {},
     }),
   )
-  console.log('preConnectRes', preConnectRes)
-
   const queryClient = useQueryClient()
 
   const postConnect = useMutation(

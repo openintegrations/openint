@@ -73,6 +73,11 @@ export const connectRouter = router({
 
       const url = new URL(...resolveRoute('/connect', null))
       url.searchParams.set('token', token)
+      Object.entries(input.connect_options ?? {}).forEach(([key, value]) => {
+        if (value && typeof value === 'string') {
+          url.searchParams.set(key, value)
+        }
+      })
 
       return {
         magic_link_url: url.toString(),
