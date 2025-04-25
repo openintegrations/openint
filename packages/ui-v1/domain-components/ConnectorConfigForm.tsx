@@ -204,7 +204,7 @@ export function ConnectorConfigForm({
     }
     const hasOauthChanges = changedFields.some((field) => field === 'oauth')
     if (connectorConfig && hasOauthChanges) {
-      confirmAlert({
+      await confirmAlert({
         title: 'OAuth Credentials Changed',
         description:
           'You have changed the OAuth credentials. This will require reconnecting any existing connections using these credentials. Are you sure you want to proceed?',

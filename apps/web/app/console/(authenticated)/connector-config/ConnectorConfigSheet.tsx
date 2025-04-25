@@ -145,18 +145,17 @@ export function ConnectorConfigSheet({
     deleteConfig.isPending ||
     (selectedCcfg.connection_count ?? 0) > 0
 
-  const onOpenChange = (open: boolean) => {
+  const onOpenChange = async (open: boolean) => {
     if (selectedConnector && !selectedCcfg) {
       setSelectedConnector(null)
     } else if (selectedCcfg) {
       if (changedFields.length > 0) {
-        confirmAlert({
+        await confirmAlert({
           title: 'Discard Changes',
           description:
             'You have unsaved changes. Are you sure you want to discard these changes? All information will be lost.',
           onConfirm: discardChanges,
         })
-        return
       }
       setSelectedConnector(null)
       setSelectedCcfg(null)
