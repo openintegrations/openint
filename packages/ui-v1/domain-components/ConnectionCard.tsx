@@ -1,7 +1,7 @@
 import type {ConnectionExpanded, ConnectorName} from '@openint/api-v1/models'
 
 import {Settings} from 'lucide-react'
-import {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
@@ -29,6 +29,7 @@ export function ConnectionCard({
   children,
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const displayName =
     connection.integration?.name ||
@@ -37,17 +38,31 @@ export function ConnectionCard({
 
   const {borderColor} = getConnectionStatusStyles(connection.status)
 
+  const handleMouseEnter = () => {
+    if (onPress) {
+      setIsHovered(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (onPress) {
+      setIsHovered(false)
+    }
+  }
+
   return (
     <Card
+      ref={cardRef}
       className={cn(
         'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
-        onPress &&
-          'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out',
+        onPress
+          ? 'hover:border-button hover:bg-button-light cursor-pointer transition-all duration-300 ease-in-out hover:scale-105'
+          : 'hover:border-primary/20 transition-all duration-300 ease-in-out hover:scale-[1.02]',
         connection.status !== 'healthy' && borderColor,
         className,
       )}
-      onMouseEnter={() => onPress && setIsHovered(true)}
-      onMouseLeave={() => onPress && setIsHovered(false)}>
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
       <CardContent
         className="flex h-full flex-col items-center justify-center p-4 py-2"
         onClick={onPress}>
