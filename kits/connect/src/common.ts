@@ -61,7 +61,7 @@ export function createConnectIframe(props: ConnectProps) {
   const spinnerContainer = document.createElement('div')
   spinnerContainer.className = 'spinner-container loading'
   spinnerContainer.innerHTML = `
-    <svg class="spinner" viewBox="0 0 50 50">
+    <svg class="spinner" viewBox="0 0 50 50" color="#5652BF">
       <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
     </svg>
   `
@@ -78,6 +78,7 @@ export function createConnectIframe(props: ConnectProps) {
   // note: connect-embed-warpper .spinner-container background
   // was ${connectOptions?.theme === 'dark' ? '#1C1C1C' : 'white'};
   const style = document.createElement('style')
+
   style.textContent = `
      .connect-embed-wrapper {
           display: flex;
@@ -109,7 +110,8 @@ export function createConnectIframe(props: ConnectProps) {
           height: 30px;
         }
         .connect-embed-wrapper .path {
-          stroke: #5652BF;
+        /* IMPORTANT: this needs to match the LoadingSpinner color in both light and dark themes */
+          stroke: #000000 !important; 
           stroke-linecap: round;
           animation: openint-connect-dash 1.5s ease-in-out infinite;
         }

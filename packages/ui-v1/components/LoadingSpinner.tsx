@@ -16,12 +16,13 @@ export function LoadingSpinner({size = 'md', className}: LoadingSpinnerProps) {
     <div className="min-h-100 flex h-full w-full items-center justify-center">
       <div
         className={cn(
-          'animate-spin rounded-full border-2 border-current border-t-transparent',
+          'border-1 animate-spin rounded-full border-[#000000] border-t-transparent',
           sizeClasses[size],
           className,
         )}
         role="status"
         aria-label="Loading">
+        {/* this text doesn't show its sr only */}
         <span className="sr-only">Loading...</span>
       </div>
     </div>
