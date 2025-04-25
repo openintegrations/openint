@@ -3,6 +3,7 @@
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {FormData} from '@openint/ui-v1'
 
+import {useQueryClient} from '@tanstack/react-query'
 import {useState} from 'react'
 import {
   Sheet,
@@ -27,7 +28,6 @@ interface ConnectorConfigSheetProps {
       'connector' | 'integrations' | 'connection_count'
     > | null,
   ) => void
-  refetch: () => Promise<void>
   connectors: Array<Core['connector']>
 }
 
@@ -38,15 +38,39 @@ export function ConnectorConfigSheet({
   setSelectedConnector,
   selectedCcfg,
   setSelectedCcfg,
-  refetch,
   connectors,
 }: ConnectorConfigSheetProps) {
   const [changedFields, setChangedFields] = useState<string[]>([])
 
   const trpc = useTRPC()
-  const createConfig = useMutation(trpc.createConnectorConfig.mutationOptions())
-  const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
-  const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
+  const queryClient = useQueryClient()
+  const createConfig = useMutation(
+    trpc.createConnectorConfig.mutationOptions({
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnectorConfigs.queryKey(),
+        })
+      },
+    }),
+  )
+  const updateConfig = useMutation(
+    trpc.updateConnectorConfig.mutationOptions({
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnectorConfigs.queryKey(),
+        })
+      },
+    }),
+  )
+  const deleteConfig = useMutation(
+    trpc.deleteConnectorConfig.mutationOptions({
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnectorConfigs.queryKey(),
+        })
+      },
+    }),
+  )
 
   const confirmAlert = useConfirm()
 
@@ -82,7 +106,6 @@ export function ConnectorConfigSheet({
       })
     }
 
-    await refetch()
     setSheetOpen(false)
     setSelectedConnector(null)
     setSelectedCcfg(null)
@@ -99,7 +122,6 @@ export function ConnectorConfigSheet({
     setSheetOpen(false)
     setSelectedConnector(null)
     setSelectedCcfg(null)
-    await refetch()
   }
 
   const handleSelectConnector = (connector: Core['connector']) => {

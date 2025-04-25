@@ -150,9 +150,6 @@ export function ConnectorConfigList() {
         selectedCcfg={selectedCcfg}
         setSelectedCcfg={setSelectedCcfg}
         connectors={connectorRes.data.items}
-        refetch={async () => {
-          await res.refetch()
-        }}
       />
     </div>
   )
