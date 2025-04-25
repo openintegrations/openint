@@ -1,8 +1,9 @@
 import type {ConnectorName, Core} from '@openint/api-v1/models'
 
+import {ArrowRightCircle} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Badge, Button} from '@openint/shadcn/ui'
+import {Badge} from '@openint/shadcn/ui'
 import {ConnectorLogo} from './ConnectorLogo'
 
 export interface ConnectorCardProps
@@ -47,58 +48,57 @@ const ConnectorCard = ({
       <div
         className={cn(
           'flex items-center gap-4',
-          isRowMode ? 'flex-row' : 'w-full flex-row',
+          isRowMode ? 'w-full flex-row justify-between' : 'w-full flex-row',
         )}>
-        <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
-          <ConnectorLogo
-            connectorName={name as ConnectorName}
-            className="object-contain"
-          />
+        <div className="flex items-center gap-4">
+          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
+            <ConnectorLogo
+              connectorName={name as ConnectorName}
+              className="object-contain"
+            />
+          </div>
+          <div className={cn(isRowMode ? 'flex flex-col' : 'flex-1')}>
+            <h3 className="line-clamp-2 text-base font-semibold transition-colors group-hover:text-gray-900">
+              {display_name || name}
+            </h3>
+            {displayBadges && (
+              <div className="mt-1 flex flex-wrap gap-2">
+                {connector.stage && (
+                  <Badge
+                    variant={connector.stage === 'ga' ? 'default' : 'secondary'}
+                    className={cn(
+                      connector.stage === 'ga' &&
+                        'bg-green-100 text-green-800 hover:bg-green-200',
+                      connector.stage === 'beta' &&
+                        'bg-blue-100 text-blue-800 hover:bg-blue-200',
+                      connector.stage === 'alpha' &&
+                        'bg-pink-100 text-pink-800 hover:bg-pink-200',
+                    )}>
+                    {connector.stage.toUpperCase()}
+                  </Badge>
+                )}
+                {connector.platforms?.map((platform) => (
+                  <Badge
+                    key={platform}
+                    variant="secondary"
+                    className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+                    {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-        <div className={cn(isRowMode ? 'flex flex-col' : 'flex-1')}>
-          <h3 className="line-clamp-2 text-base font-semibold transition-colors group-hover:text-gray-900">
-            {display_name || name}
-          </h3>
-          {displayBadges && (
-            <div className="mt-1 flex flex-wrap gap-2">
-              {connector.stage && (
-                <Badge
-                  variant={connector.stage === 'ga' ? 'default' : 'secondary'}
-                  className={cn(
-                    connector.stage === 'ga' &&
-                      'bg-green-100 text-green-800 hover:bg-green-200',
-                    connector.stage === 'beta' &&
-                      'bg-blue-100 text-blue-800 hover:bg-blue-200',
-                    connector.stage === 'alpha' &&
-                      'bg-pink-100 text-pink-800 hover:bg-pink-200',
-                  )}>
-                  {connector.stage.toUpperCase()}
-                </Badge>
-              )}
-              {connector.platforms?.map((platform) => (
-                <Badge
-                  key={platform}
-                  variant="secondary"
-                  className="bg-gray-100 text-gray-800 hover:bg-gray-200">
-                  {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                </Badge>
-              ))}
+        {isRowMode && (
+          <div className="flex-shrink-0">
+            <div className="border-primary/30 bg-primary/5 group-hover:border-primary group-hover:bg-primary/10 group-hover:ring-primary/20 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all group-hover:scale-105 group-hover:shadow-md group-hover:ring-2">
+              <ArrowRightCircle className="text-primary group-hover:text-primary/90 h-4 w-4 transition-all" />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {isRowMode && onCtaClick ? (
-        <div className="ml-auto">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation()
-              onCtaClick()
-            }}>
-            {ctaText}
-          </Button>
-        </div>
-      ) : null}
+      {/* CTA button removed */}
     </div>
   )
 }
