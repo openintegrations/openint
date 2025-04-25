@@ -41,7 +41,7 @@ import {TabsClient} from './page.client'
 export default async function ConnectPage(
   pageProps: PageProps<
     never,
-    {view?: string; connector_name?: string; is_magic_link?: string}
+    {view?: string; connector_name?: string; is_embedded?: string}
   >,
 ) {
   const {
@@ -107,7 +107,6 @@ export default async function ConnectPage(
     }),
   )
 
-  // console.log('is_magic_link', searchParams.is_magic_link)
   // TODO: Splitting the layout out of here.
   // Given that layout.tsx cannot access params, perhaps we should put token as a path segment?
   return (
@@ -142,7 +141,7 @@ export default async function ConnectPage(
             <ConnectOpWrapper>
               <div className="flex min-h-screen w-full">
                 {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
-                {searchParams.is_magic_link && (
+                {!searchParams.is_embedded && (
                   <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
                     <div className="flex flex-col items-start p-8">
                       <Suspense

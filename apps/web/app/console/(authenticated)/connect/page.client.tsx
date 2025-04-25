@@ -87,9 +87,6 @@ export function ConnectEmbedPreview(props: {
           className="h-full w-full"
           token={tokenRes.data.token}
           baseURL={getBaseURLs(null).connect}
-          connectOptions={{
-            isMagicLink: true,
-          }}
         />
       )}
       {/* <iframe src={mutation.data?.token} className="h-full w-full" /> */}
