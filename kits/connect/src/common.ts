@@ -17,6 +17,7 @@ export interface ConnectProps {
     connectorNames?: string[]
     view?: 'add' | 'manage'
     debug?: boolean
+    isMagicLink?: boolean
     // TODO: add theme enum and colors object
   }
 }
@@ -28,6 +29,10 @@ const createMagicLinkUrl = ({
 }: ConnectProps) => {
   const url = new URL(baseURL)
   url.searchParams.set('token', token)
+  url.searchParams.set(
+    'is_magic_link',
+    connectOptions.isMagicLink ? 'true' : 'false',
+  )
   Object.entries(connectOptions).forEach(([key, value]) => {
     if (value && typeof value === 'string') {
       url.searchParams.set(

@@ -23,6 +23,11 @@ export const zConnectOptions = z.object({
     title: 'Debug',
     description: 'Whether to enable debug mode',
   }),
+  is_magic_link: zCoerceBoolean().optional().openapi({
+    title: 'Is Magic Link',
+    description:
+      'Whether to enable magic link mode. Magic links show the side bar with extra context for the end user and make it easier to redirect back to the organization.',
+  }),
 })
 
 export const connectRouterModels = {
