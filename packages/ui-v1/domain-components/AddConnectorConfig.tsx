@@ -81,6 +81,7 @@ export const AddConnectorConfig = ({
               onClick={() => {
                 onSelectConnector && onSelectConnector(connector)
               }}
+              displayBadges
             />
           ))}
           {filteredConnectors.length === 0 && (

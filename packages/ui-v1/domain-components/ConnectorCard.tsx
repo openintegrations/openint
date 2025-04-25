@@ -11,6 +11,7 @@ export interface ConnectorCardProps
   mode?: 'card' | 'row'
   ctaText?: string
   onCtaClick?: () => void
+  displayBadges?: boolean
 }
 
 /**
@@ -26,6 +27,7 @@ const ConnectorCard = ({
   mode = 'card',
   ctaText = 'Connect',
   onCtaClick,
+  displayBadges = false,
   ...props
 }: ConnectorCardProps) => {
   const {name, display_name} = connector
@@ -35,7 +37,7 @@ const ConnectorCard = ({
     // TODO: @snrondina: Refactor to use the proper card component from our library
     <div
       className={cn(
-        'group flex cursor-pointer rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50',
+        'group flex cursor-pointer rounded-lg border border-gray-200 p-2 transition-all hover:border-gray-400 hover:bg-gray-50',
         isRowMode
           ? 'w-full flex-row items-center gap-4'
           : 'w-full flex-col items-start gap-4',
@@ -54,10 +56,10 @@ const ConnectorCard = ({
           />
         </div>
         <div className={cn(isRowMode ? 'flex flex-col' : 'flex-1')}>
-          <h3 className="line-clamp-2 text-xl font-semibold transition-colors group-hover:text-gray-900">
+          <h3 className="line-clamp-2 text-base font-semibold transition-colors group-hover:text-gray-900">
             {display_name || name}
           </h3>
-          {isRowMode && (
+          {displayBadges && (
             <div className="mt-1 flex flex-wrap gap-2">
               {connector.stage && (
                 <Badge
@@ -97,7 +99,8 @@ const ConnectorCard = ({
           </Button>
         </div>
       ) : (
-        !isRowMode && (
+        !isRowMode &&
+        false && (
           <ConnectorBadges
             stage={connector.stage}
             platforms={connector.platforms}
