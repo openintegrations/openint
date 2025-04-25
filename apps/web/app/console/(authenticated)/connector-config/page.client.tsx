@@ -3,7 +3,7 @@
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import {useSuspenseQueries} from '@tanstack/react-query'
+import {useSuspenseQuery} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
 import {useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
@@ -27,18 +27,13 @@ export function ConnectorConfigList() {
   const trpc = useTRPC()
 
   // Must use multiple queries to avoid waterfall and allow server prefetch to work
-  const [res, connectorRes] = useSuspenseQueries({
-    queries: [
-      trpc.listConnectorConfigs.queryOptions({
-        expand: ['connection_count', 'connector.schemas'],
-        limit: DATA_PER_PAGE,
-        offset: pageIndex * DATA_PER_PAGE,
-      }),
-      trpc.listConnectors.queryOptions({
-        expand: ['schemas'],
-      }),
-    ],
-  })
+  const res = useSuspenseQuery(
+    trpc.listConnectorConfigs.queryOptions({
+      expand: ['connection_count', 'connector.schemas'],
+      limit: DATA_PER_PAGE,
+      offset: pageIndex * DATA_PER_PAGE,
+    }),
+  )
 
   const handlePageChange = (newPageIndex: number) => {
     setPageIndex(newPageIndex)
@@ -98,19 +93,13 @@ export function ConnectorConfigList() {
   const handleRowClick = (
     ccfg: ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
   ) => {
-    // Find the full connector data from the connectors list
-    const fullConnector = connectorRes.data.items.find(
-      (c) => c.name === ccfg.connector?.name,
-    )
-
     setSelectedCcfg(ccfg)
-    // Use the full connector data if available, otherwise use the one from ccfg
-    setSelectedConnector(fullConnector || ccfg.connector || null)
+    setSelectedConnector(ccfg.connector || null)
     setSheetOpen(true)
   }
 
   // initial flash of no data....
-  if (!res.data.items || !connectorRes.data.items) {
+  if (!res.data.items) {
     return null
   }
 
@@ -149,7 +138,6 @@ export function ConnectorConfigList() {
         setSelectedConnector={setSelectedConnector}
         selectedCcfg={selectedCcfg}
         setSelectedCcfg={setSelectedCcfg}
-        connectors={connectorRes.data.items}
       />
     </div>
   )

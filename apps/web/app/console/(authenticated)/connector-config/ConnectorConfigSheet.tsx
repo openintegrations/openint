@@ -11,9 +11,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
-import {AddConnectorConfig, ConnectorConfigForm} from '@openint/ui-v1'
+import {ConnectorConfigForm} from '@openint/ui-v1'
 import {useConfirm} from '@openint/ui-v1/components/ConfirmAlert'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
+import {AddConnectorConfigWrapper} from './AddConnectorConfigWrapper'
 
 interface ConnectorConfigSheetProps {
   sheetOpen: boolean
@@ -28,7 +29,6 @@ interface ConnectorConfigSheetProps {
       'connector' | 'integrations' | 'connection_count'
     > | null,
   ) => void
-  connectors: Array<Core['connector']>
 }
 
 export function ConnectorConfigSheet({
@@ -38,7 +38,6 @@ export function ConnectorConfigSheet({
   setSelectedConnector,
   selectedCcfg,
   setSelectedCcfg,
-  connectors,
 }: ConnectorConfigSheetProps) {
   const [changedFields, setChangedFields] = useState<string[]>([])
 
@@ -194,8 +193,7 @@ export function ConnectorConfigSheet({
               setChangedFields={setChangedFields}
             />
           ) : (
-            <AddConnectorConfig
-              connectors={connectors}
+            <AddConnectorConfigWrapper
               onSelectConnector={handleSelectConnector}
             />
           )}
