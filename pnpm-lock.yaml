@@ -214,6 +214,9 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@sentry/cli':
         specifier: ^2.43.0
         version: 2.43.0
