@@ -69,22 +69,22 @@ const connectors = [
 const manyConnectors = [
   ...connectors,
   // Duplicating existing connectors with slight name variations for testing
-  ...connectors.map((connector, index) => ({
+  ...connectors.map((connector) => ({
     ...connector,
     name: connector.name, // Keep the same name so ConnectorLogo can find it
     display_name: `${connector.display_name} Pro`,
   })),
-  ...connectors.map((connector, index) => ({
+  ...connectors.map((connector) => ({
     ...connector,
     name: connector.name, // Keep the same name so ConnectorLogo can find it
     display_name: `${connector.display_name} Team`,
   })),
-  ...connectors.map((connector, index) => ({
+  ...connectors.map((connector) => ({
     ...connector,
     name: connector.name, // Keep the same name so ConnectorLogo can find it
     display_name: `${connector.display_name} Enterprise`,
   })),
-  ...connectors.map((connector, index) => ({
+  ...connectors.map((connector) => ({
     ...connector,
     name: connector.name, // Keep the same name so ConnectorLogo can find it
     display_name: `${connector.display_name} Cloud`,
