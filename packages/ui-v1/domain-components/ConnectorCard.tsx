@@ -38,10 +38,10 @@ const ConnectorCard = ({
     // TODO: @snrondina: Refactor to use the proper card component from our library
     <div
       className={cn(
-        'group flex cursor-pointer rounded-lg border border-gray-200 p-2 transition-all hover:border-gray-400 hover:bg-gray-50',
+        'group flex cursor-pointer rounded-lg transition-all',
         isRowMode
-          ? 'w-full flex-row items-center gap-4'
-          : 'w-full flex-col items-start gap-4',
+          ? 'w-full flex-row items-center gap-4 px-2 py-1'
+          : 'w-full flex-col items-start gap-4 border border-gray-200 p-2 hover:border-gray-400 hover:bg-gray-50',
         className,
       )}
       {...props}>

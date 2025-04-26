@@ -65,6 +65,32 @@ const connectors = [
   },
 ]
 
+// Create a larger set of connectors for testing scroll behavior
+const manyConnectors = [
+  ...connectors,
+  // Duplicating existing connectors with slight name variations for testing
+  ...connectors.map((connector, index) => ({
+    ...connector,
+    name: connector.name, // Keep the same name so ConnectorLogo can find it
+    display_name: `${connector.display_name} Pro`,
+  })),
+  ...connectors.map((connector, index) => ({
+    ...connector,
+    name: connector.name, // Keep the same name so ConnectorLogo can find it
+    display_name: `${connector.display_name} Team`,
+  })),
+  ...connectors.map((connector, index) => ({
+    ...connector,
+    name: connector.name, // Keep the same name so ConnectorLogo can find it
+    display_name: `${connector.display_name} Enterprise`,
+  })),
+  ...connectors.map((connector, index) => ({
+    ...connector,
+    name: connector.name, // Keep the same name so ConnectorLogo can find it
+    display_name: `${connector.display_name} Cloud`,
+  })),
+]
+
 // Controlled Example
 const ControlledExample = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -130,4 +156,30 @@ const PreFilteredExample = () => {
 
 export const WithSearchPrefiltered: Story = {
   render: () => <PreFilteredExample />,
+}
+
+// Add a story with many connectors to test scrolling
+const ManyConnectorsExample = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>
+        Open Modal with Many Connectors
+      </Button>
+      <LinkConnectorModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        connectors={manyConnectors}
+        onSelectConnector={(connector) => {
+          console.log('Selected connector:', connector)
+          setIsOpen(false)
+        }}
+      />
+    </div>
+  )
+}
+
+export const WithManyConnectors: Story = {
+  render: () => <ManyConnectorsExample />,
 }
