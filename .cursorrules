@@ -101,3 +101,8 @@ const searchParams = await props.searchParams
 - Prefer to use the `test` keyword instead of the `it` keyword when writing tests.
 - Use `.test` not .spec` for extension
 - Prefer co-locating test with the file being tested when possible. Only if test is not file-specific then create and use a __tests__ directory
+
+
+## For humans and AI alike
+
+- Minimize amount of props components take, especially those that could conflict with each other. 
