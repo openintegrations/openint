@@ -67,8 +67,9 @@ export function ConnectorConfigForm({
   }
 
   const formContext = {
-    openint_scopes: connector?.openint_scopes ?? [],
-    scopes: connector?.scopes ?? [],
+    openint_scopes:
+      connector?.openint_scopes ?? connectorConfig?.connector?.openint_scopes,
+    scopes: connector?.scopes ?? connectorConfig?.connector?.scopes,
     initialData: connectorConfig,
     connector: connector ?? connectorConfig?.connector,
   }
