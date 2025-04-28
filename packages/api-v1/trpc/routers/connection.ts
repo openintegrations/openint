@@ -117,6 +117,7 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
+      const {limit = 50, offset = 0} = input
       const query = ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(
@@ -138,95 +139,22 @@ export const connectionRouter = router({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
         },
+        // todo: should we switch to cursor pagination?
+        limit,
+        offset,
       })
 
       const res = await query
       const total = res[0]?.total ?? 0
       const items = res.map((conn) => expandConnection(conn, input.expand))
 
-      // const {items, total} = extractTotal(await query, 'total')
-
       return {
         items,
         total,
-        limit: input.limit ?? 50,
-        offset: input.offset ?? 0,
+        // TODO: Should return next page cursor / have next page instead...
+        limit,
+        offset,
       }
-
-      // const {query, limit, offset} = applyPaginationAndOrder(
-      //   ctx.db
-      //     .select({
-      //       connection: schema.connection,
-      //       total: sql`count(*) OVER ()`,
-      //     })
-      //     .from(schema.connection)
-      //     .where(
-      //       and(
-      //         input?.connector_config_id
-      //           ? eq(
-      //               schema.connection.connector_config_id,
-      //               input.connector_config_id,
-      //             )
-      //           : undefined,
-      //         input?.['customer_id']
-      //           ? eq(schema.connection.customer_id, input['customer_id'])
-      //           : undefined,
-      //         input?.['connector_names'] && input['connector_names'].length > 0
-      //           ? inArray(
-      //               schema.connection.connector_name,
-      //               input['connector_names'],
-      //             )
-      //           : undefined,
-      //         // excluding data from old connectors that are no longer supported
-      //         inArray(schema.connection.connector_name, connectorNames),
-      //         // connectorNamesFromToken.length > 0
-      //         //   ? inArray(
-      //         //       schema.connection.connector_name,
-      //         //       connectorNamesFromToken,
-      //         //     )
-      //         //   : undefined,
-      //       ),
-      //     ),
-      //   schema.connection.created_at,
-      //   input,
-      // )
-
-      // const {items, total} = await processPaginatedResponse(query, 'connection')
-
-      // const expandedItems = items.map((conn) =>
-      //   formatConnection(
-      //     ctx,
-      //     conn as any,
-      //     input?.include_secrets,
-      //     input?.expand ?? [],
-      //   ),
-      // )
-
-      // // let failures = 0
-      // // expandedItems.forEach((item) => {
-      // //   try {
-      // //     zConnectionExpanded.parse(item)
-      // //     // console.log('success parsing', item.id)
-      // //   } catch (error) {
-      // //     console.error('Failed to parse connection:', item.id)
-      // //     failures++
-      // //   }
-      // // })
-      // // console.log('failures', failures)
-      // // if (failures > 0) {
-      // //   throw new TRPCError({
-      // //     code: 'INTERNAL_SERVER_ERROR',
-      // //     message: `Failed to parse ${failures} connections`,
-      // //   })
-      // // }
-
-      // return {
-      //   // TODO: fix this to respect rls policy... Add corresponding tests also
-      //   items: expandedItems,
-      //   total,
-      //   limit,
-      //   offset,
-      // }
     }),
 
   deleteConnection: authenticatedProcedure
