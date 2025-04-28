@@ -68,7 +68,7 @@ export function ConnectorConfigDetails({
 
   const onSuccessUpsert = () => {
     toast.success(
-      `${connName} ${connectorConfig ? 'updated' : 'added'} successfully`,
+      `${connName} ${connectorConfig?.data ? 'updated' : 'added'} successfully`,
     )
     successCallback?.()
   }
@@ -82,7 +82,7 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to save connector: ${error}`)
+        toast.error(`Failed to add ${connName}: ${error}`)
       },
     }),
   )
@@ -98,14 +98,14 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to save connector: ${error}`)
+        toast.error(`Failed to save ${connName}: ${error}`)
       },
     }),
   )
   const deleteConfig = useMutation(
     trpc.deleteConnectorConfig.mutationOptions({
       onSuccess: () => {
-        toast.success('Connector config deleted successfully')
+        toast.success(`${connName} deleted successfully`)
         successCallback?.()
       },
       onSettled: () => {
@@ -114,7 +114,7 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to delete connector config: ${error}`)
+        toast.error(`Failed to delete ${connName}: ${error}`)
       },
     }),
   )
@@ -217,7 +217,7 @@ export function ConnectorConfigDetails({
         onSubmit={handleSave}
         formRef={formRef}
       />
-      <div className="mt-auto border-t p-4">
+      <div className="bg-background sticky bottom-0 border-t p-4">
         <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             {connectorConfig?.data?.connection_count ? (
