@@ -69,6 +69,8 @@ export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   onSubmit?: (data: {formData: TData}) => void
 
   debugMode?: boolean
+  changedFieldsRef?: React.RefObject<string[]>
+  formRef?: React.RefObject<JSONSchemaFormRef | null>
 }
 
 export const JSONSchemaForm = <TData extends Record<string, unknown>>({
@@ -81,6 +83,8 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   onSubmit,
   debugMode: debugMode,
   onChange,
+  changedFieldsRef,
+  formRef,
   ...props
 }: JSONSchemaFormProps<TData>) => {
   const jsonSchema = transformJSONSchema(_jsonSchema as Oas31Schema, {
@@ -94,12 +98,27 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   const [formData, setFormData] = React.useState(() => formDataRef.current)
 
   const handleFormChange = React.useCallback(
-    (data: IChangeEvent<TData>) => {
+    (data: IChangeEvent<TData>, id: string | undefined) => {
       formDataRef.current = data.formData
       setFormData(data.formData)
-      onChange?.(data)
+      onChange?.(data, id)
+
+      if (changedFieldsRef) {
+        const changed = getChangedFields(
+          data.formData,
+          initialFormData
+            ? {
+                ...initialFormData,
+              }
+            : {
+                disabled: false,
+                displayName: '',
+              },
+        )
+        changedFieldsRef.current = changed
+      }
     },
-    [onChange],
+    [onChange, changedFieldsRef, initialFormData],
   )
 
   const uiSchema = jsonSchemaToUiSchema(jsonSchema)
@@ -132,6 +151,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
         }
         onSubmit?.({formData: data.formData})
       }}
+      ref={formRef}
     />
   )
   return debugMode ? (

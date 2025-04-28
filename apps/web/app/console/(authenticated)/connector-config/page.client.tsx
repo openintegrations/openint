@@ -1,6 +1,7 @@
 'use client'
 
-import type {ConnectorConfig, Core} from '@openint/api-v1/models'
+import type {ConnectorConfig} from '@openint/api-v1/models'
+import type {Id} from '@openint/cdk/id.types'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSuspenseQuery} from '@tanstack/react-query'
@@ -16,12 +17,9 @@ const DATA_PER_PAGE = 20
 
 export function ConnectorConfigList() {
   const [sheetOpen, setSheetOpen] = useState(false)
-  const [selectedConnector, setSelectedConnector] = useState<
-    Core['connector'] | null
-  >(null)
-  const [selectedCcfg, setSelectedCcfg] = useState<ConnectorConfig<
-    'connector' | 'integrations' | 'connection_count'
-  > | null>(null)
+  const [connectorConfigId, setConnectorConfigId] = useState<Id['ccfg'] | null>(
+    null,
+  )
   const [pageIndex, setPageIndex] = useState(0)
 
   const trpc = useTRPC()
@@ -93,8 +91,7 @@ export function ConnectorConfigList() {
   const handleRowClick = (
     ccfg: ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
   ) => {
-    setSelectedCcfg(ccfg)
-    setSelectedConnector(ccfg.connector || null)
+    setConnectorConfigId(ccfg.id as Id['ccfg'])
     setSheetOpen(true)
   }
 
@@ -134,10 +131,8 @@ export function ConnectorConfigList() {
       <ConnectorConfigSheet
         sheetOpen={sheetOpen}
         setSheetOpen={setSheetOpen}
-        selectedConnector={selectedConnector}
-        setSelectedConnector={setSelectedConnector}
-        selectedCcfg={selectedCcfg}
-        setSelectedCcfg={setSelectedCcfg}
+        setConnectorConfigId={setConnectorConfigId}
+        connectorConfigId={connectorConfigId}
       />
     </div>
   )

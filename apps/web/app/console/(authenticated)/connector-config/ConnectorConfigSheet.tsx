@@ -1,154 +1,52 @@
 'use client'
 
-import type {ConnectorConfig, Core} from '@openint/api-v1/models'
-import type {FormData} from '@openint/ui-v1'
+import type {ConnectorName, Core} from '@openint/api-v1/models'
+import type {Id} from '@openint/cdk/id.types'
 
-import {useQueryClient} from '@tanstack/react-query'
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
-import {ConnectorConfigForm} from '@openint/ui-v1'
 import {useConfirm} from '@openint/ui-v1/components/ConfirmAlert'
-import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 import {AddConnectorConfigWrapper} from './AddConnectorConfigWrapper'
+import {ConnectorConfigDetails} from './ConnectorConfigDetails'
 
-interface ConnectorConfigSheetProps {
+type ConnectorConfigSheetProps = {
   sheetOpen: boolean
   setSheetOpen: (open: boolean) => void
-  selectedConnector: Core['connector'] | null
-  setSelectedConnector: (connector: Core['connector'] | null) => void
-  selectedCcfg: ConnectorConfig<
-    'connector' | 'integrations' | 'connection_count'
-  > | null
-  setSelectedCcfg: (
-    ccfg: ConnectorConfig<
-      'connector' | 'integrations' | 'connection_count'
-    > | null,
-  ) => void
+  setConnectorConfigId: (id: Id['ccfg'] | null) => void
+  connectorConfigId: Id['ccfg'] | null
 }
 
 export function ConnectorConfigSheet({
   sheetOpen,
   setSheetOpen,
-  selectedConnector,
-  setSelectedConnector,
-  selectedCcfg,
-  setSelectedCcfg,
+  setConnectorConfigId,
+  connectorConfigId,
 }: ConnectorConfigSheetProps) {
-  const [changedFields, setChangedFields] = useState<string[]>([])
-
-  const trpc = useTRPC()
-  const queryClient = useQueryClient()
-  const createConfig = useMutation(
-    trpc.createConnectorConfig.mutationOptions({
-      onSettled: () => {
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listConnectorConfigs.queryKey(),
-        })
-      },
-    }),
-  )
-  const updateConfig = useMutation(
-    trpc.updateConnectorConfig.mutationOptions({
-      onSettled: () => {
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listConnectorConfigs.queryKey(),
-        })
-      },
-    }),
-  )
-  const deleteConfig = useMutation(
-    trpc.deleteConnectorConfig.mutationOptions({
-      onSettled: () => {
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listConnectorConfigs.queryKey(),
-        })
-      },
-    }),
-  )
+  const changedFieldsRef = useRef<string[]>([])
+  const [connectorName, setConnectorName] = useState<ConnectorName | null>(null)
 
   const confirmAlert = useConfirm()
 
   const discardChanges = () => {
     setSheetOpen(false)
-    setSelectedConnector(null)
-    setSelectedCcfg(null)
-    setChangedFields([])
-  }
-
-  const saveData = async (formState: FormData) => {
-    if (!formState || !selectedConnector) return
-    const {displayName, disabled, config = {}, ...rest} = formState
-
-    const baseData = {
-      display_name: displayName,
-      disabled,
-      config: {
-        ...config,
-        ...rest,
-      },
-    }
-
-    if (selectedCcfg) {
-      await updateConfig.mutateAsync({
-        ...baseData,
-        id: selectedCcfg.id,
-      })
-    } else {
-      await createConfig.mutateAsync({
-        ...baseData,
-        connector_name: selectedConnector.name,
-      })
-    }
-
-    setSheetOpen(false)
-    setSelectedConnector(null)
-    setSelectedCcfg(null)
-    setChangedFields([])
-  }
-
-  const handleDelete = async () => {
-    if (!selectedCcfg) return
-
-    await deleteConfig.mutateAsync({
-      id: selectedCcfg.id,
-    })
-
-    setSheetOpen(false)
-    setSelectedConnector(null)
-    setSelectedCcfg(null)
+    setConnectorConfigId(null)
+    changedFieldsRef.current = []
   }
 
   const handleSelectConnector = (connector: Core['connector']) => {
-    setSelectedConnector(connector)
-    setSelectedCcfg(null)
+    setConnectorName(connector.name as ConnectorName)
   }
 
-  const saveButtonLabel =
-    createConfig.isPending || updateConfig.isPending
-      ? selectedCcfg
-        ? 'Saving...'
-        : 'Adding...'
-      : selectedCcfg
-        ? `Save ${selectedConnector?.display_name} Connector`
-        : `Add ${selectedConnector?.display_name} Connector`
-
-  const isSaveDisabled = createConfig.isPending || updateConfig.isPending
-
-  const isDeleteDisabled =
-    !selectedCcfg ||
-    deleteConfig.isPending ||
-    (selectedCcfg.connection_count ?? 0) > 0
-
   const onOpenChange = async (open: boolean) => {
-    if (selectedConnector && !selectedCcfg) {
-      setSelectedConnector(null)
-    } else if (selectedCcfg) {
-      if (changedFields.length > 0) {
+    if (connectorName) {
+      setConnectorName(null)
+    } else if (connectorConfigId) {
+      if (changedFieldsRef.current.length > 0) {
         await confirmAlert({
           title: 'Discard Changes',
           description:
@@ -156,8 +54,7 @@ export function ConnectorConfigSheet({
           onConfirm: discardChanges,
         })
       }
-      setSelectedConnector(null)
-      setSelectedCcfg(null)
+      setConnectorConfigId(null)
       setSheetOpen(open)
     } else {
       setSheetOpen(open)
@@ -172,29 +69,26 @@ export function ConnectorConfigSheet({
         <div className="p-4 pb-0">
           <SheetHeader>
             <SheetTitle className="text-lg">
-              {selectedCcfg ? 'Edit Connector' : 'Add Connector'}
+              {connectorConfigId ? 'Edit Connector' : 'Add Connector'}
             </SheetTitle>
           </SheetHeader>
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {selectedConnector ? (
-            <ConnectorConfigForm
-              configSchema={selectedConnector?.schemas?.connector_config}
-              connector={selectedConnector}
-              connectorConfig={selectedCcfg}
-              onSave={saveData}
-              onDelete={handleDelete}
-              saveButtonLabel={saveButtonLabel}
-              isSaveDisabled={isSaveDisabled}
-              isDeleteDisabled={isDeleteDisabled}
-              isDeletePending={deleteConfig.isPending}
-              changedFields={changedFields}
-              setChangedFields={setChangedFields}
-            />
-          ) : (
+          {!connectorConfigId && !connectorName ? (
             <AddConnectorConfigWrapper
               onSelectConnector={handleSelectConnector}
+            />
+          ) : (
+            <ConnectorConfigDetails
+              connectorConfigId={connectorConfigId ?? undefined}
+              connectorName={connectorName ?? undefined}
+              changedFieldsRef={changedFieldsRef}
+              successCallback={() => {
+                setSheetOpen(false)
+                setConnectorConfigId(null)
+                changedFieldsRef.current = []
+              }}
             />
           )}
         </div>
