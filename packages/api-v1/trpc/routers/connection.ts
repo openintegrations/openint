@@ -22,7 +22,7 @@ import {
   checkConnection,
   connectionCanBeChecked,
 } from './utils/connectionChecker'
-import {zListParams, zListResponse} from './utils/pagination'
+import {formatListResponse, zListParams, zListResponse} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
@@ -104,21 +104,16 @@ export const connectionRouter = router({
         include_secrets: zIncludeSecrets.optional().openapi({
           description: 'Include secret credentials in the response',
         }),
-        expand: z
-          .array(zConnectionExpandOption)
-          .optional()
-          .default([])
-          .openapi({
-            description: 'Expand the response with additional optionals',
-          }),
+        expand: z.array(zConnectionExpandOption).default([]).openapi({
+          description: 'Expand the response with additional optionals',
+        }),
       }),
     )
     .output(
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
-    .query(async ({ctx, input}) => {
-      const {limit, offset} = input
-      const query = ctx.db.query.connection.findMany({
+    .query(async ({ctx, input: {limit, offset, ...input}}) => {
+      const res = await ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(
           input.connector_config_id
@@ -143,17 +138,9 @@ export const connectionRouter = router({
         limit,
         offset,
       })
-
-      const res = await query
-      const total = res[0]?.total ?? 0
-      const items = res.map((conn) => expandConnection(conn, input.expand))
-
       return {
-        items,
-        total,
-        // TODO: Should return next page cursor / have next page instead...
-        limit,
-        offset,
+        ...formatListResponse(res, {limit, offset}),
+        items: res.map((conn) => expandConnection(conn, input.expand)),
       }
     }),
 

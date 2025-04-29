@@ -37,7 +37,22 @@ export function zListResponse<T extends Z.ZodTypeAny>(itemSchema: T) {
       .min(0)
       .describe('Limit the number of items returned'),
     offset: z.number().int().min(0).describe('Offset the items returned'),
+    has_next_page: z
+      .boolean()
+      .optional()
+      .describe('Convenience flag = offset + limit >= total'),
   })
+}
+
+type ListResponse<T> = Z.infer<ReturnType<typeof zListResponse<Z.ZodType<T>>>>
+
+export function formatListResponse<T extends {total: number}>(
+  data: T[],
+  {offset, limit}: {limit: number; offset: number},
+): ListResponse<T> {
+  const total = data[0]?.total ?? 0
+  const has_next_page = offset + limit >= total
+  return {total, limit, offset, has_next_page, items: data}
 }
 
 export function extractTotal<T extends {total: number}, K extends keyof T>(
