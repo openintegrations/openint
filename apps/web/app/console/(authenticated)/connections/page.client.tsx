@@ -3,6 +3,7 @@
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
+import {useSearchParams} from 'next/navigation'
 import {useMemo, useState} from 'react'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {
@@ -63,12 +64,15 @@ export function ConnectionsPage() {
     Core['connection_select'] | null
   >(null)
   const [pageIndex, setPageIndex] = useState(0)
+  const searchParams = useSearchParams()
+  const customerId = searchParams.get('customerId')
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
       expand: ['connector'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      customer_id: customerId ? customerId : undefined,
     }),
   )
 
