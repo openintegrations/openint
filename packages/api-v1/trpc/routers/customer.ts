@@ -1,13 +1,8 @@
-import type {Customer} from '../../models'
-import type {Query} from './utils/pagination'
-
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
-import {core} from '../../models/core'
 import {
-  applyPaginationAndOrder,
-  processTypedPaginatedResponse,
+  formatListResponse,
   zListParams,
   zListResponse,
 } from './utils/pagination'
@@ -32,45 +27,34 @@ export const customerRouter = router({
     )
     .output(
       zListResponse(
-        core.customer_select.extend({connection_count: z.number()}),
+        // core.customer_select.extend({connection_count: z.number()}),
+        z.object({
+          id: z.string().nullable().describe('Customer Id'),
+          connection_count: z.number(),
+          created_at: z.string().datetime(),
+          updated_at: z.string().datetime(),
+        }),
       ),
     )
-    .query(async ({ctx, input}) => {
-      const baseQuery = ctx.db
+    .query(async ({ctx, input: {offset, limit, keywords}}) => {
+      const res = await ctx.db
         .select({
           id: schema.connection.customer_id,
           connection_count: sql<number>`cast(count(*) AS integer)`,
           created_at: sql<string>`min(${schema.connection.created_at})`,
           updated_at: sql<string>`max(${schema.connection.updated_at})`,
+          total: sql<number>`count(*) OVER ()`.as('total'),
         })
         .from(schema.connection)
         .where(
-          input?.keywords
-            ? sql`
-                ${schema.connection.customer_id} ILIKE ${`%${input.keywords}%`}
-              `
+          keywords
+            ? sql` ${schema.connection.customer_id} ILIKE ${`%${keywords}%`} `
             : undefined,
         )
-        .groupBy(schema.connection.customer_id, schema.connection.created_at)
+        .groupBy(schema.connection.customer_id)
+        .offset(offset)
+        .limit(limit)
 
-      const {query, limit, offset} = applyPaginationAndOrder(
-        baseQuery,
-        schema.connection.created_at,
-        input,
-      )
-
-      const {items, total} = await processTypedPaginatedResponse<Customer>(
-        query as unknown as Query,
-      )
-
-      return {
-        items: items.filter(
-          (item): item is Customer & {connection_count: number} =>
-            item.id !== null,
-        ),
-        total,
-        limit,
-        offset,
-      }
+      return formatListResponse(res, {limit, offset})
     }),
 })
