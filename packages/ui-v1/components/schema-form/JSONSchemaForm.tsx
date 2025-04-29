@@ -67,6 +67,10 @@ export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   onSubmit?: (data: {formData: TData}) => void
 
   debugMode?: boolean
+  /**
+   * TODO: Combine if possible,  @rodrigo tried combining but the formRef always overrides the changedFieldsRef and we cannot keep track of the changed fields.
+   * on handleFormChange tried setting formRef.current.changedFieldsRef but the value was always undefined.
+   */
   changedFieldsRef?: React.RefObject<string[]>
   formRef?: React.RefObject<JSONSchemaFormRef | null>
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import type {ReactNode} from 'react'
+
 import {createContext, useCallback, useContext, useState} from 'react'
 import {
   AlertDialog,
@@ -18,6 +20,7 @@ interface ConfirmationOptions {
   confirmText?: string
   cancelText?: string
   variant?: 'default' | 'destructive'
+  resolve?: (value: boolean) => void
 }
 
 interface ConfirmationContextType {
@@ -26,38 +29,31 @@ interface ConfirmationContextType {
 
 const ConfirmationContext = createContext<ConfirmationContextType | null>(null)
 
-export function ConfirmationProvider({children}: {children: React.ReactNode}) {
-  const [isOpen, setIsOpen] = useState(false)
+export function ConfirmationProvider({children}: {children: ReactNode}) {
   const [options, setOptions] = useState<ConfirmationOptions | null>(null)
-  const [resolve, setResolve] = useState<((value: boolean) => void) | null>(
-    null,
-  )
 
-  const confirmAlert = useCallback(
-    (options: ConfirmationOptions) => {
-      return new Promise<boolean>((_resolve) => {
-        setOptions(options)
-        setResolve(() => _resolve)
-        setIsOpen(true)
-      })
-    },
-    [setOptions, setIsOpen],
-  )
+  const confirmAlert = useCallback((options: ConfirmationOptions) => {
+    return new Promise<boolean>((_resolve) => {
+      setOptions({...options, resolve: _resolve})
+    })
+  }, [])
 
-  const handleConfirm = () => {
-    resolve?.(true)
-    setIsOpen(false)
-  }
+  const handleConfirm = useCallback(() => {
+    options?.resolve?.(true)
+    setOptions(null)
+  }, [options])
 
-  const handleCancel = () => {
-    resolve?.(false)
-    setIsOpen(false)
-  }
+  const handleCancel = useCallback(() => {
+    options?.resolve?.(false)
+    setOptions(null)
+  }, [options])
 
   return (
     <ConfirmationContext.Provider value={{confirmAlert}}>
       {children}
-      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialog
+        open={options !== null}
+        onOpenChange={(open) => !open && setOptions(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{options?.title}</AlertDialogTitle>

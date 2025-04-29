@@ -37,8 +37,12 @@ export function ConnectorConfigDetails({
   const confirmAlert = useConfirm()
   const formRef = useRef<JSONSchemaFormRef>(null)
 
-  // Used to get initial data if we have connectorConfigId, enabled should prevent
-  // this from being called if connectorConfigId is null
+  /*
+   * enabled should prevent this from being called if connectorConfigId or connectorName are null but didn't work,
+   * The calls were being made even if connectorConfigId or connectorName were null using skipToken instead that
+   * works the same as enabled but is typesafe.
+   * https://tanstack.com/query/latest/docs/framework/react/guides/disabling-queries#typesafe-disabling-of-queries-using-skiptoken
+   */
   const [connectorConfig, connector] = useQueries({
     queries: [
       {
@@ -63,9 +67,6 @@ export function ConnectorConfigDetails({
       },
     ],
   })
-
-  const connName = (connectorName ??
-    connectorConfig?.data?.connector?.name) as ConnectorName
 
   const displayName =
     connectorConfig?.data?.connector?.display_name ??
@@ -96,7 +97,7 @@ export function ConnectorConfigDetails({
       onSuccess: onSuccessUpsert,
       onSettled: () => {
         void queryClient.invalidateQueries({
-          queryKey: [trpc.listConnectorConfigs.queryKey()],
+          queryKey: trpc.listConnectorConfigs.queryKey(),
         })
         void queryClient.invalidateQueries({
           queryKey: trpc.getConnectorConfig.queryKey(),
@@ -151,12 +152,14 @@ export function ConnectorConfigDetails({
           description:
             'You have changed the OAuth credentials. This will require reconnecting any existing connections using these credentials. Are you sure you want to proceed?',
         })
-        if (!confirmed) return
+        if (!confirmed) {
+          return
+        }
       }
       await updateCcfg()
     } else {
       await createConfig.mutateAsync({
-        connector_name: connName,
+        connector_name: connectorName,
         display_name,
         disabled,
         config: {
@@ -174,7 +177,9 @@ export function ConnectorConfigDetails({
   }
 
   const handleDelete = async () => {
-    if (!connectorConfigId) return
+    if (!connectorConfigId) {
+      return
+    }
 
     await deleteConfig.mutateAsync({
       id: connectorConfigId,
@@ -206,14 +211,23 @@ export function ConnectorConfigDetails({
 
   return (
     <div className="flex size-full flex-1 flex-col justify-between">
-      <ConnectorConfigForm
-        connectorConfig={connectorConfig?.data}
-        connector={connector?.data}
-        configSchema={configSchema}
-        changedFieldsRef={changedFieldsRef}
-        onSubmit={handleSave}
-        formRef={formRef}
-      />
+      {connectorConfig.data ? (
+        <ConnectorConfigForm
+          connectorConfig={connectorConfig.data}
+          configSchema={configSchema}
+          changedFieldsRef={changedFieldsRef}
+          onSubmit={handleSave}
+          formRef={formRef}
+        />
+      ) : (
+        <ConnectorConfigForm
+          connector={connector.data}
+          configSchema={configSchema}
+          changedFieldsRef={changedFieldsRef}
+          onSubmit={handleSave}
+          formRef={formRef}
+        />
+      )}
       <div className="bg-background sticky bottom-0 border-t p-4">
         <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center gap-2">

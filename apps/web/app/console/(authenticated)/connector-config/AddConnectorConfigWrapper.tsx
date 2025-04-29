@@ -1,3 +1,5 @@
+'use client'
+
 import type {Core} from '@openint/api-v1/models'
 
 import {useSuspenseQuery} from '@tanstack/react-query'

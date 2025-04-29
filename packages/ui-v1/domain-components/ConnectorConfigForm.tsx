@@ -5,19 +5,35 @@ import type {JSONSchemaFormRef} from '../components/schema-form'
 
 import {JSONSchemaForm} from '../components/schema-form'
 
-export interface ConnectorConfigFormProps {
-  // The connector config data, Initial state of the form.
-  connectorConfig?: ConnectorConfig<
-    'connector' | 'integrations' | 'connection_count'
-  > | null
-  //The selected connector, when we only get connector it means we are creating a new connector config
-  connector: Core['connector'] | null
-  // The schema of the connector config, this is used to generate the form
+export type ConnectorConfigFormProps = {
+  /*
+   * The schema of the connector config, this is used to generate the form
+   */
   configSchema: Record<string, unknown> | undefined
+  /*
+   * Changed fields ref.
+   */
   changedFieldsRef: React.RefObject<string[]>
+  /*
+   * formRef for JSONSchemaForm
+   */
   formRef: React.RefObject<JSONSchemaFormRef | null>
+  /*
+   * onSubmit for JSONSchemaForm
+   */
   onSubmit?: (data: {formData: Core['connector_config_insert']}) => void
-}
+} & (
+  | {
+      connectorConfig: ConnectorConfig<
+        'connector' | 'integrations' | 'connection_count'
+      >
+      connector?: never
+    }
+  | {
+      connector: Core['connector']
+      connectorConfig?: never
+    }
+)
 
 /**
  * ConnectorConfigForm component that displays the configuration form for a specific connector
@@ -40,6 +56,11 @@ export function ConnectorConfigForm({
       : {}
   ) as Core['connector_config_insert']
 
+  /**
+   * TODO: This is a temporary form schema, we need to move this to the connector config models.
+   * In the connector schemas we only have connector_config for this form, but we need to add the rest
+   * to the connector config models.
+   */
   const formSchema = {
     type: 'object' as const,
     properties: {

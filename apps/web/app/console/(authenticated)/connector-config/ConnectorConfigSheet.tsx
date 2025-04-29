@@ -51,7 +51,9 @@ export function ConnectorConfigSheet({
           description:
             'You have unsaved changes. Are you sure you want to discard these changes? All information will be lost.',
         })
-        if (!confirmed) return
+        if (!confirmed) {
+          return
+        }
         discardChanges()
       }
       onCloseSheet()
