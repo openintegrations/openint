@@ -3,18 +3,17 @@
 import type {AppRouterOutput} from '@openint/api-v1'
 import type {ColumnDef} from '../../components/DataTable'
 
-import {MoreHorizontal} from 'lucide-react'
-import {Button} from '@openint/shadcn/ui'
 import {CopyID} from '../../components'
 import {DataTable} from '../../components/DataTable'
 import {Icon} from '../../components/Icon'
 import {formatIsoDateString} from '../../utils'
 
-const columns: Array<
-  ColumnDef<AppRouterOutput['listCustomers']['items'][number]>
-> = [
+type CustomerData = AppRouterOutput['listCustomers']['items'][number]
+
+const columns: Array<ColumnDef<CustomerData>> = [
   {
     id: 'id',
+    accessorKey: 'id',
     header: 'Customer Id',
     cell: ({row}) => (
       <CopyID value={row.original.id ?? ''} size="compact" width="auto" />
@@ -22,6 +21,7 @@ const columns: Array<
   },
   {
     id: 'connections',
+    accessorKey: 'connection_count',
     header: 'Connections',
     cell: ({row}) => {
       const connectionsCount = row.original.connection_count
@@ -42,7 +42,7 @@ const columns: Array<
             size={16}
           />
           <span className="font-medium group-hover:underline">
-            {connectionsCount}
+            {`${connectionsCount} Connection${connectionsCount === 1 ? '' : 's'}`}
           </span>
         </button>
       )
@@ -50,20 +50,12 @@ const columns: Array<
   },
   {
     id: 'firstCreated',
+    accessorKey: 'created_at',
     header: 'First Connected',
     cell: ({row}) => (
       <div className="text-gray-500">
         {formatIsoDateString(row.original.created_at)}
       </div>
-    ),
-  },
-  {
-    id: 'action',
-    header: '',
-    cell: () => (
-      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
     ),
   },
 ]
@@ -78,8 +70,8 @@ export function CustomersTable({
   isLoading: boolean
 }) {
   return (
-    <DataTable
-      data={data}
+    <DataTable<CustomerData, string | number>
+      data={data.items}
       columns={columns}
       enableSelect={false}
       onPageChange={onPageChange}
