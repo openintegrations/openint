@@ -5,7 +5,7 @@ import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models/core'
 import {getConnectorModel, zConnectorName} from './connector.models'
-import {zListResponse} from './utils/pagination'
+import {zListParams, zListResponse} from './utils/pagination'
 
 export const zConnectorExtended = core.connector.extend({
   integrations: z.array(core.integration_select).optional(),
@@ -27,21 +27,22 @@ export const connectorRouter = router({
       },
     })
     .input(
-      z.object({expand: zCoerceArray(zExpandOption).optional()}).optional(),
+      zListParams
+        .extend({expand: zCoerceArray(zExpandOption).optional()})
+        .default({}),
     )
     .output(zListResponse(zConnectorExtended).describe('List of connectors'))
-    .query(async ({input}) => {
-      const items = Object.values(defConnectors).map((def) =>
+    .query(async ({input: {limit, offset, expand}}) => {
+      const connectors = Object.values(defConnectors).map((def) =>
         getConnectorModel(def, {
-          includeSchemas: input?.expand?.includes('schemas'),
+          includeSchemas: expand?.includes('schemas'),
         }),
       )
-      return {
-        items,
-        total: items.length,
-        limit: 0,
-        offset: 0,
-      }
+      const items = connectors.slice(offset, offset + limit)
+      const total = items.length
+      const has_next_page = offset + limit >= items.length
+
+      return {items, total, limit, offset, has_next_page}
     }),
   getConnectorByName: publicProcedure
     .meta({

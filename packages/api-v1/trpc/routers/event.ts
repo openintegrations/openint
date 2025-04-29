@@ -1,13 +1,12 @@
 import {TRPCError} from '@trpc/server'
-import {any, eq, schema, sql} from '@openint/db'
+import {any, asc, desc, eq, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
 import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
+  formatListResponse,
   zListParams,
   zListResponse,
 } from './utils/pagination'
@@ -60,25 +59,19 @@ export const eventRouter = router({
         summary: 'List Organization Events',
       },
     })
-    .input(zListParams.optional())
+    .input(zListParams.default({}))
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input}) => {
-      const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            event: schema.event,
-            total: sql`count(*) OVER ()`,
-          })
-          .from(schema.event)
-          .where(
-            // filter out deprecated events, preventing parse errors
-            eq(schema.event.name, any(Object.keys(eventMap))),
-          ),
-        schema.event.timestamp,
-        input,
-      )
-
-      const {items, total} = await processPaginatedResponse(query, 'event')
+    .query(async ({ctx, input: {limit, offset}}) => {
+      const res = await ctx.db.query.event.findMany({
+        extras: {
+          total: sql<number>`count(*) OVER ()`.as('total'),
+        },
+        // filter out deprecated events, preventing parse errors
+        where: eq(schema.event.name, any(Object.keys(eventMap))),
+        orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
+        offset,
+        limit,
+      })
 
       // const parseErrors: string[] = []
       // items.forEach((item) => {
@@ -95,12 +88,6 @@ export const eventRouter = router({
       //     message: `Failed to parse ${parseErrors.length} events`,
       //   })
       // }
-
-      return {
-        items,
-        total,
-        limit,
-        offset,
-      }
+      return formatListResponse(res, {limit, offset})
     }),
 })

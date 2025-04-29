@@ -28,6 +28,10 @@ export function connectionExpired(
 export function connectionCanBeChecked(
   connection: Z.infer<typeof core.connection_select>,
 ) {
+  // For partial fetches where we do not return settings... we cannot check connection
+  if (!connection.settings) {
+    return false
+  }
   const connector = serverConnectors[
     connection.connector_name as keyof typeof serverConnectors
   ] as ConnectorServer
