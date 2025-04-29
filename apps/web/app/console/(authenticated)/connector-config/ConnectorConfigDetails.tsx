@@ -1,6 +1,6 @@
 'use client'
 
-import type {ConnectorName} from '@openint/api-v1/models'
+import type {ConnectorName, Core} from '@openint/api-v1/models'
 import type {Id} from '@openint/cdk/id.types'
 import type {JSONSchemaFormRef} from '@openint/ui-v1'
 
@@ -120,15 +120,10 @@ export function ConnectorConfigDetails({
   )
 
   const handleSave = async (data: {
-    formData: {
-      displayName: string
-      disabled: boolean
-      config?: Record<string, unknown>
-      [key: string]: unknown
-    }
+    formData: Core['connector_config_insert']
   }) => {
     const {
-      formData: {displayName, disabled, config = {}, ...rest},
+      formData: {display_name, disabled, config = {}, ...rest},
     } = data
 
     if (connectorConfigId) {
@@ -138,29 +133,26 @@ export function ConnectorConfigDetails({
       const updateCcfg = async () =>
         await updateConfig.mutateAsync({
           id: connectorConfigId,
-          display_name: displayName,
-          disabled,
+          display_name: display_name ?? undefined,
+          disabled: disabled ?? undefined,
           config: {
             ...config,
             ...rest,
           },
         })
       if (hasOauthChanges) {
-        await confirmAlert({
+        const confirmed = await confirmAlert({
           title: 'OAuth Credentials Changed',
           description:
             'You have changed the OAuth credentials. This will require reconnecting any existing connections using these credentials. Are you sure you want to proceed?',
-          onConfirm: async () => {
-            await updateCcfg()
-          },
         })
-        return
+        if (!confirmed) return
       }
       await updateCcfg()
     } else {
       await createConfig.mutateAsync({
         connector_name: connName,
-        display_name: displayName,
+        display_name,
         disabled,
         config: {
           ...config,

@@ -5,13 +5,6 @@ import type {JSONSchemaFormRef} from '../components/schema-form'
 
 import {JSONSchemaForm} from '../components/schema-form'
 
-export interface FormData {
-  displayName: string
-  disabled: boolean
-  config?: Core['connector_config_insert']['config']
-  [key: string]: unknown
-}
-
 export interface ConnectorConfigFormProps {
   // The connector config data, Initial state of the form.
   connectorConfig?: ConnectorConfig<
@@ -23,7 +16,7 @@ export interface ConnectorConfigFormProps {
   configSchema: Record<string, unknown> | undefined
   changedFieldsRef: React.RefObject<string[]>
   formRef: React.RefObject<JSONSchemaFormRef | null>
-  onSubmit?: (data: {formData: FormData}) => void
+  onSubmit?: (data: {formData: Core['connector_config_insert']}) => void
 }
 
 /**
@@ -45,7 +38,7 @@ export function ConnectorConfigForm({
           disabled: connectorConfig.disabled ?? false,
         }
       : {}
-  ) as FormData
+  ) as Core['connector_config_insert']
 
   const formSchema = {
     type: 'object' as const,
@@ -78,7 +71,7 @@ export function ConnectorConfigForm({
     <div className="flex h-full flex-col">
       <div className="flex-1 overflow-y-auto">
         <div className="flex h-full flex-col space-y-8 px-8">
-          <JSONSchemaForm
+          <JSONSchemaForm<Core['connector_config_insert']>
             jsonSchema={formSchema}
             formData={initialValues}
             formContext={formContext}

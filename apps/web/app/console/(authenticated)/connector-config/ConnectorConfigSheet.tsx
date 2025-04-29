@@ -47,12 +47,13 @@ export function ConnectorConfigSheet({
       setConnectorName(null)
     } else if (connectorConfigId) {
       if (changedFieldsRef.current.length > 0) {
-        await confirmAlert({
+        const confirmed = await confirmAlert({
           title: 'Discard Changes',
           description:
             'You have unsaved changes. Are you sure you want to discard these changes? All information will be lost.',
-          onConfirm: discardChanges,
         })
+        if (!confirmed) return
+        discardChanges()
       }
       setConnectorConfigId(null)
       setSheetOpen(open)

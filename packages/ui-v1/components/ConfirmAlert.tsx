@@ -15,15 +15,13 @@ import {
 interface ConfirmationOptions {
   title: string
   description: string
-  onConfirm: () => void
-  onCancel?: () => void
   confirmText?: string
   cancelText?: string
   variant?: 'default' | 'destructive'
 }
 
 interface ConfirmationContextType {
-  confirmAlert: (options: ConfirmationOptions) => Promise<void>
+  confirmAlert: (options: ConfirmationOptions) => Promise<boolean>
 }
 
 const ConfirmationContext = createContext<ConfirmationContextType | null>(null)
@@ -31,21 +29,15 @@ const ConfirmationContext = createContext<ConfirmationContextType | null>(null)
 export function ConfirmationProvider({children}: {children: React.ReactNode}) {
   const [isOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState<ConfirmationOptions | null>(null)
+  const [resolve, setResolve] = useState<((value: boolean) => void) | null>(
+    null,
+  )
 
   const confirmAlert = useCallback(
     (options: ConfirmationOptions) => {
-      return new Promise<void>((resolve) => {
-        setOptions({
-          ...options,
-          onConfirm: () => {
-            options.onConfirm?.()
-            resolve()
-          },
-          onCancel: () => {
-            options.onCancel?.()
-            resolve()
-          },
-        })
+      return new Promise<boolean>((_resolve) => {
+        setOptions(options)
+        setResolve(() => _resolve)
         setIsOpen(true)
       })
     },
@@ -53,7 +45,12 @@ export function ConfirmationProvider({children}: {children: React.ReactNode}) {
   )
 
   const handleConfirm = () => {
-    options?.onConfirm()
+    resolve?.(true)
+    setIsOpen(false)
+  }
+
+  const handleCancel = () => {
+    resolve?.(false)
     setIsOpen(false)
   }
 
@@ -69,7 +66,7 @@ export function ConfirmationProvider({children}: {children: React.ReactNode}) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>
+            <AlertDialogCancel onClick={handleCancel}>
               {options?.cancelText || 'Cancel'}
             </AlertDialogCancel>
             <AlertDialogAction

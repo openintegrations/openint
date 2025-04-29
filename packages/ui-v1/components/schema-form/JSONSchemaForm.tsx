@@ -31,8 +31,6 @@ import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'
 
-export {getChangedFields}
-
 const theme: ThemeProps = {}
 
 /** Customized form with our theme */
