@@ -31,8 +31,8 @@ export const customerRouter = router({
         z.object({
           id: z.string().nullable().describe('Customer Id'),
           connection_count: z.number(),
-          created_at: z.string().datetime(),
-          updated_at: z.string().datetime(),
+          created_at: z.string().describe('postgres timestamp format, not yet ISO'),
+          updated_at: z.string().describe('postgres timestamp format, not yet ISO'),
         }),
       ),
     )
