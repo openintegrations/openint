@@ -101,7 +101,6 @@ export function createOAuth2Client(
       fullParams,
       config.paramKeyMapping ?? {},
     )
-    // console.log(`resolvedParams`, resolvedParams)
     const body = stringifyQueryParams(resolvedParams)
 
     const headers: HeadersInit = {
@@ -120,18 +119,10 @@ export function createOAuth2Client(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => null)
-      // console.log(
-      //   `oauth2 errorText`,
-      //   response.status,
-      //   response.statusText,
-      //   response.headers,
-      //   errorText,
-      // )
       const errorJSON = safeJSONParseObject(errorText)
       const errPayload = {
         status: response.status,
         status_text: response.statusText,
-        // Can headers be arrays like search params?
         headers: Object.fromEntries(response.headers.entries()),
         ...(errorJSON ?? {error_text: errorText}),
         request_url: url,
@@ -150,7 +141,33 @@ export function createOAuth2Client(
       )
     }
 
-    return response.json() as Promise<T>
+    // Parse the response content into a JavaScript object regardless of format
+    try {
+      // First try JSON parsing
+      const result = await response.json()
+      return result as T
+    } catch (err) {
+      // If JSON parsing fails, try reading as text and parsing manually
+      const text = await response.clone().text()
+
+      try {
+        // Try parsing as URL-encoded form data
+        const formData = new URLSearchParams(text)
+        const result: Record<string, string | number> = {}
+
+        // Convert numeric values where appropriate
+        formData.forEach((value, key) => {
+          result[key] = /^\d+$/.test(value) ? parseInt(value, 10) : value
+        })
+
+        return result as unknown as T
+      } catch (formErr) {
+        // If all else fails, return the raw text
+        throw new Error(
+          `Failed to parse oauth post response: ${text.substring(0, 100)}...`,
+        )
+      }
+    }
   }
 
   const getAuthorizeUrl = zFunction(
