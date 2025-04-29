@@ -1,6 +1,5 @@
 import {sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/node-postgres'
-import {describeEachDatabase, formatSql} from '../__tests__/test-utils'
+import {describeEachDatabase} from '../__tests__/test-utils'
 import {schema} from '../schema'
 
 describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {

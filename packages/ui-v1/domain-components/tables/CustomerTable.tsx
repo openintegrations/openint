@@ -17,7 +17,7 @@ const columns: Array<
     id: 'id',
     header: 'Customer Id',
     cell: ({row}) => (
-      <CopyID value={row.original.id} size="compact" width="auto" />
+      <CopyID value={row.original.id ?? ''} size="compact" width="auto" />
     ),
   },
   {
