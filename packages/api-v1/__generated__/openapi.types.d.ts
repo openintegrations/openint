@@ -2863,6 +2863,10 @@ export interface operations {
     listConnectors: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
+                limit?: number;
+                /** @description Offset the items returned */
+                offset?: number;
                 expand?: "schemas"[];
             };
             header?: never;
