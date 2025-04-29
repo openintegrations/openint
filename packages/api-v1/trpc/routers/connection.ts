@@ -69,10 +69,10 @@ export const connectionRouter = router({
         })
       }
 
-      const credentialsRequiresRefresh =
-        input.refresh_policy === 'force' || input.refresh_policy === 'auto'
-
-      if (credentialsRequiresRefresh && connectionCanBeChecked(connection)) {
+      if (
+        (input.refresh_policy === 'force' || input.refresh_policy === 'auto') &&
+        connectionCanBeChecked(connection)
+      ) {
         const {status, status_message} = await checkConnection(connection, ctx)
         connection.status = status
         connection.status_message = status_message ?? null
@@ -117,7 +117,7 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
-      const {limit = 50, offset = 0} = input
+      const {limit, offset} = input
       const query = ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(

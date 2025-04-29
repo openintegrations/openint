@@ -108,7 +108,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(conn2).toBeDefined()
     expect(conn1?.id).not.toEqual(conn2?.id)
   })
-  // return
 
   test('window function query for total works', async () => {
     const res = await asCustomer.db
