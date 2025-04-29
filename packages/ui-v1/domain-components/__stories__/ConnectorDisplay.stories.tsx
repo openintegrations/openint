@@ -2,7 +2,6 @@ import type {Meta, StoryObj} from '@storybook/react'
 
 import {Badge} from '@openint/shadcn/ui'
 import {ConnectorDisplay} from '../ConnectorDisplay'
-import {FIXTURES} from './fixtures'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
