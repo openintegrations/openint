@@ -5,7 +5,7 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
-import {and, any, dbUpsertOne, eq, schema, sql} from '@openint/db'
+import {and, any, asc, dbUpsertOne, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
@@ -22,7 +22,11 @@ import {
   checkConnection,
   connectionCanBeChecked,
 } from './utils/connectionChecker'
-import {formatListResponse, zListParams, zListResponse} from './utils/pagination'
+import {
+  formatListResponse,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
@@ -134,7 +138,10 @@ export const connectionRouter = router({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
         },
-        // todo: should we switch to cursor pagination?
+        orderBy: [
+          desc(schema.connection.updated_at),
+          asc(schema.connection.id),
+        ],
         limit,
         offset,
       })

@@ -2887,6 +2887,8 @@ export interface operations {
                         limit: number;
                         /** @description Offset the items returned */
                         offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
                     };
                 };
             };
@@ -3031,7 +3033,9 @@ export interface operations {
     listConnectorConfigs: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
                 expand?: ("connector" | "connector.schemas" | "connection_count")[];
                 connector_names?: components["schemas"]["core.connector.name"][];
@@ -3077,6 +3081,8 @@ export interface operations {
                         limit: number;
                         /** @description Offset the items returned */
                         offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
                     };
                 };
             };
@@ -3297,7 +3303,9 @@ export interface operations {
     listConnections: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
                 connector_names?: components["schemas"]["core.connector.name"][];
                 /** @description The id of the customer in your application. Ensure it is unique for that customer. */
@@ -3350,6 +3358,8 @@ export interface operations {
                         limit: number;
                         /** @description Offset the items returned */
                         offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
                     };
                 };
             };
@@ -3739,7 +3749,9 @@ export interface operations {
     listEvents: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
             };
             header?: never;
@@ -3762,6 +3774,8 @@ export interface operations {
                         limit: number;
                         /** @description Offset the items returned */
                         offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
                     };
                 };
             };
