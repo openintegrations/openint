@@ -28,7 +28,7 @@ export const customerRouter = router({
         .extend({
           keywords: z.string().trim().nullish(),
         })
-        .optional(),
+        .default({}),
     )
     .output(
       zListResponse(

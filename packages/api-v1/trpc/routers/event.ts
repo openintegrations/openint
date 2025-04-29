@@ -6,9 +6,7 @@ import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
 import {
-  applyPaginationAndOrder,
   formatListResponse,
-  processPaginatedResponse,
   zListParams,
   zListResponse,
 } from './utils/pagination'
