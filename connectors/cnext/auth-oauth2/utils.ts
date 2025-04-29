@@ -90,7 +90,7 @@ export function getClient({
       revokeUrl: oauthConfig.revocation_request_url,
       scopeDelimiter: oauthConfig.scope_separator,
       paramKeyMapping: oauthConfig.params_config.param_names,
-      clientAuthLocation: 'body', // Make this configurable
+      clientAuthLocation: connectorName === 'notion' ? 'header' : 'body', // Make this configurable
     },
     connectCtx.fetch,
   )
