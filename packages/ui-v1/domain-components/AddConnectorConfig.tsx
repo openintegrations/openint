@@ -4,7 +4,7 @@ import type {Core} from '@openint/api-v1/models'
 import * as React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input} from '@openint/shadcn/ui'
-import {ConnectorCard} from './ConnectorCard'
+import {ConnectorDisplay} from './ConnectorDisplay'
 
 export interface AddConnectorConfigProps
   extends HTMLAttributes<HTMLDivElement> {
@@ -75,7 +75,7 @@ export const AddConnectorConfig = ({
       <div className={cn('min-h-0 flex-1 overflow-y-auto p-6')}>
         <div className={cn('grid grid-cols-1 gap-4 2xl:grid-cols-2')}>
           {filteredConnectors.map((connector, index) => (
-            <ConnectorCard
+            <ConnectorDisplay
               connector={connector}
               key={`${connector.name}-${index}`}
               onClick={() => {

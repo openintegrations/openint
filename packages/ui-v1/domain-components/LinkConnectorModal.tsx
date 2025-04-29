@@ -12,7 +12,7 @@ import {
   DialogTitle,
   Input,
 } from '@openint/shadcn/ui'
-import {ConnectorCard} from './ConnectorCard'
+import {ConnectorDisplay} from './ConnectorDisplay'
 
 export interface LinkConnectorModalProps {
   isOpen: boolean
@@ -98,7 +98,7 @@ export function LinkConnectorModal({
                   <div
                     className="rounded-md py-2 transition-all duration-100 hover:bg-gray-50"
                     onClick={() => onSelectConnector?.(connector)}>
-                    <ConnectorCard
+                    <ConnectorDisplay
                       connector={connector}
                       mode="row"
                       displayBadges={false}
@@ -120,7 +120,7 @@ export function LinkConnectorModal({
                   key={`${connector.name}-${connector.display_name || index}`}
                   onClick={() => onSelectConnector?.(connector)}
                   className="transition-transform duration-100 hover:scale-[1.01]">
-                  <ConnectorCard
+                  <ConnectorDisplay
                     connector={connector}
                     displayBadges={false}
                     onCtaClick={() => onSelectConnector?.(connector)}

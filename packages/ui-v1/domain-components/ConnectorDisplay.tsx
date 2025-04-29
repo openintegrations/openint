@@ -1,12 +1,12 @@
 import type {ConnectorName, Core} from '@openint/api-v1/models'
 
-import {ArrowRightCircle} from 'lucide-react'
+import {ChevronRight} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
 import {ConnectorLogo} from './ConnectorLogo'
 
-export interface ConnectorCardProps
+export interface ConnectorDisplayProps
   extends React.HTMLAttributes<HTMLDivElement> {
   connector: Core['connector']
   mode?: 'card' | 'row'
@@ -16,13 +16,13 @@ export interface ConnectorCardProps
 }
 
 /**
- * ConnectorCard component displays connector information with a logo and badges.
+ * ConnectorDisplay component displays connector information with a logo and badges.
  * It uses the Badge component from shadcn/ui.
  *
  * The component is responsive and will adapt to different screen sizes.
  * It includes a hover effect with darker border and background to indicate it's clickable.
  */
-const ConnectorCard = ({
+const ConnectorDisplay = ({
   className,
   connector,
   mode = 'card',
@@ -30,7 +30,7 @@ const ConnectorCard = ({
   onCtaClick,
   displayBadges = false,
   ...props
-}: ConnectorCardProps) => {
+}: ConnectorDisplayProps) => {
   const {name, display_name} = connector
   const isRowMode = mode === 'row'
 
@@ -90,10 +90,11 @@ const ConnectorCard = ({
           </div>
         </div>
         {isRowMode && (
-          <div className="flex-shrink-0">
-            <div className="border-primary/30 bg-primary/5 group-hover:border-primary group-hover:bg-primary/10 group-hover:ring-primary/20 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all group-hover:scale-105 group-hover:shadow-md group-hover:ring-2">
-              <ArrowRightCircle className="text-primary group-hover:text-primary/90 h-4 w-4 transition-all" />
-            </div>
+          <div className="ml-2 flex-shrink-0">
+            <ChevronRight
+              className="text-muted-foreground group-hover:text-foreground h-4 w-4 transition-all duration-200 ease-in-out group-hover:translate-x-0.5"
+              strokeWidth={1.5}
+            />
           </div>
         )}
       </div>
@@ -103,9 +104,9 @@ const ConnectorCard = ({
   )
 }
 
-ConnectorCard.displayName = 'ConnectorCard'
+ConnectorDisplay.displayName = 'ConnectorDisplay'
 
-export {ConnectorCard}
+export {ConnectorDisplay}
 
 // Export the ConnectorBadges component so it can be used in stories
 export const ConnectorBadges = ({
