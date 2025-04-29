@@ -13,7 +13,11 @@ import {
   zConnectorConfigExpandOption,
 } from '../../models'
 import {getConnectorModelByName, zConnectorName} from './connector.models'
-import {zListParams, zListResponse} from './utils/pagination'
+import {
+  formatListResponse,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
 
 const connectionCountExtra = {
@@ -90,14 +94,14 @@ export const connectorConfigRouter = router({
             description: 'The names of the connectors to filter by',
           }),
         })
-        .optional(),
+        .default({}),
     )
     .output(
       zListResponse(connectorConfigExtended).describe(
         'The list of connector configurations',
       ),
     )
-    .query(async ({ctx, input: {expand, connector_names, ...params} = {}}) => {
+    .query(async ({ctx, input: {expand, connector_names, limit, offset}}) => {
       const includeConnectionCount = expand?.includes('connection_count')
       // @pellicceama: Have another way to validate
       // const connectorNamesFromToken =
@@ -137,14 +141,11 @@ export const connectorConfigRouter = router({
           desc(schema.connector_config.updated_at),
           asc(schema.connector_config.id),
         ],
-        limit: params?.limit ?? 50,
-        offset: params?.offset ?? 0,
+        limit,
+        offset,
       })
 
       const items = await query
-      const limit = params?.limit ?? 50
-      const offset = params?.offset ?? 0
-      const total = items[0]?.total ?? 0
 
       const expandedItems = items.map((item) => {
         const ccfg: ConnectorConfig = item
@@ -181,10 +182,8 @@ export const connectorConfigRouter = router({
         }
       })
       return {
+        ...formatListResponse(items, {limit, offset}),
         items: expandedItems,
-        total,
-        limit,
-        offset,
       }
     }),
   createConnectorConfig: orgProcedure
