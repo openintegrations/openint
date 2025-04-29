@@ -16,25 +16,24 @@ import {ConnectorConfigDetails} from './ConnectorConfigDetails'
 
 type ConnectorConfigSheetProps = {
   sheetOpen: boolean
-  setSheetOpen: (open: boolean) => void
-  setConnectorConfigId: (id: Id['ccfg'] | null) => void
+  onCloseSheet: () => void
   connectorConfigId: Id['ccfg'] | null
 }
 
 export function ConnectorConfigSheet({
   sheetOpen,
-  setSheetOpen,
-  setConnectorConfigId,
+  onCloseSheet,
   connectorConfigId,
 }: ConnectorConfigSheetProps) {
   const changedFieldsRef = useRef<string[]>([])
-  const [connectorName, setConnectorName] = useState<ConnectorName | null>(null)
+  const [connectorName, setConnectorName] = useState<ConnectorName | undefined>(
+    undefined,
+  )
 
   const confirmAlert = useConfirm()
 
   const discardChanges = () => {
-    setSheetOpen(false)
-    setConnectorConfigId(null)
+    onCloseSheet()
     changedFieldsRef.current = []
   }
 
@@ -42,9 +41,9 @@ export function ConnectorConfigSheet({
     setConnectorName(connector.name as ConnectorName)
   }
 
-  const onOpenChange = async (open: boolean) => {
+  const onOpenChange = async () => {
     if (connectorName) {
-      setConnectorName(null)
+      setConnectorName(undefined)
     } else if (connectorConfigId) {
       if (changedFieldsRef.current.length > 0) {
         const confirmed = await confirmAlert({
@@ -55,11 +54,15 @@ export function ConnectorConfigSheet({
         if (!confirmed) return
         discardChanges()
       }
-      setConnectorConfigId(null)
-      setSheetOpen(open)
+      onCloseSheet()
     } else {
-      setSheetOpen(open)
+      onCloseSheet()
     }
+  }
+
+  const successCallback = () => {
+    onCloseSheet()
+    changedFieldsRef.current = []
   }
 
   return (
@@ -80,17 +83,20 @@ export function ConnectorConfigSheet({
             <AddConnectorConfigWrapper
               onSelectConnector={handleSelectConnector}
             />
-          ) : (
+          ) : connectorConfigId ? (
             <ConnectorConfigDetails
-              connectorConfigId={connectorConfigId ?? undefined}
-              connectorName={connectorName ?? undefined}
               changedFieldsRef={changedFieldsRef}
-              successCallback={() => {
-                setSheetOpen(false)
-                setConnectorConfigId(null)
-                changedFieldsRef.current = []
-              }}
+              successCallback={successCallback}
+              connectorConfigId={connectorConfigId}
             />
+          ) : (
+            connectorName && (
+              <ConnectorConfigDetails
+                changedFieldsRef={changedFieldsRef}
+                successCallback={successCallback}
+                connectorName={connectorName}
+              />
+            )
           )}
         </div>
       </SheetContent>

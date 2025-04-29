@@ -18,12 +18,13 @@ import {ConnectorConfigForm} from '@openint/ui-v1'
 import {useConfirm} from '@openint/ui-v1/components/ConfirmAlert'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
-interface ConnectorConfigDetailsProps {
-  connectorConfigId?: Id['ccfg'] | null
-  connectorName?: ConnectorName | null
+type ConnectorConfigDetailsProps = {
   changedFieldsRef: React.RefObject<string[]>
   successCallback?: () => void
-}
+} & (
+  | {connectorConfigId: Id['ccfg']; connectorName?: never}
+  | {connectorName: ConnectorName; connectorConfigId?: never}
+)
 
 export function ConnectorConfigDetails({
   connectorConfigId,
@@ -66,9 +67,13 @@ export function ConnectorConfigDetails({
   const connName = (connectorName ??
     connectorConfig?.data?.connector?.name) as ConnectorName
 
+  const displayName =
+    connectorConfig?.data?.connector?.display_name ??
+    connector?.data?.display_name
+
   const onSuccessUpsert = () => {
     toast.success(
-      `${connName} ${connectorConfig?.data ? 'updated' : 'added'} successfully`,
+      `${displayName} ${connectorConfig?.data ? 'updated' : 'added'} successfully`,
     )
     successCallback?.()
   }
@@ -82,7 +87,7 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to add ${connName}: ${error}`)
+        toast.error(`Failed to add ${displayName}: ${error}`)
       },
     }),
   )
@@ -98,14 +103,14 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to save ${connName}: ${error}`)
+        toast.error(`Failed to save ${displayName}: ${error}`)
       },
     }),
   )
   const deleteConfig = useMutation(
     trpc.deleteConnectorConfig.mutationOptions({
       onSuccess: () => {
-        toast.success(`${connName} deleted successfully`)
+        toast.success(`${displayName} deleted successfully`)
         successCallback?.()
       },
       onSettled: () => {
@@ -114,7 +119,7 @@ export function ConnectorConfigDetails({
         })
       },
       onError: (error) => {
-        toast.error(`Failed to delete ${connName}: ${error}`)
+        toast.error(`Failed to delete ${displayName}: ${error}`)
       },
     }),
   )
@@ -182,8 +187,8 @@ export function ConnectorConfigDetails({
         ? 'Saving...'
         : 'Adding...'
       : connectorConfigId
-        ? `Save ${connName} Connector`
-        : `Add ${connName} Connector`
+        ? `Save ${displayName} Connector`
+        : `Add ${displayName} Connector`
 
   const isSaveDisabled = createConfig.isPending || updateConfig.isPending
 

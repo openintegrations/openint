@@ -95,6 +95,11 @@ export function ConnectorConfigList() {
     setSheetOpen(true)
   }
 
+  const onCloseSheet = () => {
+    setConnectorConfigId(null)
+    setSheetOpen(false)
+  }
+
   // initial flash of no data....
   if (!res.data.items) {
     return null
@@ -130,8 +135,7 @@ export function ConnectorConfigList() {
       </DataTable>
       <ConnectorConfigSheet
         sheetOpen={sheetOpen}
-        setSheetOpen={setSheetOpen}
-        setConnectorConfigId={setConnectorConfigId}
+        onCloseSheet={onCloseSheet}
         connectorConfigId={connectorConfigId}
       />
     </div>

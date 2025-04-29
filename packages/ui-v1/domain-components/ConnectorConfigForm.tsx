@@ -34,7 +34,7 @@ export function ConnectorConfigForm({
     connectorConfig
       ? {
           ...connectorConfig.config,
-          displayName: connectorConfig.display_name ?? '',
+          display_name: connectorConfig.display_name ?? '',
           disabled: connectorConfig.disabled ?? false,
         }
       : {}
@@ -50,7 +50,7 @@ export function ConnectorConfigForm({
           'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
         'ui:field': 'DisabledField',
       },
-      displayName: {
+      display_name: {
         type: 'string' as const,
         title: 'Display Name',
         description: 'A friendly name for this connector configuration',
@@ -59,17 +59,23 @@ export function ConnectorConfigForm({
     },
   }
 
+  const openint_scopes =
+    connector?.openint_scopes ??
+    connectorConfig?.connector?.openint_scopes ??
+    []
+
+  const scopes = connector?.scopes ?? connectorConfig?.connector?.scopes ?? []
+
   const formContext = {
-    openint_scopes:
-      connector?.openint_scopes ?? connectorConfig?.connector?.openint_scopes,
-    scopes: connector?.scopes ?? connectorConfig?.connector?.scopes,
+    openint_scopes,
+    scopes,
     initialData: connectorConfig,
     connector: connector ?? connectorConfig?.connector,
   }
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1">
         <div className="flex h-full flex-col space-y-8 px-8">
           <JSONSchemaForm<Core['connector_config_insert']>
             jsonSchema={formSchema}
