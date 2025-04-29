@@ -101,18 +101,8 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
       setFormData(data.formData)
       onChange?.(data, id)
 
-      if (changedFieldsRef) {
-        const changed = getChangedFields(
-          data.formData,
-          initialFormData
-            ? {
-                ...initialFormData,
-              }
-            : {
-                disabled: false,
-                displayName: '',
-              },
-        )
+      if (changedFieldsRef && data.formData && initialFormData) {
+        const changed = getChangedFields(data.formData, initialFormData)
         changedFieldsRef.current = changed
       }
     },
