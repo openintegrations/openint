@@ -12,7 +12,6 @@ import {
   pgPolicy,
   pgRole,
   pgTable,
-  pgView,
   primaryKey,
   timestamp,
   varchar,
@@ -461,22 +460,22 @@ export const event = pgTable(
     pgPolicy('org_append', {
       to: 'org',
       for: 'insert',
-      withCheck: sql`org_id = jwt_org_id ()`,
+      withCheck: sql`org_id = jwt_org_id()`,
     }),
     pgPolicy('org_member_append', {
       to: 'authenticated',
       for: 'insert',
       withCheck: sql`
-        org_id = public.jwt_org_id ()
-        AND user_id = public.jwt_sub ()
+        org_id = public.jwt_org_id()
+        AND user_id = public.jwt_sub()
       `,
     }),
     pgPolicy('customer_append', {
       to: 'customer',
       for: 'insert',
       withCheck: sql`
-        org_id = public.jwt_org_id ()
-        AND customer_id = public.jwt_customer_id ()
+        org_id = public.jwt_org_id()
+        AND customer_id = public.jwt_customer_id()
       `,
     }),
   ],
@@ -567,19 +566,3 @@ export const customer = pgTable(
     }),
   ],
 )
-
-export const customer_from_connection = pgView('customer_from_connection')
-  .with({securityInvoker: true})
-  .as((db) =>
-    db
-      .select({
-        id: connection.customer_id,
-        connection_count: sql<number>`cast(count(*) AS integer)`.as(
-          'connection_acount',
-        ),
-        created_at: sql<string>`min(${connection.created_at})`.as('created_at'),
-        updated_at: sql<string>`max(${connection.updated_at})`.as('updated_at'),
-      })
-      .from(connection)
-      .groupBy(connection.customer_id),
-  )

@@ -17,7 +17,11 @@ export const eventRouter = router({
     .meta({
       openapi: {method: 'POST', path: '/event'},
     })
-    .input(z.object({event: zEvent})) // Ref does not work for input params for now in zod-openapi. So will be inlined in the spec unfortunately
+    .input(
+      z.object({
+        event: zEvent,
+      }),
+    ) // Ref does not work for input params for now in zod-openapi. So will be inlined in the spec unfortunately
     .output(core.event_select)
     .mutation(async ({ctx, input}) => ctx.dispatch(input.event)),
 
