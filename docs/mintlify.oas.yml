@@ -15,6 +15,23 @@ paths:
         - CustomerToken: []
       parameters:
         - in: query
+          name: limit
+          description: Limit the number of items returned
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 50
+            description: Limit the number of items returned
+        - in: query
+          name: offset
+          description: Offset the items returned
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            description: Offset the items returned
+        - in: query
           name: expand
           schema:
             type: array
@@ -52,6 +69,9 @@ paths:
                     type: integer
                     minimum: 0
                     description: Offset the items returned
+                  has_next_page:
+                    type: boolean
+                    description: Convenience flag = offset + limit >= total
                 required:
                   - items
                   - total
@@ -98,9 +118,10 @@ paths:
             });
 
             async function main() {
-              const response = await client.listConnectors();
-
-              console.log(response.items);
+              // Automatically fetches more pages as needed.
+              for await (const listConnectorsResponse of client.listConnectors()) {
+                console.log(listConnectorsResponse.name);
+              }
             }
 
             main();
@@ -112,8 +133,9 @@ paths:
             client = Openint(
                 api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
-            response = client.list_connectors()
-            print(response.items)
+            page = client.list_connectors()
+            page = page.items[0]
+            print(page.name)
   /connector-config/{id}:
     get:
       operationId: getConnectorConfig
@@ -349,15 +371,21 @@ paths:
       parameters:
         - in: query
           name: limit
+          description: Limit the number of items returned
           schema:
             type: integer
             minimum: 0
             maximum: 500
+            default: 50
+            description: Limit the number of items returned
         - in: query
           name: offset
+          description: Offset the items returned
           schema:
             type: integer
             minimum: 0
+            default: 0
+            description: Offset the items returned
         - in: query
           name: expand
           schema:
@@ -561,6 +589,9 @@ paths:
                     type: integer
                     minimum: 0
                     description: Offset the items returned
+                  has_next_page:
+                    type: boolean
+                    description: Convenience flag = offset + limit >= total
                 required:
                   - items
                   - total
@@ -1017,15 +1048,21 @@ paths:
       parameters:
         - in: query
           name: limit
+          description: Limit the number of items returned
           schema:
             type: integer
             minimum: 0
             maximum: 500
+            default: 50
+            description: Limit the number of items returned
         - in: query
           name: offset
+          description: Offset the items returned
           schema:
             type: integer
             minimum: 0
+            default: 0
+            description: Offset the items returned
         - in: query
           name: connector_names
           schema:
@@ -1270,6 +1307,9 @@ paths:
                     type: integer
                     minimum: 0
                     description: Offset the items returned
+                  has_next_page:
+                    type: boolean
+                    description: Convenience flag = offset + limit >= total
                 required:
                   - items
                   - total
@@ -1603,6 +1643,10 @@ paths:
                       type: boolean
                       title: Debug
                       description: Whether to enable debug mode
+                    is_embedded:
+                      type: boolean
+                      title: Is Embedded
+                      description: Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
       responses:
         '200':
           description: Successful response
@@ -1719,6 +1763,10 @@ paths:
                       type: boolean
                       title: Debug
                       description: Whether to enable debug mode
+                    is_embedded:
+                      type: boolean
+                      title: Is Embedded
+                      description: Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
       responses:
         '200':
           description: Successful response
@@ -2178,15 +2226,21 @@ paths:
       parameters:
         - in: query
           name: limit
+          description: Limit the number of items returned
           schema:
             type: integer
             minimum: 0
             maximum: 500
+            default: 50
+            description: Limit the number of items returned
         - in: query
           name: offset
+          description: Offset the items returned
           schema:
             type: integer
             minimum: 0
+            default: 0
+            description: Offset the items returned
       responses:
         '200':
           description: Successful response
@@ -2211,6 +2265,9 @@ paths:
                     type: integer
                     minimum: 0
                     description: Offset the items returned
+                  has_next_page:
+                    type: boolean
+                    description: Convenience flag = offset + limit >= total
                 required:
                   - items
                   - total

@@ -10,8 +10,6 @@ export interface ConnectorDisplayProps
   extends React.HTMLAttributes<HTMLDivElement> {
   connector: Core['connector']
   mode?: 'card' | 'row'
-  ctaText?: string
-  onCtaClick?: () => void
   displayBadges?: boolean
 }
 
@@ -26,8 +24,6 @@ const ConnectorDisplay = ({
   className,
   connector,
   mode = 'card',
-  ctaText = 'Connect',
-  onCtaClick,
   displayBadges = false,
   ...props
 }: ConnectorDisplayProps) => {
