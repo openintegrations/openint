@@ -17,6 +17,7 @@ import {
 } from '@openint/console-auth/client'
 import {toast, Toaster} from '@openint/shadcn/ui/sonner'
 import {CommandBar, CommandContext} from '@openint/ui-v1'
+import {ConfirmationProvider} from '@openint/ui-v1/components/ConfirmAlert'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {z} from '@openint/util/zod-utils'
 import {SIDEBAR_NAV_ITEMS} from '@/app/console/(authenticated)/sidebar-nav-items'
@@ -33,9 +34,11 @@ export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
         ctx: {},
         definitions,
       }}>
-      <CommandBar ctx={{}} definitions={definitions} />
-      <Toaster />
-      {props.children}
+      <ConfirmationProvider>
+        <CommandBar ctx={{}} definitions={definitions} />
+        <Toaster />
+        {props.children}
+      </ConfirmationProvider>
     </CommandContext.Provider>
   )
 }
