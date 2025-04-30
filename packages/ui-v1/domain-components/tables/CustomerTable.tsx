@@ -3,7 +3,7 @@
 import type {AppRouterOutput} from '@openint/api-v1'
 import type {ColumnDef} from '../../components/DataTable'
 
-import {CopyID} from '../../components'
+import {CopyID, SearchInput} from '../../components'
 import {DataTable} from '../../components/DataTable'
 import {Icon} from '../../components/Icon'
 import {formatIsoDateString} from '../../utils'
@@ -15,11 +15,15 @@ export function CustomersTable({
   onPageChange,
   isLoading,
   onCountClick,
+  query,
+  onQueryChange,
 }: {
   data: AppRouterOutput['listCustomers']
   onPageChange: (pageIndex: number) => void
   isLoading: boolean
   onCountClick: (customerId: string) => void
+  query: string | undefined
+  onQueryChange: (query: string) => void
 }) {
   const columns: Array<ColumnDef<CustomerData>> = [
     {
@@ -79,7 +83,7 @@ export function CustomersTable({
       onPageChange={onPageChange}
       isLoading={isLoading}>
       <DataTable.Header>
-        <DataTable.SearchInput />
+        <SearchInput initialValue={query} onChange={onQueryChange} />
         <DataTable.ColumnVisibilityToggle />
       </DataTable.Header>
       <DataTable.Table />

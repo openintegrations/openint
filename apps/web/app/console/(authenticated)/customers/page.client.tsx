@@ -11,10 +11,12 @@ export function CustomerList() {
   const router = useRouter()
   const trpc = useTRPC()
   const [pageIndex, setPageIndex] = useState(0)
+  const [query, setQuery] = useState<string | undefined>(undefined)
   const customerData = useSuspenseQuery(
     trpc.listCustomers.queryOptions({
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      query,
     }),
   )
 
@@ -32,6 +34,8 @@ export function CustomerList() {
       onPageChange={handlePageChange}
       isLoading={customerData.isFetching || customerData.isLoading}
       onCountClick={handleCountClick}
+      query={query}
+      onQueryChange={setQuery}
     />
   )
 }

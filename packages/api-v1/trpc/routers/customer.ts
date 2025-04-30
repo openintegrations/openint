@@ -21,7 +21,7 @@ export const customerRouter = router({
     .input(
       zListParams
         .extend({
-          keywords: z.string().trim().nullish(),
+          query: z.string().trim().nullish(),
         })
         .default({}),
     )
@@ -31,12 +31,16 @@ export const customerRouter = router({
         z.object({
           id: z.string().nullable().describe('Customer Id'),
           connection_count: z.number(),
-          created_at: z.string().describe('postgres timestamp format, not yet ISO'),
-          updated_at: z.string().describe('postgres timestamp format, not yet ISO'),
+          created_at: z
+            .string()
+            .describe('postgres timestamp format, not yet ISO'),
+          updated_at: z
+            .string()
+            .describe('postgres timestamp format, not yet ISO'),
         }),
       ),
     )
-    .query(async ({ctx, input: {offset, limit, keywords}}) => {
+    .query(async ({ctx, input: {offset, limit, query}}) => {
       const res = await ctx.db
         .select({
           id: schema.connection.customer_id,
@@ -47,8 +51,8 @@ export const customerRouter = router({
         })
         .from(schema.connection)
         .where(
-          keywords
-            ? sql` ${schema.connection.customer_id} ILIKE ${`%${keywords}%`} `
+          query
+            ? sql` ${schema.connection.customer_id} ILIKE ${`%${query}%`} `
             : undefined,
         )
         .groupBy(schema.connection.customer_id)
