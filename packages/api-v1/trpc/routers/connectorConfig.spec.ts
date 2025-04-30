@@ -117,6 +117,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items[0]?.org_id).toEqual('org_222')
   })
 
+  test('list connector config with query', async () => {
+    const res = await asOrg.listConnectorConfigs({
+      query: 'quickbooks',
+    })
+    expect(res.items).toHaveLength(2)
+  })
+
+  test('list connector config with non existing query', async () => {
+    const res = await asOrg.listConnectorConfigs({
+      query: 'test',
+    })
+    expect(res.items).toHaveLength(0)
+  })
+
   test('user has access to org connector config', async () => {
     const res = await asUser.listConnectorConfigs()
     expect(res.items).toHaveLength(2)

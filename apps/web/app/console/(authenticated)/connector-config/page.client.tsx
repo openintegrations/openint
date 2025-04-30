@@ -8,7 +8,7 @@ import {useSuspenseQuery} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
 import {useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
-import {ConnectorTableCell} from '@openint/ui-v1'
+import {ConnectorTableCell, SearchInput} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
@@ -21,6 +21,7 @@ export function ConnectorConfigList() {
     null,
   )
   const [pageIndex, setPageIndex] = useState(0)
+  const [query, setQuery] = useState<string | undefined>(undefined)
 
   const trpc = useTRPC()
 
@@ -30,6 +31,7 @@ export function ConnectorConfigList() {
       expand: ['connection_count', 'connector.schemas'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      query,
     }),
   )
 
@@ -117,7 +119,7 @@ export function ConnectorConfigList() {
         onPageChange={handlePageChange}
         isLoading={res.isFetching || res.isLoading}>
         <DataTable.Header>
-          <DataTable.SearchInput />
+          <SearchInput initialValue={query} onChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
           <Button
             className="ml-4"
