@@ -14,13 +14,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@openint/shadcn/ui'
-import {ConnectorConfigForm} from '@openint/ui-v1'
+import {ConnectorConfigForm, CopyID} from '@openint/ui-v1'
 import {useConfirm} from '@openint/ui-v1/components/ConfirmAlert'
+import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
 type ConnectorConfigDetailsProps = {
   changedFieldsRef: React.RefObject<string[]>
   successCallback?: () => void
+  onFormChange?: () => void
 } & (
   | {connectorConfigId: Id['ccfg']; connectorName?: never}
   | {connectorName: ConnectorName; connectorConfigId?: never}
@@ -31,6 +33,7 @@ export function ConnectorConfigDetails({
   connectorName,
   changedFieldsRef,
   successCallback,
+  onFormChange,
 }: ConnectorConfigDetailsProps) {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
@@ -201,6 +204,12 @@ export function ConnectorConfigDetails({
     connector?.data?.schemas?.connector_config ??
     connectorConfig?.data?.connector?.schemas?.connector_config
 
+  const handleChange = () => {
+    if (onFormChange) {
+      onFormChange()
+    }
+  }
+
   if (connectorConfig.isLoading || connector.isLoading) {
     return (
       <div className="flex size-full items-center justify-center">
@@ -209,26 +218,117 @@ export function ConnectorConfigDetails({
     )
   }
 
+  // Add some basic info for display if we have connector data
+  const configData = connectorConfig?.data
+
   return (
-    <div className="flex size-full flex-1 flex-col justify-between">
-      {connectorConfig.data ? (
-        <ConnectorConfigForm
-          connectorConfig={connectorConfig.data}
-          configSchema={configSchema}
-          changedFieldsRef={changedFieldsRef}
-          onSubmit={handleSave}
-          formRef={formRef}
-        />
-      ) : (
-        <ConnectorConfigForm
-          connector={connector.data}
-          configSchema={configSchema}
-          changedFieldsRef={changedFieldsRef}
-          onSubmit={handleSave}
-          formRef={formRef}
-        />
-      )}
-      <div className="bg-background sticky bottom-0 border-t p-4">
+    <div className="flex size-full flex-1 flex-col">
+      <div className="space-y-5 p-5">
+        {/* Basic Connector Info */}
+        {configData && (
+          <section className="border-border/60 bg-card/30 overflow-hidden rounded-lg border">
+            <div className="border-border/40 bg-muted/30 border-b px-5 py-3">
+              <h3 className="text-sm font-medium tracking-tight">
+                Connector Information
+              </h3>
+            </div>
+            <div className="divide-border/40 divide-y">
+              <div className="flex px-5 py-3">
+                <h4 className="text-muted-foreground w-1/3 text-sm">
+                  Connector Name
+                </h4>
+                <div className="w-2/3">
+                  <p className="text-sm font-medium">
+                    {configData.connector?.display_name || displayName}
+                  </p>
+                </div>
+              </div>
+              <div className="flex px-5 py-3">
+                <h4 className="text-muted-foreground w-1/3 text-sm">
+                  Config ID
+                </h4>
+                <div className="w-2/3">
+                  <CopyID value={configData.id} width="100%" size="medium" />
+                </div>
+              </div>
+              {configData.created_at && (
+                <div className="flex px-5 py-3">
+                  <h4 className="text-muted-foreground w-1/3 text-sm">
+                    Created
+                  </h4>
+                  <div className="flex w-2/3 items-center justify-between">
+                    <p className="text-sm font-medium">
+                      {formatIsoDateString(configData.created_at)}
+                    </p>
+                    <p className="text-muted-foreground text-xs">
+                      {timeSince(configData.created_at)}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {configData.updated_at && (
+                <div className="flex px-5 py-3">
+                  <h4 className="text-muted-foreground w-1/3 text-sm">
+                    Last Updated
+                  </h4>
+                  <div className="flex w-2/3 items-center justify-between">
+                    <p className="text-sm font-medium">
+                      {formatIsoDateString(configData.updated_at)}
+                    </p>
+                    <p className="text-muted-foreground text-xs">
+                      {timeSince(configData.updated_at)}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {configData.connection_count !== undefined && (
+                <div className="flex px-5 py-3">
+                  <h4 className="text-muted-foreground w-1/3 text-sm">
+                    Active Connections
+                  </h4>
+                  <div className="w-2/3">
+                    <p className="text-sm font-medium">
+                      {configData.connection_count}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Configuration Form */}
+        <section className="border-border/60 bg-card/30 overflow-hidden rounded-lg border">
+          <div className="border-border/40 bg-muted/30 border-b px-5 py-3">
+            <h3 className="text-sm font-medium tracking-tight">
+              Connector Configuration
+            </h3>
+          </div>
+          <div className="p-5">
+            {connectorConfig.data ? (
+              <ConnectorConfigForm
+                connectorConfig={connectorConfig.data}
+                configSchema={configSchema}
+                changedFieldsRef={changedFieldsRef}
+                onSubmit={handleSave}
+                formRef={formRef}
+                onChange={handleChange}
+              />
+            ) : (
+              <ConnectorConfigForm
+                connector={connector.data}
+                configSchema={configSchema}
+                changedFieldsRef={changedFieldsRef}
+                onSubmit={handleSave}
+                formRef={formRef}
+                onChange={handleChange}
+              />
+            )}
+          </div>
+        </section>
+      </div>
+
+      <div className="bg-background sticky bottom-0 mt-auto border-t p-4">
         <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             {connectorConfig?.data?.connection_count ? (
@@ -246,7 +346,11 @@ export function ConnectorConfigDetails({
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={deleteConfig.isPending}>
+              disabled={
+                deleteConfig.isPending ||
+                !connectorConfigId ||
+                (connectorConfig?.data?.connection_count || 0) > 0
+              }>
               {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
             </Button>
           </div>

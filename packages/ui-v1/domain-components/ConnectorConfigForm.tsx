@@ -1,8 +1,10 @@
 'use client'
 
+import type {IChangeEvent} from '@rjsf/core'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {JSONSchemaFormRef} from '../components/schema-form'
 
+import {useCallback} from 'react'
 import {JSONSchemaForm} from '../components/schema-form'
 
 export type ConnectorConfigFormProps = {
@@ -22,6 +24,10 @@ export type ConnectorConfigFormProps = {
    * onSubmit for JSONSchemaForm
    */
   onSubmit?: (data: {formData: Core['connector_config_insert']}) => void
+  /*
+   * onChange callback for when the form changes
+   */
+  onChange?: () => void
 } & (
   | {
       connectorConfig: ConnectorConfig<
@@ -45,6 +51,7 @@ export function ConnectorConfigForm({
   changedFieldsRef,
   onSubmit,
   formRef,
+  onChange,
 }: ConnectorConfigFormProps) {
   const initialValues = (
     connectorConfig
@@ -94,6 +101,19 @@ export function ConnectorConfigForm({
     connector: connector ?? connectorConfig?.connector,
   }
 
+  // Track user interaction with the form
+  const handleFormChange = useCallback(
+    (_data: IChangeEvent<any>, id?: string) => {
+      // Only call onChange when there's actual user interaction
+      if (id !== undefined) {
+        if (onChange) {
+          onChange()
+        }
+      }
+    },
+    [onChange],
+  )
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1">
@@ -104,6 +124,7 @@ export function ConnectorConfigForm({
             formContext={formContext}
             formRef={formRef}
             changedFieldsRef={changedFieldsRef}
+            onChange={handleFormChange}
             onSubmit={onSubmit}
           />
         </div>
