@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {ChevronDown, Loader2, Search} from 'lucide-react'
+import {ChevronDown, Loader2} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
@@ -26,7 +26,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  Input,
   Table,
   TableBody,
   TableCell,
@@ -36,6 +35,7 @@ import {
 } from '@openint/shadcn/ui'
 import {compact} from '@openint/util/array-utils'
 import {titleCase} from '@openint/util/string-utils'
+import {SearchInput as SearchInputComponent} from './SearchInput'
 
 const defaultFilter = () => true
 
@@ -197,6 +197,7 @@ export function DataTable<TData, TValue>({
     },
     manualPagination: isPaginated, // Only enable manual pagination if data is paginated
     pageCount: isPaginated ? Math.ceil(totalCount / pageSize) : 1,
+    rowCount: totalCount,
     onPaginationChange: isPaginated
       ? (updater) => {
           if (typeof updater === 'function') {
@@ -306,9 +307,8 @@ export function DataTableHeader({children}: {children: React.ReactNode}) {
   return <div className="flex items-center py-4">{children}</div>
 }
 
-export function SearchInput({initialSearch}: {initialSearch?: string | null}) {
+function SearchInput({initialSearch}: {initialSearch?: string | null}) {
   const {table} = useDataTableContext()
-  const [isFocused, setIsFocused] = React.useState(false)
 
   useEffect(() => {
     if (initialSearch) {
@@ -317,23 +317,11 @@ export function SearchInput({initialSearch}: {initialSearch?: string | null}) {
   }, [initialSearch, table])
 
   return (
-    <div
-      className="relative max-w-lg transition-all duration-300 ease-in-out"
-      style={{width: isFocused ? '600px' : '400px'}}>
-      {isFocused && (
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500 opacity-100 transition-opacity duration-300 ease-in-out" />
-      )}
-      <Input
-        placeholder={isFocused ? '' : 'Search...'}
-        value={(table.getState().globalFilter as string) ?? ''}
-        onChange={(event) => table.setGlobalFilter(event.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className={`transition-all duration-300 ease-in-out ${
-          isFocused ? 'pl-10' : 'pl-3'
-        }`}
-      />
-    </div>
+    <SearchInputComponent
+      initialValue={(table.getState().globalFilter as string) ?? ''}
+      onChange={(value) => table.setGlobalFilter(value)}
+      className="max-w-lg"
+    />
   )
 }
 
