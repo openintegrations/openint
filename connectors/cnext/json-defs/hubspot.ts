@@ -16,10 +16,6 @@ export default {
     openint_scopes: ['crm.objects.contacts.read'],
     scopes: [
       {
-        scope: 'oauth',
-        description: "Allows the app to make OAuth requests to HubSpot's API.",
-      },
-      {
         scope: 'contacts',
         description:
           'Provides read and write access to all contacts and contact properties in HubSpot.',
