@@ -4,7 +4,7 @@ import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSearchParams} from 'next/navigation'
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {
   CommandPopover,
@@ -66,6 +66,11 @@ export function ConnectionsPage() {
   const [pageIndex, setPageIndex] = useState(0)
   const searchParams = useSearchParams()
   const customerId = searchParams.get('customerId')
+
+  useEffect(() => {
+    // Reset page index when customerId changes
+    setPageIndex(0)
+  }, [customerId])
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
@@ -129,7 +134,7 @@ export function ConnectionsPage() {
           onPageChange={handlePageChange}
           isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
-            <DataTable.SearchInput />
+            <DataTable.SearchInput initialSearch={customerId} />
             <DataTable.ColumnVisibilityToggle />
           </DataTable.Header>
           <DataTable.Table />
