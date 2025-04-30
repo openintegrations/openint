@@ -5,7 +5,7 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useState} from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {CopyID} from '@openint/ui-v1'
+import {CopyID, SearchInput} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils/dates'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
@@ -44,11 +44,13 @@ export function EventsList() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [pageIndex, setPageIndex] = useState(0)
+  const [query, setQuery] = useState<string | undefined>(undefined)
 
   const eventData = useSuspenseQuery(
     trpc.listEvents.queryOptions({
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      query,
     }),
   )
 
@@ -72,7 +74,7 @@ export function EventsList() {
         onPageChange={handlePageChange}
         isLoading={eventData.isFetching || eventData.isLoading}>
         <DataTable.Header>
-          <DataTable.SearchInput />
+          <SearchInput initialValue={query} onChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
         </DataTable.Header>
         <DataTable.Table />
