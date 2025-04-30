@@ -162,7 +162,7 @@ export const zOAuthConfig = z.object({
   required_scopes: z
     .array(z.string())
     .optional()
-    .describe('Scopes required by the Connector for Oauth requests'),
+    .describe('Scopes required by the Connector for OAuth requests'),
   openint_scopes: z
     .array(z.string())
     .optional()
