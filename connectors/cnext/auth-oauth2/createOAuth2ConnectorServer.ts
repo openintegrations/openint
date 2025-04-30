@@ -7,7 +7,7 @@ import {env, resolveRoute} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {zOauthState} from './schemas'
-import {getClient} from './utils'
+import {getClient, getRequestedScopes} from './utils'
 
 /*
  * This function generates a server implementation for an OAuth2 connector.
@@ -72,14 +72,7 @@ export function createOAuth2ConnectorServer<
         redirect_uri:
           config.oauth?.redirect_uri?.trim() ||
           env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
-        scopes: config.oauth?.scopes
-          ? // here because some old ccfgs have scopes as a string
-            typeof config.oauth.scopes === 'string'
-            ? (config.oauth.scopes as string).split(
-                oauthConfigTemplate.scope_separator ?? ' ',
-              )
-            : config.oauth.scopes
-          : [],
+        scopes: getRequestedScopes(config, oauthConfig),
         state: JSON.stringify({
           connection_id: connectionId,
           redirect_uri: new URL(
