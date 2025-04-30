@@ -5,7 +5,18 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
-import {and, any, asc, dbUpsertOne, desc, eq, schema, sql} from '@openint/db'
+import {
+  and,
+  any,
+  asc,
+  dbUpsertOne,
+  desc,
+  eq,
+  like,
+  or,
+  schema,
+  sql,
+} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
@@ -111,6 +122,9 @@ export const connectionRouter = router({
         expand: z.array(zConnectionExpandOption).default([]).openapi({
           description: 'Expand the response with additional optionals',
         }),
+        query: z.string().optional().openapi({
+          description: 'Search query for the connection list',
+        }),
       }),
     )
     .output(
@@ -134,6 +148,12 @@ export const connectionRouter = router({
             // excluding data from old connectors that are no longer supported
             any(input.connector_names ?? zConnectorName.options),
           ),
+          input.query
+            ? or(
+                like(schema.connection.id, `%${input.query}%`),
+                like(schema.connection.customer_id, `%${input.query}%`),
+              )
+            : undefined,
         ),
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),

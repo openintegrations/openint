@@ -11,6 +11,7 @@ import {
   ConnectionStatusBadge,
   ConnectionTableCell,
   CopyID,
+  SearchInput,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
@@ -66,6 +67,9 @@ export function ConnectionsPage() {
   const [pageIndex, setPageIndex] = useState(0)
   const searchParams = useSearchParams()
   const customerId = searchParams.get('customerId')
+  const [query, setQuery] = useState<string | undefined>(
+    customerId ?? undefined,
+  )
 
   useEffect(() => {
     // Reset page index when customerId changes
@@ -78,6 +82,7 @@ export function ConnectionsPage() {
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
       customer_id: customerId ? customerId : undefined,
+      query,
     }),
   )
 
@@ -134,7 +139,7 @@ export function ConnectionsPage() {
           onPageChange={handlePageChange}
           isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
-            <DataTable.SearchInput initialSearch={customerId} />
+            <SearchInput initialValue={query} onChange={setQuery} />
             <DataTable.ColumnVisibilityToggle />
           </DataTable.Header>
           <DataTable.Table />
