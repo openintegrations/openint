@@ -73,7 +73,7 @@ export function CustomersTable({
 
   return (
     <DataTable<CustomerData, string | number>
-      data={data.items}
+      data={data}
       columns={columns}
       enableSelect={false}
       onPageChange={onPageChange}
