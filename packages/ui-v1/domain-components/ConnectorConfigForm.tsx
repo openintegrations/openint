@@ -5,6 +5,7 @@ import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {JSONSchemaFormRef} from '../components/schema-form'
 
 import {useCallback} from 'react'
+import {cn} from '@openint/shadcn/lib/utils'
 import {JSONSchemaForm} from '../components/schema-form'
 
 export type ConnectorConfigFormProps = {
@@ -115,20 +116,90 @@ export function ConnectorConfigForm({
   )
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1">
-        <div className="flex h-full flex-col space-y-8 px-8">
-          <JSONSchemaForm<Core['connector_config_insert']>
-            jsonSchema={formSchema}
-            formData={initialValues}
-            formContext={formContext}
-            formRef={formRef}
-            changedFieldsRef={changedFieldsRef}
-            onChange={handleFormChange}
-            onSubmit={onSubmit}
-          />
-        </div>
-      </div>
+    <div className="divide-border/40 divide-y">
+      <JSONSchemaForm<Core['connector_config_insert']>
+        jsonSchema={formSchema}
+        formData={initialValues}
+        formContext={formContext}
+        formRef={formRef}
+        changedFieldsRef={changedFieldsRef}
+        onChange={handleFormChange}
+        onSubmit={onSubmit}
+        className={cn('schema-form-improved', 'px-0')}
+      />
+      <style jsx global>{`
+        .schema-form-improved .form-group {
+          @apply border-border/40 flex items-center px-0 py-3;
+          border-bottom-width: 0;
+        }
+        .schema-form-improved .form-group:first-child {
+          @apply pt-0;
+        }
+        .schema-form-improved .form-group:last-child {
+          @apply pb-0;
+        }
+        .schema-form-improved label.control-label {
+          @apply text-muted-foreground w-1/3 text-sm font-normal;
+        }
+        .schema-form-improved .field-description {
+          @apply text-muted-foreground my-1 text-xs;
+        }
+        .schema-form-improved .form-group > div {
+          @apply w-2/3;
+        }
+        .schema-form-improved input,
+        .schema-form-improved select {
+          @apply bg-background border-input rounded-md border px-3 py-2;
+          max-width: 100%;
+        }
+        .schema-form-improved fieldset {
+          @apply m-0 border-none p-0;
+        }
+        .schema-form-improved fieldset > legend {
+          @apply hidden;
+        }
+
+        /* Custom field specific styles */
+        .schema-form-improved [id$='_disabled-field'] > div {
+          @apply flex justify-start;
+        }
+
+        /* Switch styling */
+        .schema-form-improved .switch-container {
+          @apply flex items-center;
+        }
+
+        /* OAuth field styling */
+        .schema-form-improved [id$='_oauth-field'],
+        .schema-form-improved [id$='_credentials-field'] {
+          @apply w-full;
+        }
+
+        .schema-form-improved [id$='_oauth-field'] > div,
+        .schema-form-improved [id$='_credentials-field'] > div {
+          @apply w-full;
+        }
+
+        /* Fix alignment for OAuth switch */
+        .schema-form-improved
+          [id$='_oauth-field']
+          .w-full.flex.justify-between {
+          @apply items-center;
+        }
+
+        /* Fix alignment for scopes */
+        .schema-form-improved [id*='scopes'] {
+          @apply flex-col pt-2;
+        }
+
+        .schema-form-improved [id*='scopes'] > label {
+          @apply w-full;
+        }
+
+        .schema-form-improved [id*='scopes'] > div {
+          @apply w-full pt-2;
+        }
+      `}</style>
     </div>
   )
 }

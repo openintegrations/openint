@@ -304,7 +304,7 @@ export function ConnectorConfigDetails({
               Connector Configuration
             </h3>
           </div>
-          <div className="p-5">
+          <div className="px-5">
             {connectorConfig.data ? (
               <ConnectorConfigForm
                 connectorConfig={connectorConfig.data}
