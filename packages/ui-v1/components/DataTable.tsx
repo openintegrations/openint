@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -306,9 +306,15 @@ export function DataTableHeader({children}: {children: React.ReactNode}) {
   return <div className="flex items-center py-4">{children}</div>
 }
 
-export function SearchInput() {
+export function SearchInput({initialSearch}: {initialSearch?: string | null}) {
   const {table} = useDataTableContext()
   const [isFocused, setIsFocused] = React.useState(false)
+
+  useEffect(() => {
+    if (initialSearch) {
+      table.setGlobalFilter(initialSearch)
+    }
+  }, [initialSearch, table])
 
   return (
     <div
