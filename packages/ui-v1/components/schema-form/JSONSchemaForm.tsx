@@ -10,10 +10,13 @@ import type {
   RegistryFieldsType,
   RegistryWidgetsType,
   RJSFSchema,
+  UiSchema,
+  ValidatorType,
 } from '@rjsf/utils'
 import type {Oas31Schema} from '@openint/util/schema'
 
 import {withTheme} from '@rjsf/core'
+import {getChangedFields} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -64,6 +67,12 @@ export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   onSubmit?: (data: {formData: TData}) => void
 
   debugMode?: boolean
+  /**
+   * TODO: Combine if possible,  @rodrigo tried combining but the formRef always overrides the changedFieldsRef and we cannot keep track of the changed fields.
+   * on handleFormChange tried setting formRef.current.changedFieldsRef but the value was always undefined.
+   */
+  changedFieldsRef?: React.RefObject<string[]>
+  formRef?: React.RefObject<JSONSchemaFormRef | null>
 }
 
 export const JSONSchemaForm = <TData extends Record<string, unknown>>({
@@ -76,6 +85,8 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   onSubmit,
   debugMode: debugMode,
   onChange,
+  changedFieldsRef,
+  formRef,
   ...props
 }: JSONSchemaFormProps<TData>) => {
   const jsonSchema = transformJSONSchema(_jsonSchema as Oas31Schema, {
@@ -89,12 +100,17 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   const [formData, setFormData] = React.useState(() => formDataRef.current)
 
   const handleFormChange = React.useCallback(
-    (data: IChangeEvent<TData>) => {
+    (data: IChangeEvent<TData>, id: string | undefined) => {
       formDataRef.current = data.formData
       setFormData(data.formData)
-      onChange?.(data)
+      onChange?.(data, id)
+
+      if (changedFieldsRef && data.formData && initialFormData) {
+        const changed = getChangedFields(data.formData, initialFormData)
+        changedFieldsRef.current = changed
+      }
     },
-    [onChange],
+    [onChange, changedFieldsRef, initialFormData],
   )
 
   const uiSchema = jsonSchemaToUiSchema(jsonSchema)
@@ -114,9 +130,12 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
       schema={jsonSchema}
       uiSchema={{
         ...(hideSubmitButton && {'ui:submitButtonOptions': {norender: true}}),
-        ...uiSchema,
-        ...props.uiSchema,
+        ...(uiSchema as UiSchema<TData, RJSFSchema, any>),
+        ...(props.uiSchema as UiSchema<TData, RJSFSchema, any>),
       }}
+      validator={validator as ValidatorType<TData, RJSFSchema, any>}
+      widgets={widgets as RegistryWidgetsType}
+      fields={fields as RegistryFieldsType}
       onChange={handleFormChange}
       onSubmit={(data) => {
         if (!data.formData) {
@@ -124,9 +143,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
         }
         onSubmit?.({formData: data.formData})
       }}
-      validator={validator}
-      widgets={widgets as RegistryWidgetsType}
-      fields={fields as RegistryFieldsType}
+      ref={formRef}
     />
   )
   return debugMode ? (
