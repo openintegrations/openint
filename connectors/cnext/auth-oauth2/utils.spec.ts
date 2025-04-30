@@ -121,4 +121,19 @@ describe('getRequestedScopes', () => {
     )
     expect(scopes).toEqual([])
   })
+
+  test('should handle both required_scopes and config.oauth.scopes being undefined', () => {
+    const scopes = getRequestedScopes(
+      {oauth: {scopes: undefined}},
+      {
+        type: 'OAUTH2',
+        scopes: [],
+        authorization_request_url: 'https://example.com/auth',
+        token_request_url: 'https://example.com/token',
+        params_config: {},
+        // No required_scopes specified
+      },
+    )
+    expect(scopes).toEqual([])
+  })
 })
