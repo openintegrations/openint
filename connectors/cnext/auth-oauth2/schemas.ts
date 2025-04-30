@@ -159,6 +159,10 @@ export const zOAuthConfig = z.object({
     .url()
     .optional()
     .describe('URL to revoke an access token from the provider'),
+  required_scopes: z
+    .array(z.string())
+    .optional()
+    .describe('Scopes required by the Connector for Oauth requests'),
   openint_scopes: z
     .array(z.string())
     .optional()
