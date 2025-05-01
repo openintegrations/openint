@@ -1,4 +1,4 @@
-import {schema, sql} from '@openint/db'
+import {like, or, schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
 import {
@@ -52,7 +52,10 @@ export const customerRouter = router({
         .from(schema.connection)
         .where(
           query
-            ? sql` ${schema.connection.customer_id} ILIKE ${`%${query}%`} `
+            ? or(
+                like(schema.connection.customer_id, `%${query}%`),
+                like(schema.connection.connector_name, `%${query}%`),
+              )
             : undefined,
         )
         .groupBy(schema.connection.customer_id)

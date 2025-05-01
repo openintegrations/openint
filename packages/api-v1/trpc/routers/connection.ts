@@ -152,6 +152,7 @@ export const connectionRouter = router({
             ? or(
                 like(schema.connection.id, `%${input.query}%`),
                 like(schema.connection.customer_id, `%${input.query}%`),
+                like(schema.connection.connector_name, `%${input.query}%`),
               )
             : undefined,
         ),
