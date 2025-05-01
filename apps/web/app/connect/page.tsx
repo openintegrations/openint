@@ -142,7 +142,7 @@ export default async function ConnectPage(
               <div className="flex min-h-screen w-full">
                 {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
                 {!searchParams.is_embedded && (
-                  <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
+                  <div className="bg-primary/10 mr-4 hidden lg:flex lg:w-[450px]">
                     <div className="flex flex-col items-start p-8">
                       <Suspense
                         fallback={
@@ -190,21 +190,7 @@ export default async function ConnectPage(
 
                 {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
-                <div className="mx-auto w-full max-w-4xl pt-14">
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-bold">My Integrations</h1>
-                    <Button className="mr-20">
-                      <Link
-                        href={
-                          (resolveLinkPath('/connect') +
-                            '?view=add&token=' +
-                            token) as TypedHref
-                        }>
-                        Add Integration
-                      </Link>
-                    </Button>
-                  </div>
-                  <div className="mt-4"></div>
+                <div className="mx-auto w-full max-w-4xl px-3 pt-14 md:px-4">
                   {isManage ? (
                     <Suspense fallback={<LoadingSpinner />}>
                       <MyConnectionsClient
