@@ -10,6 +10,7 @@
     "pub": "pnpm publish --no-git-checks"
   },
   "devDependencies": {
+    "@openint/events": "workspace:*",
     "@types/react": "19.1.0",
     "typescript": "*"
   },
