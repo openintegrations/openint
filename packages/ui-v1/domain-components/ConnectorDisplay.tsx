@@ -1,66 +1,119 @@
 import type {ConnectorName, Core} from '@openint/api-v1/models'
 
+import {ChevronRight} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
 import {ConnectorLogo} from './ConnectorLogo'
 
-export interface ConnectorCardProps
+export interface ConnectorDisplayProps
   extends React.HTMLAttributes<HTMLDivElement> {
   connector: Core['connector']
+  mode?: 'card' | 'row'
+  displayBadges?: boolean
+  onPress?: () => void
 }
 
 /**
- * ConnectorCard component displays connector information with a logo and badges.
+ * ConnectorDisplay component displays connector information with a logo and badges.
  * It uses the Badge component from shadcn/ui.
  *
  * The component is responsive and will adapt to different screen sizes.
  * It includes a hover effect with darker border and background to indicate it's clickable.
  */
-const ConnectorCard = ({
+const ConnectorDisplay = ({
   className,
   connector,
+  mode = 'card',
+  displayBadges = false,
+  onPress,
   ...props
-}: ConnectorCardProps) => {
+}: ConnectorDisplayProps) => {
   const {name, display_name} = connector
+  const isRowMode = mode === 'row'
+
   return (
     // TODO: @snrondina: Refactor to use the proper card component from our library
     <div
       className={cn(
-        'group flex w-full cursor-pointer flex-col items-start gap-4 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50',
+        'group flex cursor-pointer rounded-lg transition-all',
+        isRowMode
+          ? 'w-full flex-row items-center gap-4 px-2 py-1'
+          : 'w-full flex-col items-start gap-4 border border-gray-200 p-2 hover:border-gray-400 hover:bg-gray-50',
         className,
       )}
+      onClick={onPress}
       {...props}>
-      <div className="flex w-full flex-row items-center gap-4">
-        <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
-          <ConnectorLogo
-            connectorName={name as ConnectorName}
-            className="object-contain"
-          />
+      <div
+        className={cn(
+          'flex items-center gap-4',
+          isRowMode ? 'w-full flex-row justify-between' : 'w-full flex-row',
+        )}>
+        <div className="flex items-center gap-4">
+          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
+            <ConnectorLogo
+              connectorName={name as ConnectorName}
+              className="object-contain"
+            />
+          </div>
+          <div className={cn(isRowMode ? 'flex flex-col' : 'flex-1')}>
+            <h3 className="line-clamp-2 text-base font-semibold transition-colors group-hover:text-gray-900">
+              {display_name || name}
+            </h3>
+            {displayBadges && (
+              <div className="mt-1 flex flex-wrap gap-2">
+                {connector.stage && (
+                  <Badge
+                    variant={connector.stage === 'ga' ? 'default' : 'secondary'}
+                    className={cn(
+                      connector.stage === 'ga' &&
+                        'bg-green-100 text-green-800 hover:bg-green-200',
+                      connector.stage === 'beta' &&
+                        'bg-blue-100 text-blue-800 hover:bg-blue-200',
+                      connector.stage === 'alpha' &&
+                        'bg-pink-100 text-pink-800 hover:bg-pink-200',
+                    )}>
+                    {connector.stage.toUpperCase()}
+                  </Badge>
+                )}
+                {connector.platforms?.map((platform) => (
+                  <Badge
+                    key={platform}
+                    variant="secondary"
+                    className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+                    {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-        <h3 className="line-clamp-2 text-xl font-semibold transition-colors group-hover:text-gray-900">
-          {display_name || name}
-        </h3>
+        {isRowMode && (
+          <div className="ml-2 flex-shrink-0">
+            <ChevronRight
+              className="text-muted-foreground group-hover:text-foreground h-4 w-4 transition-all duration-200 ease-in-out group-hover:translate-x-0.5"
+              strokeWidth={1.5}
+            />
+          </div>
+        )}
       </div>
-      <ConnectorBadges
-        stage={connector.stage}
-        platforms={connector.platforms}
-      />
     </div>
   )
 }
 
-ConnectorCard.displayName = 'ConnectorCard'
+ConnectorDisplay.displayName = 'ConnectorDisplay'
 
-export {ConnectorCard}
+export {ConnectorDisplay}
 
 // Export the ConnectorBadges component so it can be used in stories
 export const ConnectorBadges = ({
   stage,
   platforms,
+  className,
 }: {
   stage?: Core['connector']['stage']
   platforms?: Core['connector']['platforms']
+  className?: string
 }) => {
   // Create an array of all badges
   const allBadges = [
@@ -73,7 +126,7 @@ export const ConnectorBadges = ({
   const visibleBadgesCount = 2
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={cn('flex flex-wrap gap-2', className)}>
       {/* Show all badges on desktop */}
       <div className="hidden md:flex md:flex-wrap md:gap-2">
         {stage && (
