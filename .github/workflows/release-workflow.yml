@@ -19,15 +19,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
-      - name: Setup Node.js and pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
       - name: Authenticate GitHub CLI
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -166,6 +157,9 @@ jobs:
           git config user.name "Amadeo Pellicce (Automated PR)"
           git config user.email "pellicceama@gmail.com"
           git fetch 
+
+          # Run generate on docs without the NODE_ENV=development flag so that it pull from production stainless any changes
+          cd docs && pnpm generate && cd ..
 
           # Add all generated files using pattern matching
           git add -f "packages/api-v1/__generated__/*" "docs/mintlify.oas.yml" 2>/dev/null || true

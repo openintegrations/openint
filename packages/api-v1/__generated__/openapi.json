@@ -26,6 +26,29 @@
         "parameters": [
           {
             "in": "query",
+            "name": "limit",
+            "description": "Limit the number of items returned",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 500,
+              "default": 50,
+              "description": "Limit the number of items returned"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "description": "Offset the items returned",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
+            }
+          },
+          {
+            "in": "query",
             "name": "expand",
             "schema": {
               "type": "array",
@@ -78,6 +101,10 @@
                       "type": "integer",
                       "minimum": 0,
                       "description": "Offset the items returned"
+                    },
+                    "has_next_page": {
+                      "type": "boolean",
+                      "description": "Convenience flag = offset + limit >= total"
                     }
                   },
                   "required": [
@@ -561,18 +588,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 500
+              "maximum": 500,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
@@ -927,6 +960,10 @@
                       "type": "integer",
                       "minimum": 0,
                       "description": "Offset the items returned"
+                    },
+                    "has_next_page": {
+                      "type": "boolean",
+                      "description": "Convenience flag = offset + limit >= total"
                     }
                   },
                   "required": [
@@ -1564,18 +1601,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 500
+              "maximum": 500,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
@@ -1988,6 +2031,10 @@
                       "type": "integer",
                       "minimum": 0,
                       "description": "Offset the items returned"
+                    },
+                    "has_next_page": {
+                      "type": "boolean",
+                      "description": "Convenience flag = offset + limit >= total"
                     }
                   },
                   "required": [
@@ -3254,18 +3301,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 500
+              "maximum": 500,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           }
         ],
@@ -3297,6 +3350,10 @@
                       "type": "integer",
                       "minimum": 0,
                       "description": "Offset the items returned"
+                    },
+                    "has_next_page": {
+                      "type": "boolean",
+                      "description": "Convenience flag = offset + limit >= total"
                     }
                   },
                   "required": [

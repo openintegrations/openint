@@ -1,77 +1,113 @@
-import type Form from '@rjsf/core'
-import type {RJSFSchema} from '@rjsf/utils'
-import type {ForwardedRef} from 'react'
-import type {defConnectors} from '@openint/all-connectors/connectors.def'
+'use client'
+
+import type {ConnectorConfig, Core} from '@openint/api-v1/models'
+import type {JSONSchemaFormRef} from '../components/schema-form'
 
 import {JSONSchemaForm} from '../components/schema-form'
 
-export interface ConnectorConfigFormProps<
-  T extends keyof typeof defConnectors,
-> {
-  /**
-   * The name of the connector to display the config form for
+export type ConnectorConfigFormProps = {
+  /*
+   * The schema of the connector config, this is used to generate the form
    */
-  connectorName: T
-
-  /**
-   * The connector config data to display the config form for. Initial state of the form.
-   * If data is passed in, it is expected to come in the schema for the connectorConfig.config
-   **/
-  connectorConfig: any
-
-  jsonSchema: RJSFSchema
-
-  /**
-   * Callback for form submission
+  configSchema: Record<string, unknown> | undefined
+  /*
+   * Changed fields ref.
    */
-  onSubmit: (data: any) => void
-
-  /**
-   * Ref for the form element to be able to submit it.
-   * Can be created with const formRef = createRef<Form>()
-   * and submitted with formRef.current.submit();
-   * onSubmit is then called with the form data
+  changedFieldsRef: React.RefObject<string[]>
+  /*
+   * formRef for JSONSchemaForm
    */
-  ref: ForwardedRef<Form>
-
-  /**
-   * Optional class name for styling the form container
+  formRef: React.RefObject<JSONSchemaFormRef | null>
+  /*
+   * onSubmit for JSONSchemaForm
    */
-  className?: string
-  /**
-   * Flag to indicate if the form is in a loading state
-   */
-  loading?: boolean
-}
+  onSubmit?: (data: {formData: Core['connector_config_insert']}) => void
+} & (
+  | {
+      connectorConfig: ConnectorConfig<
+        'connector' | 'integrations' | 'connection_count'
+      >
+      connector?: never
+    }
+  | {
+      connector: Core['connector']
+      connectorConfig?: never
+    }
+)
 
 /**
  * ConnectorConfigForm component that displays the configuration form for a specific connector
  */
-export function ConnectorConfigForm<T extends keyof typeof defConnectors>({
-  // connectorName, // TODO: Handling the loading of the right connector config
+export function ConnectorConfigForm({
+  configSchema,
+  connector,
   connectorConfig,
-  jsonSchema,
-  className,
-  loading = false,
+  changedFieldsRef,
   onSubmit,
-  ref,
-}: ConnectorConfigFormProps<T>) {
+  formRef,
+}: ConnectorConfigFormProps) {
+  const initialValues = (
+    connectorConfig
+      ? {
+          ...connectorConfig.config,
+          display_name: connectorConfig.display_name ?? '',
+          disabled: connectorConfig.disabled ?? false,
+        }
+      : {}
+  ) as Core['connector_config_insert']
+
+  /**
+   * TODO: This is a temporary form schema, we need to move this to the connector config models.
+   * In the connector schemas we only have connector_config for this form, but we need to add the rest
+   * to the connector config models.
+   */
+  const formSchema = {
+    type: 'object' as const,
+    properties: {
+      disabled: {
+        type: 'boolean' as const,
+        title: 'Disabled',
+        description:
+          'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
+        'ui:field': 'DisabledField',
+      },
+      display_name: {
+        type: 'string' as const,
+        title: 'Display Name',
+        description: 'A friendly name for this connector configuration',
+      },
+      ...(configSchema?.['properties'] || {}),
+    },
+  }
+
+  const openint_scopes =
+    connector?.openint_scopes ??
+    connectorConfig?.connector?.openint_scopes ??
+    []
+
+  const scopes = connector?.scopes ?? connectorConfig?.connector?.scopes ?? []
+
+  const formContext = {
+    openint_scopes,
+    scopes,
+    initialData: connectorConfig,
+    connector: connector ?? connectorConfig?.connector,
+  }
+
   return (
-    <div className="relative">
-      {/* TODO: Add a consistent loading indicator */}
-      {loading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded bg-white/50 dark:bg-black/50">
-          <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+    <div className="flex h-full flex-col">
+      <div className="flex-1">
+        <div className="flex h-full flex-col space-y-8 px-8">
+          <JSONSchemaForm<Core['connector_config_insert']>
+            jsonSchema={formSchema}
+            formData={initialValues}
+            formContext={formContext}
+            formRef={formRef}
+            changedFieldsRef={changedFieldsRef}
+            onSubmit={onSubmit}
+          />
         </div>
-      )}
-      <JSONSchemaForm
-        ref={ref}
-        jsonSchema={jsonSchema}
-        formData={connectorConfig}
-        className={className}
-        loading={loading}
-        onSubmit={onSubmit}
-      />
+      </div>
     </div>
   )
 }

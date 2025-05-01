@@ -90,9 +90,28 @@ export function getClient({
       revokeUrl: oauthConfig.revocation_request_url,
       scopeDelimiter: oauthConfig.scope_separator,
       paramKeyMapping: oauthConfig.params_config.param_names,
-      clientAuthLocation: 'body', // Make this configurable
+      clientAuthLocation: connectorName === 'notion' ? 'header' : 'body', // Make this configurable
     },
     connectCtx.fetch,
   )
   return {client, oauthConfig}
+}
+
+export function getRequestedScopes(
+  config: Z.infer<typeof oauth2Schemas.connector_config>,
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
+) {
+  const scopes = config.oauth?.scopes
+    ? // here because some old ccfgs have scopes as a string
+      typeof config.oauth.scopes === 'string'
+      ? (config.oauth.scopes as string).split(
+          oauthConfig.scope_separator ?? ' ',
+        )
+      : config.oauth.scopes
+    : []
+  const addedRequiredScopes = new Set([
+    ...scopes,
+    ...(oauthConfig.required_scopes || []),
+  ])
+  return Array.from(addedRequiredScopes)
 }

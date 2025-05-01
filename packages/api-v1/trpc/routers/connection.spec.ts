@@ -21,6 +21,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     return {...ctx, caller}
   }
 
+  const asSystem = getTestContext({role: 'system'})
   const asOrg = getTestContext({role: 'org', orgId: 'org_222'})
   const asUser = getTestContext({
     role: 'user',
@@ -91,7 +92,24 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     },
   )
 
-  test('window function query works', async () => {
+  test('pagination', async () => {
+    const {
+      items: [conn1],
+    } = await asSystem.caller.listConnections({
+      limit: 1,
+    })
+    const {
+      items: [conn2],
+    } = await asSystem.caller.listConnections({
+      limit: 1,
+      offset: 1,
+    })
+    expect(conn1).toBeDefined()
+    expect(conn2).toBeDefined()
+    expect(conn1?.id).not.toEqual(conn2?.id)
+  })
+
+  test('window function query for total works', async () => {
     const res = await asCustomer.db
       .select({
         connection: schema.connection,

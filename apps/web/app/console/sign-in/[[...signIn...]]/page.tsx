@@ -7,7 +7,7 @@ import {currentViewer} from '@/lib-server/auth.server'
 export default async function SignInScreen() {
   const current = await currentViewer()
   if (current.viewer.role !== 'anon') {
-    redirect('/console')
+    redirect(resolveLinkPath('/console'))
   }
   return (
     <FullScreenCenter>

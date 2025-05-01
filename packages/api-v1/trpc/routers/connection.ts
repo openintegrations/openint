@@ -5,7 +5,7 @@ import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
-import {and, any, dbUpsertOne, eq, schema, sql} from '@openint/db'
+import {and, any, asc, dbUpsertOne, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
@@ -22,7 +22,11 @@ import {
   checkConnection,
   connectionCanBeChecked,
 } from './utils/connectionChecker'
-import {zListParams, zListResponse} from './utils/pagination'
+import {
+  formatListResponse,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
@@ -69,10 +73,10 @@ export const connectionRouter = router({
         })
       }
 
-      const credentialsRequiresRefresh =
-        input.refresh_policy === 'force' || input.refresh_policy === 'auto'
-
-      if (credentialsRequiresRefresh && connectionCanBeChecked(connection)) {
+      if (
+        (input.refresh_policy === 'force' || input.refresh_policy === 'auto') &&
+        connectionCanBeChecked(connection)
+      ) {
         const {status, status_message} = await checkConnection(connection, ctx)
         connection.status = status
         connection.status_message = status_message ?? null
@@ -104,20 +108,16 @@ export const connectionRouter = router({
         include_secrets: zIncludeSecrets.optional().openapi({
           description: 'Include secret credentials in the response',
         }),
-        expand: z
-          .array(zConnectionExpandOption)
-          .optional()
-          .default([])
-          .openapi({
-            description: 'Expand the response with additional optionals',
-          }),
+        expand: z.array(zConnectionExpandOption).default([]).openapi({
+          description: 'Expand the response with additional optionals',
+        }),
       }),
     )
     .output(
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
-    .query(async ({ctx, input}) => {
-      const query = ctx.db.query.connection.findMany({
+    .query(async ({ctx, input: {limit, offset, ...input}}) => {
+      const res = await ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(
           input.connector_config_id
@@ -138,95 +138,17 @@ export const connectionRouter = router({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
         },
+        orderBy: [
+          desc(schema.connection.updated_at),
+          asc(schema.connection.id),
+        ],
+        limit,
+        offset,
       })
-
-      const res = await query
-      const total = res[0]?.total ?? 0
-      const items = res.map((conn) => expandConnection(conn, input.expand))
-
-      // const {items, total} = extractTotal(await query, 'total')
-
       return {
-        items,
-        total,
-        limit: input.limit ?? 50,
-        offset: input.offset ?? 0,
+        ...formatListResponse(res, {limit, offset}),
+        items: res.map((conn) => expandConnection(conn, input.expand)),
       }
-
-      // const {query, limit, offset} = applyPaginationAndOrder(
-      //   ctx.db
-      //     .select({
-      //       connection: schema.connection,
-      //       total: sql`count(*) OVER ()`,
-      //     })
-      //     .from(schema.connection)
-      //     .where(
-      //       and(
-      //         input?.connector_config_id
-      //           ? eq(
-      //               schema.connection.connector_config_id,
-      //               input.connector_config_id,
-      //             )
-      //           : undefined,
-      //         input?.['customer_id']
-      //           ? eq(schema.connection.customer_id, input['customer_id'])
-      //           : undefined,
-      //         input?.['connector_names'] && input['connector_names'].length > 0
-      //           ? inArray(
-      //               schema.connection.connector_name,
-      //               input['connector_names'],
-      //             )
-      //           : undefined,
-      //         // excluding data from old connectors that are no longer supported
-      //         inArray(schema.connection.connector_name, connectorNames),
-      //         // connectorNamesFromToken.length > 0
-      //         //   ? inArray(
-      //         //       schema.connection.connector_name,
-      //         //       connectorNamesFromToken,
-      //         //     )
-      //         //   : undefined,
-      //       ),
-      //     ),
-      //   schema.connection.created_at,
-      //   input,
-      // )
-
-      // const {items, total} = await processPaginatedResponse(query, 'connection')
-
-      // const expandedItems = items.map((conn) =>
-      //   formatConnection(
-      //     ctx,
-      //     conn as any,
-      //     input?.include_secrets,
-      //     input?.expand ?? [],
-      //   ),
-      // )
-
-      // // let failures = 0
-      // // expandedItems.forEach((item) => {
-      // //   try {
-      // //     zConnectionExpanded.parse(item)
-      // //     // console.log('success parsing', item.id)
-      // //   } catch (error) {
-      // //     console.error('Failed to parse connection:', item.id)
-      // //     failures++
-      // //   }
-      // // })
-      // // console.log('failures', failures)
-      // // if (failures > 0) {
-      // //   throw new TRPCError({
-      // //     code: 'INTERNAL_SERVER_ERROR',
-      // //     message: `Failed to parse ${failures} connections`,
-      // //   })
-      // // }
-
-      // return {
-      //   // TODO: fix this to respect rls policy... Add corresponding tests also
-      //   items: expandedItems,
-      //   total,
-      //   limit,
-      //   offset,
-      // }
     }),
 
   deleteConnection: authenticatedProcedure

@@ -79,6 +79,21 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
       connector_config_id: 'ccfg_greenhouse_222',
       display_name: 'Test Connection',
       env_name: 'sandbox',
+      customer_id: 'cus_123',
+    })
+    await db.insert(schema.connection).values({
+      id: 'conn_greenhouse_223',
+      connector_config_id: 'ccfg_greenhouse_222',
+      display_name: 'Test Connection',
+      env_name: 'sandbox',
+      customer_id: 'cus_223',
+    })
+    await db.insert(schema.connection).values({
+      id: 'conn_greenhouse_323',
+      connector_config_id: 'ccfg_greenhouse_222',
+      display_name: 'Test Connection',
+      env_name: 'sandbox',
+      customer_id: 'cus_323',
     })
   })
 
@@ -98,7 +113,7 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
         "connection".connector_config_id = $1
       "
     `)
-    expect(await query).toMatchObject([{connection_count: 1}])
+    expect(await query).toMatchObject([{connection_count: 3}])
   })
 
   test('query with count and join', async () => {
@@ -167,8 +182,8 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
       {id: 'ccfg_apollo_333', connection_count: 0, connections: []},
       {
         id: 'ccfg_greenhouse_222',
-        connection_count: 1,
-        connections: [expect.anything()],
+        connection_count: 3,
+        connections: expect.any(Array),
       },
     ])
   })

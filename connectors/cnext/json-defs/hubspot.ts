@@ -12,6 +12,7 @@ export default {
     token_request_url: 'https://api.hubapi.com/oauth/v1/token',
     scope_separator: ' ',
     params_config: {},
+    required_scopes: ['oauth'],
     openint_scopes: ['crm.objects.contacts.read'],
     scopes: [
       {
