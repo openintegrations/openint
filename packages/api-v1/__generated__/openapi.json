@@ -640,7 +640,7 @@
           },
           {
             "in": "query",
-            "name": "query",
+            "name": "search_query",
             "schema": {
               "type": [
                 "string",
@@ -1697,7 +1697,7 @@
           },
           {
             "in": "query",
-            "name": "query",
+            "name": "search_query",
             "schema": {
               "type": "string"
             }
@@ -3360,7 +3360,7 @@
           },
           {
             "in": "query",
-            "name": "query",
+            "name": "search_query",
             "schema": {
               "type": "string"
             }

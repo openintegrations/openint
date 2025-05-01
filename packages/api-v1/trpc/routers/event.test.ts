@@ -46,16 +46,16 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.items[0]?.id).toBe(eventRes.current?.id)
     })
 
-    test('list events with query', async () => {
+    test('list events with search query', async () => {
       const res = await caller.listEvents({
-        query: 'evt',
+        search_query: 'evt',
       })
       expect(res.items).toHaveLength(1)
     })
 
-    test('list events with non-existent query', async () => {
+    test('list events with non-existent search query', async () => {
       const res = await caller.listEvents({
-        query: 'test',
+        search_query: 'test',
       })
       expect(res.items).toHaveLength(0)
     })

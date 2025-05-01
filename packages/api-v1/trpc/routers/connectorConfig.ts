@@ -104,7 +104,7 @@ export const connectorConfigRouter = router({
           connector_names: zCoerceArray(zConnectorName).optional().openapi({
             description: 'The names of the connectors to filter by',
           }),
-          query: z.string().trim().nullish().openapi({
+          search_query: z.string().trim().nullish().openapi({
             description:
               'Search query for the connector config list applied to the connector config id',
           }),
@@ -119,7 +119,7 @@ export const connectorConfigRouter = router({
     .query(
       async ({
         ctx,
-        input: {expand, connector_names, limit, offset, query: searchQuery},
+        input: {expand, connector_names, limit, offset, search_query},
       }) => {
         const includeConnectionCount = expand?.includes('connection_count')
         // @pellicceama: Have another way to validate
@@ -130,7 +130,7 @@ export const connectorConfigRouter = router({
           defConnectors ?? {},
         )
         // Lowercased query for case insensitive search
-        const lowerQuery = searchQuery?.toLowerCase()
+        const lowerQuery = search_query?.toLowerCase()
 
         const query = ctx.db.query.connector_config.findMany({
           extras: {

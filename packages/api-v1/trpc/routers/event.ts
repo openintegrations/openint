@@ -62,16 +62,16 @@ export const eventRouter = router({
     .input(
       zListParams
         .extend({
-          query: z.string().optional().openapi({
+          search_query: z.string().optional().openapi({
             description: 'Search query for the event list',
           }),
         })
         .default({}),
     )
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input: {limit, offset, query}}) => {
+    .query(async ({ctx, input: {limit, offset, search_query}}) => {
       // Lowercased query for case insensitive search
-      const lowerQuery = query?.toLowerCase()
+      const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db.query.event.findMany({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),

@@ -3079,7 +3079,7 @@ export interface operations {
                 offset?: number;
                 expand?: ("connector" | "connector.schemas" | "connection_count")[];
                 connector_names?: components["schemas"]["core.connector.name"][];
-                query?: string | null;
+                search_query?: string | null;
             };
             header?: never;
             path?: never;
@@ -3355,7 +3355,7 @@ export interface operations {
                 connector_config_id?: string;
                 include_secrets?: boolean;
                 expand?: "connector"[];
-                query?: string;
+                search_query?: string;
             };
             header?: never;
             path?: never;
@@ -3795,7 +3795,7 @@ export interface operations {
                 limit?: number;
                 /** @description Offset the items returned */
                 offset?: number;
-                query?: string;
+                search_query?: string;
             };
             header?: never;
             path?: never;

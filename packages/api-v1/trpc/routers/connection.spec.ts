@@ -187,16 +187,16 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(conn.settings).toBeUndefined()
   })
 
-  test('read with query', async () => {
+  test('read with search query', async () => {
     const res = await asCustomer.caller.listConnections({
-      query: 'greenhouse',
+      search_query: 'greenhouse',
     })
     expect(res.items).toHaveLength(1)
   })
 
-  test('read with non-existent query', async () => {
+  test('read with non-existent search query', async () => {
     const res = await asCustomer.caller.listConnections({
-      query: 'test',
+      search_query: 'test',
     })
     expect(res.items).toHaveLength(0)
   })

@@ -117,16 +117,16 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items[0]?.org_id).toEqual('org_222')
   })
 
-  test('list connector config with query', async () => {
+  test('list connector config with search query', async () => {
     const res = await asOrg.listConnectorConfigs({
-      query: 'quickbooks',
+      search_query: 'quickbooks',
     })
     expect(res.items).toHaveLength(2)
   })
 
-  test('list connector config with non existing query', async () => {
+  test('list connector config with non existing search query', async () => {
     const res = await asOrg.listConnectorConfigs({
-      query: 'test',
+      search_query: 'test',
     })
     expect(res.items).toHaveLength(0)
   })

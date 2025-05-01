@@ -122,7 +122,7 @@ export const connectionRouter = router({
         expand: z.array(zConnectionExpandOption).default([]).openapi({
           description: 'Expand the response with additional optionals',
         }),
-        query: z.string().optional().openapi({
+        search_query: z.string().optional().openapi({
           description: 'Search query for the connection list',
         }),
       }),
@@ -132,7 +132,7 @@ export const connectionRouter = router({
     )
     .query(async ({ctx, input: {limit, offset, ...input}}) => {
       // Lowercased query for case insensitive search
-      const lowerQuery = input.query?.toLowerCase()
+      const lowerQuery = input.search_query?.toLowerCase()
       const res = await ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(
@@ -150,7 +150,7 @@ export const connectionRouter = router({
             // excluding data from old connectors that are no longer supported
             any(input.connector_names ?? zConnectorName.options),
           ),
-          input.query
+          lowerQuery
             ? or(
                 like(schema.connection.id, `%${lowerQuery}%`),
                 like(schema.connection.customer_id, `%${lowerQuery}%`),

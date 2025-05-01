@@ -82,7 +82,7 @@ export function ConnectionsPage() {
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
       customer_id: customerId ? customerId : undefined,
-      query,
+      search_query: query,
     }),
   )
 

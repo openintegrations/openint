@@ -16,7 +16,7 @@ export function CustomerList() {
     trpc.listCustomers.queryOptions({
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
-      query,
+      search_query: query,
     }),
   )
 

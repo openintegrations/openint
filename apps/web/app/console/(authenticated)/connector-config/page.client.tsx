@@ -31,7 +31,7 @@ export function ConnectorConfigList() {
       expand: ['connection_count', 'connector.schemas'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
-      query,
+      search_query: query,
     }),
   )
 

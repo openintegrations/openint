@@ -21,7 +21,7 @@ export const customerRouter = router({
     .input(
       zListParams
         .extend({
-          query: z.string().trim().nullish(),
+          search_query: z.string().trim().nullish(),
         })
         .default({}),
     )
@@ -40,9 +40,9 @@ export const customerRouter = router({
         }),
       ),
     )
-    .query(async ({ctx, input: {offset, limit, query}}) => {
+    .query(async ({ctx, input: {offset, limit, search_query}}) => {
       // Lowercased query for case insensitive search
-      const lowerQuery = query?.toLowerCase()
+      const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db
         .select({
           id: schema.connection.customer_id,
