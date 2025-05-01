@@ -3,7 +3,7 @@
 import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
 import type {Id} from '@openint/cdk'
 
-import {Search} from 'lucide-react'
+import {SearchIcon} from 'lucide-react'
 import {ReactElement, useState} from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -25,6 +25,7 @@ export type ConnectorConfigForCustomer = Pick<
 
 export type AddConnectionPrefetchedCard = {
   connectorName: ConnectorName
+  connectorDisplayName?: string
   card: ReactElement
 }
 
@@ -46,7 +47,10 @@ export function AddConnectionClient({
 
   const filteredCards = cards.filter((card) => {
     const searchLower = searchQuery.toLowerCase()
-    return card.connectorName.toLowerCase().includes(searchLower)
+    return (
+      card.connectorName.toLowerCase().includes(searchLower) ||
+      card.connectorDisplayName?.toLowerCase().includes(searchLower)
+    )
   })
 
   return (
@@ -70,7 +74,7 @@ export function AddConnectionClient({
             )}>
             <div className="p-6 pb-3">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-500" />
+                <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-500" />
                 <Input
                   placeholder="Search integrations"
                   value={searchQuery}

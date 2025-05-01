@@ -291,6 +291,7 @@ async function AddConnections({
       <AddConnectionClient
         cards={availableToConnect.map((ccfg) => ({
           connectorName: ccfg.connector_name as ConnectorName,
+          connectorDisplayName: ccfg.connector?.display_name,
           card: (
             <AddConnectionCardPrefetch
               key={ccfg.id}
