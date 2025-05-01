@@ -50,10 +50,7 @@ export function AddConnectionClient({
   })
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => !open && onClose()}
-      modal={false}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       {/* TODO: consider making full screen horizontal on mobile https://github.com/radix-ui/themes/issues/142 */}
       <DialogContent
         className={cn(
