@@ -131,6 +131,8 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input: {limit, offset, ...input}}) => {
+      // Lowercased query for case insensitive search
+      const lowerQuery = input.query?.toLowerCase()
       const res = await ctx.db.query.connection.findMany({
         columns: input.include_secrets ? undefined : {settings: false},
         where: and(
@@ -150,9 +152,9 @@ export const connectionRouter = router({
           ),
           input.query
             ? or(
-                like(schema.connection.id, `%${input.query}%`),
-                like(schema.connection.customer_id, `%${input.query}%`),
-                like(schema.connection.connector_name, `%${input.query}%`),
+                like(schema.connection.id, `%${lowerQuery}%`),
+                like(schema.connection.customer_id, `%${lowerQuery}%`),
+                like(schema.connection.connector_name, `%${lowerQuery}%`),
               )
             : undefined,
         ),

@@ -41,6 +41,8 @@ export const customerRouter = router({
       ),
     )
     .query(async ({ctx, input: {offset, limit, query}}) => {
+      // Lowercased query for case insensitive search
+      const lowerQuery = query?.toLowerCase()
       const res = await ctx.db
         .select({
           id: schema.connection.customer_id,
@@ -51,10 +53,10 @@ export const customerRouter = router({
         })
         .from(schema.connection)
         .where(
-          query
+          lowerQuery
             ? or(
-                like(schema.connection.customer_id, `%${query}%`),
-                like(schema.connection.connector_name, `%${query}%`),
+                like(schema.connection.customer_id, `%${lowerQuery}%`),
+                like(schema.connection.connector_name, `%${lowerQuery}%`),
               )
             : undefined,
         )

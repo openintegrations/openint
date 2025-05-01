@@ -129,6 +129,8 @@ export const connectorConfigRouter = router({
         const currentlySupportedConnectorNames = Object.keys(
           defConnectors ?? {},
         )
+        // Lowercased query for case insensitive search
+        const lowerQuery = searchQuery?.toLowerCase()
 
         const query = ctx.db.query.connector_config.findMany({
           extras: {
@@ -151,12 +153,12 @@ export const connectorConfigRouter = router({
               schema.connector_config.connector_name,
               any(currentlySupportedConnectorNames),
             ),
-            searchQuery
+            lowerQuery
               ? or(
-                  like(schema.connector_config.id, `%${searchQuery}%`),
+                  like(schema.connector_config.id, `%${lowerQuery}%`),
                   like(
                     schema.connector_config.connector_name,
-                    `%${searchQuery}%`,
+                    `%${lowerQuery}%`,
                   ),
                 )
               : undefined,

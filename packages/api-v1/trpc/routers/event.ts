@@ -70,6 +70,8 @@ export const eventRouter = router({
     )
     .output(zListResponse(core.event_select))
     .query(async ({ctx, input: {limit, offset, query}}) => {
+      // Lowercased query for case insensitive search
+      const lowerQuery = query?.toLowerCase()
       const res = await ctx.db.query.event.findMany({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
@@ -77,7 +79,7 @@ export const eventRouter = router({
         // filter out deprecated events, preventing parse errors
         where: and(
           eq(schema.event.name, any(Object.keys(eventMap))),
-          query ? like(schema.event.id, `%${query}%`) : undefined,
+          lowerQuery ? like(schema.event.id, `%${lowerQuery}%`) : undefined,
         ),
         orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
         offset,
