@@ -36,7 +36,7 @@ import {AddConnectionCard} from './AddConnection.client'
 import {ConnectContextProvider} from './ConnectContextProvider'
 import {ConnectOpWrapper} from './ConnectOpWrapper'
 import {MyConnectionsClient} from './MyConnections.client'
-import {TabsClient} from './page.client'
+import {ErrorBoundarySuspense, TabsClient} from './page.client'
 
 export default async function ConnectPage(
   pageProps: PageProps<
@@ -144,7 +144,7 @@ export default async function ConnectPage(
                 {!searchParams.is_embedded && (
                   <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
                     <div className="flex flex-col items-start p-8">
-                      <Suspense
+                      <ErrorBoundarySuspense
                         fallback={
                           <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
                         }>
@@ -152,7 +152,7 @@ export default async function ConnectPage(
                           orgId={viewer.orgId}
                           className="lg:pt-6"
                         />
-                      </Suspense>
+                      </ErrorBoundarySuspense>
 
                       <h1 className="mb-4 mt-16 text-2xl font-bold">
                         Connect Your Services
@@ -167,9 +167,9 @@ export default async function ConnectPage(
                           className="flex items-center gap-2">
                           <ChevronLeftIcon className="h-4 w-4" />
                           Back to{' '}
-                          <Suspense fallback="OpenInt Console">
+                          <ErrorBoundarySuspense fallback="OpenInt Console">
                             <OrganizationName orgId={viewer.orgId} />
-                          </Suspense>
+                          </ErrorBoundarySuspense>
                         </Link>
                       </Button>
 
