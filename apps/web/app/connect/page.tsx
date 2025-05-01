@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@openint/shadcn/ui/card'
-import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {LoadingSpinner} from '@openint/ui-v1'
 import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
@@ -32,11 +31,10 @@ import {
   getServerComponentContext,
   serverComponentContextForViewer,
 } from '@/lib-server/trpc.server'
-import {AddConnectionCard} from './AddConnection.client'
+import {AddConnectionCard, AddConnectionClient} from './AddConnection.client'
 import {ConnectContextProvider} from './ConnectContextProvider'
 import {ConnectOpWrapper} from './ConnectOpWrapper'
 import {MyConnectionsClient} from './MyConnections.client'
-import {TabsClient} from './page.client'
 
 export default async function ConnectPage(
   pageProps: PageProps<
@@ -99,6 +97,8 @@ export default async function ConnectPage(
       .filter(([key]) => key.startsWith('--')) // Only include theme variables
       .map(([key, value]) => [key, value]),
   )
+
+  const isManage = searchParams.view === 'manage' || !searchParams.view
 
   const viewerConnections = await queryClient.fetchQuery(
     trpc.listConnections.queryOptions({
@@ -190,37 +190,36 @@ export default async function ConnectPage(
 
                 {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
-                <TabsClient
-                  defaultValue={
-                    viewerConnections.items.length > 0 ? 'manage' : 'add'
-                  }
-                  paramKey="view"
-                  className="flex-1 p-4 lg:pt-12">
-                  <div className="mx-auto w-full max-w-4xl">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="manage">
-                        Manage Integrations
-                      </TabsTrigger>
-                      <TabsTrigger value="add">Add New Integration</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="manage" className="pt-6">
-                      <Suspense fallback={<LoadingSpinner />}>
-                        <MyConnectionsClient
-                          connector_names={searchParams.connector_names}
-                        />
-                      </Suspense>
-                    </TabsContent>
-                    <TabsContent value="add" className="pt-6">
-                      <Suspense fallback={<LoadingSpinner />}>
-                        <AddConnections
-                          viewer={viewer}
-                          connector_names={searchParams.connector_names}
-                          existingConnections={viewerConnections.items}
-                        />
-                      </Suspense>
-                    </TabsContent>
+                <div className="mx-auto w-full max-w-4xl pt-14">
+                  <div className="flex items-center justify-between">
+                    <h1 className="text-xl font-bold">My Integrations</h1>
+                    <Button className="mr-20">
+                      <Link
+                        href={
+                          (resolveLinkPath('/connect') +
+                            '?view=add') as TypedHref
+                        }>
+                        Add Integration
+                      </Link>
+                    </Button>
                   </div>
-                </TabsClient>
+                  <div className="mt-4"></div>
+                  {isManage ? (
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <MyConnectionsClient
+                        connector_names={searchParams.connector_names}
+                      />
+                    </Suspense>
+                  ) : (
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <AddConnections
+                        viewer={viewer}
+                        connector_names={searchParams.connector_names}
+                        existingConnections={viewerConnections.items}
+                      />
+                    </Suspense>
+                  )}
+                </div>
               </div>
             </ConnectOpWrapper>
           </ConnectContextProvider>
@@ -303,19 +302,24 @@ async function AddConnections({
   return (
     <div className="flex flex-col gap-4">
       <Suspense fallback={<LoadingSpinner />}>
-        {availableToConnect.map((ccfg) => (
-          <AddConnectionCardPrefetch
-            key={ccfg.id}
-            connectorConfig={{
-              // NOTE: Be extremely careful that sensitive data is not exposed here
-              // TODO: Consider using row level security make asOrgIfCustomer unnecessary
-              id: ccfg.id,
-              connector_name: ccfg.connector_name,
-              connector: ccfg.connector,
-            }}
-            viewer={viewer}
-          />
-        ))}
+        <AddConnectionClient
+          cards={availableToConnect.map((ccfg) => ({
+            connectorName: ccfg.connector_name as ConnectorName,
+            card: (
+              <AddConnectionCardPrefetch
+                key={ccfg.id}
+                connectorConfig={{
+                  // NOTE: Be extremely careful that sensitive data is not exposed here
+                  // TODO: Consider using row level security make asOrgIfCustomer unnecessary
+                  id: ccfg.id,
+                  connector_name: ccfg.connector_name,
+                  connector: ccfg.connector,
+                }}
+                viewer={viewer}
+              />
+            ),
+          }))}
+        />
       </Suspense>
     </div>
   )
