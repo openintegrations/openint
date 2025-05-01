@@ -92,7 +92,8 @@
       "axios": "0.21.1",
       "esbuild": "0.17.5",
       "react": "19.0.0",
-      "react-dom": "19.0.0"
+      "react-dom": "19.0.0",
+      "tailwindcss": "4.0.13"
     },
     "patchedDependencies": {
       "@jsonurl/jsonurl@1.1.7": "patches/@jsonurl__jsonurl@1.1.7.patch",

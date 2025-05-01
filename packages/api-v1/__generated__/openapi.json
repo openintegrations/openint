@@ -398,6 +398,9 @@
                           "$ref": "#/components/schemas/connector.onebrick.discriminated_connector_config"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.openledger.discriminated_connector_config"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.plaid.discriminated_connector_config"
                         },
                         {
@@ -481,6 +484,7 @@
                           "merge": "#/components/schemas/connector.merge.discriminated_connector_config",
                           "moota": "#/components/schemas/connector.moota.discriminated_connector_config",
                           "onebrick": "#/components/schemas/connector.onebrick.discriminated_connector_config",
+                          "openledger": "#/components/schemas/connector.openledger.discriminated_connector_config",
                           "plaid": "#/components/schemas/connector.plaid.discriminated_connector_config",
                           "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
                           "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
@@ -827,6 +831,9 @@
                                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connector_config"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.openledger.discriminated_connector_config"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.plaid.discriminated_connector_config"
                               },
                               {
@@ -910,6 +917,7 @@
                                 "merge": "#/components/schemas/connector.merge.discriminated_connector_config",
                                 "moota": "#/components/schemas/connector.moota.discriminated_connector_config",
                                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connector_config",
+                                "openledger": "#/components/schemas/connector.openledger.discriminated_connector_config",
                                 "plaid": "#/components/schemas/connector.plaid.discriminated_connector_config",
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
@@ -1317,6 +1325,9 @@
                           "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.openledger.discriminated_connection_settings"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
                         },
                         {
@@ -1400,6 +1411,7 @@
                           "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
                           "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                           "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
+                          "openledger": "#/components/schemas/connector.openledger.discriminated_connection_settings",
                           "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                           "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                           "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
@@ -1903,6 +1915,9 @@
                                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.openledger.discriminated_connection_settings"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
                               },
                               {
@@ -1986,6 +2001,7 @@
                                 "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
                                 "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
+                                "openledger": "#/components/schemas/connector.openledger.discriminated_connection_settings",
                                 "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
@@ -2267,6 +2283,9 @@
                         "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
                       },
                       {
+                        "$ref": "#/components/schemas/connector.openledger.discriminated_connection_settings"
+                      },
+                      {
                         "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
                       },
                       {
@@ -2350,6 +2369,7 @@
                         "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
                         "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                         "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
+                        "openledger": "#/components/schemas/connector.openledger.discriminated_connection_settings",
                         "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                         "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                         "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
@@ -7471,6 +7491,77 @@
         ],
         "title": "onebrick"
       },
+      "connector.openledger.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "openledger"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "entity_id": {
+                "type": "string",
+                "description": "Your entity's identifier, aka customer ID"
+              }
+            },
+            "required": [
+              "entity_id"
+            ]
+          }
+        },
+        "required": [
+          "connector_name"
+        ],
+        "title": "openledger"
+      },
+      "connector.openledger.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "openledger"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "developer_id": {
+                "type": "string",
+                "description": "Your developer ID for authentication"
+              },
+              "developer_secret": {
+                "type": "string",
+                "description": "Your developer secret"
+              },
+              "environment": {
+                "type": "string",
+                "enum": [
+                  "development",
+                  "production"
+                ],
+                "description": "Switch to \"production\" for live data"
+              },
+              "api_url": {
+                "type": "string",
+                "format": "uri",
+                "description": "API endpoint"
+              }
+            },
+            "required": [
+              "developer_id",
+              "developer_secret",
+              "environment",
+              "api_url"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "openledger"
+      },
       "connector.outreach.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -10101,6 +10192,9 @@
                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
               },
               {
+                "$ref": "#/components/schemas/connector.openledger.discriminated_connection_settings"
+              },
+              {
                 "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
               },
               {
@@ -10184,6 +10278,7 @@
                 "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
                 "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
+                "openledger": "#/components/schemas/connector.openledger.discriminated_connection_settings",
                 "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
@@ -10330,6 +10425,7 @@
           "moota",
           "notion",
           "onebrick",
+          "openledger",
           "outreach",
           "pipedrive",
           "plaid",

@@ -16,6 +16,7 @@ import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/serv
 import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMoota} from '@openint/connector-moota/server'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/server'
+import {default as connectorOpenledger} from '@openint/connector-openledger/server'
 import {default as connectorPlaid} from '@openint/connector-plaid/server'
 import {default as connectorPostgres} from '@openint/connector-postgres/server'
 import {default as connectorRamp} from '@openint/connector-ramp/server'
@@ -42,6 +43,7 @@ export const customConnectors = {
   merge: connectorMerge,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
+  openledger: connectorOpenledger,
   plaid: connectorPlaid,
   postgres: connectorPostgres,
   ramp: connectorRamp,

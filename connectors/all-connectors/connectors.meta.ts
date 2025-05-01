@@ -365,6 +365,16 @@ export default {
       logoUrl: '/_assets/logo-onebrick.svg',
     },
   },
+  openledger: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking', 'accounting'],
+      displayName: 'OpenLedger',
+      stage: 'ga',
+      logoUrl: '/_assets/logo-plaid.svg',
+    },
+  },
   outreach: {
     hasClient: false,
     hasServer: false,
