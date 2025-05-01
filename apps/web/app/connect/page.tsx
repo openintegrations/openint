@@ -287,28 +287,26 @@ async function AddConnections({
   // "You have configured all enabled integrations. If you'd like to enable new ones please contact the {organizationName} support team"
 
   return (
-    <div className="flex flex-col gap-4">
-      <Suspense fallback={<LoadingSpinner />}>
-        <AddConnectionClient
-          cards={availableToConnect.map((ccfg) => ({
-            connectorName: ccfg.connector_name as ConnectorName,
-            card: (
-              <AddConnectionCardPrefetch
-                key={ccfg.id}
-                connectorConfig={{
-                  // NOTE: Be extremely careful that sensitive data is not exposed here
-                  // TODO: Consider using row level security make asOrgIfCustomer unnecessary
-                  id: ccfg.id,
-                  connector_name: ccfg.connector_name,
-                  connector: ccfg.connector,
-                }}
-                viewer={viewer}
-              />
-            ),
-          }))}
-        />
-      </Suspense>
-    </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <AddConnectionClient
+        cards={availableToConnect.map((ccfg) => ({
+          connectorName: ccfg.connector_name as ConnectorName,
+          card: (
+            <AddConnectionCardPrefetch
+              key={ccfg.id}
+              connectorConfig={{
+                // NOTE: Be extremely careful that sensitive data is not exposed here
+                // TODO: Consider using row level security make asOrgIfCustomer unnecessary
+                id: ccfg.id,
+                connector_name: ccfg.connector_name,
+                connector: ccfg.connector,
+              }}
+              viewer={viewer}
+            />
+          ),
+        }))}
+      />
+    </Suspense>
   )
 }
 

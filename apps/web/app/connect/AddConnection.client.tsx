@@ -4,7 +4,6 @@ import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig
 import type {Id} from '@openint/cdk'
 
 import {Search} from 'lucide-react'
-import {useRouter} from 'next/navigation'
 import {ReactElement, useState} from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -17,7 +16,6 @@ import {
 } from '@openint/shadcn/ui'
 import {ConnectorDisplay} from '@openint/ui-v1/domain-components/ConnectorDisplay'
 import {useMutableSearchParams} from '@openint/ui-v1/hooks/useStateFromSearchParam'
-import {resolveLinkPath} from '@/lib-common/Link'
 import {ConnectorConnectContainer} from './ConnectorConnect.client'
 
 export type ConnectorConfigForCustomer = Pick<
@@ -52,7 +50,11 @@ export function AddConnectionClient({
   })
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => !open && onClose()}
+      modal={false}>
+      {/* TODO: consider making full screen horizontal on mobile https://github.com/radix-ui/themes/issues/142 */}
       <DialogContent
         className={cn(
           'flex h-[85vh] max-h-[600px] max-w-2xl flex-col gap-0 overflow-hidden p-0 shadow-xl',

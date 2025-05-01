@@ -10,7 +10,7 @@ import {
   CommandPopover,
   ConnectionStatusPill,
   DataTileView,
-  Spinner,
+  LoadingSpinner,
   useMutableSearchParams,
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
@@ -42,7 +42,7 @@ export function MyConnectionsClient(props: {
   const definitions = useCommandDefinitionMap()
 
   if (isLoading) {
-    return <Spinner />
+    return <LoadingSpinner />
   }
 
   if (!res.data?.items?.length || res.data.items.length === 0) {
