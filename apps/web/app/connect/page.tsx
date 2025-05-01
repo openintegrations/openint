@@ -190,6 +190,7 @@ export default async function ConnectPage(
 
                 {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
+                {/* QQ: should we always load myConnections and just load AddConnections on top given that it's a modal */}
                 <div className="mx-auto w-full max-w-4xl px-3 pt-14 md:px-4">
                   {isManage ? (
                     <Suspense fallback={<LoadingSpinner />}>
