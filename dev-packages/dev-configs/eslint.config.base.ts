@@ -115,6 +115,7 @@ export const configs = keyAsName({
       'no-useless-catch': 'warn',
       'no-loss-of-precision': 'warn',
       'no-empty-pattern': 'off',
+      curly: ['warn', 'all'],
     },
   },
   import: {
