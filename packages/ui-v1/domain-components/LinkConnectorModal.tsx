@@ -102,7 +102,7 @@ export function LinkConnectorModal({
                       connector={connector}
                       mode="row"
                       displayBadges={false}
-                      onCtaClick={() => onSelectConnector?.(connector)}
+                      onPress={() => onSelectConnector?.(connector)}
                       className="hover:bg-transparent"
                     />
                   </div>
@@ -123,7 +123,7 @@ export function LinkConnectorModal({
                   <ConnectorDisplay
                     connector={connector}
                     displayBadges={false}
-                    onCtaClick={() => onSelectConnector?.(connector)}
+                    onPress={() => onSelectConnector?.(connector)}
                   />
                 </div>
               ))}

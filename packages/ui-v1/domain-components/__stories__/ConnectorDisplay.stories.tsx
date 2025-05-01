@@ -16,10 +16,6 @@ const meta = {
       options: ['card', 'row'],
       description: 'The layout mode of the connector display',
     },
-    ctaText: {
-      control: 'text',
-      description: 'Text to display on the CTA button',
-    },
   },
 } satisfies Meta<typeof ConnectorDisplay>
 
@@ -52,7 +48,6 @@ export const RowMode: Story = {
       platforms: ['web', 'mobile', 'desktop'],
     },
     mode: 'row',
-    onCtaClick: () => alert('Connect button clicked'),
   },
   parameters: {
     layout: 'padded',

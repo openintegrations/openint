@@ -11,6 +11,7 @@ export interface ConnectorDisplayProps
   connector: Core['connector']
   mode?: 'card' | 'row'
   displayBadges?: boolean
+  onPress?: () => void
 }
 
 /**
@@ -25,6 +26,7 @@ const ConnectorDisplay = ({
   connector,
   mode = 'card',
   displayBadges = false,
+  onPress,
   ...props
 }: ConnectorDisplayProps) => {
   const {name, display_name} = connector
@@ -40,6 +42,7 @@ const ConnectorDisplay = ({
           : 'w-full flex-col items-start gap-4 border border-gray-200 p-2 hover:border-gray-400 hover:bg-gray-50',
         className,
       )}
+      onClick={onPress}
       {...props}>
       <div
         className={cn(
@@ -94,8 +97,6 @@ const ConnectorDisplay = ({
           </div>
         )}
       </div>
-
-      {/* CTA button removed */}
     </div>
   )
 }
