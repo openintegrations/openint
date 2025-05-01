@@ -16,6 +16,7 @@ import {
   Input,
 } from '@openint/shadcn/ui'
 import {ConnectorDisplay} from '@openint/ui-v1/domain-components/ConnectorDisplay'
+import {useMutableSearchParams} from '@openint/ui-v1/hooks/useStateFromSearchParam'
 import {resolveLinkPath} from '@/lib-common/Link'
 import {ConnectorConnectContainer} from './ConnectorConnect.client'
 
@@ -36,11 +37,11 @@ export function AddConnectionClient({
   cards: AddConnectionPrefetchedCard[]
   className?: string
 }) {
-  const router = useRouter()
   const [isOpen] = useState(true)
-  const closeLink = resolveLinkPath('/connect') + '?view=manage'
+  const [_, setSearchParams] = useMutableSearchParams()
+
   const onClose = () => {
-    router.push(closeLink)
+    setSearchParams({view: 'manage'}, {shallow: false})
   }
   const [searchQuery, setSearchQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)

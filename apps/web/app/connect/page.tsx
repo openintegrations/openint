@@ -197,7 +197,8 @@ export default async function ConnectPage(
                       <Link
                         href={
                           (resolveLinkPath('/connect') +
-                            '?view=add') as TypedHref
+                            '?view=add&token=' +
+                            token) as TypedHref
                         }>
                         Add Integration
                       </Link>
