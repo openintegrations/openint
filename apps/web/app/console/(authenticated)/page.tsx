@@ -147,9 +147,9 @@ export default async function GettingStartedSteps(pageProps: PageProps) {
             )
           })}
         </div>
-        <div className="md:w-1/2">
+        {/* <div className="md:w-1/2">
           <VideoEmbed videoId={VIDEO_ID} title="OpenInt Introduction" />
-        </div>
+        </div> */}
       </div>
       {/* 
       {allStepsCompleted && !onboardingState.onboarding_marked_complete && (
