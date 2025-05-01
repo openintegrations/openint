@@ -158,6 +158,9 @@ jobs:
           git config user.email "pellicceama@gmail.com"
           git fetch 
 
+          # Run generate on docs without the NODE_ENV=development flag so that it pull from production stainless any changes
+          cd docs && pnpm generate && cd ..
+
           # Add all generated files using pattern matching
           git add -f "packages/api-v1/__generated__/*" "docs/mintlify.oas.yml" 2>/dev/null || true
 
