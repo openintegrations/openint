@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import {LoadingSpinner} from '@openint/ui-v1'
+import {ErrorBoundarySuspense, LoadingSpinner} from '@openint/ui-v1'
 import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link, resolveLinkPath} from '@/lib-common/Link'
@@ -36,7 +36,7 @@ import {AddConnectionCard} from './AddConnection.client'
 import {ConnectContextProvider} from './ConnectContextProvider'
 import {ConnectOpWrapper} from './ConnectOpWrapper'
 import {MyConnectionsClient} from './MyConnections.client'
-import {ErrorBoundarySuspense, TabsClient} from './page.client'
+import {TabsClient} from './page.client'
 
 export default async function ConnectPage(
   pageProps: PageProps<
