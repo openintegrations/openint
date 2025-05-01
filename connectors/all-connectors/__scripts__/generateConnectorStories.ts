@@ -10,7 +10,7 @@ import type {ConnectorName} from '@openint/all-connectors/name'
 import type {Meta, StoryObj} from '@storybook/react'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {getConnectorModel} from '@openint/api-v1/models'
-import {ConnectorCard} from '../domain-components/ConnectorCard'
+import {ConnectorDisplay} from '../domain-components/ConnectorDisplay'
 
 function StoryWrapper(props: {name: ConnectorName}) {
   const def = defConnectors[props.name]
@@ -21,7 +21,7 @@ function StoryWrapper(props: {name: ConnectorName}) {
     includeSchemas: true,
   })
 
-  return <ConnectorCard connector={connector} />
+  return <ConnectorDisplay connector={connector} />
 }
 
 const meta: Meta<typeof StoryWrapper> = {
@@ -94,7 +94,7 @@ async function main() {
 
   const connectorStories = Object.entries(defConnectors).map(
     ([name]) => `
-    export const ${camelCase(name)}ConnectorCard: Story = {
+    export const ${camelCase(name)}ConnectorDisplay: Story = {
       args: {name: '${name}'},
     }
   `,
@@ -119,7 +119,7 @@ async function main() {
   )
 
   await writePretty(
-    'ConnectorCard.stories.tsx',
+    'ConnectorDisplay.stories.tsx',
     connectorTemplateMeta + '\n' + connectorStories.join('\n'),
     outputPath,
   )
