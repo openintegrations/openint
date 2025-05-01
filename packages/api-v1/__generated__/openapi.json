@@ -637,6 +637,16 @@
                 "$ref": "#/components/schemas/core.connector.name"
               }
             }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
           }
         ],
         "responses": {
@@ -1683,6 +1693,13 @@
               },
               "default": [],
               "description": "Expand the response with additional optionals"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -3339,6 +3356,13 @@
               "minimum": 0,
               "default": 0,
               "description": "Offset the items returned"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
