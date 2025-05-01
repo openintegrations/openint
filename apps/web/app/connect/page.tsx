@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import {LoadingSpinner} from '@openint/ui-v1'
+import {ErrorBoundarySuspense, LoadingSpinner} from '@openint/ui-v1'
 import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link, resolveLinkPath} from '@/lib-common/Link'
@@ -144,7 +144,7 @@ export default async function ConnectPage(
                 {!searchParams.is_embedded && (
                   <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
                     <div className="flex flex-col items-start p-8">
-                      <Suspense
+                      <ErrorBoundarySuspense
                         fallback={
                           <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
                         }>
@@ -152,7 +152,7 @@ export default async function ConnectPage(
                           orgId={viewer.orgId}
                           className="lg:pt-6"
                         />
-                      </Suspense>
+                      </ErrorBoundarySuspense>
 
                       <h1 className="mb-4 mt-16 text-2xl font-bold">
                         Connect Your Services
@@ -167,9 +167,9 @@ export default async function ConnectPage(
                           className="flex items-center gap-2">
                           <ChevronLeftIcon className="h-4 w-4" />
                           Back to{' '}
-                          <Suspense fallback="OpenInt Console">
+                          <ErrorBoundarySuspense fallback="OpenInt Console">
                             <OrganizationName orgId={viewer.orgId} />
-                          </Suspense>
+                          </ErrorBoundarySuspense>
                         </Link>
                       </Button>
 

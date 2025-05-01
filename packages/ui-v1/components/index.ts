@@ -21,4 +21,5 @@ export * from './tabs'
 export * from './ThemeProvider'
 export * from './WebhookInput'
 export * from './VideoEmbed'
+export * from './ErrorBoundarySuspense'
 // codegen:end
