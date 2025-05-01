@@ -119,6 +119,7 @@ export function ConnectorConfigList() {
         onPageChange={handlePageChange}
         isLoading={res.isFetching || res.isLoading}>
         <DataTable.Header>
+          {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
           <SearchInput initialValue={query} onChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
           <Button

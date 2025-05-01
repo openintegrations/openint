@@ -74,6 +74,7 @@ export function EventsList() {
         onPageChange={handlePageChange}
         isLoading={eventData.isFetching || eventData.isLoading}>
         <DataTable.Header>
+          {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
           <SearchInput initialValue={query} onChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
         </DataTable.Header>

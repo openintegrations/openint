@@ -83,6 +83,7 @@ export function CustomersTable({
       onPageChange={onPageChange}
       isLoading={isLoading}>
       <DataTable.Header>
+        {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
         <SearchInput initialValue={query} onChange={onQueryChange} />
         <DataTable.ColumnVisibilityToggle />
       </DataTable.Header>
