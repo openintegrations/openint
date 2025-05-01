@@ -5,7 +5,6 @@ import {z} from '@openint/util/zod-utils'
 
 export const openLedgerSchemas = {
   name: z.literal('openledger'),
-  // There is a mixing of cases here... Unfortunately...
   connector_config: z.object({
     developer_id: z.string().describe('Your developer ID for authentication'),
     developer_secret: z.string().describe('Your developer secret'),
@@ -35,8 +34,8 @@ export const openLedgerDef = {
     verticals: ['banking', 'accounting'],
     displayName: 'OpenLedger',
     stage: 'ga',
-    /** https://commons.wikimedia.org/wiki/File:Plaid_logo.svg */
-    logoUrl: '/_assets/logo-plaid.svg',
+
+    logoUrl: '/_assets/logo-openledger.svg',
   },
 } satisfies ConnectorDef<typeof openLedgerSchemas>
 

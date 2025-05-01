@@ -299,6 +299,9 @@ importers:
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../connector-onebrick
+      '@openint/connector-openledger':
+        specifier: workspace:*
+        version: link:../connector-openledger
       '@openint/connector-plaid':
         specifier: workspace:*
         version: link:../connector-plaid
