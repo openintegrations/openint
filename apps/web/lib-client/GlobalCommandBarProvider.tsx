@@ -8,7 +8,7 @@ import type {
 
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {useRouter} from 'next/navigation'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {cmdInit} from '@openint/commands'
 import {
   useOrganization,
@@ -111,7 +111,12 @@ export function useCommandDefinitionMap() {
 }
 
 function useCurrentSessionCommands() {
+  const queryClient = useQueryClient()
   const {userId, orgId} = useSession()
+  useEffect(() => {
+    // Invalidate all queries when the orgId changes
+    void queryClient.invalidateQueries()
+  }, [orgId, queryClient])
 
   return {
     'currentSession:copyUserId': userId && {
