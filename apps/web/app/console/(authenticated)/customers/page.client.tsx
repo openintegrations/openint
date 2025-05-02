@@ -25,7 +25,7 @@ export function CustomerList() {
   }
 
   const handleCountClick = (customerId: string) => {
-    router.push(`/console/connections?customerId=${customerId}`)
+    router.push(`/console/connections?q=${customerId}`)
   }
 
   return (

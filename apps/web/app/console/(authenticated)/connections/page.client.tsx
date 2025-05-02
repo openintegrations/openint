@@ -66,22 +66,19 @@ export function ConnectionsPage() {
   >(null)
   const [pageIndex, setPageIndex] = useState(0)
   const searchParams = useSearchParams()
-  const customerId = searchParams.get('customerId')
-  const [query, setQuery] = useState<string | undefined>(
-    customerId ?? undefined,
-  )
+  const q = searchParams.get('q')
+  const [query, setQuery] = useState<string | undefined>(q ?? undefined)
 
   useEffect(() => {
-    // Reset page index when customerId changes
+    // Reset page index when search params query changes
     setPageIndex(0)
-  }, [customerId])
+  }, [q])
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
       expand: ['connector'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
-      customer_id: customerId ? customerId : undefined,
       search_query: query,
     }),
   )
