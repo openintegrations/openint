@@ -12,7 +12,7 @@ import {
   dbUpsertOne,
   desc,
   eq,
-  like,
+  ilike,
   or,
   schema,
   sql,
@@ -152,9 +152,9 @@ export const connectionRouter = router({
           ),
           lowerQuery
             ? or(
-                like(schema.connection.id, `%${lowerQuery}%`),
-                like(schema.connection.customer_id, `%${lowerQuery}%`),
-                like(schema.connection.connector_name, `%${lowerQuery}%`),
+                ilike(schema.connection.id, `%${lowerQuery}%`),
+                ilike(schema.connection.customer_id, `%${lowerQuery}%`),
+                ilike(schema.connection.connector_name, `%${lowerQuery}%`),
               )
             : undefined,
         ),

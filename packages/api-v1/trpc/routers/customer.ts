@@ -1,4 +1,4 @@
-import {like, or, schema, sql} from '@openint/db'
+import {ilike, or, schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
 import {
@@ -55,8 +55,8 @@ export const customerRouter = router({
         .where(
           lowerQuery
             ? or(
-                like(schema.connection.customer_id, `%${lowerQuery}%`),
-                like(schema.connection.connector_name, `%${lowerQuery}%`),
+                ilike(schema.connection.customer_id, `%${lowerQuery}%`),
+                ilike(schema.connection.connector_name, `%${lowerQuery}%`),
               )
             : undefined,
         )

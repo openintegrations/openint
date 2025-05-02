@@ -9,8 +9,8 @@ import {
   asc,
   desc,
   eq,
+  ilike,
   inArray,
-  like,
   or,
   schema,
   sql,
@@ -155,8 +155,8 @@ export const connectorConfigRouter = router({
             ),
             lowerQuery
               ? or(
-                  like(schema.connector_config.id, `%${lowerQuery}%`),
-                  like(
+                  ilike(schema.connector_config.id, `%${lowerQuery}%`),
+                  ilike(
                     schema.connector_config.connector_name,
                     `%${lowerQuery}%`,
                   ),

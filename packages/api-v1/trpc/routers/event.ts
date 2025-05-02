@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {and, any, asc, desc, eq, like, schema, sql} from '@openint/db'
+import {and, any, asc, desc, eq, ilike, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
@@ -79,7 +79,7 @@ export const eventRouter = router({
         // filter out deprecated events, preventing parse errors
         where: and(
           eq(schema.event.name, any(Object.keys(eventMap))),
-          lowerQuery ? like(schema.event.id, `%${lowerQuery}%`) : undefined,
+          lowerQuery ? ilike(schema.event.id, `%${lowerQuery}%`) : undefined,
         ),
         orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
         offset,
