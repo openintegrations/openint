@@ -21,7 +21,7 @@ interface Step {
   isCompleted: boolean
 }
 
-const VIDEO_ID = 'FpG7otZZhRw'
+const VIDEO_ID = 'ogxUBk1wuag'
 
 export default async function GettingStartedSteps(pageProps: PageProps) {
   const {queryClient, trpc} = await getServerComponentContext(pageProps)
