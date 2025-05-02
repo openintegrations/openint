@@ -71,7 +71,14 @@ export function ConnectorConnectContainer({
   const postConnect = useMutation(
     trpc.postConnect.mutationOptions({
       onSuccess: () => {},
-      onSettled: () => {},
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnections.queryKey(),
+        })
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listCustomers.queryKey(),
+        })
+      },
     }),
   )
 
