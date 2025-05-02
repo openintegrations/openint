@@ -96,3 +96,22 @@ export function getClient({
   )
   return {client, oauthConfig}
 }
+
+export function getRequestedScopes(
+  config: Z.infer<typeof oauth2Schemas.connector_config>,
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
+) {
+  const scopes = config.oauth?.scopes
+    ? // here because some old ccfgs have scopes as a string
+      typeof config.oauth.scopes === 'string'
+      ? (config.oauth.scopes as string).split(
+          oauthConfig.scope_separator ?? ' ',
+        )
+      : config.oauth.scopes
+    : []
+  const addedRequiredScopes = new Set([
+    ...scopes,
+    ...(oauthConfig.required_scopes || []),
+  ])
+  return Array.from(addedRequiredScopes)
+}
