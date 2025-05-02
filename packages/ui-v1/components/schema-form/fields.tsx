@@ -161,67 +161,82 @@ export function DisabledField(props: FieldProps<boolean>) {
   const {initialData, connector} = formContext as OAuthFormContext
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-2 space-y-1">
-        <div className="flex items-center gap-2">
-          {connector?.logo_url && (
-            <Image
-              src={connector.logo_url}
-              alt={`${connector.display_name} logo`}
-              width={24}
-              height={24}
-              className="object-contain"
+    <div className="space-y-6">
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+        {/* Header with logo, name and badge */}
+        <div className="flex flex-col gap-3 border-b border-gray-100 bg-gray-50/50 p-4">
+          <div className="flex items-center gap-3">
+            {connector?.logo_url && (
+              <Image
+                src={connector.logo_url}
+                alt={`${connector.display_name} logo`}
+                width={36}
+                height={36}
+                className="h-9 w-9 flex-shrink-0 rounded-xl object-contain"
+              />
+            )}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-medium text-gray-900">
+                  {connector?.display_name}
+                </h3>
+                {connector?.stage && (
+                  <ConnectorBadges stage={connector.stage} platforms={[]} />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {initialData?.id && <CopyID value={initialData?.id} width="100%" />}
+        </div>
+
+        {/* Config details and controls */}
+        <div className="p-4">
+          <div className="flex items-center">
+            <label
+              htmlFor="disabled"
+              className="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+              Disabled
+            </label>
+            <Switch
+              id="disabled"
+              checked={formData}
+              onCheckedChange={(checked) => {
+                onChange(checked)
+              }}
             />
-          )}
-          <h3 className="font-medium">{connector?.display_name}</h3>
-        </div>
-        {initialData?.id && <CopyID value={initialData?.id} />}
+          </div>
 
-        <div className="flex items-center space-x-2 text-sm">
-          <ConnectorBadges
-            stage={connector?.stage}
-            platforms={connector?.platforms}
-          />
+          {(initialData?.created_at ||
+            initialData?.updated_at ||
+            initialData?.connection_count !== undefined) && (
+            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-gray-100 pt-3 text-xs text-gray-500">
+              {initialData?.created_at && (
+                <div className="flex items-center">
+                  <span className="w-40 flex-shrink-0">Created:</span>
+                  <span>
+                    {new Date(initialData.created_at).toLocaleString()}
+                  </span>
+                </div>
+              )}
+              {initialData?.updated_at && (
+                <div className="flex items-center">
+                  <span className="w-40 flex-shrink-0">Updated:</span>
+                  <span>
+                    {new Date(initialData.updated_at).toLocaleString()}
+                  </span>
+                </div>
+              )}
+              {initialData?.connection_count !== undefined && (
+                <div className="flex items-center">
+                  <span className="w-40 flex-shrink-0">Connections:</span>
+                  <span>{initialData.connection_count}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
-
-      <div className="flex items-center">
-        <label
-          htmlFor="disabled"
-          className="w-36 flex-shrink-0 text-sm font-medium text-gray-700">
-          Disabled
-        </label>
-        <Switch
-          id="disabled"
-          checked={formData}
-          onCheckedChange={(checked) => {
-            onChange(checked)
-          }}
-        />
-      </div>
-
-      {initialData?.created_at || initialData?.updated_at ? (
-        <div className="flex flex-col space-y-1 text-xs text-gray-500">
-          {initialData?.created_at && (
-            <div className="flex items-center">
-              <span className="w-36 flex-shrink-0">Created:</span>
-              <span>{new Date(initialData.created_at).toLocaleString()}</span>
-            </div>
-          )}
-          {initialData?.updated_at && (
-            <div className="flex items-center">
-              <span className="w-36 flex-shrink-0">Updated:</span>
-              <span>{new Date(initialData.updated_at).toLocaleString()}</span>
-            </div>
-          )}
-          {initialData?.connection_count !== undefined && (
-            <div className="flex items-center">
-              <span className="w-36 flex-shrink-0">Connections:</span>
-              <span>{initialData.connection_count}</span>
-            </div>
-          )}
-        </div>
-      ) : null}
     </div>
   )
 }
