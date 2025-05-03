@@ -5,7 +5,7 @@ export const openLedgerClientConnector = {
   useConnectHook: (_) => {
     return async (opts, {integrationExternalId}) => {
       console.log('[openledger] Will connect', opts, integrationExternalId)
-      return {}
+      return {entity_id: '123'}
     }
   },
 } satisfies ConnectorClient<typeof openLedgerSchemas>
