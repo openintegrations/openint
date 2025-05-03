@@ -91,7 +91,7 @@ export function createOAuth2ConnectorDef<
       displayName: def.display_name,
       stage: def.stage,
       verticals: def.verticals,
-      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-${name}.svg`,
+      logoUrl: `/_assets/logo-${name}.svg`,
       authType: def.auth.type,
       jsonDef: def,
     },
