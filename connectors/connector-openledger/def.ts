@@ -16,13 +16,12 @@ export const openLedgerSchemas = {
   connection_settings: z.object({
     entity_id: z.string().describe("Your entity's identifier, aka customer ID"),
   }),
-
-  connect_input: z.object({
-    entity_id: z.string().describe("Your entity's identifier, aka customer ID"),
-  }),
-  connect_output: z.object({
-    entity_id: z.string().describe("Your entity's identifier, aka customer ID"),
-  }),
+  // connect_input: z.object({
+  //   entity_id: z.string().describe("Your entity's identifier, aka customer ID"),
+  // }),
+  // connect_output: z.object({
+  //   entity_id: z.string().describe("Your entity's identifier, aka customer ID"),
+  // }),
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(openLedgerSchemas)
