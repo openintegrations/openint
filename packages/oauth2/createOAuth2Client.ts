@@ -141,33 +141,31 @@ export function createOAuth2Client(
       )
     }
 
-    // Parse the response content into a JavaScript object regardless of format
-    try {
-      // First try JSON parsing
-      const result = await response.json()
-      return result as T
-    } catch (err) {
-      // If JSON parsing fails, try reading as text and parsing manually
-      const text = await response.clone().text()
-
-      try {
-        // Try parsing as URL-encoded form data
-        const formData = new URLSearchParams(text)
-        const result: Record<string, string | number> = {}
-
-        // Convert numeric values where appropriate
-        formData.forEach((value, key) => {
-          result[key] = /^\d+$/.test(value) ? parseInt(value, 10) : value
-        })
-
-        return result as unknown as T
-      } catch (formErr) {
-        // If all else fails, return the raw text
-        throw new Error(
-          `Failed to parse oauth post response: ${text.substring(0, 100)}...`,
-        )
-      }
+    // First try JSON parsing
+    const text = await response.text()
+    const json = safeJSONParseObject(text)
+    if (json) {
+      return json as T
     }
+
+    // Then try parsing as URL-encoded form data
+    try {
+      const formData = new URLSearchParams(text)
+      const result: Record<string, string | number> = {}
+
+      // Convert numeric values where appropriate
+      formData.forEach((value, key) => {
+        result[key] = /^\d+$/.test(value) ? parseInt(value, 10) : value
+      })
+
+      return result as unknown as T
+      // eslint-disable-next-line no-empty
+    } catch {}
+
+    // If all else fails, throw error
+    throw new Error(
+      `Failed to parse oauth post response: ${text.substring(0, 100)}...`,
+    )
   }
 
   const getAuthorizeUrl = zFunction(
