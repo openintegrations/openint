@@ -8,8 +8,7 @@ export default {
       displayName: 'Acme OAuth',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-acme-oauth2.svg',
+      logoUrl: '/_assets/logo-acme-oauth2.svg',
       authType: 'OAUTH2',
     },
   },
@@ -20,8 +19,7 @@ export default {
       displayName: 'Aircall',
       stage: 'ga',
       verticals: ['ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg',
+      logoUrl: '/_assets/logo-aircall.svg',
       authType: 'OAUTH2',
     },
   },
@@ -68,8 +66,7 @@ export default {
       displayName: 'Confluence',
       stage: 'ga',
       verticals: ['wiki'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-confluence.svg',
+      logoUrl: '/_assets/logo-confluence.svg',
       authType: 'OAUTH2',
     },
   },
@@ -80,8 +77,7 @@ export default {
       displayName: 'Discord',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg',
+      logoUrl: '/_assets/logo-discord.svg',
       authType: 'OAUTH2',
     },
   },
@@ -92,8 +88,7 @@ export default {
       displayName: 'Facebook',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg',
+      logoUrl: '/_assets/logo-facebook.svg',
       authType: 'OAUTH2',
     },
   },
@@ -129,8 +124,7 @@ export default {
       displayName: 'GitHub',
       stage: 'ga',
       verticals: ['developer-tools', 'ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg',
+      logoUrl: '/_assets/logo-github.svg',
       authType: 'OAUTH2',
     },
   },
@@ -141,8 +135,7 @@ export default {
       displayName: 'Gong',
       stage: 'ga',
       verticals: ['communication', 'streaming'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg',
+      logoUrl: '/_assets/logo-gong.svg',
       authType: 'OAUTH2',
     },
   },
@@ -153,8 +146,7 @@ export default {
       displayName: 'Google Calendar',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-calendar.svg',
+      logoUrl: '/_assets/logo-google-calendar.svg',
       authType: 'OAUTH2',
     },
   },
@@ -165,8 +157,7 @@ export default {
       displayName: 'Google Docs',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-docs.svg',
+      logoUrl: '/_assets/logo-google-docs.svg',
       authType: 'OAUTH2',
     },
   },
@@ -177,8 +168,7 @@ export default {
       displayName: 'Google Drive',
       stage: 'ga',
       verticals: ['wiki', 'file-storage'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg',
+      logoUrl: '/_assets/logo-google-drive.svg',
       authType: 'OAUTH2',
     },
   },
@@ -189,8 +179,7 @@ export default {
       displayName: 'Gmail',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-mail.svg',
+      logoUrl: '/_assets/logo-google-mail.svg',
       authType: 'OAUTH2',
     },
   },
@@ -201,8 +190,7 @@ export default {
       displayName: 'Google Sheet',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-sheet.svg',
+      logoUrl: '/_assets/logo-google-sheet.svg',
       authType: 'OAUTH2',
     },
   },
@@ -233,8 +221,7 @@ export default {
       displayName: 'HubSpot',
       stage: 'ga',
       verticals: ['ticketing', 'crm'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg',
+      logoUrl: '/_assets/logo-hubspot.svg',
       authType: 'OAUTH2',
     },
   },
@@ -245,8 +232,7 @@ export default {
       displayName: 'Instagram',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg',
+      logoUrl: '/_assets/logo-instagram.svg',
       authType: 'OAUTH2',
     },
   },
@@ -257,8 +243,7 @@ export default {
       displayName: 'Intercom',
       stage: 'ga',
       verticals: ['ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg',
+      logoUrl: '/_assets/logo-intercom.svg',
       authType: 'OAUTH2',
     },
   },
@@ -269,8 +254,7 @@ export default {
       displayName: 'Jira',
       stage: 'ga',
       verticals: ['ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg',
+      logoUrl: '/_assets/logo-jira.svg',
       authType: 'OAUTH2',
     },
   },
@@ -281,8 +265,7 @@ export default {
       displayName: 'Lever',
       stage: 'ga',
       verticals: ['ats'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg',
+      logoUrl: '/_assets/logo-lever.svg',
       authType: 'OAUTH2',
     },
   },
@@ -293,8 +276,7 @@ export default {
       displayName: 'Linear',
       stage: 'ga',
       verticals: ['ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linear.svg',
+      logoUrl: '/_assets/logo-linear.svg',
       authType: 'OAUTH2',
     },
   },
@@ -305,8 +287,7 @@ export default {
       displayName: 'LinkedIn',
       stage: 'ga',
       verticals: ['ats', 'social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg',
+      logoUrl: '/_assets/logo-linkedin.svg',
       authType: 'OAUTH2',
     },
   },
@@ -352,8 +333,7 @@ export default {
       displayName: 'Notion',
       stage: 'ga',
       verticals: ['wiki'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-notion.svg',
+      logoUrl: '/_assets/logo-notion.svg',
       authType: 'OAUTH2',
     },
   },
@@ -365,6 +345,16 @@ export default {
       logoUrl: '/_assets/logo-onebrick.svg',
     },
   },
+  openledger: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking', 'accounting'],
+      displayName: 'OpenLedger',
+      stage: 'ga',
+      logoUrl: '/_assets/logo-openledger.svg',
+    },
+  },
   outreach: {
     hasClient: false,
     hasServer: false,
@@ -372,8 +362,7 @@ export default {
       displayName: 'Outreach',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg',
+      logoUrl: '/_assets/logo-outreach.svg',
       authType: 'OAUTH2',
     },
   },
@@ -384,8 +373,7 @@ export default {
       displayName: 'Pipedrive',
       stage: 'ga',
       verticals: ['crm'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg',
+      logoUrl: '/_assets/logo-pipedrive.svg',
       authType: 'OAUTH2',
     },
   },
@@ -415,8 +403,7 @@ export default {
       displayName: 'Quickbooks',
       stage: 'ga',
       verticals: ['accounting'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-quickbooks.svg',
+      logoUrl: '/_assets/logo-quickbooks.svg',
       authType: 'OAUTH2',
     },
   },
@@ -436,8 +423,7 @@ export default {
       displayName: 'Reddit',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg',
+      logoUrl: '/_assets/logo-reddit.svg',
       authType: 'OAUTH2',
     },
   },
@@ -448,8 +434,7 @@ export default {
       displayName: 'Salesloft',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg',
+      logoUrl: '/_assets/logo-salesloft.svg',
       authType: 'OAUTH2',
     },
   },
@@ -468,8 +453,7 @@ export default {
       displayName: 'SharePoint',
       stage: 'ga',
       verticals: ['file-storage', 'communication'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepoint.svg',
+      logoUrl: '/_assets/logo-sharepoint.svg',
       authType: 'OAUTH2',
     },
   },
@@ -480,8 +464,7 @@ export default {
       displayName: 'Slack',
       stage: 'ga',
       verticals: ['other'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-slack.svg',
+      logoUrl: '/_assets/logo-slack.svg',
       authType: 'OAUTH2',
     },
   },
@@ -534,8 +517,7 @@ export default {
       displayName: 'Twitter',
       stage: 'ga',
       verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg',
+      logoUrl: '/_assets/logo-twitter.svg',
       authType: 'OAUTH2',
     },
   },
@@ -562,8 +544,7 @@ export default {
       displayName: 'Xero',
       stage: 'ga',
       verticals: ['accounting'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg',
+      logoUrl: '/_assets/logo-xero.svg',
       authType: 'OAUTH2',
     },
   },
@@ -582,8 +563,7 @@ export default {
       displayName: 'Zoho Desk',
       stage: 'ga',
       verticals: ['ticketing'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zoho-desk.svg',
+      logoUrl: '/_assets/logo-zoho-desk.svg',
       authType: 'OAUTH2',
     },
   },

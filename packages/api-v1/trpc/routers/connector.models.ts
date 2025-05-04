@@ -9,6 +9,7 @@ import {zConnectorSchemas} from '@openint/cdk'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
+import {env} from '@openint/env'
 
 export const zConnector = z.object({
   name: z.string(),
@@ -63,7 +64,9 @@ export const getConnectorModel = (
     // TODO: replace this with our own custom domain later
     logo_url: logoUrl?.startsWith('http')
       ? logoUrl
-      : `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`,
+      : env.VERCEL_ENV === 'production'
+        ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`
+        : logoUrl,
     stage: def.metadata?.stage,
     platforms: def.metadata?.platforms,
     authType: def.metadata?.authType ?? 'CUSTOM',

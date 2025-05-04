@@ -198,6 +198,10 @@ export const onebrickConnectionSettings: Story = {
   args: {name: 'onebrick'},
 }
 
+export const openledgerConnectionSettings: Story = {
+  args: {name: 'openledger'},
+}
+
 export const plaidConnectionSettings: Story = {
   args: {name: 'plaid'},
 }

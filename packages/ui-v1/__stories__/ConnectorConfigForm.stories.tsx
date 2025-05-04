@@ -190,6 +190,10 @@ export const onebrickConnectorConfig: Story = {
   args: {name: 'onebrick'},
 }
 
+export const openledgerConnectorConfig: Story = {
+  args: {name: 'openledger'},
+}
+
 export const plaidConnectorConfig: Story = {
   args: {name: 'plaid'},
 }
