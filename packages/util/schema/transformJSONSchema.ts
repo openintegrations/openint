@@ -22,7 +22,6 @@ export function transformJSONSchema(
       /password/i,
       /token/i,
       /secret/i,
-      /api/i,
       /credential/i,
     ]
 

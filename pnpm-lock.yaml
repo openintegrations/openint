@@ -298,6 +298,9 @@ importers:
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../connector-onebrick
+      '@openint/connector-openledger':
+        specifier: workspace:*
+        version: link:../connector-openledger
       '@openint/connector-plaid':
         specifier: workspace:*
         version: link:../connector-plaid
@@ -579,6 +582,22 @@ importers:
       '@opensdks/sdk-onebrick':
         specifier: ^0.0.0
         version: 0.0.0
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
+    devDependencies:
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
+
+  connectors/connector-openledger:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
       react:
         specifier: 19.0.0
         version: 19.0.0

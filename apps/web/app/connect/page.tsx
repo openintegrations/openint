@@ -343,7 +343,17 @@ function AddConnectionCardPrefetch({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AddConnectionCard connectorConfig={connectorConfig} />
+      {/* 
+      TODO: IMprove this error boundary so that it still shows the connector card
+      but with a message that it is temporarily unavailable
+      and ideally an ID to copy to contact support with
+       */}
+      <ErrorBoundarySuspense
+        fallback={
+          <div>Unable to connect to {connectorConfig.connector_name}</div>
+        }>
+        <AddConnectionCard connectorConfig={connectorConfig} />
+      </ErrorBoundarySuspense>
     </HydrationBoundary>
   )
 }

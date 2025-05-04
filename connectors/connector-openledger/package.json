@@ -1,0 +1,23 @@
+{
+  "name": "@openint/connector-openledger",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "dependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/util": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "*"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "//": {
+    "//": "Add this dep when we are ready",
+    "dependencies": {
+      "@openledger/accounting-react": "^1.1.23"
+    }
+  }
+}

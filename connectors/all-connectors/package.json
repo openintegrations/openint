@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "generate": "run-s generate:lists generate:meta generate:stories",
+    "generate": "run-s generate:lists generate:meta generate:stories generate:deps",
+    "generate:deps": "bun ./__scripts__/verifyDependencies.ts",
     "generate:lists": "bun ./__scripts__/generateConnectorLists.ts",
     "generate:meta": "bun ./__scripts__/generateConnectorMeta.ts",
     "generate:stories": "bun ./__scripts__/generateConnectorStories.ts"
@@ -25,6 +26,7 @@
     "@openint/connector-merge": "workspace:*",
     "@openint/connector-moota": "workspace:*",
     "@openint/connector-onebrick": "workspace:*",
+    "@openint/connector-openledger": "workspace:*",
     "@openint/connector-plaid": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
     "@openint/connector-ramp": "workspace:*",

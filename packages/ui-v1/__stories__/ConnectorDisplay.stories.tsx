@@ -206,6 +206,10 @@ export const onebrickConnectorDisplay: Story = {
   args: {name: 'onebrick'},
 }
 
+export const openledgerConnectorDisplay: Story = {
+  args: {name: 'openledger'},
+}
+
 export const plaidConnectorDisplay: Story = {
   args: {name: 'plaid'},
 }
