@@ -304,7 +304,17 @@ export const plaidServerConnector = {
       body: {
         offset: 0,
         count: 50,
-        country_codes: ['US'],
+        country_codes: [
+          CountryCode.Us,
+          // CountryCode.Gb,
+          // CountryCode.Es,
+          // CountryCode.Nl,
+          // CountryCode.Fr,
+          // CountryCode.Ie,
+          // CountryCode.Ca,
+          // CountryCode.De,
+          // CountryCode.It,
+        ],
         options: {
           include_optional_metadata: true,
           include_auth_metadata: true,
@@ -318,7 +328,9 @@ export const plaidServerConnector = {
       items: res.data.institutions.map((inst) => ({
         id: inst.institution_id,
         name: inst.name,
-        logo_url: inst.logo,
+        logo_url: inst.logo
+          ? `data:image/png;base64,${inst.logo}`
+          : undefined,
         raw_data: inst as any,
       })),
     }
