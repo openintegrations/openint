@@ -134,11 +134,10 @@ export function DataTable<TData, TValue>({
   // Check if data is paginated
   const isPaginated = 'items' in data && 'total' in data
   const items = isPaginated ? data.items : data
-  const totalCount = isPaginated ? data.total : items.length
+  const rowCount = isPaginated ? data.total : items.length
   const pageSize = isPaginated ? data.limit : items.length
-  const currentPage = isPaginated ? Math.floor(data.offset / data.limit) : 0
-
-  const [pageIndex, setPageIndex] = useState(currentPage)
+  const pageIndex = isPaginated ? Math.floor(data.offset / data.limit) : 0
+  const pageCount = isPaginated ? Math.ceil(rowCount / pageSize) : 1
 
   const columns = React.useMemo(
     () =>
@@ -195,15 +194,20 @@ export function DataTable<TData, TValue>({
         pageSize,
       },
     },
-    manualPagination: isPaginated, // Only enable manual pagination if data is paginated
-    pageCount: isPaginated ? Math.ceil(totalCount / pageSize) : 1,
-    rowCount: totalCount,
+    // Only enable manual pagination if data is paginated
+    manualPagination: isPaginated,
+    manualFiltering: isPaginated,
+    manualSorting: isPaginated,
+    pageCount,
+    rowCount,
     onPaginationChange: isPaginated
       ? (updater) => {
+          // We don't care for page Size as it's not modifiable for now
           if (typeof updater === 'function') {
             const newState = updater({pageIndex, pageSize})
-            setPageIndex(newState.pageIndex)
             onPageChange?.(newState.pageIndex)
+          } else {
+            onPageChange?.(updater.pageIndex)
           }
         }
       : undefined,
@@ -226,8 +230,8 @@ export function DataTable<TData, TValue>({
         isLoading: isLoading ?? false,
         paginationInfo: isPaginated
           ? {
-              currentPage,
-              totalCount,
+              currentPage: pageIndex,
+              totalCount: rowCount,
               pageSize,
             }
           : undefined,
@@ -307,19 +311,28 @@ export function DataTableHeader({children}: {children: React.ReactNode}) {
   return <div className="flex items-center py-4">{children}</div>
 }
 
-function SearchInput({initialSearch}: {initialSearch?: string | null}) {
+function SearchInput({
+  query: query,
+  onQueryChange: onQueryChange,
+}: {
+  query?: string | null
+  onQueryChange?: (value: string) => void
+}) {
   const {table} = useDataTableContext()
 
   useEffect(() => {
-    if (initialSearch) {
-      table.setGlobalFilter(initialSearch)
+    if (query != null) {
+      table.setGlobalFilter(query)
     }
-  }, [initialSearch, table])
+  }, [query, table])
 
   return (
     <SearchInputComponent
       initialValue={(table.getState().globalFilter as string) ?? ''}
-      onChange={(value) => table.setGlobalFilter(value)}
+      onChange={(value) => {
+        table.setGlobalFilter(value)
+        onQueryChange?.(value)
+      }}
       className="max-w-lg"
     />
   )

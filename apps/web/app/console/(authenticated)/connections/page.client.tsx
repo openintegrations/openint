@@ -137,7 +137,8 @@ export function ConnectionsPage() {
           isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
             {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
-            <SearchInput initialValue={query} onChange={setQuery} />
+            {/* <SearchInput initialValue={query} onChange={setQuery} /> */}
+            <DataTable.SearchInput query={query} onQueryChange={setQuery} />
             <DataTable.ColumnVisibilityToggle />
           </DataTable.Header>
           <DataTable.Table />
