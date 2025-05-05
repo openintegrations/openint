@@ -15,7 +15,7 @@ import {
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
-import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
+import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
 /** TODO: move into ui-v1 */
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
@@ -55,7 +55,7 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 ]
 
-const DATA_PER_PAGE = 5
+const DATA_PER_PAGE = 20
 
 export function ConnectionsPage() {
   const trpc = useTRPC()
@@ -63,6 +63,17 @@ export function ConnectionsPage() {
   const [selectedConnection, setSelectedConnection] = useState<
     Core['connection_select'] | null
   >(null)
+  // const tableRef = useRef<ReactTable<ConnectionExpanded>>(null)
+  // const pageIndex  = tableRef.current?.getState().pagination.pageIndex
+  // const setPageIndex = (pageIndex: number) => {
+  //   tableRef.current?.setPageIndex(pageIndex)
+  // }
+  // const [_pageIndex, _setPageIndex] = useStateFromSearchParams('page', {
+  //   defaultValue: '0',
+  //   shallow: true,
+  // })
+  // Perhaps data table should sync itself with the search params of the page optionally if controlled by a param
+  // for future though...
   const [pageIndex, setPageIndex] = useState(0)
   const [query, setQuery] = useStateFromSearchParams('q', {
     shallow: true,
@@ -86,18 +97,6 @@ export function ConnectionsPage() {
   const handlePageChange = (newPageIndex: number) => {
     setPageIndex(newPageIndex)
   }
-
-  const deleteConn = useMutation(
-    trpc.deleteConnection.mutationOptions({
-      onSuccess: async () => {
-        await connectionData.refetch()
-      },
-      onError: (error) => {
-        // TODO: @rodri77 - Add a toast to the UI.
-        console.error(error)
-      },
-    }),
-  )
 
   const definitions = useCommandDefinitionMap()
   const handleRowClick = (connection: Core['connection_select']) => {
@@ -123,7 +122,7 @@ export function ConnectionsPage() {
         ),
       } as ColumnDef<ConnectionExpanded>,
     ],
-    [deleteConn],
+    [definitions],
   )
 
   return (
