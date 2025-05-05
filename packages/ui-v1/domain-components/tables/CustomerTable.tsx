@@ -15,11 +15,15 @@ export function CustomersTable({
   onPageChange,
   isLoading,
   onCountClick,
+  query,
+  onQueryChange,
 }: {
   data: AppRouterOutput['listCustomers']
   onPageChange: (pageIndex: number) => void
   isLoading: boolean
   onCountClick: (customerId: string) => void
+  query: string | undefined
+  onQueryChange: (query: string) => void
 }) {
   const columns: Array<ColumnDef<CustomerData>> = [
     {
@@ -79,7 +83,7 @@ export function CustomersTable({
       onPageChange={onPageChange}
       isLoading={isLoading}>
       <DataTable.Header>
-        <DataTable.SearchInput />
+        <DataTable.SearchInput query={query} onQueryChange={onQueryChange} />
         <DataTable.ColumnVisibilityToggle />
       </DataTable.Header>
       <DataTable.Table />

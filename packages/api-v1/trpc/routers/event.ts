@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {any, asc, desc, eq, schema, sql} from '@openint/db'
+import {and, any, asc, desc, eq, ilike, schema, sql} from '@openint/db'
 import {zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
@@ -59,15 +59,28 @@ export const eventRouter = router({
         summary: 'List Organization Events',
       },
     })
-    .input(zListParams.default({}))
+    .input(
+      zListParams
+        .extend({
+          search_query: z.string().optional().openapi({
+            description: 'Search query for the event list',
+          }),
+        })
+        .default({}),
+    )
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input: {limit, offset}}) => {
+    .query(async ({ctx, input: {limit, offset, search_query}}) => {
+      // Lowercased query for case insensitive search
+      const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db.query.event.findMany({
         extras: {
           total: sql<number>`count(*) OVER ()`.as('total'),
         },
         // filter out deprecated events, preventing parse errors
-        where: eq(schema.event.name, any(Object.keys(eventMap))),
+        where: and(
+          eq(schema.event.name, any(Object.keys(eventMap))),
+          lowerQuery ? ilike(schema.event.id, `%${lowerQuery}%`) : undefined,
+        ),
         orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
         offset,
         limit,

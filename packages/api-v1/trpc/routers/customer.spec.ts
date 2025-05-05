@@ -58,17 +58,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items[0]?.connection_count).toEqual(1)
   })
 
-  test('list customers with existing keywords', async () => {
+  test('list customers with existing search query', async () => {
     const res = await asOrgConnectionsCaller.listCustomers({
-      keywords: 'cus_222',
+      search_query: 'cus_222',
     })
 
     expect(res.items).toHaveLength(1)
   })
 
-  test('list customers with non existing keywords', async () => {
+  test('list customers with non existing search query', async () => {
     const res = await asOrgConnectionsCaller.listCustomers({
-      keywords: 'cus_333',
+      search_query: 'cus_333',
     })
 
     expect(res.items).toHaveLength(0)
