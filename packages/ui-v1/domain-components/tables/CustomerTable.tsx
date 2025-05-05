@@ -3,7 +3,7 @@
 import type {AppRouterOutput} from '@openint/api-v1'
 import type {ColumnDef} from '../../components/DataTable'
 
-import {CopyID, SearchInput} from '../../components'
+import {CopyID} from '../../components'
 import {DataTable} from '../../components/DataTable'
 import {Icon} from '../../components/Icon'
 import {formatIsoDateString} from '../../utils'
@@ -83,8 +83,7 @@ export function CustomersTable({
       onPageChange={onPageChange}
       isLoading={isLoading}>
       <DataTable.Header>
-        {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
-        <SearchInput initialValue={query} onChange={onQueryChange} />
+        <DataTable.SearchInput query={query} onQueryChange={onQueryChange} />
         <DataTable.ColumnVisibilityToggle />
       </DataTable.Header>
       <DataTable.Table />

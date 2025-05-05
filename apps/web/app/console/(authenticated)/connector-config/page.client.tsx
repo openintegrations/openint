@@ -8,11 +8,7 @@ import {useSuspenseQuery} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
 import React from 'react'
 import {Button} from '@openint/shadcn/ui'
-import {
-  ConnectorTableCell,
-  SearchInput,
-  useStateFromSearchParams,
-} from '@openint/ui-v1'
+import {ConnectorTableCell, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
@@ -131,8 +127,7 @@ export function ConnectorConfigList() {
         onPageChange={handlePageChange}
         isLoading={res.isFetching || res.isLoading}>
         <DataTable.Header>
-          {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
-          <SearchInput initialValue={query} onChange={setQuery} />
+          <DataTable.SearchInput query={query} onQueryChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
           <Button
             className="ml-4"

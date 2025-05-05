@@ -5,7 +5,7 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 import React from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {CopyID, SearchInput, useStateFromSearchParams} from '@openint/ui-v1'
+import {CopyID, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils/dates'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
@@ -82,8 +82,7 @@ export function EventsList() {
         onPageChange={handlePageChange}
         isLoading={eventData.isFetching || eventData.isLoading}>
         <DataTable.Header>
-          {/* Use this approach for paginated search, DataTable.SearchInput works for client-side search */}
-          <SearchInput initialValue={query} onChange={setQuery} />
+          <DataTable.SearchInput query={query} onQueryChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
         </DataTable.Header>
         <DataTable.Table />
