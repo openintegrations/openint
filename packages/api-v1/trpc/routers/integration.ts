@@ -16,7 +16,7 @@ export const integrationRouter = router({
         summary: 'List Connector Integrations',
       },
     })
-    .input(z.object({name: zConnectorName}))
+    .input(z.object({name: zConnectorName, search_text: z.string().nullish()}))
     .output(
       z.object({
         items: z.array(
@@ -48,7 +48,9 @@ export const integrationRouter = router({
           next_cursor: null,
         }
       }
-      const res = await connector.listIntegrations({})
+      const res = await connector.listIntegrations({
+        search_text: input.search_text ?? undefined,
+      })
       return {
         items: res.items.map((item) => ({
           id: item.id,

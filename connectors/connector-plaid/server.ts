@@ -289,8 +289,9 @@ export const plaidServerConnector = {
     })
     return {...sdk, accessToken: settings?.accessToken}
   },
-  async listIntegrations() {
-    const env = 'sandbox' as const
+  async listIntegrations({search_text}) {
+    const env = 'production' as const
+
     const creds = getPlatformConfig(env)
     const sdk = initSDK(plaidSdkDef, {
       baseUrl: `https://${env}.plaid.com`,
@@ -300,6 +301,31 @@ export const plaidServerConnector = {
         'Content-Type': 'application/json',
       },
     })
+    if (search_text) {
+      const res = await sdk.POST('/institutions/search', {
+        body: {
+          query: search_text,
+          country_codes: [CountryCode.Us],
+          options: {
+            include_optional_metadata: true,
+            include_auth_metadata: true,
+            include_payment_initiation_metadata: true,
+          },
+        },
+      })
+      return {
+        has_next_page: false,
+        next_cursor: null,
+        items: res.data.institutions.map((inst) => ({
+          id: inst.institution_id,
+          name: inst.name,
+          logo_url: inst.logo
+            ? `data:image/png;base64,${inst.logo}`
+            : undefined,
+          raw_data: inst as any,
+        })),
+      }
+    }
     const res = await sdk.POST('/institutions/get', {
       body: {
         offset: 0,
@@ -328,9 +354,7 @@ export const plaidServerConnector = {
       items: res.data.institutions.map((inst) => ({
         id: inst.institution_id,
         name: inst.name,
-        logo_url: inst.logo
-          ? `data:image/png;base64,${inst.logo}`
-          : undefined,
+        logo_url: inst.logo ? `data:image/png;base64,${inst.logo}` : undefined,
         raw_data: inst as any,
       })),
     }

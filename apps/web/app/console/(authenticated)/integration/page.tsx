@@ -1,14 +1,22 @@
 'use client'
 
 import Image from 'next/image'
+import React from 'react'
+import {useDebounce} from 'use-debounce'
+import {Input} from '@openint/shadcn/ui'
+import {useStateFromSearchParams} from '@openint/ui-v1'
 import {useQuery, useTRPC} from '@/lib-client/TRPCApp'
 
-export default function IntegrationPage() {
+function IntegrationList({searchText}: {searchText: string}) {
   const trpc = useTRPC()
 
   const res = useQuery(
-    trpc.listConnectorIntegrations.queryOptions({name: 'plaid'}),
+    trpc.listConnectorIntegrations.queryOptions({
+      name: 'plaid',
+      search_text: searchText || undefined,
+    }),
   )
+
   if (res.status === 'pending') {
     return <div>Loading...</div>
   }
@@ -32,6 +40,27 @@ export default function IntegrationPage() {
           )}
         </div>
       ))}
+    </div>
+  )
+}
+
+export default function IntegrationPage() {
+  const [searchText, setSearchText] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
+
+  const [searchTextDebounced] = useDebounce(searchText ?? '', 1000)
+
+  return (
+    <div className="space-y-4">
+      <Input
+        type="search"
+        placeholder="Search integrations..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+      />
+      <IntegrationList searchText={searchTextDebounced} />
     </div>
   )
 }

@@ -158,7 +158,7 @@ export interface ConnectorServer<
   // MARK: - Sync
 
   // pagination params
-  listIntegrations?: (params: unknown) => Promise<{
+  listIntegrations?: (params: {search_text?: string}) => Promise<{
     has_next_page: boolean
     next_cursor: string | null
     // Institution
