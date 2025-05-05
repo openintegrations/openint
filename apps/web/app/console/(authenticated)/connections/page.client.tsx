@@ -3,7 +3,6 @@
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import {useSearchParams} from 'next/navigation'
 import {useEffect, useMemo, useState} from 'react'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {
@@ -11,7 +10,6 @@ import {
   ConnectionStatusBadge,
   ConnectionTableCell,
   CopyID,
-  SearchInput,
   useStateFromSearchParams,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'

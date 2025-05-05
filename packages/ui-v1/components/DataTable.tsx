@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2} from 'lucide-react'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -320,7 +320,7 @@ function SearchInput({
 }) {
   const {table} = useDataTableContext()
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (query != null) {
       table.setGlobalFilter(query)
     }
