@@ -1,4 +1,4 @@
-import {schema, sql} from '@openint/db'
+import {ilike, or, schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
 import {
@@ -21,7 +21,7 @@ export const customerRouter = router({
     .input(
       zListParams
         .extend({
-          keywords: z.string().trim().nullish(),
+          search_query: z.string().trim().nullish(),
         })
         .default({}),
     )
@@ -31,12 +31,18 @@ export const customerRouter = router({
         z.object({
           id: z.string().nullable().describe('Customer Id'),
           connection_count: z.number(),
-          created_at: z.string().describe('postgres timestamp format, not yet ISO'),
-          updated_at: z.string().describe('postgres timestamp format, not yet ISO'),
+          created_at: z
+            .string()
+            .describe('postgres timestamp format, not yet ISO'),
+          updated_at: z
+            .string()
+            .describe('postgres timestamp format, not yet ISO'),
         }),
       ),
     )
-    .query(async ({ctx, input: {offset, limit, keywords}}) => {
+    .query(async ({ctx, input: {offset, limit, search_query}}) => {
+      // Lowercased query for case insensitive search
+      const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db
         .select({
           id: schema.connection.customer_id,
@@ -47,8 +53,11 @@ export const customerRouter = router({
         })
         .from(schema.connection)
         .where(
-          keywords
-            ? sql` ${schema.connection.customer_id} ILIKE ${`%${keywords}%`} `
+          lowerQuery
+            ? or(
+                ilike(schema.connection.customer_id, `%${lowerQuery}%`),
+                ilike(schema.connection.connector_name, `%${lowerQuery}%`),
+              )
             : undefined,
         )
         .groupBy(schema.connection.customer_id)

@@ -6,9 +6,9 @@ import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import {useSuspenseQuery} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
-import {useState} from 'react'
+import React from 'react'
 import {Button} from '@openint/shadcn/ui'
-import {ConnectorTableCell} from '@openint/ui-v1'
+import {ConnectorTableCell, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
@@ -16,11 +16,20 @@ import {ConnectorConfigSheet} from './ConnectorConfigSheet'
 const DATA_PER_PAGE = 20
 
 export function ConnectorConfigList() {
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [connectorConfigId, setConnectorConfigId] = useState<Id['ccfg'] | null>(
-    null,
-  )
-  const [pageIndex, setPageIndex] = useState(0)
+  const [sheetOpen, setSheetOpen] = React.useState(false)
+  const [connectorConfigId, setConnectorConfigId] = React.useState<
+    Id['ccfg'] | null
+  >(null)
+  const [pageIndex, setPageIndex] = React.useState(0)
+  const [query, setQuery] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
+
+  React.useEffect(() => {
+    // Reset page index when search params query changes
+    setPageIndex(0)
+  }, [query])
 
   const trpc = useTRPC()
 
@@ -30,6 +39,7 @@ export function ConnectorConfigList() {
       expand: ['connection_count', 'connector.schemas'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      search_query: query,
     }),
   )
 
@@ -117,7 +127,7 @@ export function ConnectorConfigList() {
         onPageChange={handlePageChange}
         isLoading={res.isFetching || res.isLoading}>
         <DataTable.Header>
-          <DataTable.SearchInput />
+          <DataTable.SearchInput query={query} onQueryChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
           <Button
             className="ml-4"
