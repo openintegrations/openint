@@ -12,6 +12,7 @@ import {
   ConnectionTableCell,
   CopyID,
   SearchInput,
+  useStateFromSearchParams,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
@@ -56,7 +57,7 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 ]
 
-const DATA_PER_PAGE = 20
+const DATA_PER_PAGE = 5
 
 export function ConnectionsPage() {
   const trpc = useTRPC()
@@ -65,14 +66,15 @@ export function ConnectionsPage() {
     Core['connection_select'] | null
   >(null)
   const [pageIndex, setPageIndex] = useState(0)
-  const searchParams = useSearchParams()
-  const q = searchParams.get('q')
-  const [query, setQuery] = useState<string | undefined>(q ?? undefined)
+  const [query, setQuery] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
 
   useEffect(() => {
     // Reset page index when search params query changes
     setPageIndex(0)
-  }, [q])
+  }, [query])
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
