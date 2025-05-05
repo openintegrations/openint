@@ -20,11 +20,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   const anon = getCaller({role: 'anon'})
 
   test('list oauth integrations', async () => {
-     const res = await anon.listConnectorIntegrations({name: 'google-drive'})
+    const res = await anon.listConnectorIntegrations({name: 'google-drive'})
 
     expect(res.items.length).toEqual(1)
     expect(res.items[0]?.id).toEqual('int_google-drive')
     expect(res.items[0]?.name).toEqual('Google Drive')
     expect(res.items[0]?.logo_url).toContain('google-drive')
+  })
+
+  test.only('list plaid integrations', async () => {
+    const res = await anon.listConnectorIntegrations({name: 'plaid'})
+
+    console.log(res.items)
+    expect(res.items.length).toBeGreaterThan(1)
   })
 })

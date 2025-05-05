@@ -289,6 +289,40 @@ export const plaidServerConnector = {
     })
     return {...sdk, accessToken: settings?.accessToken}
   },
+  async listIntegrations() {
+    const env = 'sandbox' as const
+    const creds = getPlatformConfig(env)
+    const sdk = initSDK(plaidSdkDef, {
+      baseUrl: `https://${env}.plaid.com`,
+      headers: {
+        'PLAID-CLIENT-ID': creds.clientId,
+        'PLAID-SECRET': creds.clientSecret,
+        'Content-Type': 'application/json',
+      },
+    })
+    const res = await sdk.POST('/institutions/get', {
+      body: {
+        offset: 0,
+        count: 50,
+        country_codes: ['US'],
+        options: {
+          include_optional_metadata: true,
+          include_auth_metadata: true,
+          include_payment_initiation_metadata: true,
+        },
+      },
+    })
+    return {
+      has_next_page: false,
+      next_cursor: null,
+      items: res.data.institutions.map((inst) => ({
+        id: inst.institution_id,
+        name: inst.name,
+        logo_url: inst.logo,
+        raw_data: inst as any,
+      })),
+    }
+  },
 } satisfies ConnectorServer<typeof plaidSchemas, PlaidSDK>
 
 export default plaidServerConnector

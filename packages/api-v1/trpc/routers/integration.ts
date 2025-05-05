@@ -1,7 +1,7 @@
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {serverConnectors} from '@openint/cnext/connectors.server'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
 import {getConnectorModel, zConnectorName} from './connector.models'

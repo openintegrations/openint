@@ -167,7 +167,7 @@ export interface ConnectorServer<
       id: string
       name: string
       logo_url?: string | null
-      updated_at: string
+      updated_at?: string
       verticals?: VerticalKey[]
       raw_data: T['_intOpType']['data']
     }>
