@@ -312,7 +312,7 @@ export function DataTableHeader({children}: {children: React.ReactNode}) {
 }
 
 function SearchInput({
-  query: query,
+  query,
   onQueryChange: onQueryChange,
 }: {
   query?: string | null
@@ -326,9 +326,11 @@ function SearchInput({
     }
   }, [query, table])
 
+  const initialValue = query ?? (table.getState().globalFilter as string) ?? ''
+
   return (
     <SearchInputComponent
-      initialValue={(table.getState().globalFilter as string) ?? ''}
+      initialValue={initialValue}
       onChange={(value) => {
         table.setGlobalFilter(value)
         onQueryChange?.(value)

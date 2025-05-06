@@ -1,6 +1,8 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
 import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
+import {Suspense} from 'react'
+import {LoadingSpinner} from '@openint/ui-v1/components'
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {EventsList} from './page.client'
 
@@ -11,7 +13,9 @@ export default async function Page(props: PageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <EventsList />
+      <Suspense fallback={<LoadingSpinner />}>
+        <EventsList />
+      </Suspense>
     </HydrationBoundary>
   )
 }
