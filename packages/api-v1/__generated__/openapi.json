@@ -10405,6 +10405,9 @@
                 "scope"
               ]
             }
+          },
+          "hasOpenIntCredentials": {
+            "type": "boolean"
           }
         },
         "required": [

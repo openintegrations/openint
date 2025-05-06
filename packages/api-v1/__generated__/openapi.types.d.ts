@@ -2605,6 +2605,7 @@ export interface components {
                 display_name?: string;
                 description?: string;
             }[];
+            hasOpenIntCredentials?: boolean;
         };
         /**
          * connector
