@@ -9,7 +9,7 @@ import {routerContextFromViewer} from '../context'
 
 export const generalRouter = router({
   debug: publicProcedure
-    .meta({openapi: {method: 'GET', path: '/debug'}})
+    .meta({openapi: {method: 'GET', path: '/debug', enabled: false}})
     .input(z.object({crash: z.string().optional()}))
     .output(z.object({ok: z.boolean()}))
     .query(({input}) => {
@@ -26,6 +26,7 @@ export const generalRouter = router({
         path: '/health',
         description: 'Check if the API is operational',
         summary: 'Health Check',
+        enabled: false,
         // Normally these would be disabled as they are internal endpoints but
         // since we use them for tests of oas generation we leave them on
         // and then hardcode remove it form docs in generateDocsOas.bin.cjs
