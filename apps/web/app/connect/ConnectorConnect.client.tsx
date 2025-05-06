@@ -71,14 +71,7 @@ export function ConnectorConnectContainer({
   const postConnect = useMutation(
     trpc.postConnect.mutationOptions({
       onSuccess: () => {},
-      onSettled: () => {
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listConnections.queryKey(),
-        })
-        void queryClient.invalidateQueries({
-          queryKey: trpc.listCustomers.queryKey(),
-        })
-      },
+      onSettled: () => {},
     }),
   )
 
@@ -111,6 +104,10 @@ export function ConnectorConnectContainer({
       // back up in case refetchQueries doesn't work, query is still marked as stale
       void queryClient.invalidateQueries({
         queryKey: trpc.listConnections.queryKey({}),
+      })
+      // We also invalidate listCustomers here to ensure that the customer list connection count is updated
+      void queryClient.invalidateQueries({
+        queryKey: trpc.listCustomers.queryKey(),
       })
       // Immediately trigger refetch to not need to wait until refetchOnMount
       void queryClient.refetchQueries({
