@@ -36,7 +36,7 @@ export const zConnector = z.object({
       }),
     )
     .optional(),
-  hasOpenIntCredentials: z.boolean().optional(),
+  has_openint_credentials: z.boolean().optional(),
 })
 
 export {zConnectorName, type ConnectorName}
@@ -87,7 +87,7 @@ export const getConnectorModel = (
       def.metadata?.jsonDef?.auth.type === 'OAUTH2'
         ? def.metadata?.jsonDef?.auth.scopes
         : undefined,
-    hasOpenIntCredentials:
+    has_openint_credentials:
       getConnectorDefaultCredentials(def.name) !== undefined,
   }
 }

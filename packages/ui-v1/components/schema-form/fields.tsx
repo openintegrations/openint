@@ -36,7 +36,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
     }, {}) ?? {}
 
   const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(
-    connector?.hasOpenIntCredentials &&
+    connector?.has_openint_credentials &&
       (!formData?.client_id || !formData?.client_secret),
   )
 
@@ -71,7 +71,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
 
   return (
     <div className="space-y-4">
-      {connector?.hasOpenIntCredentials && (
+      {connector?.has_openint_credentials && (
         <div className="flex items-center justify-between">
           <label
             htmlFor="use-openint-credentials"
@@ -86,7 +86,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
         </div>
       )}
 
-      {(!connector?.hasOpenIntCredentials || !useOpenIntCredentials) && (
+      {(!connector?.has_openint_credentials || !useOpenIntCredentials) && (
         <div className="space-y-2">
           <label
             htmlFor="client-id"
