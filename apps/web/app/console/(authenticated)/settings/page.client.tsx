@@ -1,5 +1,6 @@
 'use client'
 
+import {useQueryClient} from '@tanstack/react-query'
 import {toast} from '@openint/shadcn/ui/sonner'
 import {SecureInput} from '@openint/ui-v1/components/SecureInput'
 import {WebhookInput} from '@openint/ui-v1/components/WebhookInput'
@@ -17,6 +18,7 @@ export function SettingsContent({
   webhookUrl,
 }: SettingsContentProps) {
   const trpc = useTRPC()
+  const queryClient = useQueryClient()
   const setWebhook = useMutation(
     trpc.setWebhookUrl.mutationOptions({
       onSuccess: () => {
@@ -32,7 +34,15 @@ export function SettingsContent({
     setWebhook.mutate({webhookUrl: value})
   }
 
-  const createEvent = useMutation(trpc.createEvent.mutationOptions({}))
+  const createEvent = useMutation(
+    trpc.createEvent.mutationOptions({
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listEvents.queryKey(),
+        })
+      },
+    }),
+  )
 
   return (
     <div className="max-w-3xl p-6">
