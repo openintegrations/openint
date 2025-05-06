@@ -21,7 +21,7 @@ export const zConnector = z.object({
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
     .optional(),
   schemas: zConnectorSchemas.optional(),
-  authType: z
+  auth_type: z
     // custom should be considered to be default
     .enum(['BASIC', 'OAUTH1', 'OAUTH2', 'OAUTH2CC', 'API_KEY', 'CUSTOM'])
     .optional(),
@@ -70,7 +70,7 @@ export const getConnectorModel = (
         : logoUrl,
     stage: def.metadata?.stage,
     platforms: def.metadata?.platforms,
-    authType: def.metadata?.authType ?? 'CUSTOM',
+    auth_type: def.metadata?.authType ?? 'CUSTOM',
     // verticals: def.metadata?.verticals ?? ['other'],
     // authType: def.metadata?.authType,
 
