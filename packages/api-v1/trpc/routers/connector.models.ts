@@ -6,10 +6,10 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zConnectorName} from '@openint/all-connectors/name'
 import {jsonSchemasByConnectorName} from '@openint/all-connectors/schemas'
 import {zConnectorSchemas} from '@openint/cdk'
+import {env, getConnectorDefaultCredentials} from '@openint/env'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
-import {env} from '@openint/env'
 
 export const zConnector = z.object({
   name: z.string(),
@@ -36,6 +36,7 @@ export const zConnector = z.object({
       }),
     )
     .optional(),
+  hasOpenIntCredentials: z.boolean().optional(),
 })
 
 export {zConnectorName, type ConnectorName}
@@ -86,5 +87,7 @@ export const getConnectorModel = (
       def.metadata?.jsonDef?.auth.type === 'OAUTH2'
         ? def.metadata?.jsonDef?.auth.scopes
         : undefined,
+    hasOpenIntCredentials:
+      getConnectorDefaultCredentials(def.name) !== undefined,
   }
 }
