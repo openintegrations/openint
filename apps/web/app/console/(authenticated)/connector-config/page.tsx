@@ -1,6 +1,8 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
 import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
+import {Suspense} from 'react'
+import {LoadingSpinner} from '@openint/ui-v1/components'
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {ConnectorConfigList} from './page.client'
 
@@ -10,7 +12,6 @@ import {ConnectorConfigList} from './page.client'
 // whatever reason... it only works when we do explicit prefetch
 // whereas I guess SSR just blocks the full page?
 // That's why we have server comopnents?
-
 
 /**
  * Only purpose now is to provide explicit prefetching of data for perf.
@@ -34,7 +35,9 @@ export default async function ConnectorConfigPageExplicitPrefetch(
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ConnectorConfigList />
+      <Suspense fallback={<LoadingSpinner />}>
+        <ConnectorConfigList />
+      </Suspense>
     </HydrationBoundary>
   )
 }
