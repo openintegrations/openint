@@ -28,7 +28,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items[0]?.logo_url).toContain('google-drive')
   })
 
-  test.only('list plaid integrations', async () => {
+  test('list plaid integrations', async () => {
     const res = await anon.listConnectorIntegrations({name: 'plaid'})
 
     console.log(res.items)

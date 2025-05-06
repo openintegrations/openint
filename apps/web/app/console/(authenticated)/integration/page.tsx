@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import React from 'react'
 import {useDebounce} from 'use-debounce'
 import {Input} from '@openint/shadcn/ui'
 import {useStateFromSearchParams} from '@openint/ui-v1'
