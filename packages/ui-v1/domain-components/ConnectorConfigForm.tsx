@@ -97,7 +97,7 @@ export function ConnectorConfigForm({
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1">
-        <div className="flex h-full flex-col space-y-8 px-8">
+        <div className="flex h-full flex-col space-y-8 px-8 pb-24">
           <JSONSchemaForm<Core['connector_config_insert']>
             jsonSchema={formSchema}
             formData={initialValues}

@@ -31,6 +31,7 @@ interface ConnectorScopesProps {
   hideCustomInput?: boolean
   onRemoveScope?: (scope: string) => void
   onAddScope?: (scope: string) => void
+  onClearAllScopes?: () => void
   scopeLookup?: Record<string, ScopeLookup>
   scopes: string[]
   maxVisible?: number
@@ -88,6 +89,7 @@ export function ConnectorScopes({
   hideCustomInput = false,
   onRemoveScope,
   onAddScope,
+  onClearAllScopes,
   scopeLookup,
   scopes,
   maxVisible = 8,
@@ -140,6 +142,29 @@ export function ConnectorScopes({
   const visibleScopes = scopes.slice(0, maxVisible)
   const hiddenScopesCount = scopes.length - maxVisible
   const hasHiddenScopes = hiddenScopesCount > 0
+
+  const handleClearAllScopes = useCallback(() => {
+    // Check if there are scopes to remove
+    if (scopes.length === 0) return
+
+    // If custom clear function provided, use it
+    if (onClearAllScopes) {
+      onClearAllScopes()
+      return
+    }
+
+    // Otherwise, remove scopes one by one
+    // Create a copy to avoid issues with the array changing during iteration
+    const scopesToRemove = [...scopes]
+
+    if (onRemoveScope) {
+      scopesToRemove.forEach((scope) => {
+        onRemoveScope(scope)
+      })
+    }
+
+    // Don't close the popover, keep it open so user can see and select new scopes
+  }, [scopes, onRemoveScope, onClearAllScopes])
 
   const renderScopeBadge = (scope: string) => (
     <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
@@ -289,8 +314,27 @@ export function ConnectorScopes({
                         </div>
                       )}
                       <div className="flex max-h-[280px] flex-col">
-                        <div className="text-muted-foreground mb-1.5 px-1 text-xs font-medium">
-                          Available scopes
+                        <div className="mb-1.5 flex items-center justify-between px-1">
+                          <div className="text-muted-foreground text-xs font-medium">
+                            Available scopes
+                          </div>
+                          {scopes.length > 0 && (
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="h-5 px-1.5">
+                                {scopes.length} selected
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive hover:bg-destructive/10 hover:text-destructive h-6 px-2 text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleClearAllScopes()
+                                }}>
+                                Clear all
+                              </Button>
+                            </div>
+                          )}
                         </div>
                         <div className="-mr-1.5 flex-1 overflow-y-auto pr-1.5">
                           {filteredScopes.length > 0 ? (
