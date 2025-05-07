@@ -6,9 +6,8 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zConnectorName} from '@openint/all-connectors/name'
 import {jsonSchemasByConnectorName} from '@openint/all-connectors/schemas'
 import {zConnectorSchemas} from '@openint/cdk'
-import {env, getConnectorDefaultCredentials} from '@openint/env'
+import {getConnectorDefaultCredentials, isProduction} from '@openint/env'
 import {titleCase} from '@openint/util/string-utils'
-import {urlFromImage} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
 
 export const zConnector = z.object({
@@ -56,18 +55,15 @@ export const getConnectorModel = (
   def: ConnectorDef,
   opts: {includeSchemas?: boolean} = {},
 ): Z.infer<typeof zConnector> => {
-  const logoUrl = def.metadata?.logoSvg
-    ? urlFromImage({type: 'svg', data: def.metadata?.logoSvg})
-    : def.metadata?.logoUrl
   return {
     name: def.name,
     display_name: def.metadata?.displayName ?? titleCase(def.name),
     // TODO: replace this with our own custom domain later
-    logo_url: logoUrl?.startsWith('http')
-      ? logoUrl
-      : env.VERCEL_ENV === 'production'
-        ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`
-        : logoUrl,
+    logo_url: def.metadata?.logoUrl?.startsWith('http')
+      ? def.metadata?.logoUrl
+      : isProduction
+        ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${def.metadata?.logoUrl}`
+        : def.metadata?.logoUrl,
     stage: def.metadata?.stage,
     platforms: def.metadata?.platforms,
     auth_type: def.metadata?.authType ?? 'CUSTOM',
