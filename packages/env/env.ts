@@ -145,7 +145,9 @@ export const envRequired = proxyRequired(env, {
 })
 
 export const isProduction =
-  env['NODE_ENV'] === 'production' || env['VERCEL_ENV'] === 'production'
+  env['NODE_ENV'] === 'production' ||
+  env['VERCEL_ENV'] === 'production' ||
+  env['NEXT_PUBLIC_VERCEL_ENV'] === 'production'
 
 export function getSentryEnvironment() {
   const serverUrl =
