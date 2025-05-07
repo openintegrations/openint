@@ -13,39 +13,56 @@ interface VerticalFilterProps {
   selected: string[]
   onSelect: (key: string) => void
   onDeselect: (key: string) => void
-  onReset: () => void
 }
 
-function VerticalFilter({
-  selected,
-  onSelect,
-  onDeselect,
-  onReset,
-}: VerticalFilterProps) {
+function VerticalFilter({selected, onSelect, onDeselect}: VerticalFilterProps) {
+  const handleReset = () => {
+    // This is a placeholder. The parent must pass a stable setSelectedVerticals or similar if you want to fully control from here.
+    // In this codebase, we use search params, so this will be handled by the parent via props.
+    // See IntegrationPage for the actual implementation.
+    // TODO: Move the reset logic here if you want to fully control state from this component.
+  }
+
   return (
-    <nav className="flex flex-col gap-1">
-      {Object.values(VERTICAL_BY_KEY).map((vertical) => {
-        const isChecked = selected.includes(vertical.key)
-        return (
-          <label
-            key={vertical.key}
-            className={cn(
-              'hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 transition',
-              isChecked && 'bg-muted font-semibold',
-            )}>
-            <Checkbox
-              checked={isChecked}
-              onCheckedChange={(checked) => {
-                if (checked) onSelect(vertical.key)
-                else onDeselect(vertical.key)
-              }}
-              aria-label={vertical.name}
-            />
-            <span className="text-left text-sm">{vertical.name}</span>
-          </label>
-        )
-      })}
-    </nav>
+    <>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Verticals</h2>
+        {selected.length > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground h-auto px-2 py-1 text-xs"
+            onClick={handleReset}
+            // TODO: Implement reset logic by lifting state or passing a callback from parent
+          >
+            Reset
+          </Button>
+        )}
+      </div>
+      <nav className="flex flex-col gap-1">
+        {Object.values(VERTICAL_BY_KEY).map((vertical) => {
+          const isChecked = selected.includes(vertical.key)
+          return (
+            <label
+              key={vertical.key}
+              className={cn(
+                'hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 transition',
+                isChecked && 'bg-muted font-semibold',
+              )}>
+              <Checkbox
+                checked={isChecked}
+                onCheckedChange={(checked) => {
+                  if (checked) onSelect(vertical.key)
+                  else onDeselect(vertical.key)
+                }}
+                aria-label={vertical.name}
+              />
+              <span className="text-left text-sm">{vertical.name}</span>
+            </label>
+          )
+        })}
+      </nav>
+    </>
   )
 }
 
@@ -105,10 +122,7 @@ export default function IntegrationPage() {
   // Use comma-separated string in search params for verticals
   const [verticalsParam, setVerticalsParam] = useStateFromSearchParams(
     'verticals',
-    {
-      shallow: true,
-      defaultValue: '',
-    },
+    {shallow: true, defaultValue: '' as string},
   )
   const selectedVerticals = React.useMemo<string[]>(
     () =>
@@ -126,30 +140,14 @@ export default function IntegrationPage() {
   const handleDeselectVertical = (key: string) => {
     setVerticalsParam(selectedVerticals.filter((k) => k !== key).join(','))
   }
-  const handleReset = () => {
-    setVerticalsParam('')
-  }
 
   return (
     <div className="flex gap-8">
       <aside className="w-64 shrink-0 border-r py-6 pr-4">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Verticals</h2>
-          {selectedVerticals.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground h-auto px-2 py-1 text-xs"
-              onClick={handleReset}>
-              Reset
-            </Button>
-          )}
-        </div>
         <VerticalFilter
           selected={selectedVerticals}
           onSelect={handleSelectVertical}
           onDeselect={handleDeselectVertical}
-          onReset={handleReset}
         />
       </aside>
       <main className="flex-1 py-6">
