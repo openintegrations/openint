@@ -103,7 +103,7 @@ export function MyConnectionsClient(props: {
         return (
           <ConnectorConnectContainer
             connectorName={conn.connector_name as ConnectorName}
-            connector={{authType: 'OAUTH2'} as any}
+            connector={{auth_type: 'OAUTH2'} as any}
             connectorConfigId={conn.connector_config_id as Id['ccfg']}
             connectionId={conn.id as Id['conn']}>
             {renderCard}
