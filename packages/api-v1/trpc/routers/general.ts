@@ -9,7 +9,7 @@ import {routerContextFromViewer} from '../context'
 
 export const generalRouter = router({
   debug: publicProcedure
-    .meta({openapi: {method: 'GET', path: '/debug'}})
+    .meta({openapi: {method: 'GET', path: '/debug', enabled: false}})
     .input(z.object({crash: z.string().optional()}))
     .output(z.object({ok: z.boolean()}))
     .query(({input}) => {

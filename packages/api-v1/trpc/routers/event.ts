@@ -15,7 +15,7 @@ export const eventRouter = router({
   // NOTE: why publish this API?
   createEvent: authenticatedProcedure
     .meta({
-      openapi: {method: 'POST', path: '/event'},
+      openapi: {method: 'POST', path: '/event', enabled: false},
     })
     .input(
       z.object({
@@ -32,6 +32,7 @@ export const eventRouter = router({
         path: '/event/{id}',
         description: 'Get a single event by ID',
         summary: 'Get Event',
+        enabled: false,
       },
     })
     .input(z.object({id: z.string()}))
@@ -57,6 +58,7 @@ export const eventRouter = router({
         path: '/event',
         description: 'List all events for an organization',
         summary: 'List Organization Events',
+        enabled: false,
       },
     })
     .input(

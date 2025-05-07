@@ -32,17 +32,13 @@
             "pages": [
               "getting-started/intro",
               "getting-started/quickstart",
+              "getting-started/build-vs-buy",
               "getting-started/integrations"
             ]
           },
           {
             "group": "Using @Connect",
-            "pages": [
-              "connect/embed",
-              "connect/customize",
-              "connect/data-flow",
-              "connect/faq"
-            ]
+            "pages": ["connect/embed", "connect/customize", "connect/data-flow"]
           }
         ]
       },
