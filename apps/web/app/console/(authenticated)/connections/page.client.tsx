@@ -246,27 +246,6 @@ export function ConnectionsPage() {
                           </p>
                         </div>
                       </div>
-                      {selectedConnection.settings?.oauth?.last_fetched_at && (
-                        <div className="flex px-5 py-3">
-                          <h4 className="text-muted-foreground w-1/3 text-sm">
-                            Last Fetched
-                          </h4>
-                          <div className="flex w-2/3 items-center justify-between">
-                            <p className="text-sm font-medium">
-                              {formatIsoDateString(
-                                selectedConnection.settings.oauth
-                                  .last_fetched_at,
-                              )}
-                            </p>
-                            <p className="text-muted-foreground text-xs">
-                              {timeSince(
-                                selectedConnection.settings.oauth
-                                  .last_fetched_at,
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </section>
 
@@ -295,54 +274,47 @@ export function ConnectionsPage() {
                           </div>
                         </div>
 
-                        <div className="flex px-5 py-3">
-                          <h4 className="text-muted-foreground w-1/3 text-sm">
-                            Refresh Token
-                          </h4>
-                          <div className="w-2/3">
-                            <CopyID
-                              value={
-                                selectedConnection.settings.oauth.credentials
-                                  .refresh_token
-                              }
-                              width="100%"
-                              size="medium"
-                            />
+                        {selectedConnection.settings.oauth.credentials
+                          .refresh_token && (
+                          <div className="flex px-5 py-3">
+                            <h4 className="text-muted-foreground w-1/3 text-sm">
+                              Refresh Token
+                            </h4>
+                            <div className="w-2/3">
+                              <CopyID
+                                value={
+                                  selectedConnection.settings.oauth.credentials
+                                    .refresh_token
+                                }
+                                width="100%"
+                                size="medium"
+                              />
+                            </div>
                           </div>
-                        </div>
+                        )}
 
-                        <div className="px-5 py-3">
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                              <h4 className="text-muted-foreground mb-1 text-sm">
-                                Token Type
-                              </h4>
+                        {selectedConnection.settings.oauth.credentials
+                          .expires_at && (
+                          <div className="flex px-5 py-3">
+                            <h4 className="text-muted-foreground w-1/3 text-sm">
+                              Expires At
+                            </h4>
+                            <div className="flex w-2/3 items-center justify-between">
                               <p className="text-sm font-medium">
-                                {
+                                {formatIsoDateString(
                                   selectedConnection.settings.oauth.credentials
-                                    .token_type
-                                }
-                              </p>
-                            </div>
-                            <div>
-                              <h4 className="text-muted-foreground mb-1 text-sm">
-                                Expires In
-                              </h4>
-                              <p className="text-sm font-medium">
-                                {
-                                  selectedConnection.settings.oauth.credentials
-                                    .expires_in
-                                }
-                                s
+                                    .expires_at,
+                                )}
                               </p>
                             </div>
                           </div>
-                        </div>
+                        )}
 
                         <div className="px-5 py-3">
                           <h4 className="text-muted-foreground mb-1 text-sm">
-                            Scope
+                            Scopes
                           </h4>
+                          {/* TODO: use same component as in ccfg sheet  */}
                           <div className="grid grid-cols-2 gap-1.5 md:grid-cols-3">
                             {selectedConnection.settings.oauth.credentials.scope
                               .split(' ')
@@ -355,17 +327,6 @@ export function ConnectionsPage() {
                                 </span>
                               ))}
                           </div>
-                        </div>
-
-                        <div className="px-5 py-3">
-                          <h4 className="text-muted-foreground mb-1 text-sm">
-                            Expires At
-                          </h4>
-                          <p className="text-sm font-medium">
-                            {new Date(
-                              selectedConnection.settings.oauth.credentials.expires_at,
-                            ).toLocaleString()}
-                          </p>
                         </div>
                       </div>
                     </section>
