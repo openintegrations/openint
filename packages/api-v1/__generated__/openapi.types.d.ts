@@ -2598,13 +2598,14 @@ export interface components {
                 connect_output?: unknown;
             };
             /** @enum {string} */
-            authType?: "BASIC" | "OAUTH1" | "OAUTH2" | "OAUTH2CC" | "API_KEY" | "CUSTOM";
+            auth_type?: "BASIC" | "OAUTH1" | "OAUTH2" | "OAUTH2CC" | "API_KEY" | "CUSTOM";
             openint_scopes?: string[];
             scopes?: {
                 scope: string;
                 display_name?: string;
                 description?: string;
             }[];
+            has_openint_credentials?: boolean;
         };
         /**
          * connector

@@ -139,7 +139,7 @@ export function ConnectorConnectContainer({
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component && connector?.authType === 'OAUTH2') {
+  if (!Component && connector?.auth_type === 'OAUTH2') {
     Component = makeNativeOauthConnectorClientComponent(
       preConnectRes.data.connect_input,
     )

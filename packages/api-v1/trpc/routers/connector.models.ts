@@ -6,10 +6,10 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zConnectorName} from '@openint/all-connectors/name'
 import {jsonSchemasByConnectorName} from '@openint/all-connectors/schemas'
 import {zConnectorSchemas} from '@openint/cdk'
+import {env, getConnectorDefaultCredentials} from '@openint/env'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
-import {env} from '@openint/env'
 
 export const zConnector = z.object({
   name: z.string(),
@@ -21,7 +21,7 @@ export const zConnector = z.object({
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
     .optional(),
   schemas: zConnectorSchemas.optional(),
-  authType: z
+  auth_type: z
     // custom should be considered to be default
     .enum(['BASIC', 'OAUTH1', 'OAUTH2', 'OAUTH2CC', 'API_KEY', 'CUSTOM'])
     .optional(),
@@ -36,6 +36,7 @@ export const zConnector = z.object({
       }),
     )
     .optional(),
+  has_openint_credentials: z.boolean().optional(),
 })
 
 export {zConnectorName, type ConnectorName}
@@ -69,7 +70,7 @@ export const getConnectorModel = (
         : logoUrl,
     stage: def.metadata?.stage,
     platforms: def.metadata?.platforms,
-    authType: def.metadata?.authType ?? 'CUSTOM',
+    auth_type: def.metadata?.authType ?? 'CUSTOM',
     // verticals: def.metadata?.verticals ?? ['other'],
     // authType: def.metadata?.authType,
 
@@ -86,5 +87,7 @@ export const getConnectorModel = (
       def.metadata?.jsonDef?.auth.type === 'OAUTH2'
         ? def.metadata?.jsonDef?.auth.scopes
         : undefined,
+    has_openint_credentials:
+      getConnectorDefaultCredentials(def.name) !== undefined,
   }
 }

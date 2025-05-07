@@ -36,7 +36,8 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
     }, {}) ?? {}
 
   const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(
-    !formData?.client_id && !formData?.client_secret,
+    connector?.has_openint_credentials &&
+      (!formData?.client_id || !formData?.client_secret),
   )
 
   const availableScopes: string[] = useOpenIntCredentials
@@ -70,20 +71,22 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <label
-          htmlFor="use-openint-credentials"
-          className="text-sm font-medium text-gray-700">
-          Use OpenInt {connector?.display_name} credentials
-        </label>
-        <Switch
-          id="use-openint-credentials"
-          checked={useOpenIntCredentials}
-          onCheckedChange={handleSwitchChange}
-        />
-      </div>
+      {connector?.has_openint_credentials && (
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="use-openint-credentials"
+            className="text-sm font-medium text-gray-700">
+            Use OpenInt {connector?.display_name} credentials
+          </label>
+          <Switch
+            id="use-openint-credentials"
+            checked={useOpenIntCredentials}
+            onCheckedChange={handleSwitchChange}
+          />
+        </div>
+      )}
 
-      {!useOpenIntCredentials && (
+      {(!connector?.has_openint_credentials || !useOpenIntCredentials) && (
         <div className="space-y-2">
           <label
             htmlFor="client-id"

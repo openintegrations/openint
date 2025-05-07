@@ -271,12 +271,12 @@ async function AddConnections({
   const availableToConnect = res.items.filter(
     (ccfg) =>
       // Allow custom connectors to be added multiple times
-      ccfg.connector?.authType === 'CUSTOM' ||
+      ccfg.connector?.auth_type === 'CUSTOM' ||
       // For non-custom connectors, only include if they don't already exist
       (!existingConnections.some(
         (conn) => conn.connector_config_id === ccfg.id,
       ) &&
-        ccfg.connector?.authType),
+        ccfg.connector?.auth_type),
   )
 
   if (!availableToConnect?.length || availableToConnect.length === 0) {

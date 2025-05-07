@@ -10369,7 +10369,7 @@
             },
             "additionalProperties": false
           },
-          "authType": {
+          "auth_type": {
             "type": "string",
             "enum": [
               "BASIC",
@@ -10405,6 +10405,9 @@
                 "scope"
               ]
             }
+          },
+          "has_openint_credentials": {
+            "type": "boolean"
           }
         },
         "required": [
