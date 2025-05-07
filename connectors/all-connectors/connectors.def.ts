@@ -17,6 +17,7 @@ import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
 import {default as connectorMoota} from '@openint/connector-moota/def'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/def'
+import {default as connectorOpenledger} from '@openint/connector-openledger/def'
 import {default as connectorPlaid} from '@openint/connector-plaid/def'
 import {default as connectorPostgres} from '@openint/connector-postgres/def'
 import {default as connectorRamp} from '@openint/connector-ramp/def'
@@ -45,6 +46,7 @@ export const customConnectors = {
   merge: connectorMerge,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
+  openledger: connectorOpenledger,
   plaid: connectorPlaid,
   postgres: connectorPostgres,
   ramp: connectorRamp,

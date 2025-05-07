@@ -187,6 +187,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(conn.settings).toBeUndefined()
   })
 
+  test('read with search query', async () => {
+    const res = await asCustomer.caller.listConnections({
+      search_query: 'greenhouse',
+    })
+    expect(res.items).toHaveLength(1)
+  })
+
+  test('read with non-existent search query', async () => {
+    const res = await asCustomer.caller.listConnections({
+      search_query: 'test',
+    })
+    expect(res.items).toHaveLength(0)
+  })
+
   test('read include settings', async () => {
     const conns = await asCustomer.caller.listConnections({
       include_secrets: true,

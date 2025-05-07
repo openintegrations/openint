@@ -3,7 +3,6 @@
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import {useSearchParams} from 'next/navigation'
 import {useEffect, useMemo, useState} from 'react'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {
@@ -11,11 +10,12 @@ import {
   ConnectionStatusBadge,
   ConnectionTableCell,
   CopyID,
+  useStateFromSearchParams,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
-import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
+import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
 /** TODO: move into ui-v1 */
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
@@ -63,39 +63,40 @@ export function ConnectionsPage() {
   const [selectedConnection, setSelectedConnection] = useState<
     Core['connection_select'] | null
   >(null)
+  // const tableRef = useRef<ReactTable<ConnectionExpanded>>(null)
+  // const pageIndex  = tableRef.current?.getState().pagination.pageIndex
+  // const setPageIndex = (pageIndex: number) => {
+  //   tableRef.current?.setPageIndex(pageIndex)
+  // }
+  // const [_pageIndex, _setPageIndex] = useStateFromSearchParams('page', {
+  //   defaultValue: '0',
+  //   shallow: true,
+  // })
+  // Perhaps data table should sync itself with the search params of the page optionally if controlled by a param
+  // for future though...
   const [pageIndex, setPageIndex] = useState(0)
-  const searchParams = useSearchParams()
-  const customerId = searchParams.get('customerId')
+  const [query, setQuery] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
 
   useEffect(() => {
-    // Reset page index when customerId changes
+    // Reset page index when search params query changes
     setPageIndex(0)
-  }, [customerId])
+  }, [query])
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions({
       expand: ['connector'],
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
-      customer_id: customerId ? customerId : undefined,
+      search_query: query,
     }),
   )
 
   const handlePageChange = (newPageIndex: number) => {
     setPageIndex(newPageIndex)
   }
-
-  const deleteConn = useMutation(
-    trpc.deleteConnection.mutationOptions({
-      onSuccess: async () => {
-        await connectionData.refetch()
-      },
-      onError: (error) => {
-        // TODO: @rodri77 - Add a toast to the UI.
-        console.error(error)
-      },
-    }),
-  )
 
   const definitions = useCommandDefinitionMap()
   const handleRowClick = (connection: Core['connection_select']) => {
@@ -121,7 +122,7 @@ export function ConnectionsPage() {
         ),
       } as ColumnDef<ConnectionExpanded>,
     ],
-    [deleteConn],
+    [definitions],
   )
 
   return (
@@ -134,7 +135,7 @@ export function ConnectionsPage() {
           onPageChange={handlePageChange}
           isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
-            <DataTable.SearchInput initialSearch={customerId} />
+            <DataTable.SearchInput query={query} onQueryChange={setQuery} />
             <DataTable.ColumnVisibilityToggle />
           </DataTable.Header>
           <DataTable.Table />

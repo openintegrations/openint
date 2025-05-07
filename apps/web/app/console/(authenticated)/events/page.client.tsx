@@ -2,10 +2,10 @@
 
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import {useState} from 'react'
+import React from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {CopyID} from '@openint/ui-v1'
+import {CopyID, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils/dates'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
@@ -41,14 +41,24 @@ const DATA_PER_PAGE = 20
 
 export function EventsList() {
   const trpc = useTRPC()
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
-  const [pageIndex, setPageIndex] = useState(0)
+  const [sheetOpen, setSheetOpen] = React.useState(false)
+  const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null)
+  const [pageIndex, setPageIndex] = React.useState(0)
+  const [query, setQuery] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
+
+  React.useEffect(() => {
+    // Reset page index when search params query changes
+    setPageIndex(0)
+  }, [query])
 
   const eventData = useSuspenseQuery(
     trpc.listEvents.queryOptions({
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      search_query: query,
     }),
   )
 
@@ -72,7 +82,7 @@ export function EventsList() {
         onPageChange={handlePageChange}
         isLoading={eventData.isFetching || eventData.isLoading}>
         <DataTable.Header>
-          <DataTable.SearchInput />
+          <DataTable.SearchInput query={query} onQueryChange={setQuery} />
           <DataTable.ColumnVisibilityToggle />
         </DataTable.Header>
         <DataTable.Table />

@@ -46,6 +46,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.items[0]?.id).toBe(eventRes.current?.id)
     })
 
+    test('list events with search query', async () => {
+      const res = await caller.listEvents({
+        search_query: 'evt',
+      })
+      expect(res.items).toHaveLength(1)
+    })
+
+    test('list events with non-existent search query', async () => {
+      const res = await caller.listEvents({
+        search_query: 'test',
+      })
+      expect(res.items).toHaveLength(0)
+    })
+
     afterAll(async () => {
       if (eventRes.current?.id) {
         await db

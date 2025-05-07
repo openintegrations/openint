@@ -16,8 +16,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {ChevronDown, Loader2, Search} from 'lucide-react'
-import React, {useEffect, useState} from 'react'
+import {ChevronDown, Loader2} from 'lucide-react'
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -26,7 +26,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  Input,
   Table,
   TableBody,
   TableCell,
@@ -36,6 +35,7 @@ import {
 } from '@openint/shadcn/ui'
 import {compact} from '@openint/util/array-utils'
 import {titleCase} from '@openint/util/string-utils'
+import {SearchInput as SearchInputComponent} from './SearchInput'
 
 const defaultFilter = () => true
 
@@ -134,11 +134,10 @@ export function DataTable<TData, TValue>({
   // Check if data is paginated
   const isPaginated = 'items' in data && 'total' in data
   const items = isPaginated ? data.items : data
-  const totalCount = isPaginated ? data.total : items.length
+  const rowCount = isPaginated ? data.total : items.length
   const pageSize = isPaginated ? data.limit : items.length
-  const currentPage = isPaginated ? Math.floor(data.offset / data.limit) : 0
-
-  const [pageIndex, setPageIndex] = useState(currentPage)
+  const pageIndex = isPaginated ? Math.floor(data.offset / data.limit) : 0
+  const pageCount = isPaginated ? Math.ceil(rowCount / pageSize) : 1
 
   const columns = React.useMemo(
     () =>
@@ -195,14 +194,20 @@ export function DataTable<TData, TValue>({
         pageSize,
       },
     },
-    manualPagination: isPaginated, // Only enable manual pagination if data is paginated
-    pageCount: isPaginated ? Math.ceil(totalCount / pageSize) : 1,
+    // Only enable manual pagination if data is paginated
+    manualPagination: isPaginated,
+    manualFiltering: isPaginated,
+    manualSorting: isPaginated,
+    pageCount,
+    rowCount,
     onPaginationChange: isPaginated
       ? (updater) => {
+          // We don't care for page Size as it's not modifiable for now
           if (typeof updater === 'function') {
             const newState = updater({pageIndex, pageSize})
-            setPageIndex(newState.pageIndex)
             onPageChange?.(newState.pageIndex)
+          } else {
+            onPageChange?.(updater.pageIndex)
           }
         }
       : undefined,
@@ -225,8 +230,8 @@ export function DataTable<TData, TValue>({
         isLoading: isLoading ?? false,
         paginationInfo: isPaginated
           ? {
-              currentPage,
-              totalCount,
+              currentPage: pageIndex,
+              totalCount: rowCount,
               pageSize,
             }
           : undefined,
@@ -306,34 +311,32 @@ export function DataTableHeader({children}: {children: React.ReactNode}) {
   return <div className="flex items-center py-4">{children}</div>
 }
 
-export function SearchInput({initialSearch}: {initialSearch?: string | null}) {
+function SearchInput({
+  query,
+  onQueryChange: onQueryChange,
+}: {
+  query?: string | null
+  onQueryChange?: (value: string) => void
+}) {
   const {table} = useDataTableContext()
-  const [isFocused, setIsFocused] = React.useState(false)
 
-  useEffect(() => {
-    if (initialSearch) {
-      table.setGlobalFilter(initialSearch)
+  React.useEffect(() => {
+    if (query != null) {
+      table.setGlobalFilter(query)
     }
-  }, [initialSearch, table])
+  }, [query, table])
+
+  const initialValue = query ?? (table.getState().globalFilter as string) ?? ''
 
   return (
-    <div
-      className="relative max-w-lg transition-all duration-300 ease-in-out"
-      style={{width: isFocused ? '600px' : '400px'}}>
-      {isFocused && (
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500 opacity-100 transition-opacity duration-300 ease-in-out" />
-      )}
-      <Input
-        placeholder={isFocused ? '' : 'Search...'}
-        value={(table.getState().globalFilter as string) ?? ''}
-        onChange={(event) => table.setGlobalFilter(event.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className={`transition-all duration-300 ease-in-out ${
-          isFocused ? 'pl-10' : 'pl-3'
-        }`}
-      />
-    </div>
+    <SearchInputComponent
+      initialValue={initialValue}
+      onChange={(value) => {
+        table.setGlobalFilter(value)
+        onQueryChange?.(value)
+      }}
+      className="max-w-lg"
+    />
   )
 }
 

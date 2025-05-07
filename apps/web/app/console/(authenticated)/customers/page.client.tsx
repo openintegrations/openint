@@ -1,8 +1,9 @@
 'use client'
 
 import {useRouter} from 'next/navigation'
-import {useState} from 'react'
+import React from 'react'
 import {CustomersTable} from '@openint/ui-v1/domain-components'
+import {useStateFromSearchParams} from '@openint/ui-v1/hooks/useStateFromSearchParam'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
 const DATA_PER_PAGE = 20
@@ -10,11 +11,22 @@ const DATA_PER_PAGE = 20
 export function CustomerList() {
   const router = useRouter()
   const trpc = useTRPC()
-  const [pageIndex, setPageIndex] = useState(0)
+  const [pageIndex, setPageIndex] = React.useState(0)
+  const [query, setQuery] = useStateFromSearchParams('q', {
+    shallow: true,
+    defaultValue: '' as string,
+  })
+
+  React.useEffect(() => {
+    // Reset page index when search params query changes
+    setPageIndex(0)
+  }, [query])
+
   const customerData = useSuspenseQuery(
     trpc.listCustomers.queryOptions({
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
+      search_query: query,
     }),
   )
 
@@ -23,7 +35,7 @@ export function CustomerList() {
   }
 
   const handleCountClick = (customerId: string) => {
-    router.push(`/console/connections?customerId=${customerId}`)
+    router.push(`/console/connections?q=${customerId}`)
   }
 
   return (
@@ -32,6 +44,8 @@ export function CustomerList() {
       onPageChange={handlePageChange}
       isLoading={customerData.isFetching || customerData.isLoading}
       onCountClick={handleCountClick}
+      query={query}
+      onQueryChange={setQuery}
     />
   )
 }

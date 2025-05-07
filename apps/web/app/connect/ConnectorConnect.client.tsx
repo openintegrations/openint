@@ -105,6 +105,10 @@ export function ConnectorConnectContainer({
       void queryClient.invalidateQueries({
         queryKey: trpc.listConnections.queryKey({}),
       })
+      // We also invalidate listCustomers here to ensure that the customer list connection count is updated
+      void queryClient.invalidateQueries({
+        queryKey: trpc.listCustomers.queryKey(),
+      })
       // Immediately trigger refetch to not need to wait until refetchOnMount
       void queryClient.refetchQueries({
         // stale: true, // This is another option
@@ -135,7 +139,7 @@ export function ConnectorConnectContainer({
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component && connector?.authType === 'OAUTH2') {
+  if (!Component && connector?.auth_type === 'OAUTH2') {
     Component = makeNativeOauthConnectorClientComponent(
       preConnectRes.data.connect_input,
     )

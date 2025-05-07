@@ -24,7 +24,7 @@ export function ConnectCallbackClient({
         <span className="ml-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
       ) : (
         <div>
-          <pre className="text-muted-foreground max-w-full overflow-auto text-sm">
+          <pre className="text-muted-foreground max-w-[80vw] overflow-auto text-sm">
             {JSON.stringify(data, null, 2)}
           </pre>
           <div className="flex gap-2">
