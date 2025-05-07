@@ -26,7 +26,6 @@ export const generalRouter = router({
         path: '/health',
         description: 'Check if the API is operational',
         summary: 'Health Check',
-        enabled: false,
         // Normally these would be disabled as they are internal endpoints but
         // since we use them for tests of oas generation we leave them on
         // and then hardcode remove it form docs in generateDocsOas.bin.cjs
