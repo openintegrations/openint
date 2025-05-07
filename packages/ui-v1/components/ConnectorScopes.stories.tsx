@@ -23,6 +23,22 @@ const initialScopes: string[] = [
   'read:settings',
 ]
 
+// Extended set of many scopes for demonstrating "+X more" functionality
+const manyScopes: string[] = [
+  'read:users',
+  'read:documents',
+  'read:profiles',
+  'read:settings',
+  'write:users',
+  'write:documents',
+  'write:profiles',
+  'write:settings',
+  'admin:access',
+  'admin:users',
+  'admin:system',
+  'admin:billing',
+]
+
 const availableScopes: string[] = [
   'write:users',
   'write:documents',
@@ -30,16 +46,9 @@ const availableScopes: string[] = [
   'write:settings',
   'admin:access',
   'admin:users',
+  'admin:system',
+  'admin:billing',
 ]
-
-// Default view (read-only)
-export const Default: Story = {
-  args: {
-    scopes: initialScopes,
-    editable: false,
-  },
-  render: (args) => <ConnectorScopes {...args} />,
-}
 
 // Interactive story with state management
 const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
@@ -62,30 +71,22 @@ const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
       onRemoveScope={handleRemoveScope}
       onAddScope={handleAddScope}
       availableScopes={availableScopes}
-      editable={true}
-      hideCustomInput={hideCustomInput}></ConnectorScopes>
+      hideCustomInput={hideCustomInput}
+      editable={true}></ConnectorScopes>
   )
 }
 
 export const Editable: Story = {
   render: () => <EditableExample />,
 }
-export const EditableWithHideCustomInput: Story = {
-  render: () => <EditableExample hideCustomInput />,
-}
 
-// Constrained width example simulating a sheet
-const ConstrainedWidthExample = ({
-  scopeLookup,
-  hideCustomInput,
+// Sheet view example simulating the app's UI
+const SheetViewExample = ({
+  hideCustomInput = false,
 }: {
-  scopeLookup?: Record<
-    string,
-    {scope: string; display_name: string; description: string}
-  >
   hideCustomInput?: boolean
 }) => {
-  const [scopes, setScopes] = useState<string[]>(initialScopes)
+  const [scopes, setScopes] = useState<string[]>(manyScopes)
   const [enabled, setEnabled] = useState(true)
 
   const handleRemoveScope = (scopeToRemove: string) => {
@@ -165,8 +166,8 @@ const ConstrainedWidthExample = ({
             </span>
             <span style={{fontSize: '14px', color: '#6b7280'}}>
               {enabled
-                ? 'Credentials are enabled. Scopes are read-only.'
-                : 'Credentials are disabled. You can edit scopes.'}
+                ? 'Credentials are enabled. You can edit scopes.'
+                : 'Credentials are disabled. Scopes are read-only.'}
             </span>
           </div>
           <Switch checked={enabled} onCheckedChange={setEnabled} />
@@ -177,7 +178,7 @@ const ConstrainedWidthExample = ({
         <h3 style={{fontSize: '18px', fontWeight: '500', marginBottom: '16px'}}>
           Scopes
         </h3>
-        {enabled ? (
+        {!enabled ? (
           <ConnectorScopes
             scopes={scopes}
             editable={false}
@@ -200,8 +201,8 @@ const ConstrainedWidthExample = ({
   )
 }
 
-export const ConstrainedWidth: Story = {
-  render: () => <ConstrainedWidthExample />,
+export const SheetViewWithManyScopes: Story = {
+  render: () => <SheetViewExample />,
 }
 
 const scopeLookup = {
@@ -255,8 +256,14 @@ const scopeLookup = {
     display_name: 'Admin Users',
     description: 'Administrative control over user accounts and permissions',
   },
-}
-
-export const WithScopeLookup: Story = {
-  render: () => <ConstrainedWidthExample scopeLookup={scopeLookup} />,
+  'admin:system': {
+    scope: 'admin:system',
+    display_name: 'Admin System',
+    description: 'Administrative control over system configuration',
+  },
+  'admin:billing': {
+    scope: 'admin:billing',
+    display_name: 'Admin Billing',
+    description: 'Administrative control over billing and payments',
+  },
 }
