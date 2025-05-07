@@ -91,6 +91,7 @@ export function ConnectionsPage() {
       limit: DATA_PER_PAGE,
       offset: pageIndex * DATA_PER_PAGE,
       search_query: query,
+      include_secrets: true,
     }),
   )
 

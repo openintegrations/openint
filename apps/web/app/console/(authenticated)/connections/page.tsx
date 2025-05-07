@@ -12,6 +12,7 @@ export default async function Page(props: PageProps) {
   void queryClient.prefetchQuery(
     trpc.listConnections.queryOptions({
       expand: ['connector'],
+      include_secrets: true,
     }),
   )
 
