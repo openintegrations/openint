@@ -245,19 +245,26 @@ export const connectionRouter = router({
 
       const id = makeId('conn', input.data.connector_name, makeUlid())
 
-      const {status, status_message} = await checkConnection(
-        {
-          id,
-          settings: input.data.settings,
-          connector_name: input.data.connector_name,
-          connector_config_id: input.connector_config_id,
-        } as Z.infer<typeof core.connection_select>,
-        ctx,
-        serverConnectors[
-          input.data.connector_name as keyof typeof serverConnectors
-        ] as ConnectorServer,
-        true,
-      )
+      // default values
+      let status = 'unknown'
+      let status_message = 'Connection was imported without checking its status'
+      if (input.check_connection) {
+        const check = await checkConnection(
+          {
+            id,
+            settings: input.data.settings,
+            connector_name: input.data.connector_name,
+            connector_config_id: input.connector_config_id,
+          } as Z.infer<typeof core.connection_select>,
+          ctx,
+          serverConnectors[
+            input.data.connector_name as keyof typeof serverConnectors
+          ] as ConnectorServer,
+          true,
+        )
+        status = check.status ?? status
+        status_message = check.status_message ?? status_message
+      }
 
       const [conn] = await dbUpsertOne(
         ctx.db,
@@ -268,7 +275,7 @@ export const connectionRouter = router({
           connector_config_id: input.connector_config_id,
           customer_id: input.customer_id,
           metadata: input.metadata,
-          status,
+          status: status as Z.infer<typeof core.connection_select>['status'],
           status_message,
         },
         {keyColumns: ['id']},

@@ -414,6 +414,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       serverConnectors.greenhouse.checkConnection = mockCheckConnection
 
       try {
+        expect(mockCheckConnection).toHaveBeenCalledTimes(0)
         const connection = await asOrg.caller.createConnection({
           connector_config_id: connectorConfigId,
           customer_id: asOrg.viewer.orgId,
@@ -426,6 +427,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           check_connection: true,
         })
 
+        expect(mockCheckConnection).toHaveBeenCalledTimes(1)
+
         expect(connection).toMatchObject({
           connector_name: 'greenhouse',
           connector_config_id: connectorConfigId,
@@ -437,8 +440,33 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           status_message: 'Connection is healthy',
         })
 
-        // Verify that checkConnection was called
-        expect(mockCheckConnection).toHaveBeenCalled()
+        await asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+          check_connection: true,
+        })
+
+        expect(mockCheckConnection).toHaveBeenCalledTimes(2)
+
+        await asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+          check_connection: false,
+        })
+
+        expect(mockCheckConnection).toHaveBeenCalledTimes(2)
       } finally {
         // Restore the original method
         // @ts-ignore - restoring for test purposes
