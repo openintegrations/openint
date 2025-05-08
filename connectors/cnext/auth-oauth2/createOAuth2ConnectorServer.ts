@@ -155,6 +155,17 @@ export function createOAuth2ConnectorServer<
         throw new Error('No access token available')
       }
 
+      // If the expires_at is not set, set it to the current time plus the expires_in
+      // expires_at is a calculated field that we rely in to check if connection is expired throughout the codebase,
+      // and its not part of the oauth protocol, hence its important to enforce it creation time
+      if (
+        settings?.oauth?.credentials?.expires_in &&
+        !settings?.oauth?.credentials?.expires_at
+      ) {
+        settings.oauth.credentials.expires_at = new Date(
+          Date.now() + settings.oauth.credentials.expires_in * 1000,
+        ).toISOString()
+      }
       // console.log('[oauth2] Check connection called', oauthConfig)
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =

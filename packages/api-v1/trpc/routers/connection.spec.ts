@@ -414,6 +414,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       serverConnectors.greenhouse.checkConnection = mockCheckConnection
 
       try {
+        expect(mockCheckConnection).toHaveBeenCalledTimes(0)
         const connection = await asOrg.caller.createConnection({
           connector_config_id: connectorConfigId,
           customer_id: asOrg.viewer.orgId,
@@ -426,6 +427,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           check_connection: true,
         })
 
+        expect(mockCheckConnection).toHaveBeenCalledTimes(1)
+
         expect(connection).toMatchObject({
           connector_name: 'greenhouse',
           connector_config_id: connectorConfigId,
@@ -437,8 +440,33 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           status_message: 'Connection is healthy',
         })
 
-        // Verify that checkConnection was called
-        expect(mockCheckConnection).toHaveBeenCalled()
+        await asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+          check_connection: true,
+        })
+
+        expect(mockCheckConnection).toHaveBeenCalledTimes(2)
+
+        await asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+          check_connection: false,
+        })
+
+        expect(mockCheckConnection).toHaveBeenCalledTimes(2)
       } finally {
         // Restore the original method
         // @ts-ignore - restoring for test purposes
@@ -489,6 +517,76 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         // @ts-ignore - restoring for test purposes
         serverConnectors.greenhouse.checkConnection = originalCheckConnection
       }
+    })
+
+    test('with settings.oauth.credentials.expires_in prefills expires_at', async () => {
+      const connectorConfigId = makeId('ccfg', 'google-calendar', makeUlid())
+
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      const noCheckConnection = await asOrg.caller.createConnection({
+        connector_config_id: connectorConfigId,
+        customer_id: asOrg.viewer.orgId,
+        data: {
+          connector_name: 'google-calendar',
+          settings: {
+            oauth: {
+              credentials: {
+                access_token: 'test_access_token',
+                refresh_token: 'test_refresh_token',
+                expires_in: 1000,
+              },
+            },
+          },
+        },
+        check_connection: false,
+      })
+
+      const expectedExpiresAtNoCheck = new Date(Date.now() + 1000 * 1000)
+      const actualExpiresAtNoCheck = new Date(
+        noCheckConnection.settings.oauth.credentials.expires_at,
+      )
+      const timeDiffNoCheck = Math.abs(
+        actualExpiresAtNoCheck.getTime() - expectedExpiresAtNoCheck.getTime(),
+      )
+      expect(timeDiffNoCheck).toBeLessThan(50)
+
+      const expectedExpiresAtCheckConnection = new Date(
+        Date.now() + 1000 * 1000,
+      )
+      const withCheckConnection = await asOrg.caller.createConnection({
+        connector_config_id: connectorConfigId,
+        customer_id: asOrg.viewer.orgId,
+        data: {
+          connector_name: 'google-calendar',
+          settings: {
+            oauth: {
+              credentials: {
+                access_token: 'test_access_token',
+                refresh_token: 'test_refresh_token',
+                expires_in: 1000,
+              },
+            },
+          },
+        },
+        check_connection: true,
+      })
+
+      const actualExpiresAtCheckConnection = new Date(
+        withCheckConnection.settings.oauth.credentials.expires_at,
+      )
+      const timeDiffCheckConnection = Math.abs(
+        actualExpiresAtCheckConnection.getTime() -
+          expectedExpiresAtCheckConnection.getTime(),
+      )
+      // 50 to account for processing time of mock check connection
+      expect(timeDiffCheckConnection).toBeLessThan(50)
     })
   })
 })
