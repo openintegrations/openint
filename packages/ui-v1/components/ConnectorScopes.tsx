@@ -3,7 +3,7 @@
 import type {FC, ReactNode} from 'react'
 
 import {Check, Info, Search, X} from 'lucide-react'
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Badge,
@@ -98,6 +98,12 @@ export function ConnectorScopes({
   const [isMorePopoverOpen, setIsMorePopoverOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
+  useEffect(() => {
+    if (hideCustomInput) {
+      setSearchQuery('')
+    }
+  }, [hideCustomInput])
+
   const handleRemoveScope = useCallback(
     (scope: string) => {
       onRemoveScope?.(scope)
@@ -132,39 +138,25 @@ export function ConnectorScopes({
   }, [searchQuery, onAddScope])
 
   const filteredScopes = useMemo(() => {
-    if (!searchQuery.trim()) return availableScopes
-    const query = searchQuery.trim().toLowerCase()
-    return availableScopes.filter((scope) =>
-      scope.toLowerCase().includes(query),
-    )
-  }, [availableScopes, searchQuery])
+    if (hideCustomInput || !searchQuery.trim()) {
+      return availableScopes
+    } else {
+      const query = searchQuery.trim().toLowerCase()
+      return availableScopes.filter((scope) =>
+        scope.toLowerCase().includes(query),
+      )
+    }
+  }, [availableScopes, searchQuery, hideCustomInput])
 
   const visibleScopes = scopes.slice(0, maxVisible)
   const hiddenScopesCount = scopes.length - maxVisible
   const hasHiddenScopes = hiddenScopesCount > 0
 
   const handleClearAllScopes = useCallback(() => {
-    // Check if there are scopes to remove
-    if (scopes.length === 0) return
-
-    // If custom clear function provided, use it
     if (onClearAllScopes) {
       onClearAllScopes()
-      return
     }
-
-    // Otherwise, remove scopes one by one
-    // Create a copy to avoid issues with the array changing during iteration
-    const scopesToRemove = [...scopes]
-
-    if (onRemoveScope) {
-      scopesToRemove.forEach((scope) => {
-        onRemoveScope(scope)
-      })
-    }
-
-    // Don't close the popover, keep it open so user can see and select new scopes
-  }, [scopes, onRemoveScope, onClearAllScopes])
+  }, [onClearAllScopes])
 
   const renderScopeBadge = (scope: string) => {
     // Determine if the scope is a URL (starts with http:// or https://)
@@ -251,14 +243,7 @@ export function ConnectorScopes({
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent
-                className="w-[280px] p-2"
-                align="end"
-                side="left"
-                alignOffset={-5}
-                sideOffset={10}
-                avoidCollisions={true}
-                sticky="always">
+              <PopoverContent className="w-[280px] p-2" align="end" side="left">
                 {!hideCustomInput && (
                   <div className="mb-3">
                     <div className="relative">
@@ -281,7 +266,7 @@ export function ConnectorScopes({
                     </div>
                   </div>
                 )}
-                <div className="flex max-h-[350px] flex-col overflow-hidden">
+                <div className="max-h-[250px]">
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-sm font-medium">Available scopes</div>
                     <Badge
@@ -295,37 +280,33 @@ export function ConnectorScopes({
                     </Badge>
                   </div>
 
-                  <div className="border-border mb-3 overflow-hidden rounded-sm border">
-                    <div className="-mr-1.5 max-h-[250px] flex-1 overflow-y-auto pr-1.5">
-                      {filteredScopes.length > 0 ? (
-                        <div className="space-y-1 p-1.5">
-                          {filteredScopes.map(renderAvailableScope)}
+                  <div className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5">
+                    {filteredScopes.length > 0 ? (
+                      filteredScopes.map(renderAvailableScope)
+                    ) : (
+                      <div className="flex flex-col items-center py-3">
+                        <div className="text-muted-foreground mb-1 text-xs">
+                          No scopes found
                         </div>
-                      ) : (
-                        <div className="flex flex-col items-center py-3">
-                          <div className="text-muted-foreground mb-1 text-xs">
-                            No scopes found
-                          </div>
-                          {searchQuery.trim() && !hideCustomInput && (
-                            <div className="mt-2 flex flex-col items-center">
-                              <div className="text-muted-foreground mb-1.5 text-xs">
-                                Add custom scope?
-                              </div>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-7 text-xs"
-                                onClick={handleAddCustomScope}>
-                                Add &quot;{searchQuery.trim()}&quot;
-                              </Button>
+                        {searchQuery.trim() && !hideCustomInput && (
+                          <div className="mt-2 flex flex-col items-center">
+                            <div className="text-muted-foreground mb-1.5 text-xs">
+                              Add custom scope?
                             </div>
-                          )}
-                          <div className="border-border mt-4 w-full border-t pt-3">
-                            <RequestLink className="justify-center" />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              onClick={handleAddCustomScope}>
+                              Add &quot;{searchQuery.trim()}&quot;
+                            </Button>
                           </div>
+                        )}
+                        <div className="border-border mt-4 w-full border-t pt-3">
+                          <RequestLink className="justify-center" />
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
 
                   <Button
@@ -355,48 +336,36 @@ export function ConnectorScopes({
             {/* List of scopes */}
             <div className="mb-3">
               {scopes.length > 0 ? (
-                <div className="grid grid-cols-2 gap-2">
-                  {/* First column - First 4 scopes */}
-                  <div className="space-y-2">
-                    {visibleScopes
-                      .slice(0, Math.min(4, visibleScopes.length))
-                      .map(renderScopeBadge)}
-                  </div>
-
-                  {/* Second column - Next 4 scopes (or fewer) */}
-                  {visibleScopes.length > 4 && (
-                    <div className="space-y-2">
-                      {visibleScopes.slice(4).map(renderScopeBadge)}
-
-                      {hasHiddenScopes && (
-                        <Popover
-                          open={isMorePopoverOpen}
-                          onOpenChange={setIsMorePopoverOpen}>
-                          <PopoverTrigger asChild>
-                            <div className="flex w-full">
-                              <Badge
-                                variant="outline"
-                                className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center whitespace-nowrap rounded-sm border-dashed text-xs">
-                                <span className="mx-auto">
-                                  +{hiddenScopesCount} more
-                                </span>
-                              </Badge>
-                            </div>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto max-w-[400px] p-3"
-                            align="center"
-                            sideOffset={5}>
-                            <div className="mb-2 text-sm font-medium">
-                              All Scopes
-                            </div>
-                            <div className="flex max-h-[250px] flex-wrap gap-2 overflow-y-auto">
-                              {scopes.map(renderScopeBadge)}
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      )}
-                    </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {visibleScopes.map(renderScopeBadge)}
+                  {hasHiddenScopes && (
+                    <Popover
+                      open={isMorePopoverOpen}
+                      onOpenChange={setIsMorePopoverOpen}>
+                      <PopoverTrigger asChild>
+                        <div className="flex w-full">
+                          <Badge
+                            variant="outline"
+                            className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center whitespace-nowrap rounded-sm border-dashed text-xs">
+                            <span className="mx-auto">
+                              +{hiddenScopesCount} more
+                            </span>
+                          </Badge>
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto max-w-[400px] p-3"
+                        align="center">
+                        <span className="mb-2 block text-sm font-medium">
+                          All Scopes
+                        </span>
+                        <div className="block max-h-[250px] overflow-y-auto p-2">
+                          <div className="flex flex-wrap gap-2">
+                            {scopes.map(renderScopeBadge)}
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   )}
                 </div>
               ) : (
