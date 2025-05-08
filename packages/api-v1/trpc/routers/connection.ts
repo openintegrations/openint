@@ -243,6 +243,18 @@ export const connectionRouter = router({
         })
       }
 
+      // If the expires_at is not set, set it to the current time plus the expires_in
+      // expires_at is a calculated field that we rely in to check if connection is expired throughout the codebase,
+      // and its not part of the oauth protocol, hence its important to enforce it creation time
+      if (
+        input.data.settings?.oauth?.credentials?.expires_in &&
+        !input.data.settings?.oauth?.credentials?.expires_at
+      ) {
+        input.data.settings.oauth.credentials.expires_at = new Date(
+          Date.now() + input.data.settings.oauth.credentials.expires_in * 1000,
+        ).toISOString()
+      }
+
       const id = makeId('conn', input.data.connector_name, makeUlid())
 
       // default values
