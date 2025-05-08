@@ -77,6 +77,21 @@ describe('getRequestedScopes', () => {
     expect(scopes).toEqual(['scope1', 'scope2'])
   })
 
+  test('empty array required scopes shoudl not add separator at the end of the string', () => {
+    const scopes = getRequestedScopes(
+      {},
+      {
+        type: 'OAUTH2',
+        scopes: [],
+        authorization_request_url: 'https://example.com/auth',
+        token_request_url: 'https://example.com/token',
+        params_config: {},
+        required_scopes: [''],
+      },
+    )
+    expect(scopes).toEqual([''])
+  })
+
   test('should handle scopes as a string with default separator', () => {
     const scopes = getRequestedScopes(
       // @ts-expect-error - Testing legacy case where scopes is a string
