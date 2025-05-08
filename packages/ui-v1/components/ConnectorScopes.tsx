@@ -166,25 +166,36 @@ export function ConnectorScopes({
     // Don't close the popover, keep it open so user can see and select new scopes
   }, [scopes, onRemoveScope, onClearAllScopes])
 
-  const renderScopeBadge = (scope: string) => (
-    <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
-      <Badge
-        variant="secondary"
-        className="my-0.5 inline-flex h-6 items-center whitespace-nowrap text-xs">
-        <span className="max-w-[180px] truncate px-1.5">{scope}</span>
-        {editable && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleRemoveScope(scope)
-            }}
-            className="hover:bg-secondary ml-0.5 flex-shrink-0 rounded-full p-0.5">
-            <X className="text-muted-foreground size-2.5" />
-          </button>
-        )}
-      </Badge>
-    </ScopeTooltip>
-  )
+  const renderScopeBadge = (scope: string) => {
+    // Determine if the scope is a URL (starts with http:// or https://)
+    const isUrl = /^https?:\/\//.test(scope)
+
+    return (
+      <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
+        <Badge
+          variant="secondary"
+          className="inline-flex h-6 w-full items-center whitespace-nowrap rounded-sm text-xs">
+          <span
+            className={cn(
+              'truncate px-1.5',
+              isUrl ? 'max-w-[280px]' : 'max-w-[180px]',
+            )}>
+            {scope}
+          </span>
+          {editable && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleRemoveScope(scope)
+              }}
+              className="hover:bg-secondary ml-auto flex-shrink-0 rounded-full p-0.5">
+              <X className="text-muted-foreground size-2.5" />
+            </button>
+          )}
+        </Badge>
+      </ScopeTooltip>
+    )
+  }
 
   const renderAvailableScope = (scope: string) => {
     const isAdded = isScopeAdded(scope)
@@ -229,42 +240,153 @@ export function ConnectorScopes({
   return (
     <TooltipProvider>
       <div className={cn('w-full', className)}>
-        {/* Title */}
-        <div className="mb-2 text-sm font-medium">Scopes</div>
+        {/* Title with Add button */}
+        <div className="mb-2 flex items-center justify-between">
+          <div className="text-sm font-medium">Scopes</div>
+          {editable && (
+            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+              <PopoverTrigger asChild>
+                <Button size="sm" variant="outline" className="h-7 text-xs">
+                  Manage scopes
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverContent
+                className="w-[280px] p-2"
+                align="start"
+                side="top"
+                avoidCollisions={true}
+                sticky="always">
+                {!hideCustomInput && (
+                  <div className="border-border mb-3 border-b pb-2">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search scopes"
+                        className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (
+                            e.key === 'Enter' &&
+                            filteredScopes.length === 0
+                          ) {
+                            handleAddCustomScope()
+                          }
+                        }}
+                      />
+                      <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
+                    </div>
+                  </div>
+                )}
+                <div className="flex max-h-[350px] flex-col overflow-hidden">
+                  <div className="mb-1.5 flex items-center justify-between px-1">
+                    <div className="text-muted-foreground text-xs font-medium">
+                      Available scopes
+                    </div>
+                    {scopes.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="h-5 px-1.5">
+                          {scopes.length} selected
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-6 px-2 text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleClearAllScopes()
+                          }}>
+                          Clear all
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="-mr-1.5 max-h-[300px] flex-1 overflow-y-auto pr-1.5">
+                    {filteredScopes.length > 0 ? (
+                      <div className="space-y-1">
+                        {filteredScopes.map(renderAvailableScope)}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center py-3">
+                        <div className="text-muted-foreground mb-1 text-xs">
+                          No scopes found
+                        </div>
+                        {searchQuery.trim() && !hideCustomInput && (
+                          <div className="mt-2 flex flex-col items-center">
+                            <div className="text-muted-foreground mb-1.5 text-xs">
+                              Add custom scope?
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              onClick={handleAddCustomScope}>
+                              Add &quot;{searchQuery.trim()}&quot;
+                            </Button>
+                          </div>
+                        )}
+                        <div className="border-border mt-4 w-full border-t pt-3">
+                          <RequestLink className="justify-center" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
 
         {children || (
           <>
             {/* List of scopes */}
-            <div className="mb-3 flex flex-wrap gap-1.5">
+            <div className="mb-3">
               {scopes.length > 0 ? (
-                <>
-                  {visibleScopes.map(renderScopeBadge)}
+                <div className="grid grid-cols-2 gap-2">
+                  {/* First column - First 4 scopes */}
+                  <div className="space-y-2">
+                    {visibleScopes
+                      .slice(0, Math.min(4, visibleScopes.length))
+                      .map(renderScopeBadge)}
+                  </div>
 
-                  {hasHiddenScopes && (
-                    <Popover
-                      open={isMorePopoverOpen}
-                      onOpenChange={setIsMorePopoverOpen}>
-                      <PopoverTrigger asChild>
-                        <Badge
-                          variant="outline"
-                          className="bg-secondary/20 hover:bg-secondary/30 my-0.5 h-6 cursor-pointer border-dashed text-xs">
-                          +{hiddenScopesCount} more
-                        </Badge>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto max-w-[400px] p-3"
-                        align="center"
-                        sideOffset={5}>
-                        <div className="mb-2 text-sm font-medium">
-                          All Scopes
-                        </div>
-                        <div className="flex max-h-[250px] flex-wrap gap-1.5 overflow-y-auto">
-                          {scopes.map(renderScopeBadge)}
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                  {/* Second column - Next 4 scopes (or fewer) */}
+                  {visibleScopes.length > 4 && (
+                    <div className="space-y-2">
+                      {visibleScopes.slice(4).map(renderScopeBadge)}
+
+                      {hasHiddenScopes && (
+                        <Popover
+                          open={isMorePopoverOpen}
+                          onOpenChange={setIsMorePopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <div className="flex w-full">
+                              <Badge
+                                variant="outline"
+                                className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center whitespace-nowrap rounded-sm border-dashed text-xs">
+                                <span className="mx-auto">
+                                  +{hiddenScopesCount} more
+                                </span>
+                              </Badge>
+                            </div>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="w-auto max-w-[400px] p-3"
+                            align="center"
+                            sideOffset={5}>
+                            <div className="mb-2 text-sm font-medium">
+                              All Scopes
+                            </div>
+                            <div className="flex max-h-[250px] flex-wrap gap-2 overflow-y-auto">
+                              {scopes.map(renderScopeBadge)}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    </div>
                   )}
-                </>
+                </div>
               ) : (
                 <div className="text-muted-foreground text-xs italic">
                   No scopes added
@@ -272,106 +394,11 @@ export function ConnectorScopes({
               )}
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center justify-between">
-              <div>
-                {editable && (
-                  <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-7 text-xs">
-                        Add scope
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-[280px] p-2"
-                      align="start"
-                      side="top"
-                      avoidCollisions={true}
-                      sticky="always">
-                      {!hideCustomInput && (
-                        <div className="border-border mb-3 border-b pb-2">
-                          <div className="relative">
-                            <input
-                              type="text"
-                              placeholder="Search scopes"
-                              className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (
-                                  e.key === 'Enter' &&
-                                  filteredScopes.length === 0
-                                ) {
-                                  handleAddCustomScope()
-                                }
-                              }}
-                            />
-                            <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex max-h-[280px] flex-col">
-                        <div className="mb-1.5 flex items-center justify-between px-1">
-                          <div className="text-muted-foreground text-xs font-medium">
-                            Available scopes
-                          </div>
-                          {scopes.length > 0 && (
-                            <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="h-5 px-1.5">
-                                {scopes.length} selected
-                              </Badge>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive hover:bg-destructive/10 hover:text-destructive h-6 px-2 text-xs"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleClearAllScopes()
-                                }}>
-                                Clear all
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                        <div className="-mr-1.5 flex-1 overflow-y-auto pr-1.5">
-                          {filteredScopes.length > 0 ? (
-                            <div className="space-y-1">
-                              {filteredScopes.map(renderAvailableScope)}
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center py-3">
-                              <div className="text-muted-foreground mb-1 text-xs">
-                                No scopes found
-                              </div>
-                              {searchQuery.trim() && !hideCustomInput && (
-                                <div className="mt-2 flex flex-col items-center">
-                                  <div className="text-muted-foreground mb-1.5 text-xs">
-                                    Add custom scope?
-                                  </div>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-7 text-xs"
-                                    onClick={handleAddCustomScope}>
-                                    Add &quot;{searchQuery.trim()}&quot;
-                                  </Button>
-                                </div>
-                              )}
-                              <div className="border-border mt-4 w-full border-t pt-3">
-                                <RequestLink className="justify-center" />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
+            {/* Request Scopes link with divider */}
+            <div className="border-border mt-4 border-t pt-3">
+              <div className="flex justify-start">
+                <RequestLink />
               </div>
-              <RequestLink />
             </div>
           </>
         )}

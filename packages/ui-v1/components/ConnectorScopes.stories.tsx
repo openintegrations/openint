@@ -37,9 +37,191 @@ const manyScopes: string[] = [
   'admin:users',
   'admin:system',
   'admin:billing',
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:users',
+  'admin:content',
+  'admin:settings',
+  'admin:billing',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes to reach 70+
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
+]
+
+// Extended set of 70+ scopes for demonstrating large quantity of scopes
+const largeNumberOfScopes: string[] = [
+  // API scopes
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:users',
+  'admin:content',
+  'admin:settings',
+  'admin:billing',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes to reach 70+
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
 ]
 
 const availableScopes: string[] = [
+  // Original scopes
   'write:users',
   'write:documents',
   'write:profiles',
@@ -48,6 +230,109 @@ const availableScopes: string[] = [
   'admin:users',
   'admin:system',
   'admin:billing',
+  // API scopes
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:content',
+  'admin:settings',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
+]
+
+// Extended set with URL examples for badge width demonstration
+const urlScopeExamples: string[] = [
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/calendar.events',
+  'https://www.googleapis.com/auth/calendar.events.readonly',
+  'https://www.googleapis.com/auth/calendar.settings.readonly',
+  'https://www.googleapis.com/auth/calendar.addons.execute',
+  'https://www.googleapis.com/auth/drive',
+  'https://mail.google.com/',
+  'https://www.googleapis.com/auth/gmail.modify',
+  'openid',
+  'email',
+  'profile',
 ]
 
 // Interactive story with state management
@@ -65,11 +350,16 @@ const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
     }
   }
 
+  const handleClearAllScopes = () => {
+    setScopes([])
+  }
+
   return (
     <ConnectorScopes
       scopes={scopes}
       onRemoveScope={handleRemoveScope}
       onAddScope={handleAddScope}
+      onClearAllScopes={handleClearAllScopes}
       availableScopes={availableScopes}
       hideCustomInput={hideCustomInput}
       editable={true}></ConnectorScopes>
@@ -83,10 +373,14 @@ export const Editable: Story = {
 // Sheet view example simulating the app's UI
 const SheetViewExample = ({
   hideCustomInput = false,
+  useLargeScopes = false,
 }: {
   hideCustomInput?: boolean
+  useLargeScopes?: boolean
 }) => {
-  const [scopes, setScopes] = useState<string[]>(manyScopes)
+  const [scopes, setScopes] = useState<string[]>(
+    useLargeScopes ? largeNumberOfScopes : manyScopes,
+  )
   const [enabled, setEnabled] = useState(true)
 
   const handleRemoveScope = (scopeToRemove: string) => {
@@ -98,6 +392,10 @@ const SheetViewExample = ({
     if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
+  }
+
+  const handleClearAllScopes = () => {
+    setScopes([])
   }
 
   return (
@@ -176,7 +474,7 @@ const SheetViewExample = ({
 
       <div style={{width: '100%'}}>
         <h3 style={{fontSize: '18px', fontWeight: '500', marginBottom: '16px'}}>
-          Scopes
+          Scopes {useLargeScopes ? `(${scopes.length})` : ''}
         </h3>
         {!enabled ? (
           <ConnectorScopes
@@ -190,6 +488,7 @@ const SheetViewExample = ({
             scopes={scopes}
             onRemoveScope={handleRemoveScope}
             onAddScope={handleAddScope}
+            onClearAllScopes={handleClearAllScopes}
             availableScopes={availableScopes}
             editable={true}
             scopeLookup={scopeLookup}
@@ -203,6 +502,44 @@ const SheetViewExample = ({
 
 export const SheetViewWithManyScopes: Story = {
   render: () => <SheetViewExample />,
+}
+
+export const SheetViewWithLargeNumberOfScopes: Story = {
+  render: () => <SheetViewExample useLargeScopes={true} />,
+}
+
+// Interactive story with URL examples
+const UrlScopesExample = () => {
+  const [scopes, setScopes] = useState<string[]>(urlScopeExamples)
+
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
+  }
+
+  const handleAddScope = (scopeToAdd: string) => {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
+      setScopes([...scopes, scopeToAdd])
+    }
+  }
+
+  const handleClearAllScopes = () => {
+    setScopes([])
+  }
+
+  return (
+    <ConnectorScopes
+      scopes={scopes}
+      onRemoveScope={handleRemoveScope}
+      onAddScope={handleAddScope}
+      onClearAllScopes={handleClearAllScopes}
+      availableScopes={urlScopeExamples}
+      editable={true}
+    />
+  )
+}
+
+export const WithUrlScopes: Story = {
+  render: () => <UrlScopesExample />,
 }
 
 const scopeLookup = {
