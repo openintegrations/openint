@@ -15,12 +15,33 @@ const meta: Meta<typeof ConnectorScopes> = {
 export default meta
 type Story = StoryObj<typeof ConnectorScopes>
 
-// Sample scopes
-const initialScopes: string[] = [
-  'read:users',
-  'read:documents',
-  'read:profiles',
-  'read:settings',
+// Extended set of URL-like scopes for Google services
+const googleLongUrlScopes: string[] = [
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/drive.readonly',
+  'https://www.googleapis.com/auth/drive.metadata.readonly',
+  'https://www.googleapis.com/auth/drive.appdata',
+  'https://www.googleapis.com/auth/drive.metadata',
+  'https://www.googleapis.com/auth/drive.photos.readonly',
+  'https://mail.google.com/',
+  'https://www.googleapis.com/auth/gmail.modify',
+  'https://www.googleapis.com/auth/gmail.compose',
+  'https://www.googleapis.com/auth/gmail.send',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/gmail.metadata',
+  'https://www.googleapis.com/auth/gmail.settings.basic',
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/calendar.events',
+  'https://www.googleapis.com/auth/calendar.events.readonly',
+  'https://www.googleapis.com/auth/calendar.settings.readonly',
+  'https://www.googleapis.com/auth/calendar.addons.execute',
+  'https://www.googleapis.com/auth/contacts',
+  'https://www.googleapis.com/auth/contacts.readonly',
+  'https://www.googleapis.com/auth/user.emails.read',
+  'https://www.googleapis.com/auth/user.addresses.read',
+  'https://www.googleapis.com/auth/user.phonenumbers.read',
 ]
 
 // Extended set of many scopes for demonstrating "+X more" functionality
@@ -319,57 +340,6 @@ const availableScopes: string[] = [
   'events:write',
 ]
 
-// Extended set with URL examples for badge width demonstration
-const urlScopeExamples: string[] = [
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/calendar.readonly',
-  'https://www.googleapis.com/auth/calendar.events',
-  'https://www.googleapis.com/auth/calendar.events.readonly',
-  'https://www.googleapis.com/auth/calendar.settings.readonly',
-  'https://www.googleapis.com/auth/calendar.addons.execute',
-  'https://www.googleapis.com/auth/drive',
-  'https://mail.google.com/',
-  'https://www.googleapis.com/auth/gmail.modify',
-  'openid',
-  'email',
-  'profile',
-]
-
-// Interactive story with state management
-const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
-  const [scopes, setScopes] = useState<string[]>(initialScopes)
-
-  const handleRemoveScope = (scopeToRemove: string) => {
-    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
-  }
-
-  const handleAddScope = (scopeToAdd: string) => {
-    // Check if scope already exists
-    if (!scopes.some((scope) => scope === scopeToAdd)) {
-      setScopes([...scopes, scopeToAdd])
-    }
-  }
-
-  const handleClearAllScopes = () => {
-    setScopes([])
-  }
-
-  return (
-    <ConnectorScopes
-      scopes={scopes}
-      onRemoveScope={handleRemoveScope}
-      onAddScope={handleAddScope}
-      onClearAllScopes={handleClearAllScopes}
-      availableScopes={availableScopes}
-      hideCustomInput={hideCustomInput}
-      editable={true}></ConnectorScopes>
-  )
-}
-
-export const Editable: Story = {
-  render: () => <EditableExample />,
-}
-
 // Sheet view example simulating the app's UI
 const SheetViewExample = ({
   hideCustomInput = false,
@@ -500,17 +470,16 @@ const SheetViewExample = ({
   )
 }
 
-export const SheetViewWithManyScopes: Story = {
-  render: () => <SheetViewExample />,
-}
-
 export const SheetViewWithLargeNumberOfScopes: Story = {
   render: () => <SheetViewExample useLargeScopes={true} />,
 }
 
-// Interactive story with URL examples
-const UrlScopesExample = () => {
-  const [scopes, setScopes] = useState<string[]>(urlScopeExamples)
+// SheetView with Google URL scopes example
+const SheetViewWithLongUrlScopes = () => {
+  const [scopes, setScopes] = useState<string[]>(
+    googleLongUrlScopes.slice(0, 6),
+  )
+  const [enabled, setEnabled] = useState(true)
 
   const handleRemoveScope = (scopeToRemove: string) => {
     setScopes(scopes.filter((scope) => scope !== scopeToRemove))
@@ -527,19 +496,81 @@ const UrlScopesExample = () => {
   }
 
   return (
-    <ConnectorScopes
-      scopes={scopes}
-      onRemoveScope={handleRemoveScope}
-      onAddScope={handleAddScope}
-      onClearAllScopes={handleClearAllScopes}
-      availableScopes={urlScopeExamples}
-      editable={true}
-    />
+    <div
+      style={{
+        width: '450px',
+        border: '1px solid #e2e8f0',
+        borderRadius: '8px',
+        padding: '24px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+      <div style={{marginBottom: '32px'}}>
+        <h2 style={{fontSize: '20px', fontWeight: '600', marginBottom: '24px'}}>
+          Google Drive Connector
+        </h2>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+          <div>
+            <p
+              style={{fontSize: '14px', color: '#6b7280', marginBottom: '4px'}}>
+              OAuth Configuration
+            </p>
+            <Skeleton className="h-8 w-full" />
+          </div>
+        </div>
+      </div>
+
+      <div style={{width: '100%', marginBottom: '24px'}}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+            }}>
+            <span style={{fontSize: '16px', fontWeight: '500'}}>
+              Enable Google API Access
+            </span>
+            <span style={{fontSize: '14px', color: '#6b7280'}}>
+              {enabled
+                ? 'API access is enabled. You can edit scopes.'
+                : 'API access is disabled. Scopes are read-only.'}
+            </span>
+          </div>
+          <Switch checked={enabled} onCheckedChange={setEnabled} />
+        </div>
+      </div>
+
+      <div style={{width: '100%'}}>
+        <h3 style={{fontSize: '18px', fontWeight: '500', marginBottom: '16px'}}>
+          Google API Scopes
+        </h3>
+        {!enabled ? (
+          <ConnectorScopes scopes={scopes} editable={false} />
+        ) : (
+          <ConnectorScopes
+            scopes={scopes}
+            onRemoveScope={handleRemoveScope}
+            onAddScope={handleAddScope}
+            onClearAllScopes={handleClearAllScopes}
+            availableScopes={googleLongUrlScopes}
+            editable={true}
+          />
+        )}
+      </div>
+    </div>
   )
 }
 
-export const WithUrlScopes: Story = {
-  render: () => <UrlScopesExample />,
+export const SheetViewWithGoogleLongUrlScopes: Story = {
+  render: () => <SheetViewWithLongUrlScopes />,
 }
 
 const scopeLookup = {
