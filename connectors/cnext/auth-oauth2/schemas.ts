@@ -66,7 +66,8 @@ export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 
 export const oauth2Schemas = {
   connector_config: z.object({
-    // If null, means to use default config
+    // If null, means to use default config. This is a deprecated behavior though
+    // as we now have a separate "scopes" property even for default credentials
     oauth: zOauthConnectorConfig.nullish(),
   }),
 
