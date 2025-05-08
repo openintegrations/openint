@@ -63,23 +63,33 @@ const ScopeTooltip = ({
   scope: string
   scopeLookup?: Record<string, ScopeLookup>
   children: ReactNode
-}) => (
-  <Tooltip delayDuration={300}>
-    <TooltipTrigger asChild>{children}</TooltipTrigger>
-    <TooltipContent>
-      {scopeLookup && scopeLookup[scope] ? (
-        <div className="max-w-xs">
-          <p className="mb-1 font-medium">
-            {scopeLookup[scope].display_name || scope}
-          </p>
-          <p className="text-xs">{scopeLookup[scope].description}</p>
+}) => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <Tooltip open={isHovered}>
+      <TooltipTrigger asChild>
+        <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}>
+          {children}
         </div>
-      ) : (
-        scope
-      )}
-    </TooltipContent>
-  </Tooltip>
-)
+      </TooltipTrigger>
+      <TooltipContent>
+        {scopeLookup && scopeLookup[scope] ? (
+          <div className="max-w-xs">
+            <p className="mb-1 font-medium">
+              {scopeLookup[scope].display_name || scope}
+            </p>
+            <p className="text-xs">{scopeLookup[scope].description}</p>
+          </div>
+        ) : (
+          scope
+        )}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
 
 export function ConnectorScopes({
   availableScopes = [],
@@ -97,12 +107,20 @@ export function ConnectorScopes({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [isMorePopoverOpen, setIsMorePopoverOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [hoveredScope, setHoveredScope] = useState<string | null>(null)
 
   useEffect(() => {
     if (hideCustomInput) {
       setSearchQuery('')
     }
   }, [hideCustomInput])
+
+  // Reset hovered scope when popover closes
+  useEffect(() => {
+    if (!isPopoverOpen) {
+      setHoveredScope(null)
+    }
+  }, [isPopoverOpen])
 
   const handleRemoveScope = useCallback(
     (scope: string) => {
@@ -166,7 +184,7 @@ export function ConnectorScopes({
       <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
         <Badge
           variant="secondary"
-          className="inline-flex h-6 w-full items-center whitespace-nowrap rounded-sm text-xs">
+          className="inline-flex h-6 w-full items-center justify-between whitespace-nowrap rounded-sm text-xs">
           <span
             className={cn(
               'truncate px-1.5',
@@ -191,41 +209,42 @@ export function ConnectorScopes({
 
   const renderAvailableScope = (scope: string) => {
     const isAdded = isScopeAdded(scope)
+    const isHovered = hoveredScope === scope
 
     return (
-      <TooltipProvider key={scope}>
-        <Tooltip delayDuration={300}>
-          <TooltipTrigger asChild>
-            <button
-              className={cn(
-                'hover:bg-secondary/30 flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs',
-                isAdded
-                  ? 'bg-secondary/20 text-muted-foreground'
-                  : 'text-foreground',
-              )}
-              onClick={() => handleToggleScope(scope)}>
-              <span className="flex-1 truncate pr-1.5">{scope}</span>
-              {isAdded ? (
-                <X className="text-muted-foreground size-3.5 flex-shrink-0" />
-              ) : (
-                <Check className="text-muted-foreground size-3.5 flex-shrink-0" />
-              )}
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            {scopeLookup && scopeLookup[scope] ? (
-              <div className="max-w-xs">
-                <p className="mb-1 font-medium">
-                  {scopeLookup[scope].display_name || scope}
-                </p>
-                <p className="text-xs">{scopeLookup[scope].description}</p>
-              </div>
-            ) : (
-              scope
+      <Tooltip key={scope} open={isHovered}>
+        <TooltipTrigger asChild>
+          <button
+            className={cn(
+              'hover:bg-secondary/30 flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs',
+              isAdded
+                ? 'bg-secondary/20 text-muted-foreground'
+                : 'text-foreground',
             )}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+            onMouseEnter={() => setHoveredScope(scope)}
+            onMouseLeave={() => setHoveredScope(null)}
+            onClick={() => handleToggleScope(scope)}>
+            <span className="flex-1 truncate pr-1.5">{scope}</span>
+            {isAdded ? (
+              <X className="text-muted-foreground size-3.5 flex-shrink-0" />
+            ) : (
+              <Check className="text-muted-foreground size-3.5 flex-shrink-0" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {scopeLookup && scopeLookup[scope] ? (
+            <div className="max-w-xs">
+              <p className="mb-1 font-medium">
+                {scopeLookup[scope].display_name || scope}
+              </p>
+              <p className="text-xs">{scopeLookup[scope].description}</p>
+            </div>
+          ) : (
+            scope
+          )}
+        </TooltipContent>
+      </Tooltip>
     )
   }
 
@@ -243,7 +262,11 @@ export function ConnectorScopes({
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-[280px] p-2" align="end" side="left">
+              <PopoverContent
+                className="w-[280px] p-2"
+                align="end"
+                side="left"
+                onOpenAutoFocus={(e) => e.preventDefault()}>
                 {!hideCustomInput && (
                   <div className="mb-3">
                     <div className="relative">
@@ -280,7 +303,15 @@ export function ConnectorScopes({
                     </Badge>
                   </div>
 
-                  <div className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5">
+                  <div
+                    className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
+                    role="listbox"
+                    tabIndex={0}
+                    style={{
+                      scrollbarWidth: 'thin',
+                      WebkitOverflowScrolling: 'touch',
+                    }}
+                    onWheel={(e) => e.stopPropagation()}>
                     {filteredScopes.length > 0 ? (
                       filteredScopes.map(renderAvailableScope)
                     ) : (
@@ -346,21 +377,27 @@ export function ConnectorScopes({
                         <div className="flex w-full">
                           <Badge
                             variant="outline"
-                            className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center whitespace-nowrap rounded-sm border-dashed text-xs">
-                            <span className="mx-auto">
-                              +{hiddenScopesCount} more
-                            </span>
+                            className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed text-xs">
+                            <span>+{hiddenScopesCount} more</span>
                           </Badge>
                         </div>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-auto max-w-[400px] p-3"
+                        className="w-[320px] max-w-[90vw] p-3"
                         align="center">
                         <span className="mb-2 block text-sm font-medium">
                           All Scopes
                         </span>
-                        <div className="block max-h-[250px] overflow-y-auto p-2">
-                          <div className="flex flex-wrap gap-2">
+                        <div
+                          className="block max-h-[250px] overflow-y-auto p-2"
+                          role="listbox"
+                          tabIndex={0}
+                          style={{
+                            scrollbarWidth: 'thin',
+                            WebkitOverflowScrolling: 'touch',
+                          }}
+                          onWheel={(e) => e.stopPropagation()}>
+                          <div className="flex flex-col space-y-2">
                             {scopes.map(renderScopeBadge)}
                           </div>
                         </div>
