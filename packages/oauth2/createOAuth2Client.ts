@@ -79,7 +79,11 @@ export function createOAuth2Client(
       if (typeof scopes === 'string') {
         return scopes
       }
-      return scopes.join(config.scopeDelimiter ?? ' ')
+      return scopes
+        .filter(Boolean)
+        .map((scope) => scope.trim())
+        .filter((scope) => scope.length > 0)
+        .join(config.scopeDelimiter ?? ' ')
     },
   )
 
