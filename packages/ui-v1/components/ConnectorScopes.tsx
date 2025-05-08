@@ -252,7 +252,7 @@ export function ConnectorScopes({
     <TooltipProvider>
       <div className={cn('w-full', className)}>
         {/* Title with Add button */}
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between">
           <div className="text-sm font-medium">Scopes</div>
           {editable && (
             <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -367,7 +367,7 @@ export function ConnectorScopes({
             {/* List of scopes */}
             <div className="mb-3">
               {scopes.length > 0 ? (
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {visibleScopes.map(renderScopeBadge)}
                   {hasHiddenScopes && (
                     <Popover
@@ -397,7 +397,7 @@ export function ConnectorScopes({
                             WebkitOverflowScrolling: 'touch',
                           }}
                           onWheel={(e) => e.stopPropagation()}>
-                          <div className="flex flex-col space-y-2">
+                          <div className="flex flex-col space-y-3">
                             {scopes.map(renderScopeBadge)}
                           </div>
                         </div>
