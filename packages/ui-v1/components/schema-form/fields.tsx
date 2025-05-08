@@ -10,6 +10,7 @@ import {ConnectorBadges} from '../../domain-components/ConnectorDisplay'
 import {ConnectorScopes} from '../ConnectorScopes'
 import {CopyID} from '../CopyID'
 import {SecureInput} from '../SecureInput'
+import {AdvancedField} from './fields/AdvancedField'
 import {CredentialsField} from './fields/CredentialsField'
 
 interface Scope {
@@ -248,6 +249,7 @@ export const fields = {
   OAuthField,
   DisabledField,
   CredentialsField,
+  AdvancedField,
   // Default fields we can override
   // - ArrayField
   // - ArraySchemaField
