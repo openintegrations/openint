@@ -133,6 +133,9 @@ export function createOAuth2ConnectorServer<
               access_token: res.access_token,
               refresh_token: res.refresh_token,
               expires_in: res.expires_in,
+              expires_at: res.expires_in
+                ? new Date(Date.now() + res.expires_in * 1000).toISOString()
+                : undefined,
               scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
               raw: res,
               token_type: undefined, // What should this be?
@@ -176,6 +179,9 @@ export function createOAuth2ConnectorServer<
                 access_token: res.access_token,
                 refresh_token: res.refresh_token,
                 expires_in: res.expires_in,
+                expires_at: res.expires_in
+                  ? new Date(Date.now() + res.expires_in * 1000).toISOString()
+                  : undefined,
                 raw: res,
                 scope:
                   res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),

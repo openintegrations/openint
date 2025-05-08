@@ -176,6 +176,29 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.status_message).toBeNull()
       expect(res.customer_id).toBe('cus_222')
       expect(res.id).toEqual(preConnectRes.current.state.connection_id)
+      expect(settings.oauth.credentials?.expires_in).toBeDefined()
+      expect(settings.oauth.credentials?.expires_at).toBeDefined()
+      // adding this if to satisfy the type checker
+      if (settings.oauth.credentials?.expires_in) {
+        const expiresAt = new Date(
+          settings.oauth.credentials.expires_at as string,
+        )
+        const expectedExpiresAt = new Date(
+          Date.now() + settings.oauth.credentials.expires_in * 1000,
+        )
+
+        // Check that expires_at is a date in the future
+        expect(expiresAt.getTime()).toBeGreaterThan(Date.now())
+
+        // Check that expires_at equals updated_at plus expires_in (with small tolerance for test execution time)
+        expect(
+          Math.abs(expiresAt.getTime() - expectedExpiresAt.getTime()),
+        ).toBeLessThan(1000)
+      } else {
+        throw new Error(
+          'Oauth expires_in is not defined. Failure at connect.spec.ts',
+        )
+      }
 
       const events = await asUser.listEvents()
       const recentEvent = events.items.find(
