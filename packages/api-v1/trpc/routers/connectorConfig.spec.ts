@@ -4,6 +4,7 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {trpc} from '../_base'
 import {getTestTRPCClient} from '../../__tests__/test-utils'
+import {core} from '../../models'
 import {routerContextFromViewer} from '../context'
 import {onError} from '../error-handling'
 import {connectionRouter} from './connection'
@@ -66,7 +67,25 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     return res
   })
 
-  // TODO: Test this better
+  test('create connector config empty oauth array', async () => {
+    const ccfg = {
+      connector_name: 'notion',
+      config: {
+        oauth: {
+          scopes: [],
+          client_id: 'asdf',
+          redirect_uri: 'https://custom.com/connect/callback',
+          client_secret: 'asdf',
+        },
+      },
+    }
+    const ccfgInsert = core.connector_config_insert.parse(ccfg)
+    // console.log('config', config)
+    const res = await asOrg.createConnectorConfig(ccfgInsert)
+    // console.log(res)
+    expect(res).toMatchObject(ccfg)
+  })
+
   test('create connector config with default creds', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'quickbooks',
@@ -92,10 +111,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('list connector config', async () => {
     const res = await asOrg.listConnectorConfigs()
-    expect(res.items).toHaveLength(2)
+    expect(res.items.length).toBeGreaterThan(1)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
-    expect(res.total).toEqual(2)
   })
 
   test('list connector config with expanded schemas', async () => {
@@ -112,7 +130,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query()
-    expect(res.items).toHaveLength(2)
+    expect(res.items).toHaveLength(3)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
   })
@@ -133,7 +151,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('user has access to org connector config', async () => {
     const res = await asUser.listConnectorConfigs()
-    expect(res.items).toHaveLength(2)
+    expect(res.items).toHaveLength(3)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
   })

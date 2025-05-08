@@ -48,6 +48,10 @@ export function createOAuth2ConnectorDef<
                   description: 'Scopes for OpenInt Platform Credentials',
                 }),
               })
+              .strict() // This is required union to be non-overlapping and thus work correctly.
+              // When using platform credentials, we need to ensure that scopes field is the ONLY field that is present
+              // otherwise it will match scenario where user is using their own credentials
+              // by stripping out all other fields except scopes...
               .openapi({
                 title: 'Use OpenInt platform credentials',
               }),
