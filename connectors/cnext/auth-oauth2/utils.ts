@@ -107,7 +107,8 @@ export function getRequestedScopes(
       ? (config.oauth.scopes as string).split(
           oauthConfig.scope_separator ?? ' ',
         )
-      : config.oauth.scopes
+      : // just in case there was a mistake in the config
+        config.oauth.scopes.map((scope) => scope.trim())
     : []
   const addedRequiredScopes = new Set([
     ...scopes,
