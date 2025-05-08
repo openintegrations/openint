@@ -8,7 +8,7 @@ import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
 import {CustomerId} from '@openint/cdk'
 import {ConnectEmbed} from '@openint/connect'
 import {getBaseURLs} from '@openint/env'
-import {Spinner} from '@openint/ui-v1'
+import {LoadingSpinner} from '@openint/ui-v1'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {createURL} from '@openint/util/url-utils'
@@ -74,7 +74,7 @@ export function ConnectEmbedPreview(props: {
       className="flex-1 overflow-scroll">
       {tokenRes.status === 'pending' ? (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-          <Spinner />
+          <LoadingSpinner />
         </div>
       ) : tokenRes.status === 'error' ? (
         // TODO: Show a better error message
