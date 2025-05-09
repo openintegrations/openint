@@ -172,38 +172,10 @@ export function ConnectorScopes({
     // Determine if the scope is a URL (starts with http:// or https://)
     const isUrl = /^https?:\/\//.test(scope)
 
-    // Format the display text with more aggressive truncation
+    // Format the display text with appropriate truncation but preserve full URLs
     const displayText = () => {
-      // For URLs, show domain plus minimal path info
-      if (isUrl) {
-        try {
-          const url = new URL(scope)
-          const domain = url.hostname.replace(/^www\./, '')
-
-          // For googleapis.com URLs, extract the service name
-          if (domain.includes('googleapis.com')) {
-            // Extract service name (e.g., gmail, sheets, etc.)
-            const parts = url.pathname.split('/')
-            const service = parts.length > 1 ? parts[1] : ''
-            return service ? `${service}:${parts[2] || ''}` : domain
-          }
-
-          // For other URLs, show domain with minimal path
-          return domain.length > 15 ? domain.substring(0, 12) + '...' : domain
-        } catch (e) {
-          // If URL parsing fails, fall back to standard truncation
-          return scope.length > 20 ? scope.substring(0, 17) + '...' : scope
-        }
-      }
-
-      // For non-URLs, use more aggressive truncation
-      // Special case for scopes with colon format (service:action)
-      if (scope.includes(':')) {
-        const [service, action] = scope.split(':', 2)
-        return `${service}:${action}`
-      }
-
-      return scope.length > 20 ? scope.substring(0, 17) + '...' : scope
+      // Simple truncation for all scopes
+      return scope.length > 30 ? scope.substring(0, 27) + '...' : scope
     }
 
     return (
@@ -244,7 +216,9 @@ export function ConnectorScopes({
                   : 'text-foreground',
               )}
               onClick={() => handleToggleScope(scope)}>
-              <span className="flex-1 truncate pr-1.5">{scope}</span>
+              <span className="max-w-[300px] flex-1 truncate pr-1.5">
+                {scope}
+              </span>
               {isAdded ? (
                 <X className="text-muted-foreground size-3.5 flex-shrink-0" />
               ) : (
@@ -284,33 +258,11 @@ export function ConnectorScopes({
               </PopoverTrigger>
 
               <PopoverContent
-                className="w-[280px] p-2"
+                className="w-[380px] p-2"
                 align="end"
                 side="left"
                 onOpenAutoFocus={(e) => e.preventDefault()}>
-                {!hideCustomInput && (
-                  <div className="mb-3">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Search scopes"
-                        className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (
-                            e.key === 'Enter' &&
-                            filteredScopes.length === 0
-                          ) {
-                            handleAddCustomScope()
-                          }
-                        }}
-                      />
-                      <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
-                    </div>
-                  </div>
-                )}
-                <div className="max-h-[250px]">
+                <div className="flex flex-col">
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-sm font-medium">Available scopes</div>
                     <Badge
@@ -323,6 +275,29 @@ export function ConnectorScopes({
                       {scopes.length} selected
                     </Badge>
                   </div>
+
+                  {!hideCustomInput && (
+                    <div className="mb-3">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search scopes"
+                          className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === 'Enter' &&
+                              filteredScopes.length === 0
+                            ) {
+                              handleAddCustomScope()
+                            }
+                          }}
+                        />
+                        <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
+                      </div>
+                    </div>
+                  )}
 
                   <div
                     className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
@@ -365,7 +340,7 @@ export function ConnectorScopes({
                     variant="outline"
                     size="sm"
                     className={cn(
-                      'h-8 w-full text-xs',
+                      'mt-auto h-8 w-full text-xs',
                       scopes.length === 0
                         ? 'text-muted-foreground cursor-not-allowed opacity-50'
                         : 'text-destructive hover:bg-destructive/10',
@@ -404,7 +379,7 @@ export function ConnectorScopes({
                         </div>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-[320px] max-w-[90vw] p-3"
+                        className="w-[450px] max-w-[90vw] p-3"
                         align="center">
                         <span className="mb-2 block text-sm font-medium">
                           All Scopes
