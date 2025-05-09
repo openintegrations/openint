@@ -46,7 +46,7 @@ const RequestLink: FC<{className?: string}> = ({className}) => (
     <Info className="mr-1 size-3" />
     <span>Need new scopes?</span>
     <a
-      href="mailto:support@openint.dev?subject=Add%20OpenInt%20scopes%20request"
+      href="https://cal.com/ap-openint/discovery"
       className="ml-1 text-blue-600 hover:underline"
       target="_blank"
       rel="noopener noreferrer">
@@ -180,17 +180,47 @@ export function ConnectorScopes({
     // Determine if the scope is a URL (starts with http:// or https://)
     const isUrl = /^https?:\/\//.test(scope)
 
+    // Format the display text with more aggressive truncation
+    const displayText = () => {
+      // For URLs, show domain plus minimal path info
+      if (isUrl) {
+        try {
+          const url = new URL(scope)
+          const domain = url.hostname.replace(/^www\./, '')
+
+          // For googleapis.com URLs, extract the service name
+          if (domain.includes('googleapis.com')) {
+            // Extract service name (e.g., gmail, sheets, etc.)
+            const parts = url.pathname.split('/')
+            const service = parts.length > 1 ? parts[1] : ''
+            return service ? `${service}:${parts[2] || ''}` : domain
+          }
+
+          // For other URLs, show domain with minimal path
+          return domain.length > 15 ? domain.substring(0, 12) + '...' : domain
+        } catch (e) {
+          // If URL parsing fails, fall back to standard truncation
+          return scope.length > 20 ? scope.substring(0, 17) + '...' : scope
+        }
+      }
+
+      // For non-URLs, use more aggressive truncation
+      // Special case for scopes with colon format (service:action)
+      if (scope.includes(':')) {
+        const [service, action] = scope.split(':', 2)
+        return `${service}:${action}`
+      }
+
+      return scope.length > 20 ? scope.substring(0, 17) + '...' : scope
+    }
+
     return (
       <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
         <Badge
           variant="secondary"
-          className="inline-flex h-6 w-full items-center justify-between whitespace-nowrap rounded-sm text-xs">
-          <span
-            className={cn(
-              'truncate px-1.5',
-              isUrl ? 'max-w-[280px]' : 'max-w-[180px]',
-            )}>
-            {scope}
+          className="relative inline-flex h-6 w-full items-center justify-center whitespace-nowrap rounded-sm px-6 text-xs">
+          <span className="max-w-[85%] truncate text-center">
+            {displayText()}
           </span>
           {editable && (
             <button
@@ -198,8 +228,8 @@ export function ConnectorScopes({
                 e.stopPropagation()
                 handleRemoveScope(scope)
               }}
-              className="hover:bg-secondary ml-auto flex-shrink-0 rounded-full p-0.5">
-              <X className="text-muted-foreground size-2.5" />
+              className="absolute right-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
+              <X className="text-secondary-foreground size-3" />
             </button>
           )}
         </Badge>
@@ -209,42 +239,41 @@ export function ConnectorScopes({
 
   const renderAvailableScope = (scope: string) => {
     const isAdded = isScopeAdded(scope)
-    const isHovered = hoveredScope === scope
 
     return (
-      <Tooltip key={scope} open={isHovered}>
-        <TooltipTrigger asChild>
-          <button
-            className={cn(
-              'hover:bg-secondary/30 flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs',
-              isAdded
-                ? 'bg-secondary/20 text-muted-foreground'
-                : 'text-foreground',
-            )}
-            onMouseEnter={() => setHoveredScope(scope)}
-            onMouseLeave={() => setHoveredScope(null)}
-            onClick={() => handleToggleScope(scope)}>
-            <span className="flex-1 truncate pr-1.5">{scope}</span>
-            {isAdded ? (
-              <X className="text-muted-foreground size-3.5 flex-shrink-0" />
+      <TooltipProvider key={scope}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className={cn(
+                'hover:bg-secondary/30 flex w-full items-center justify-between rounded px-2.5 py-1.5 text-left text-xs',
+                isAdded
+                  ? 'bg-secondary/20 text-muted-foreground'
+                  : 'text-foreground',
+              )}
+              onClick={() => handleToggleScope(scope)}>
+              <span className="flex-1 truncate pr-1.5">{scope}</span>
+              {isAdded ? (
+                <X className="text-muted-foreground size-3.5 flex-shrink-0" />
+              ) : (
+                <Check className="text-muted-foreground size-3.5 flex-shrink-0" />
+              )}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {scopeLookup && scopeLookup[scope] ? (
+              <div className="max-w-xs">
+                <p className="mb-1 font-medium">
+                  {scopeLookup[scope].display_name || scope}
+                </p>
+                <p className="text-xs">{scopeLookup[scope].description}</p>
+              </div>
             ) : (
-              <Check className="text-muted-foreground size-3.5 flex-shrink-0" />
+              scope
             )}
-          </button>
-        </TooltipTrigger>
-        <TooltipContent>
-          {scopeLookup && scopeLookup[scope] ? (
-            <div className="max-w-xs">
-              <p className="mb-1 font-medium">
-                {scopeLookup[scope].display_name || scope}
-              </p>
-              <p className="text-xs">{scopeLookup[scope].description}</p>
-            </div>
-          ) : (
-            scope
-          )}
-        </TooltipContent>
-      </Tooltip>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     )
   }
 
@@ -367,18 +396,18 @@ export function ConnectorScopes({
             {/* List of scopes */}
             <div className="mb-3">
               {scopes.length > 0 ? (
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
                   {visibleScopes.map(renderScopeBadge)}
                   {hasHiddenScopes && (
                     <Popover
                       open={isMorePopoverOpen}
                       onOpenChange={setIsMorePopoverOpen}>
                       <PopoverTrigger asChild>
-                        <div className="flex w-full">
+                        <div className="w-full">
                           <Badge
                             variant="outline"
-                            className="bg-secondary/20 hover:bg-secondary/30 inline-flex h-6 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed text-xs">
-                            <span>+{hiddenScopesCount} more</span>
+                            className="bg-secondary/10 hover:bg-secondary/20 inline-flex h-6 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed text-xs transition-colors">
+                            +{hiddenScopesCount} more
                           </Badge>
                         </div>
                       </PopoverTrigger>
@@ -397,7 +426,7 @@ export function ConnectorScopes({
                             WebkitOverflowScrolling: 'touch',
                           }}
                           onWheel={(e) => e.stopPropagation()}>
-                          <div className="flex flex-col space-y-3">
+                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             {scopes.map(renderScopeBadge)}
                           </div>
                         </div>
