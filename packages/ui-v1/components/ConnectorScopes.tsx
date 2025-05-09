@@ -107,20 +107,12 @@ export function ConnectorScopes({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [isMorePopoverOpen, setIsMorePopoverOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [hoveredScope, setHoveredScope] = useState<string | null>(null)
 
   useEffect(() => {
     if (hideCustomInput) {
       setSearchQuery('')
     }
   }, [hideCustomInput])
-
-  // Reset hovered scope when popover closes
-  useEffect(() => {
-    if (!isPopoverOpen) {
-      setHoveredScope(null)
-    }
-  }, [isPopoverOpen])
 
   const handleRemoveScope = useCallback(
     (scope: string) => {
