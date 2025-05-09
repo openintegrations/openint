@@ -14,7 +14,7 @@ interface SecureInputProps extends Omit<InputProps, 'type'> {
 }
 
 export function SecureInput({
-  label = 'Secure Input',
+  label,
   placeholder = 'Enter secure text',
   value,
   onChange,
@@ -26,13 +26,7 @@ export function SecureInput({
   const [copied, setCopied] = useState(false)
 
   const toggleValueVisibility = () => {
-    if (showingValue) {
-      setShowValue(false)
-      toast.info('Value hidden')
-    } else {
-      setShowValue(true)
-      toast.info('Value visible')
-    }
+    setShowValue(!showingValue)
   }
 
   const copyToClipboard = async () => {
@@ -48,33 +42,33 @@ export function SecureInput({
 
   return (
     <div className="space-y-2">
-      <Label className="text-md font-bold" htmlFor="secureInput">
-        {label}
-      </Label>
-      <div className="flex">
+      {label && (
+        <Label className="text-sm font-medium text-gray-700">{label}</Label>
+      )}
+      <div className="flex gap-2">
         <div className="relative flex-grow">
           <Input
             {...props}
             type={showingValue ? 'text' : 'password'}
-            id="secureInput"
             placeholder={placeholder}
             value={value}
             onChange={onChange}
             className="pr-10 font-light"
             readOnly={readOnly ?? !onChange}
+            disabled={readOnly ?? !onChange}
           />
           {!showValue && (
             <Button
               type="button"
               variant="ghost"
-              size="sm"
+              size="icon"
               className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
               onClick={toggleValueVisibility}
               aria-label={showingValue ? 'Hide value' : 'Show value'}>
               {showingValue ? (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="size-4" />
               ) : (
-                <Eye className="h-4 w-4" />
+                <Eye className="size-4" />
               )}
             </Button>
           )}
@@ -82,14 +76,10 @@ export function SecureInput({
         <Button
           type="button"
           variant="outline"
-          className="ml-2"
+          size="icon"
           onClick={copyToClipboard}
           aria-label="Copy to clipboard">
-          {copied ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
+          {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
         </Button>
       </div>
     </div>

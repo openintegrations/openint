@@ -13,6 +13,7 @@ import {
   useStateFromSearchParams,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
+import {SecureInput} from '@openint/ui-v1/components/SecureInput'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
@@ -258,36 +259,34 @@ export function ConnectionsPage() {
                         </h3>
                       </div>
                       <div className="divide-border/40 divide-y">
-                        <div className="flex px-5 py-3">
+                        <div className="flex items-center px-5 py-3">
                           <h4 className="text-muted-foreground w-1/3 text-sm">
                             Access Token
                           </h4>
                           <div className="w-2/3">
-                            <CopyID
+                            <SecureInput
                               value={
                                 selectedConnection.settings.oauth.credentials
                                   .access_token
                               }
-                              width="100%"
-                              size="medium"
+                              readOnly
                             />
                           </div>
                         </div>
 
                         {selectedConnection.settings.oauth.credentials
                           .refresh_token && (
-                          <div className="flex px-5 py-3">
+                          <div className="flex items-center px-5 py-3">
                             <h4 className="text-muted-foreground w-1/3 text-sm">
                               Refresh Token
                             </h4>
                             <div className="w-2/3">
-                              <CopyID
+                              <SecureInput
                                 value={
                                   selectedConnection.settings.oauth.credentials
                                     .refresh_token
                                 }
-                                width="100%"
-                                size="medium"
+                                readOnly
                               />
                             </div>
                           </div>
