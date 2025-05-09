@@ -60,7 +60,7 @@ export const advancedFieldsSchema = z.object({
         .openapi({
           'ui:options': {
             title: 'Display Name',
-            placeholder: ' Enter Display Name',
+            placeholder: 'Enter Display Name',
           },
         }),
       // Add other advanced fields here as needed

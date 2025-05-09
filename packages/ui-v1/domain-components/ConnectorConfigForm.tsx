@@ -89,7 +89,6 @@ export function ConnectorConfigForm({
     scopes,
     initialData: connectorConfig,
     connector: connector ?? connectorConfig?.connector,
-    advancedFields: ['display_name'],
   }
 
   return (

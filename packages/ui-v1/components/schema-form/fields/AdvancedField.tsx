@@ -1,4 +1,4 @@
-import type {FieldProps} from '@rjsf/utils'
+import type {FieldProps, RJSFSchema} from '@rjsf/utils'
 
 import {Input, Label} from '@openint/shadcn/ui'
 import {
@@ -7,6 +7,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@openint/shadcn/ui/accordion'
+
+interface ExtendedJSONSchema extends RJSFSchema {
+  'ui:options'?: {
+    title?: string
+    placeholder?: string
+    [key: string]: unknown
+  }
+}
 
 function toTitleCase(str: string) {
   return str
@@ -18,7 +26,7 @@ function toTitleCase(str: string) {
  * AdvancedField is a field that collapses a section of the form.
  * It uses schema properties to render fields and handles them at the root level.
  */
-export function AdvancedField<T extends Record<string, unknown>>(
+export function AdvancedField<T extends Record<string, string | number>>(
   props: FieldProps<T>,
 ) {
   const {formData, onChange, schema} = props
@@ -37,8 +45,10 @@ export function AdvancedField<T extends Record<string, unknown>>(
         <AccordionContent className="space-y-4 pt-2">
           {schemaFields.map((fieldName) => {
             // Get schema for this field
-            const fieldSchema = schema.properties?.[String(fieldName)]
-            const fieldOptions = (fieldSchema as any)?.['ui:options']
+            const fieldSchema = schema.properties?.[
+              String(fieldName)
+            ] as ExtendedJSONSchema
+            const fieldOptions = fieldSchema?.['ui:options']
 
             return (
               <div key={String(fieldName)} className="space-y-2">
@@ -46,7 +56,7 @@ export function AdvancedField<T extends Record<string, unknown>>(
                   {fieldOptions?.title || toTitleCase(String(fieldName))}
                 </Label>
                 <Input
-                  value={formData?.[fieldName] as string}
+                  value={formData?.[fieldName]}
                   onChange={(e) => {
                     onChange({
                       ...formData,
