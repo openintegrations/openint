@@ -26,6 +26,19 @@ type ConnectorConfigDetailsProps = {
   | {connectorName: ConnectorName; connectorConfigId?: never}
 )
 
+/**
+ * Handle advanced fields as an object to spread afterwards.
+ * if not we cannot access/update correctly the field values.
+ */
+type ConnectorConfigFormData = Omit<
+  Core['connector_config_insert'],
+  'display_name'
+> & {
+  advanced_fields?: {
+    display_name?: string
+  }
+}
+
 export function ConnectorConfigDetails({
   connectorConfigId,
   connectorName,
@@ -125,11 +138,9 @@ export function ConnectorConfigDetails({
     }),
   )
 
-  const handleSave = async (data: {
-    formData: Core['connector_config_insert']
-  }) => {
+  const handleSave = async (data: {formData: ConnectorConfigFormData}) => {
     const {
-      formData: {display_name, disabled, config = {}, ...rest},
+      formData: {disabled, config = {}, advanced_fields = {}, ...rest},
     } = data
 
     if (connectorConfigId) {
@@ -139,12 +150,12 @@ export function ConnectorConfigDetails({
       const updateCcfg = async () =>
         await updateConfig.mutateAsync({
           id: connectorConfigId,
-          display_name: display_name ?? undefined,
           disabled: disabled ?? undefined,
           config: {
             ...config,
             ...rest,
           },
+          ...advanced_fields,
         })
       if (hasOauthChanges) {
         const confirmed = await confirmAlert({
@@ -160,12 +171,12 @@ export function ConnectorConfigDetails({
     } else {
       await createConfig.mutateAsync({
         connector_name: connectorName,
-        display_name,
         disabled,
         config: {
           ...config,
           ...rest,
         },
+        ...advanced_fields,
       })
     }
   }
