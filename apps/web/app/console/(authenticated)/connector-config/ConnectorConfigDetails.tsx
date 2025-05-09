@@ -72,6 +72,8 @@ export function ConnectorConfigDetails({
     connectorConfig?.data?.connector?.display_name ??
     connector?.data?.display_name
 
+  const connectionCount = connectorConfig?.data?.connection_count ?? 0
+
   const onSuccessUpsert = () => {
     toast.success(
       `${displayName} ${connectorConfig?.data ? 'updated' : 'added'} successfully`,
@@ -146,7 +148,7 @@ export function ConnectorConfigDetails({
             ...rest,
           },
         })
-      if (hasOauthChanges) {
+      if (hasOauthChanges && connectionCount > 0) {
         const confirmed = await confirmAlert({
           title: 'OAuth Credentials Changed',
           description:
