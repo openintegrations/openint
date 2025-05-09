@@ -45,37 +45,30 @@ export function SettingsContent({
   )
 
   return (
-    <div className="max-w-3xl p-6">
-      <h2 className="mb-4 text-2xl font-bold tracking-tight">Settings</h2>
-      <div className="mb-4 font-bold">
-        <SecureInput label="Organization Id" value={orgId} showValue={true} />
-      </div>
-
-      <div className="mt-4">
-        <SecureInput label="API Key" readOnly value={apiKey} />
-      </div>
-      <div className="mt-4">
-        <WebhookInput
-          defaultValue={webhookUrl}
-          onSave={handleSave}
-          isSaving={setWebhook.isPending}
-          sendDebugEvent={() => {
-            const looadingToastId = toast.loading('Sending debug event...')
-            createEvent
-              .mutateAsync({
-                event: {name: 'debug.debug', data: {}},
-              })
-              .then((evt) => {
-                toast.dismiss(looadingToastId)
-                toast.success(`Debug event sent id=${evt.id}`)
-              })
-              .catch((error) => {
-                toast.dismiss(looadingToastId)
-                toast.error(`Error: ${error.message}`)
-              })
-          }}
-        />
-      </div>
+    <div className="flex max-w-3xl flex-col gap-4 p-6">
+      <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+      <SecureInput label="Organization Id" value={orgId} showValue={true} />
+      <SecureInput label="API Key" readOnly value={apiKey} />
+      <WebhookInput
+        defaultValue={webhookUrl}
+        onSave={handleSave}
+        isSaving={setWebhook.isPending}
+        sendDebugEvent={() => {
+          const looadingToastId = toast.loading('Sending debug event...')
+          createEvent
+            .mutateAsync({
+              event: {name: 'debug.debug', data: {}},
+            })
+            .then((evt) => {
+              toast.dismiss(looadingToastId)
+              toast.success(`Debug event sent id=${evt.id}`)
+            })
+            .catch((error) => {
+              toast.dismiss(looadingToastId)
+              toast.error(`Error: ${error.message}`)
+            })
+        }}
+      />
     </div>
   )
 }

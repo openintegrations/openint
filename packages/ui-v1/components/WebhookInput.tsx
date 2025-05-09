@@ -55,7 +55,9 @@ export function WebhookInput({
 
   return (
     <div className="space-y-2">
-      <Label className="text-md font-bold" htmlFor="webhookInput">
+      <Label
+        className="text-sm font-medium text-gray-700"
+        htmlFor="webhookInput">
         Webhook URL
       </Label>
       <div className="flex flex-col gap-1">
