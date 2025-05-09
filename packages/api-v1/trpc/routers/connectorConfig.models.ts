@@ -67,7 +67,7 @@ export const advancedFieldsSchema = z.object({
     })
     .describe('Additional configuration options for this connector')
     .openapi({
-      title: 'Advanced Fields',
+      title: 'Advanced Settings',
       'ui:field': 'AdvancedField',
     }),
 })
