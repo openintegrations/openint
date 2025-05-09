@@ -14,7 +14,7 @@ interface SecureInputProps extends Omit<InputProps, 'type'> {
 }
 
 export function SecureInput({
-  label = 'Secure Input',
+  label,
   placeholder = 'Enter secure text',
   value,
   onChange,
@@ -42,7 +42,9 @@ export function SecureInput({
 
   return (
     <div className="space-y-2">
-      <Label className="text-sm font-medium text-gray-700">{label}</Label>
+      {label && (
+        <Label className="text-sm font-medium text-gray-700">{label}</Label>
+      )}
       <div className="flex">
         <div className="relative flex-grow">
           <Input
