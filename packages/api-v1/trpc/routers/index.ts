@@ -8,6 +8,7 @@ import {connectorConfigRouter} from './connectorConfig'
 import {customerRouter} from './customer'
 import {eventRouter} from './event'
 import {generalRouter} from './general'
+import {integrationRouter} from './integration'
 import {organizationRouter} from './organization'
 import {webhookRouter} from './webhook'
 
@@ -16,6 +17,7 @@ export const appRouter = trpc.mergeRouters(
   connectorConfigRouter,
   connectionRouter,
   connectRouter,
+  integrationRouter,
   eventRouter,
   customerRouter,
   generalRouter,

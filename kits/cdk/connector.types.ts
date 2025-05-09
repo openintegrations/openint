@@ -158,7 +158,7 @@ export interface ConnectorServer<
   // MARK: - Sync
 
   // pagination params
-  listIntegrations?: (params: unknown) => Promise<{
+  listIntegrations?: (params: {search_text?: string}) => Promise<{
     has_next_page: boolean
     next_cursor: string | null
     // Institution
@@ -167,7 +167,7 @@ export interface ConnectorServer<
       id: string
       name: string
       logo_url?: string | null
-      updated_at: string
+      updated_at?: string
       verticals?: VerticalKey[]
       raw_data: T['_intOpType']['data']
     }>
