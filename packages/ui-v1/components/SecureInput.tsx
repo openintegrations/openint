@@ -45,7 +45,7 @@ export function SecureInput({
       {label && (
         <Label className="text-sm font-medium text-gray-700">{label}</Label>
       )}
-      <div className="flex">
+      <div className="flex gap-2">
         <div className="relative flex-grow">
           <Input
             {...props}
@@ -61,7 +61,7 @@ export function SecureInput({
             <Button
               type="button"
               variant="ghost"
-              size="sm"
+              size="icon"
               className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
               onClick={toggleValueVisibility}
               aria-label={showingValue ? 'Hide value' : 'Show value'}>
@@ -76,14 +76,10 @@ export function SecureInput({
         <Button
           type="button"
           variant="outline"
-          className="ml-2"
+          size="icon"
           onClick={copyToClipboard}
           aria-label="Copy to clipboard">
-          {copied ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
+          {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
         </Button>
       </div>
     </div>
