@@ -9,6 +9,7 @@ import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorBadges} from '../../domain-components/ConnectorDisplay'
 import {ConnectorScopes} from '../ConnectorScopes'
 import {CopyID} from '../CopyID'
+import {SecureInput} from '../SecureInput'
 import {CredentialsField} from './fields/CredentialsField'
 
 interface Scope {
@@ -88,32 +89,23 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
 
       {(!connector?.has_openint_credentials || !useOpenIntCredentials) && (
         <div className="space-y-2">
-          <label
-            htmlFor="client-id"
-            className="text-sm font-medium text-gray-700">
-            Client ID
-          </label>
-          <Input
+          <SecureInput
             id="client-id"
-            type="text"
             value={formData?.client_id || ''}
             onChange={(e) => {
               handleChange('client_id', e.target.value)
             }}
+            label="Client ID"
             placeholder="Enter client ID"
+            showValue
           />
-          <label
-            htmlFor="client-secret"
-            className="text-sm font-medium text-gray-700">
-            Client Secret
-          </label>
-          <Input
+          <SecureInput
             id="client-secret"
-            type="text"
             value={formData?.client_secret || ''}
             onChange={(e) => {
               handleChange('client_secret', e.target.value)
             }}
+            label="Client Secret"
             placeholder="Enter client secret"
           />
           <label
