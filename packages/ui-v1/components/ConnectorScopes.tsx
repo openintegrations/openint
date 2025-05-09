@@ -169,9 +169,6 @@ export function ConnectorScopes({
   }, [onClearAllScopes])
 
   const renderScopeBadge = (scope: string) => {
-    // Determine if the scope is a URL (starts with http:// or https://)
-    const isUrl = /^https?:\/\//.test(scope)
-
     // Format the display text with appropriate truncation but preserve full URLs
     const displayText = () => {
       // Simple truncation for all scopes
