@@ -212,25 +212,27 @@ export function ConnectorConfigDetails({
   }
 
   return (
-    <div className="flex size-full flex-1 flex-col justify-between">
-      {connectorConfig.data ? (
-        <ConnectorConfigForm
-          connectorConfig={connectorConfig.data}
-          configSchema={configSchema}
-          changedFieldsRef={changedFieldsRef}
-          onSubmit={handleSave}
-          formRef={formRef}
-        />
-      ) : (
-        <ConnectorConfigForm
-          connector={connector.data}
-          configSchema={configSchema}
-          changedFieldsRef={changedFieldsRef}
-          onSubmit={handleSave}
-          formRef={formRef}
-        />
-      )}
-      <div className="bg-background sticky bottom-0 border-t p-4">
+    <div className="flex h-full flex-col">
+      <div className="flex-1 overflow-y-auto pb-24">
+        {connectorConfig.data ? (
+          <ConnectorConfigForm
+            connectorConfig={connectorConfig.data}
+            configSchema={configSchema}
+            changedFieldsRef={changedFieldsRef}
+            onSubmit={handleSave}
+            formRef={formRef}
+          />
+        ) : (
+          <ConnectorConfigForm
+            connector={connector.data}
+            configSchema={configSchema}
+            changedFieldsRef={changedFieldsRef}
+            onSubmit={handleSave}
+            formRef={formRef}
+          />
+        )}
+      </div>
+      <div className="bg-background absolute inset-x-0 bottom-0 z-10 border-t p-4">
         <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             {connectorConfig?.data?.connection_count ? (

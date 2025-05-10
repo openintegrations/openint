@@ -15,77 +15,342 @@ const meta: Meta<typeof ConnectorScopes> = {
 export default meta
 type Story = StoryObj<typeof ConnectorScopes>
 
-// Sample scopes
-const initialScopes: string[] = [
+// Extended set of URL-like scopes for Google services
+const googleLongUrlScopes: string[] = [
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/drive.readonly',
+  'https://www.googleapis.com/auth/drive.metadata.readonly',
+  'https://www.googleapis.com/auth/drive.appdata',
+  'https://www.googleapis.com/auth/drive.metadata',
+  'https://www.googleapis.com/auth/drive.photos.readonly',
+  'https://mail.google.com/',
+  'https://www.googleapis.com/auth/gmail.modify',
+  'https://www.googleapis.com/auth/gmail.compose',
+  'https://www.googleapis.com/auth/gmail.send',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/gmail.metadata',
+  'https://www.googleapis.com/auth/gmail.settings.basic',
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/calendar.events',
+  'https://www.googleapis.com/auth/calendar.events.readonly',
+  'https://www.googleapis.com/auth/calendar.settings.readonly',
+  'https://www.googleapis.com/auth/calendar.addons.execute',
+  'https://www.googleapis.com/auth/contacts',
+  'https://www.googleapis.com/auth/contacts.readonly',
+  'https://www.googleapis.com/auth/user.emails.read',
+  'https://www.googleapis.com/auth/user.addresses.read',
+  'https://www.googleapis.com/auth/user.phonenumbers.read',
+]
+
+// Extended set of many scopes for demonstrating "+X more" functionality
+const manyScopes: string[] = [
   'read:users',
   'read:documents',
   'read:profiles',
   'read:settings',
-]
-
-const availableScopes: string[] = [
   'write:users',
   'write:documents',
   'write:profiles',
   'write:settings',
   'admin:access',
   'admin:users',
+  'admin:system',
+  'admin:billing',
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:users',
+  'admin:content',
+  'admin:settings',
+  'admin:billing',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes to reach 70+
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
 ]
 
-// Default view (read-only)
-export const Default: Story = {
-  args: {
-    scopes: initialScopes,
-    editable: false,
-  },
-  render: (args) => <ConnectorScopes {...args} />,
-}
+// Extended set of 70+ scopes for demonstrating large quantity of scopes
+const largeNumberOfScopes: string[] = [
+  // API scopes
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:users',
+  'admin:content',
+  'admin:settings',
+  'admin:billing',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes to reach 70+
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
+]
 
-// Interactive story with state management
-const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
-  const [scopes, setScopes] = useState<string[]>(initialScopes)
+const availableScopes: string[] = [
+  // Original scopes
+  'write:users',
+  'write:documents',
+  'write:profiles',
+  'write:settings',
+  'admin:access',
+  'admin:users',
+  'admin:system',
+  'admin:billing',
+  // API scopes
+  'api:read',
+  'api:write',
+  'api:admin',
+  'api:metrics',
+  'api:logs',
+  'api:config',
+  'api:status',
+  'api:diagnostics',
+  // User scopes
+  'user:read',
+  'user:write',
+  'user:delete',
+  'user:profile:read',
+  'user:profile:write',
+  'user:settings:read',
+  'user:settings:write',
+  'user:billing:read',
+  'user:billing:write',
+  'user:auth:read',
+  'user:auth:write',
+  // Content scopes
+  'content:read',
+  'content:write',
+  'content:delete',
+  'content:publish',
+  'content:draft',
+  'content:archive',
+  'content:restore',
+  'content:export',
+  'content:import',
+  // Analytics scopes
+  'analytics:view',
+  'analytics:export',
+  'analytics:reports:basic',
+  'analytics:reports:advanced',
+  'analytics:reports:custom',
+  'analytics:dashboards:view',
+  'analytics:dashboards:create',
+  'analytics:dashboards:share',
+  // Admin scopes
+  'admin:full',
+  'admin:readonly',
+  'admin:content',
+  'admin:settings',
+  'admin:security',
+  'admin:logs',
+  'admin:backup',
+  'admin:restore',
+  // Integration scopes
+  'integration:connect',
+  'integration:disconnect',
+  'integration:configure',
+  'integration:oauth',
+  'integration:webhook:read',
+  'integration:webhook:write',
+  // Domain specific scopes
+  'files:read',
+  'files:write',
+  'files:delete',
+  'comments:read',
+  'comments:write',
+  'comments:delete',
+  'notifications:read',
+  'notifications:write',
+  'tags:read',
+  'tags:write',
+  'categories:read',
+  'categories:write',
+  // System scopes
+  'system:read',
+  'system:write',
+  'system:metrics',
+  'system:logs',
+  'system:config',
+  'system:diagnostics',
+  'system:health',
+  'system:cache',
+  // Additional scopes
+  'payments:read',
+  'payments:write',
+  'subscriptions:read',
+  'subscriptions:write',
+  'messages:read',
+  'messages:write',
+  'events:read',
+  'events:write',
+]
 
-  const handleRemoveScope = (scopeToRemove: string) => {
-    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
-  }
-
-  const handleAddScope = (scopeToAdd: string) => {
-    // Check if scope already exists
-    if (!scopes.some((scope) => scope === scopeToAdd)) {
-      setScopes([...scopes, scopeToAdd])
-    }
-  }
-
-  return (
-    <ConnectorScopes
-      scopes={scopes}
-      onRemoveScope={handleRemoveScope}
-      onAddScope={handleAddScope}
-      availableScopes={availableScopes}
-      editable={true}
-      hideCustomInput={hideCustomInput}></ConnectorScopes>
-  )
-}
-
-export const Editable: Story = {
-  render: () => <EditableExample />,
-}
-export const EditableWithHideCustomInput: Story = {
-  render: () => <EditableExample hideCustomInput />,
-}
-
-// Constrained width example simulating a sheet
-const ConstrainedWidthExample = ({
-  scopeLookup,
-  hideCustomInput,
+// Sheet view example simulating the app's UI
+const SheetViewExample = ({
+  hideCustomInput = false,
+  useLargeScopes = false,
 }: {
-  scopeLookup?: Record<
-    string,
-    {scope: string; display_name: string; description: string}
-  >
   hideCustomInput?: boolean
+  useLargeScopes?: boolean
 }) => {
-  const [scopes, setScopes] = useState<string[]>(initialScopes)
+  const [scopes, setScopes] = useState<string[]>(
+    useLargeScopes ? largeNumberOfScopes : manyScopes,
+  )
   const [enabled, setEnabled] = useState(true)
 
   const handleRemoveScope = (scopeToRemove: string) => {
@@ -97,6 +362,10 @@ const ConstrainedWidthExample = ({
     if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
+  }
+
+  const handleClearAllScopes = () => {
+    setScopes([])
   }
 
   return (
@@ -165,8 +434,8 @@ const ConstrainedWidthExample = ({
             </span>
             <span style={{fontSize: '14px', color: '#6b7280'}}>
               {enabled
-                ? 'Credentials are enabled. Scopes are read-only.'
-                : 'Credentials are disabled. You can edit scopes.'}
+                ? 'Credentials are enabled. You can edit scopes.'
+                : 'Credentials are disabled. Scopes are read-only.'}
             </span>
           </div>
           <Switch checked={enabled} onCheckedChange={setEnabled} />
@@ -175,9 +444,9 @@ const ConstrainedWidthExample = ({
 
       <div style={{width: '100%'}}>
         <h3 style={{fontSize: '18px', fontWeight: '500', marginBottom: '16px'}}>
-          Scopes
+          Scopes {useLargeScopes ? `(${scopes.length})` : ''}
         </h3>
-        {enabled ? (
+        {!enabled ? (
           <ConnectorScopes
             scopes={scopes}
             editable={false}
@@ -189,6 +458,7 @@ const ConstrainedWidthExample = ({
             scopes={scopes}
             onRemoveScope={handleRemoveScope}
             onAddScope={handleAddScope}
+            onClearAllScopes={handleClearAllScopes}
             availableScopes={availableScopes}
             editable={true}
             scopeLookup={scopeLookup}
@@ -200,8 +470,107 @@ const ConstrainedWidthExample = ({
   )
 }
 
-export const ConstrainedWidth: Story = {
-  render: () => <ConstrainedWidthExample />,
+export const SheetViewWithLargeNumberOfScopes: Story = {
+  render: () => <SheetViewExample useLargeScopes={true} />,
+}
+
+// SheetView with Google URL scopes example
+const SheetViewWithLongUrlScopes = () => {
+  const [scopes, setScopes] = useState<string[]>(
+    googleLongUrlScopes.slice(0, 6),
+  )
+  const [enabled, setEnabled] = useState(true)
+
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
+  }
+
+  const handleAddScope = (scopeToAdd: string) => {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
+      setScopes([...scopes, scopeToAdd])
+    }
+  }
+
+  const handleClearAllScopes = () => {
+    setScopes([])
+  }
+
+  return (
+    <div
+      style={{
+        width: '450px',
+        border: '1px solid #e2e8f0',
+        borderRadius: '8px',
+        padding: '24px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+      <div style={{marginBottom: '32px'}}>
+        <h2 style={{fontSize: '20px', fontWeight: '600', marginBottom: '24px'}}>
+          Google Drive Connector
+        </h2>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+          <div>
+            <p
+              style={{fontSize: '14px', color: '#6b7280', marginBottom: '4px'}}>
+              OAuth Configuration
+            </p>
+            <Skeleton className="h-8 w-full" />
+          </div>
+        </div>
+      </div>
+
+      <div style={{width: '100%', marginBottom: '24px'}}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+            }}>
+            <span style={{fontSize: '16px', fontWeight: '500'}}>
+              Enable Google API Access
+            </span>
+            <span style={{fontSize: '14px', color: '#6b7280'}}>
+              {enabled
+                ? 'API access is enabled. You can edit scopes.'
+                : 'API access is disabled. Scopes are read-only.'}
+            </span>
+          </div>
+          <Switch checked={enabled} onCheckedChange={setEnabled} />
+        </div>
+      </div>
+
+      <div style={{width: '100%'}}>
+        <h3 style={{fontSize: '18px', fontWeight: '500', marginBottom: '16px'}}>
+          Google API Scopes
+        </h3>
+        {!enabled ? (
+          <ConnectorScopes scopes={scopes} editable={false} />
+        ) : (
+          <ConnectorScopes
+            scopes={scopes}
+            onRemoveScope={handleRemoveScope}
+            onAddScope={handleAddScope}
+            onClearAllScopes={handleClearAllScopes}
+            availableScopes={googleLongUrlScopes}
+            editable={true}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export const SheetViewWithGoogleLongUrlScopes: Story = {
+  render: () => <SheetViewWithLongUrlScopes />,
 }
 
 const scopeLookup = {
@@ -255,8 +624,14 @@ const scopeLookup = {
     display_name: 'Admin Users',
     description: 'Administrative control over user accounts and permissions',
   },
-}
-
-export const WithScopeLookup: Story = {
-  render: () => <ConstrainedWidthExample scopeLookup={scopeLookup} />,
+  'admin:system': {
+    scope: 'admin:system',
+    display_name: 'Admin System',
+    description: 'Administrative control over system configuration',
+  },
+  'admin:billing': {
+    scope: 'admin:billing',
+    display_name: 'Admin Billing',
+    description: 'Administrative control over billing and payments',
+  },
 }
