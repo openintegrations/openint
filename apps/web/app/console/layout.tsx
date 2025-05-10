@@ -1,3 +1,5 @@
+import type {Metadata} from 'next'
+
 import {cookies} from 'next/headers'
 import React from 'react'
 import {AuthProvider} from '@openint/console-auth/client'
@@ -6,6 +8,15 @@ import {TRPCApp} from '@/lib-client/TRPCApp'
 import {resolveLinkPath} from '@/lib-common/Link'
 
 // TODO: react.cache currentViewer function
+
+export const metadata: Metadata = {
+  title: 'OpenInt Console',
+  description: 'OpenInt management console',
+  icons: {
+    icon: '/_assets/logo-favicon.svg',
+    apple: '/_assets/logo-favicon.svg',
+  },
+}
 
 export default async function ConsoleLayout(props: {
   children: React.ReactNode
