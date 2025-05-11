@@ -131,6 +131,7 @@ export function createOAuth2ConnectorServer<
             credentials: {
               client_id: client.config.clientId,
               access_token: res.access_token,
+              // NOTE: in case of a pre-existing connection, the previous refresh token may get lost?
               refresh_token: res.refresh_token,
               expires_in: res.expires_in,
               expires_at: res.expires_in
