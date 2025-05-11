@@ -146,6 +146,10 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
             (formData?.scopes || []).filter((s: string) => s !== scope),
           )
         }}
+        onClearAllScopes={() => {
+          // Set scopes to empty array in one operation
+          handleChange('scopes', [])
+        }}
       />
     </div>
   )
