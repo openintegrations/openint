@@ -71,35 +71,37 @@ export function ConnectorConfigSheet({
     <Sheet open={sheetOpen} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="sm:min-w-1/3 flex max-h-screen w-full flex-col overflow-hidden p-0">
-        <div className="p-4 pb-0">
-          <SheetHeader>
-            <SheetTitle className="text-lg">
-              {connectorConfigId ? 'Edit Connector' : 'Add Connector'}
-            </SheetTitle>
-          </SheetHeader>
-        </div>
+        className="sm:min-w-1/3 flex h-full w-full flex-col overflow-hidden p-0">
+        <div className="flex h-full flex-col">
+          <div className="p-4 pb-0">
+            <SheetHeader>
+              <SheetTitle className="text-lg">
+                {connectorConfigId ? 'Edit Connector' : 'Add Connector'}
+              </SheetTitle>
+            </SheetHeader>
+          </div>
 
-        <div className="flex-1 overflow-y-auto">
-          {!connectorConfigId && !connectorName ? (
-            <AddConnectorConfigWrapper
-              onSelectConnector={handleSelectConnector}
-            />
-          ) : connectorConfigId ? (
-            <ConnectorConfigDetails
-              changedFieldsRef={changedFieldsRef}
-              successCallback={successCallback}
-              connectorConfigId={connectorConfigId}
-            />
-          ) : (
-            connectorName && (
+          <div className="flex-1 overflow-hidden">
+            {!connectorConfigId && !connectorName ? (
+              <AddConnectorConfigWrapper
+                onSelectConnector={handleSelectConnector}
+              />
+            ) : connectorConfigId ? (
               <ConnectorConfigDetails
                 changedFieldsRef={changedFieldsRef}
                 successCallback={successCallback}
-                connectorName={connectorName}
+                connectorConfigId={connectorConfigId}
               />
-            )
-          )}
+            ) : (
+              connectorName && (
+                <ConnectorConfigDetails
+                  changedFieldsRef={changedFieldsRef}
+                  successCallback={successCallback}
+                  connectorName={connectorName}
+                />
+              )
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>
