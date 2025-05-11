@@ -259,7 +259,9 @@ export const connectionRouter = router({
 
       // default values
       let status = 'unknown'
-      let status_message = 'Connection was imported without checking its status'
+      let status_message = input.check_connection
+        ? null
+        : 'Connection was imported without checking its status'
       if (input.check_connection) {
         const check = await checkConnection(
           {
