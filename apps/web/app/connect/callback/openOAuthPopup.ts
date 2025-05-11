@@ -73,7 +73,16 @@ export async function openOAuthPopup(
         }
 
         try {
-          if (activePopup.opener === null) {
+          // It is impossible to know when a pop-up has definitively closed due to browser security policy.
+          // In pratice as of 2025-05-11_0243 popup closure detection works with github but reports premature closure
+          // linear, likely due to different content-security policies.
+          // It is better to have false negative where the pop-up has closed
+          // but we don't know about it rather than false negative where it breaks
+          // the whole OAuth flow because we assume it has terminated.
+          // therefore we are being extremely defensive here and only take into account popup closure
+          // while on our own domains.
+          // TODO: Add a UX for when oauth is in progress but we don't know whether popup has been closed or not.
+          if (activePopup.location.href && activePopup.closed) {
             clearInterval(popupTimer)
             reject(createOAuthError('popup_closed', 'Popup was closed'))
             closePopup()
@@ -85,6 +94,7 @@ export async function openOAuthPopup(
       }, 100)
 
       // Listen for messages from popup
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       activeListener = async (event: MessageEvent) => {
         try {
           // console.log('received message', {
