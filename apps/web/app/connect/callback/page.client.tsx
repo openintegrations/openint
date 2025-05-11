@@ -11,12 +11,30 @@ export function ConnectCallbackClient({
   debug?: boolean
 }) {
   React.useEffect(() => {
-    const opener = window.opener as Window | null
-    if (opener && !debug) {
-      opener.postMessage(data, '*')
-      // window.close()
+    const channel = new BroadcastChannel('oauth-channel');
+    const opener = window.opener as Window | null;
+    
+    if (!debug) {
+      try {
+        // Try direct communication first
+        if (opener) {
+          opener.postMessage(data, '*');
+        }
+      } catch (e) {
+        console.log('Direct communication failed, using broadcast channel');
+      }
+      
+      // Always broadcast as fallback
+      channel.postMessage({
+        type: 'oauth_complete',
+        data
+      });
     }
-  }, [data, debug])
+    
+    return () => {
+      channel.close();
+    };
+  }, [data, debug]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
@@ -30,26 +48,53 @@ export function ConnectCallbackClient({
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                const opener = window.opener as Window | null
-                if (opener) {
-                  // TODO: refactor the data format
-                  opener.postMessage(data, '*')
-                  window.close()
+                const channel = new BroadcastChannel('oauth-channel');
+                const opener = window.opener as Window | null;
+                
+                try {
+                  // Try direct communication first
+                  if (opener) {
+                    opener.postMessage(data, '*');
+                  }
+                } catch (e) {
+                  console.log('Direct communication failed, using broadcast channel');
                 }
+                
+                // Always broadcast as fallback
+                channel.postMessage({
+                  type: 'oauth_complete',
+                  data
+                });
+                
+                channel.close();
+                window.close();
               }}>
               Complete Authentication
             </Button>
             <Button
               variant="destructive"
               onClick={() => {
-                const opener = window.opener as Window | null
-                if (opener) {
-                  opener.postMessage(
-                    {success: false, error: 'Authentication failed'},
-                    '*',
-                  )
-                  window.close()
+                const channel = new BroadcastChannel('oauth-channel');
+                const opener = window.opener as Window | null;
+                const errorData = {success: false, error: 'Authentication failed'};
+                
+                try {
+                  // Try direct communication first
+                  if (opener) {
+                    opener.postMessage(errorData, '*');
+                  }
+                } catch (e) {
+                  console.log('Direct communication failed, using broadcast channel');
                 }
+                
+                // Always broadcast as fallback
+                channel.postMessage({
+                  type: 'oauth_error',
+                  data: errorData
+                });
+                
+                channel.close();
+                window.close();
               }}>
               Simulate Error
             </Button>

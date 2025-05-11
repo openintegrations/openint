@@ -24,16 +24,23 @@ export async function openOAuthPopup(
   }
   let activePopup: Window | null = null
   let activeListener: ((e: MessageEvent) => void) | null = null
+  let broadcastChannel: BroadcastChannel | null = null
 
   function closePopup() {
     if (activePopup && !activePopup.closed) {
       activePopup.close()
     }
     if (activeListener) {
+      console.log('Removing message event listener')
       window.removeEventListener('message', activeListener)
+    }
+    if (broadcastChannel) {
+      console.log('Closing broadcast channel')
+      broadcastChannel.close()
     }
     activePopup = null
     activeListener = null
+    broadcastChannel = null
   }
 
   // Clean up any existing popups
@@ -41,6 +48,25 @@ export async function openOAuthPopup(
 
   return new Promise((resolve, reject) => {
     try {
+      // Create broadcast channel
+      broadcastChannel = new BroadcastChannel('oauth-channel')
+      
+      // Listen for messages from any tab
+      broadcastChannel.addEventListener('message', (event) => {
+        if (event.data.type === 'oauth_complete') {
+          clearInterval(popupTimer)
+          closePopup()
+          resolve({
+            code: event.data.data.code,
+            state: event.data.data.state
+          })
+        } else if (event.data.type === 'oauth_error') {
+          clearInterval(popupTimer)
+          closePopup()
+          reject(createOAuthError('auth_error', event.data.data.error))
+        }
+      })
+
       // Calculate popup dimensions with screen size constraints
       const screenWidth = window.screen.width
       const screenHeight = window.screen.height
@@ -57,6 +83,15 @@ export async function openOAuthPopup(
           `scrollbars=yes,resizable=yes,status=no,toolbar=no,` +
           `location=no,copyhistory=no,menubar=no,directories=no`,
       )
+      console.log('Opening OAuth popup window', {
+        url: config.authorization_url,
+        dimensions: {
+          width,
+          height,
+          left,
+          top,
+        },
+      })
 
       if (!activePopup) {
         throw createOAuthError(
@@ -97,17 +132,16 @@ export async function openOAuthPopup(
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       activeListener = async (event: MessageEvent) => {
         try {
-          // console.log('received message', {
-          //   data: event.data,
-          //   origin: event.origin,
-          //   source: event.source === activePopup ? 'popup' : 'other',
-          // })
+          console.log('received message', {
+            data: event.data,
+            origin: event.origin,
+            source: event.source === activePopup ? 'popup' : 'other',
+          })
           // Verify message is from our popup window
           if (event.source !== activePopup) {
             return
           }
 
-          // console.log('activeListener', event.data)
           // Parse the response from the popup
           const response = parseAuthResponse(event.data)
 
@@ -128,11 +162,6 @@ export async function openOAuthPopup(
           clearInterval(popupTimer)
           closePopup()
 
-          // console.log('resolving oauth promise', {
-          //   code: response.code,
-          //   state: response.state,
-          //   connectionId: parsedConnectionId,
-          // })
           // Return the authorization response
           resolve({
             code: response.code,
@@ -145,6 +174,7 @@ export async function openOAuthPopup(
         }
       }
 
+      console.log('adding message event listener')
       window.addEventListener('message', activeListener)
     } catch (err) {
       closePopup()
