@@ -47,7 +47,7 @@ const RequestLink: FC<{className?: string}> = ({className}) => (
     <span>Need new scopes?</span>
     <a
       href="https://cal.com/ap-openint/discovery"
-      className="ml-1 text-blue-600 hover:underline"
+      className="text-primary hover:text-muted-foreground ml-1 hover:underline"
       target="_blank"
       rel="noopener noreferrer">
       Request Scopes
@@ -188,7 +188,7 @@ export function ConnectorScopes({
         <Badge
           variant="secondary"
           className={cn(
-            'relative mb-2 mr-2 inline-flex h-6 items-center justify-start whitespace-nowrap rounded-sm px-3 text-xs',
+            'bg-secondary/50 hover:bg-secondary/100 relative mb-2 mr-2 inline-flex h-8 items-center justify-start whitespace-nowrap rounded-md px-3 text-xs',
             getScopeStyle(),
           )}>
           <span className="truncate pr-5 text-left">{displayText()}</span>
@@ -198,7 +198,7 @@ export function ConnectorScopes({
                 e.stopPropagation()
                 handleRemoveScope(scope)
               }}
-              className="absolute right-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
+              className="hover:bg-secondary/50 absolute right-1.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
               <X className="text-secondary-foreground size-3" />
             </button>
           )}
@@ -216,20 +216,26 @@ export function ConnectorScopes({
           <TooltipTrigger asChild>
             <button
               className={cn(
-                'hover:bg-secondary/30 flex w-full items-center justify-between rounded px-2.5 py-1.5 text-left text-xs',
+                'flex w-full items-center justify-between rounded px-2.5 py-1.5 text-left text-xs transition-colors',
                 isAdded
-                  ? 'bg-secondary/20 text-muted-foreground'
-                  : 'text-foreground',
+                  ? 'bg-primary/10 text-foreground'
+                  : 'hover:bg-secondary/20 text-foreground',
               )}
               onClick={() => handleToggleScope(scope)}>
               <span className="max-w-[300px] flex-1 truncate pr-1.5">
                 {scope}
               </span>
-              {isAdded ? (
-                <X className="text-muted-foreground size-3.5 flex-shrink-0" />
-              ) : (
-                <Check className="text-muted-foreground size-3.5 flex-shrink-0" />
-              )}
+              <div
+                className={cn(
+                  'flex size-4 flex-shrink-0 items-center justify-center rounded-full border transition-colors',
+                  isAdded
+                    ? 'border-primary bg-primary'
+                    : 'border-muted-foreground/40',
+                )}>
+                {isAdded && (
+                  <Check className="text-primary-foreground size-2.5" />
+                )}
+              </div>
             </button>
           </TooltipTrigger>
           <TooltipContent>
@@ -250,124 +256,126 @@ export function ConnectorScopes({
   }
 
   return (
-    <TooltipProvider>
-      <div className={cn('w-full', className)}>
-        {/* Title with Add button */}
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-sm font-medium">Scopes</div>
-          {editable && (
-            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button size="sm" variant="outline" className="h-7 text-xs">
-                  Manage scopes
-                </Button>
-              </PopoverTrigger>
+    <div className="border-border bg-card rounded-lg border shadow-sm">
+      <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/50 p-4">
+        <div className="text-card-foreground text-base font-medium">Scopes</div>
+        {editable && (
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 text-xs font-medium">
+                Manage scopes
+              </Button>
+            </PopoverTrigger>
 
-              <PopoverContent
-                className="w-[380px] p-2"
-                align="end"
-                side="left"
-                onOpenAutoFocus={(e) => e.preventDefault()}>
-                <div className="flex flex-col">
-                  <div className="mb-3 flex items-center justify-between">
-                    <div className="text-sm font-medium">Available scopes</div>
-                    <Badge
-                      variant={scopes.length > 0 ? 'secondary' : 'outline'}
-                      className={cn(
-                        'text-xs font-normal',
-                        scopes.length === 0 &&
-                          'text-muted-foreground border-dashed',
-                      )}>
-                      {scopes.length} selected
-                    </Badge>
+            <PopoverContent
+              className="w-[380px] p-2"
+              align="end"
+              side="left"
+              onOpenAutoFocus={(e) => e.preventDefault()}>
+              <div className="flex flex-col">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="text-sm font-medium">Available scopes</div>
+                  <Badge
+                    variant={scopes.length > 0 ? 'secondary' : 'outline'}
+                    className={cn(
+                      'text-xs font-normal',
+                      scopes.length === 0 &&
+                        'text-muted-foreground border-dashed',
+                    )}>
+                    {scopes.length} selected
+                  </Badge>
+                </div>
+
+                {!hideCustomInput && (
+                  <div className="mb-3">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search scopes"
+                        className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (
+                            e.key === 'Enter' &&
+                            filteredScopes.length === 0
+                          ) {
+                            handleAddCustomScope()
+                          }
+                        }}
+                      />
+                      <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
+                    </div>
                   </div>
+                )}
 
-                  {!hideCustomInput && (
-                    <div className="mb-3">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="Search scopes"
-                          className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (
-                              e.key === 'Enter' &&
-                              filteredScopes.length === 0
-                            ) {
-                              handleAddCustomScope()
-                            }
-                          }}
-                        />
-                        <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
+                <div
+                  className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
+                  role="listbox"
+                  tabIndex={0}
+                  style={{
+                    scrollbarWidth: 'thin',
+                    WebkitOverflowScrolling: 'touch',
+                  }}
+                  onWheel={(e) => e.stopPropagation()}>
+                  {filteredScopes.length > 0 ? (
+                    filteredScopes.map(renderAvailableScope)
+                  ) : (
+                    <div className="flex flex-col items-center py-3">
+                      <div className="text-muted-foreground mb-1 text-xs">
+                        No scopes found
+                      </div>
+                      {searchQuery.trim() && !hideCustomInput && (
+                        <div className="mt-2 flex flex-col items-center">
+                          <div className="text-muted-foreground mb-1.5 text-xs">
+                            Add custom scope?
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs"
+                            onClick={handleAddCustomScope}>
+                            Add &quot;{searchQuery.trim()}&quot;
+                          </Button>
+                        </div>
+                      )}
+                      <div className="border-border mt-4 w-full border-t pt-3">
+                        <RequestLink className="justify-center" />
                       </div>
                     </div>
                   )}
-
-                  <div
-                    className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
-                    role="listbox"
-                    tabIndex={0}
-                    style={{
-                      scrollbarWidth: 'thin',
-                      WebkitOverflowScrolling: 'touch',
-                    }}
-                    onWheel={(e) => e.stopPropagation()}>
-                    {filteredScopes.length > 0 ? (
-                      filteredScopes.map(renderAvailableScope)
-                    ) : (
-                      <div className="flex flex-col items-center py-3">
-                        <div className="text-muted-foreground mb-1 text-xs">
-                          No scopes found
-                        </div>
-                        {searchQuery.trim() && !hideCustomInput && (
-                          <div className="mt-2 flex flex-col items-center">
-                            <div className="text-muted-foreground mb-1.5 text-xs">
-                              Add custom scope?
-                            </div>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-7 text-xs"
-                              onClick={handleAddCustomScope}>
-                              Add &quot;{searchQuery.trim()}&quot;
-                            </Button>
-                          </div>
-                        )}
-                        <div className="border-border mt-4 w-full border-t pt-3">
-                          <RequestLink className="justify-center" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={cn(
-                      'mt-auto h-8 w-full text-xs',
-                      scopes.length === 0
-                        ? 'text-muted-foreground cursor-not-allowed opacity-50'
-                        : 'text-destructive hover:bg-destructive/10',
-                    )}
-                    disabled={scopes.length === 0}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleClearAllScopes()
-                    }}>
-                    Clear all scopes
-                  </Button>
                 </div>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
 
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    'mt-auto h-8 w-full text-xs',
+                    scopes.length === 0
+                      ? 'text-muted-foreground cursor-not-allowed opacity-50'
+                      : 'text-destructive hover:bg-destructive/10',
+                  )}
+                  disabled={scopes.length === 0}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleClearAllScopes()
+                  }}>
+                  Clear all scopes
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+
+      <div className={cn('w-full p-5', className)}>
         {children || (
           <>
             {/* List of scopes */}
-            <div className="mb-3">
+            <div className="mb-6">
               {scopes.length > 0 ? (
                 <div className="flex flex-wrap">
                   {visibleScopes.map(renderScopeBadge)}
@@ -379,7 +387,7 @@ export function ConnectorScopes({
                         <div>
                           <Badge
                             variant="outline"
-                            className="bg-secondary/10 hover:bg-secondary/20 mb-2 inline-flex h-6 cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed px-4 text-xs transition-colors">
+                            className="bg-muted/50 hover:bg-muted mb-2 inline-flex h-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-md border-dashed px-4 text-xs transition-colors">
                             +{hiddenScopesCount} more
                           </Badge>
                         </div>
@@ -415,7 +423,7 @@ export function ConnectorScopes({
             </div>
 
             {/* Request Scopes link with divider */}
-            <div className="border-border mt-4 border-t pt-3">
+            <div className="border-border mt-5 border-t pt-4">
               <div className="flex justify-start">
                 <RequestLink />
               </div>
@@ -423,6 +431,6 @@ export function ConnectorScopes({
           </>
         )}
       </div>
-    </TooltipProvider>
+    </div>
   )
 }
