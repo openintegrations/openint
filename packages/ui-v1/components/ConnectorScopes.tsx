@@ -169,20 +169,29 @@ export function ConnectorScopes({
   }, [onClearAllScopes])
 
   const renderScopeBadge = (scope: string) => {
+    // Determine scope type based on length
+    const getScopeStyle = () => {
+      if (scope.length > 50) return 'max-w-full flex-shrink-0 flex-grow-0' // Very long (full width)
+      if (scope.length > 25) return 'max-w-[320px] flex-shrink-0 flex-grow-0' // Medium-long
+      if (scope.length > 15) return 'max-w-[200px] flex-shrink-0 flex-grow-0' // Medium
+      return 'flex-shrink-0 flex-grow-0' // Short
+    }
+
     // Format the display text with appropriate truncation but preserve full URLs
     const displayText = () => {
-      // Simple truncation for all scopes
-      return scope.length > 30 ? scope.substring(0, 27) + '...' : scope
+      // Increased truncation limit for better readability
+      return scope.length > 60 ? scope.substring(0, 57) + '...' : scope
     }
 
     return (
       <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
         <Badge
           variant="secondary"
-          className="relative inline-flex h-6 w-full items-center justify-center whitespace-nowrap rounded-sm px-6 text-xs">
-          <span className="max-w-[85%] truncate text-center">
-            {displayText()}
-          </span>
+          className={cn(
+            'relative mb-2 mr-2 inline-flex h-6 items-center justify-start whitespace-nowrap rounded-sm px-3 text-xs',
+            getScopeStyle(),
+          )}>
+          <span className="truncate pr-5 text-left">{displayText()}</span>
           {editable && (
             <button
               onClick={(e) => {
@@ -360,17 +369,17 @@ export function ConnectorScopes({
             {/* List of scopes */}
             <div className="mb-3">
               {scopes.length > 0 ? (
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+                <div className="flex flex-wrap">
                   {visibleScopes.map(renderScopeBadge)}
                   {hasHiddenScopes && (
                     <Popover
                       open={isMorePopoverOpen}
                       onOpenChange={setIsMorePopoverOpen}>
                       <PopoverTrigger asChild>
-                        <div className="w-full">
+                        <div>
                           <Badge
                             variant="outline"
-                            className="bg-secondary/10 hover:bg-secondary/20 inline-flex h-6 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed text-xs transition-colors">
+                            className="bg-secondary/10 hover:bg-secondary/20 mb-2 inline-flex h-6 cursor-pointer items-center justify-center whitespace-nowrap rounded-sm border-dashed px-4 text-xs transition-colors">
                             +{hiddenScopesCount} more
                           </Badge>
                         </div>
@@ -390,7 +399,7 @@ export function ConnectorScopes({
                             WebkitOverflowScrolling: 'touch',
                           }}
                           onWheel={(e) => e.stopPropagation()}>
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <div className="flex flex-wrap">
                             {scopes.map(renderScopeBadge)}
                           </div>
                         </div>
