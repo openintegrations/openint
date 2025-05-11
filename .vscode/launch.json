@@ -5,18 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "name": "Next.js: dev",
+      "type": "node-terminal",
       "request": "launch",
-      "name": "Run file",
-      "runtimeArgs": ["--loader", "tsx"],
-      "console": "integratedTerminal",
-      "args": ["${file}"]
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to --inspect-brk",
-      "port": 9229
+      "command": "cd apps/web && pnpm dev",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }
