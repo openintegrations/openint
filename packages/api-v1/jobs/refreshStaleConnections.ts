@@ -41,9 +41,6 @@ export async function refreshStaleConnections(
     )
     .where(
       and(
-        // TODO: REMOVE THESE TWO FILTERS
-        // eq(schema.connection.customer_id, 'derek@doubleo.ai'),
-        // eq(schema.connection.connector_name, 'google-docs'),
         isNotNull(sql`
           connection.settings -> 'oauth' -> 'credentials' ->> 'refresh_token'
         `),
