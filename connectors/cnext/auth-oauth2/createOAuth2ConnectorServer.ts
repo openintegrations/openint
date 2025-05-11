@@ -188,7 +188,7 @@ export function createOAuth2ConnectorServer<
               credentials: {
                 client_id: client.config.clientId,
                 access_token: res.access_token,
-                refresh_token: res.refresh_token,
+                refresh_token: res.refresh_token ?? refreshToken,
                 expires_in: res.expires_in,
                 expires_at: res.expires_in
                   ? new Date(Date.now() + res.expires_in * 1000).toISOString()
