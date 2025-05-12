@@ -50,7 +50,7 @@ export async function openOAuthPopup(
     try {
       // Create broadcast channel
       broadcastChannel = new BroadcastChannel('oauth-channel')
-      
+
       // Listen for messages from any tab
       broadcastChannel.addEventListener('message', (event) => {
         if (event.data.type === 'oauth_complete') {
@@ -58,7 +58,7 @@ export async function openOAuthPopup(
           closePopup()
           resolve({
             code: event.data.data.code,
-            state: event.data.data.state
+            state: event.data.data.state,
           })
         } else if (event.data.type === 'oauth_error') {
           clearInterval(popupTimer)
@@ -117,7 +117,7 @@ export async function openOAuthPopup(
           // therefore we are being extremely defensive here and only take into account popup closure
           // while on our own domains.
           // TODO: Add a UX for when oauth is in progress but we don't know whether popup has been closed or not.
-          if (activePopup.location.href && activePopup.closed) {
+          if (activePopup.closed && activePopup.location.href) {
             clearInterval(popupTimer)
             reject(createOAuthError('popup_closed', 'Popup was closed'))
             closePopup()
