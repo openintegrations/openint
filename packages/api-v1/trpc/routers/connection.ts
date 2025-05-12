@@ -171,15 +171,18 @@ export const connectionRouter = router({
       })
       if (
         ctx.viewer.orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' &&
+        ctx.viewer.role !== 'customer' &&
         res.length === 0
       ) {
-        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id} viewer: ${ctx.viewer}`
+        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id}`
         const fullList = await ctx.db.query.connection.findMany()
         await notifySlackError(msg, {
           input,
           connections: fullList.map((c) => c.id + ` (${c.connector_name})`),
+          viewer: ctx.viewer,
         })
         msg += `\nInput: ${JSON.stringify(input)}`
+        msg += `\nViewer: ${JSON.stringify(ctx.viewer)}`
         msg += `\nFull List: ${JSON.stringify(fullList.map((c) => c.id + ` (${c.connector_name})`))}`
         console.log(msg)
       }
