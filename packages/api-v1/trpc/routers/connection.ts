@@ -173,7 +173,7 @@ export const connectionRouter = router({
         ctx.viewer.orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' &&
         res.length === 0
       ) {
-        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id}.`
+        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id} viewer: ${ctx.viewer}`
         const fullList = await ctx.db.query.connection.findMany()
         await notifySlackError(msg, {
           input,
