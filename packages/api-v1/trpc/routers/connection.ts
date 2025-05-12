@@ -20,6 +20,7 @@ import {
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
+import {notifySlackError} from '../../lib/notifySlackError'
 import {core} from '../../models/core'
 import {
   expandConnection,
@@ -168,6 +169,20 @@ export const connectionRouter = router({
         limit,
         offset,
       })
+      if (
+        ctx.viewer.orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' &&
+        res.length === 0
+      ) {
+        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id}.`
+        const fullList = await ctx.db.query.connection.findMany()
+        await notifySlackError(msg, {
+          input,
+          connections: fullList.map((c) => c.id + ` (${c.connector_name})`),
+        })
+        msg += `\nInput: ${JSON.stringify(input)}`
+        msg += `\nFull List: ${JSON.stringify(fullList.map((c) => c.id + ` (${c.connector_name})`))}`
+        console.log(msg)
+      }
       return {
         ...formatListResponse(res, {limit, offset}),
         items: res.map((conn) => expandConnection(conn, input.expand)),
