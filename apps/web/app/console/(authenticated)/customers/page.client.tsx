@@ -5,6 +5,7 @@ import React from 'react'
 import {CustomersTable} from '@openint/ui-v1/domain-components'
 import {useStateFromSearchParams} from '@openint/ui-v1/hooks/useStateFromSearchParam'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
+import {resolveLinkPath} from '@/lib-common/Link'
 
 const DATA_PER_PAGE = 20
 
@@ -35,7 +36,7 @@ export function CustomerList() {
   }
 
   const handleCountClick = (customerId: string) => {
-    router.push(`/console/connections?q=${customerId}`)
+    router.push(resolveLinkPath('/console/connections') + `?q=${customerId}`)
   }
 
   return (
