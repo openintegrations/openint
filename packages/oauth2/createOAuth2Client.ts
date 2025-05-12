@@ -7,14 +7,17 @@ import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
 import {createCodeChallenge, renameObjectKeys} from './utils.client'
 
-const zTokenResponse = z.object({
-  access_token: z.string(),
-  token_type: z.string(),
-  expires_in: z.number().optional(),
-  refresh_token: z.string().optional(),
-  // TODO: Figure out how to handle scope
-  scope: z.string().optional(),
-})
+const zTokenResponse = z
+  .object({
+    access_token: z.string(),
+    token_type: z.string(),
+    expires_in: z.number().optional(),
+    refresh_token: z.string().optional(),
+    // TODO: Figure out how to handle scope
+    scope: z.string().optional(),
+  })
+  // token response may respond additional fields that we want to capture in the raw field
+  .passthrough()
 export type TokenResponse = Z.infer<typeof zTokenResponse>
 
 const zOAuth2ClientConfig = z.object({
