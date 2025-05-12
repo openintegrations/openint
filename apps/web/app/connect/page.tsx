@@ -348,10 +348,11 @@ function AddConnectionCardPrefetch({
       but with a message that it is temporarily unavailable
       and ideally an ID to copy to contact support with
        */}
-      <ErrorBoundarySuspense
-        fallback={
-          <div>Unable to connect to {connectorConfig.connector_name}</div>
-        }>
+
+      {/* TODO NOTE: This used to have <div>Unable to connect to {connectorConfig.connector_name}</div> as a fallback
+       but this shows in the initial stages of loading consistently so moving it to a spinner while we ensure that ErrorBoundarySuspense
+       does not show by default when loading */}
+      <ErrorBoundarySuspense fallback={<LoadingSpinner />}>
         <AddConnectionCard connectorConfig={connectorConfig} />
       </ErrorBoundarySuspense>
     </HydrationBoundary>
