@@ -22,11 +22,21 @@ Integrate Slack into your product using OpenInt to give your users seamless acce
 
 ## Quickstart
 
+
 OpenInt handles the Slack OAuth2 Authorization Code flow for you:
 
 1. Provide your Slack **Client ID** and **Client Secret** to OpenInt’s Slack configuration.
 2. Set the Slack scopes you wish to use (see table below). _Currently, only `users:read` is supported by OpenInt._
 3. Embed the OpenInt connect portal or button in your app.
+
+```typescript
+const slackConfig = {
+  provider: 'slack',
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  // OpenInt manages the OAuth flow for you.
+};
+```
 
 ---
 
@@ -64,7 +74,24 @@ See also [Slack OAuth setup docs](https://api.slack.com/authentication/oauth-v2)
 | `users.profile:read` |        ❌         | <Tooltip tip="Allows the app to view users' profile details, including custom profile fields.">details</Tooltip> |
 | `admin`              |        ❌         | <Tooltip tip="Allows the app to perform administrative actions, including managing users, channels, and workspace settings.">details</Tooltip> |
 | `files:read`         |        ❌         | <Tooltip tip="Allows the app to view files shared in channels and conversations it has access to.">details</Tooltip> |
+
 | `files:write`        |        ❌         | <Tooltip tip="Allows the app to upload, edit, and delete files in channels and conversations it has access to.">details</Tooltip> |
+
+---
+
+## Sample OAuth2 Handshake
+
+```bash
+# Step 1: Redirect the user for consent:
+https://slack.com/oauth/v2/authorize?client_id=<YOUR_CLIENT_ID>&scope=users:read&redirect_uri=<YOUR_REDIRECT_URI>
+
+# Step 2: Handle the callback and exchange the code for a token:
+curl -X POST 'https://slack.com/api/oauth.v2.access' \
+  -F code=<CODE_FROM_CALLBACK> \
+  -F client_id=<YOUR_CLIENT_ID> \
+  -F client_secret=<YOUR_CLIENT_SECRET> \
+  -F redirect_uri=<YOUR_REDIRECT_URI>
+```
 
 ---
 
