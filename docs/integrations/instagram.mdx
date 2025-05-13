@@ -1,0 +1,113 @@
+---
+title: Instagram Integration
+description: Developer guide for integrating Instagram (Meta) with your app via OpenInt. Includes OAuth2 credential setup, scopes, and troubleshooting details.
+---
+
+# Instagram Integration
+
+Integrate Instagram (Meta) into your SaaS or product quickly and securely using OpenInt. This guide covers developer setup, permissions, OAuth configuration, and best practices for the Instagram connector.
+
+**Audience:** Business (Instagram Business or Creator accounts required)
+
+**Vertical:** Social Media
+
+**Stage:** General Availability (GA)
+
+---
+
+## Prerequisites
+
+- You must have an [Instagram Business Account](https://www.facebook.com/help/502981923235522) or Creator account.
+- You need a [Meta for Developers](https://developers.facebook.com/) account with admin privileges.
+- OpenInt admin access to configure connectors.
+
+**Tip:** Most advanced features require your Instagram Account to be connected to a Facebook Page and your app to undergo [Meta App Review](https://developers.facebook.com/docs/app-review/).
+
+---
+
+## Quickstart: Set Up Instagram Integration
+
+1. **Create a Meta App:**
+   - Go to the [Meta App Dashboard](https://developers.facebook.com/apps/) and click **Create App**. Choose the "Business" app type for Instagram integrations.
+   - Complete the required app setup details.
+
+2. **Add Instagram Product to Your App:**
+   - In the left sidebar, select **Add Product** > **Instagram** and follow setup instructions for the [Instagram Graph API](https://developers.facebook.com/docs/instagram-api/getting-started/).
+
+3. **Retrieve OAuth Credentials:**
+   - In your app's dashboard, under **Settings > Basic**, copy the `App ID` and `App Secret`.
+   - Under the relevant Instagram settings, add your **OAuth redirect URI** (`https://[your-openint-host]/oauth/callback` or as required by your deployment).
+   - For details, see: [Valid OAuth Redirect URIs](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started#valid-oauth-redirect-uris).
+
+4. **Configure Instagram Connector in OpenInt:**
+   ```json
+   {
+     "clientId": "YOUR_INSTAGRAM_APP_ID",
+     "clientSecret": "YOUR_INSTAGRAM_APP_SECRET",
+     "redirectUri": "https://YOUR_OPENINT_DEPLOYMENT/oauth/callback",
+     "scopes": ["instagram_basic"]
+   }
+   ```
+   > Replace with your actual credentials. Use only the scopes supported by OpenInt (see below).
+
+5. **Save and Test:**
+   - Initiate a connection via your product’s OpenInt-powered integration flow. Follow the OAuth2 prompt. Ensure login is performed with an eligible Instagram Business or Creator account.
+
+---
+
+## OAuth2 Flow Details
+
+- **Authorization Endpoint:** `https://api.instagram.com/oauth/authorize`
+- **Token Endpoint:** `https://api.instagram.com/oauth/access_token`
+- **Scope Separator:** `,` (comma)
+
+The integration uses [OAuth2 Authorization Code Flow](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/). The user logs in via Instagram, reviews requested permissions, and OpenInt receives an authorization code to exchange for tokens.
+
+---
+
+## Instagram OAuth Scopes
+
+Instagram and Meta offer a wide range of OAuth permissions ("scopes"). Not all are currently supported via OpenInt. Review and request only what is needed for your use case. For production, you may need to submit for [Meta App Review](https://developers.facebook.com/docs/app-review/).
+
+**Reference:** [Meta Permissions Reference](https://developers.facebook.com/docs/permissions/reference/)
+
+### Supported and Available Scopes
+
+| Scope | Description | Supported by OpenInt? |
+|-------|-------------|:---------------------:|
+| <Tooltip tip="Provides access to the user's profile information including username, profile picture, and account type (Business or Personal).">user_profile</Tooltip> | Profile info, username, profile picture, account type. | No |
+| <Tooltip tip="Provides access to the user's media (photos and videos) including metadata, captions, and comments.">user_media</Tooltip> | Read user media, metadata, captions, comments. | No |
+| <Tooltip tip="Provides basic access to a user's profile information, username, and profile picture. This is the most limited scope.">instagram_basic</Tooltip> | Basic account details, profile, media. | **Yes** |
+| <Tooltip tip="Provides access to the list of Instagram Pages a user manages. Required for accessing Page-related features.">pages_show_list</Tooltip> | Access user's managed Pages. | No |
+| <Tooltip tip="Allows the app to publish content (photos and videos) on behalf of the user.">instagram_content_publish</Tooltip> | Publish media as user. | No |
+| <Tooltip tip="Allows the app to read and manage comments on the user's media.">instagram_manage_comments</Tooltip> | Read/manage media comments. | No |
+| <Tooltip tip="Provides access to business account insights and metrics.">instagram_manage_insights</Tooltip> | Read business analytics/insights. | No |
+| <Tooltip tip="Provides access to manage ads and campaigns for Instagram business accounts.">ads_management</Tooltip> | Manage ads and campaigns. | No |
+
+---
+
+## Adding or Requesting Additional Scopes
+
+If your use case requires a scope not yet supported by OpenInt, [contact support](https://openint.dev/contact) to request its addition.
+
+---
+
+## Common Configuration Issues
+
+- **Redirect URI mismatch:** Ensure the URI registered in Meta matches exactly what is passed in OpenInt and used in your app.
+- **Missing permissions:** Check you have a Business or Creator account, and your app is set up for Instagram Graph API (not legacy display API).
+- **App Status:** App must be "Live" (not "Development") for production authorization.
+- **App Review Required:** Requesting advanced permissions requires you to pass [Meta App Review](https://developers.facebook.com/docs/app-review/).
+- **Page Linking:** Instagram Business account must be connected to a Facebook Page for full functionality.
+
+For further troubleshooting, see the [Meta OAuth guide](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/) and [App Review checklist](https://developers.facebook.com/docs/app-review/).
+
+---
+
+## References
+
+- [Meta for Developers: Instagram Platform Overview](https://developers.facebook.com/docs/instagram-platform/overview)
+- [OAuth Authorize - Instagram Platform](https://developers.facebook.com/docs/instagram-platform/reference/oauth-authorize/)
+- [Meta Permissions Reference](https://developers.facebook.com/docs/permissions/reference/)
+- [App Review Guide](https://developers.facebook.com/docs/app-review/)
+- [Instagram Graph API Getting Started](https://developers.facebook.com/docs/instagram-api/getting-started/)
