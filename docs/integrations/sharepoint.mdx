@@ -1,0 +1,89 @@
+---
+title: SharePoint
+description: How to integrate SharePoint with your app using OpenInt (OAuth2)
+---
+
+# SharePoint Integration (OAuth2)
+
+This guide shows how to add native SharePoint integration into your product using OpenInt. You'll learn how to set up OAuth authentication with SharePoint via Microsoft Entra ID (Azure AD), configure required credentials, and understand required OAuth scopes.
+
+> **Audience:** Engineers embedding OpenInt to offer SharePoint connectivity in their platforms.
+
+---
+
+## Quickstart
+
+1. **Register an Azure AD App for SharePoint Integration**
+    - Go to [Microsoft Entra admin center](https://entra.microsoft.com/).
+    - Navigate to **Identity** → **Applications** → **App registrations** → **New registration**.
+    - Name your app, select supported account types (“Single Tenant” is most common).
+    - **Do not** enter a Redirect URI here yet (add after registration).
+    - Click **Register**. Copy the **Application (client) ID** and **Directory (tenant) ID** from the Overview.
+
+2. **Configure Platform Redirect URI**
+    - Under your app, go to **Authentication** → **Add a platform** → **Web**.
+    - Set the **Redirect URI** to your OpenInt callback endpoint (e.g. `https://yourdomain.com/openint/oauth/callback`).
+    - Save changes.
+
+3. **Generate a Client Secret**
+    - Go to **Certificates & secrets** → **New client secret**.
+    - Set a description (e.g., "OpenInt integration") and an expiry (12 months or less is recommended).
+    - Click **Add**. Copy the client secret value now—**you won’t see it again!**
+
+4. **Configure SharePoint in OpenInt**
+    - Use the values:
+      - **Client ID:** (from Overview)
+      - **Client Secret:** (from Certificates & secrets)
+      - **Tenant ID:** (from Overview)
+      - **Authorization URL:** `https://login.microsoftonline.com/common/oauth2/v2.0/authorize`
+      - **Token URL:** `https://login.microsoftonline.com/common/oauth2/v2.0/token`
+      - **Required scopes:** see next section.
+    - [See full Microsoft documentation for registration here.](https://learn.microsoft.com/en-us/graph/auth-register-app-v2)
+
+5. **Test the integration**
+    - Initiate a SharePoint connection from your app’s integration UI.
+    - Go through the Microsoft sign-in and consent flows.
+    - Upon successful OAuth callback, OpenInt will store access tokens and you may begin SharePoint API calls (within the permissions of granted scopes).
+
+---
+
+## OAuth Scopes: Supported vs. Available
+
+OpenInt currently supports authentication-related scopes only for SharePoint ("offline_access", "openid"). These scopes are required for signing in the user and enabling refresh tokens, **but do not grant permission to access SharePoint content**. Application/data scopes (like `Sites.Read.All`, `Files.Read.All`) are not yet supported by OpenInt—if your use-case requires document or sites access, please contact the OpenInt team or monitor our changelogs for updates.
+
+For reference, below is a table showing AAD/Graph scopes relevant to SharePoint. Scopes shown as supported are those implemented in OpenInt for this integration as of now.
+
+| Scope             | Description                                                                                                            | Supported by OpenInt |
+|-------------------|------------------------------------------------------------------------------------------------------------------------|:---------------------:|
+| <Tooltip tip="Allows the app to see and update data even when users are not currently using the app. Does not give additional permissions.">offline_access</Tooltip> | Enables refresh tokens for background operations. _Recommended._                                  | ✅                  |
+| <Tooltip tip="Allows users to sign in to the app and lets the app see basic profile info.">openid</Tooltip>                                | Enables OpenID Connect login for user authentication.                                             | ✅                  |
+| <Tooltip tip="Read items in all site collections.">Sites.Read.All</Tooltip>                                                               | Read all items in all SharePoint site collections.                                                | ❌                  |
+| <Tooltip tip="Read and write items in all site collections.">Sites.ReadWrite.All</Tooltip>                                                | Read/write all items in all SharePoint site collections.                                          | ❌                  |
+| <Tooltip tip="Full control of all site collections.">Sites.FullControl.All</Tooltip>                                                      | Full admin access to all SharePoint site collections.                                             | ❌                  |
+| <Tooltip tip="Read files in all site collections.">Files.Read.All</Tooltip>                                                              | Read all files in all SharePoint/OneDrive sites accessible to the user.                           | ❌                  |
+| <Tooltip tip="Read and write files in all site collections.">Files.ReadWrite.All</Tooltip>                                               | Read, create, update, and delete all files in all SharePoint/OneDrive sites.                      | ❌                  |
+| <Tooltip tip="Allows an app to read user profile data.">User.Read</Tooltip>                                                              | Read profile. _Required for profile-based data access._                                           | ❌                  |
+| ...               | ...                                                                                                                    | ...                  |
+
+For a complete, authoritative scope list—see the [Microsoft Graph permissions reference](https://learn.microsoft.com/en-us/graph/permissions-reference).
+
+---
+
+## Common Pitfalls
+
+- **Redirect URI mismatch:** Make sure the redirect URI registered in Azure exactly matches what your application sends in OAuth initiation. Even a trailing slash counts.
+- **Missing required scope:** If your use-case requires SharePoint content, OpenInt’s current scope support may not be sufficient—`offline_access` and `openid` are for authentication only.
+- **Forgotten to capture client secret:** If you leave the Azure portal without copying the secret, you must generate a new one.
+- **Failure to grant required consent:** Admins may need to grant consent for certain organization-wide permissions (future feature).
+- **Not using correct endpoints:** Always use the v2.0 endpoints listed here, not legacy v1.0 ones.
+
+---
+
+## References and Further Reading
+
+- [Register an application with Microsoft identity platform](https://learn.microsoft.com/en-us/graph/auth-register-app-v2)
+- [Microsoft Graph permissions reference](https://learn.microsoft.com/en-us/graph/permissions-reference)
+- [OpenID Connect (OIDC) scopes](https://learn.microsoft.com/en-us/entra/identity-platform/scopes-oidc#openid-connect-scopes)
+
+---
+_Last updated: 2025-05-13_
