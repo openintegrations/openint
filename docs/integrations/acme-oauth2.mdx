@@ -1,0 +1,97 @@
+---
+title: Acme OAuth Integration
+description: Developer guide for integrating the Acme OAuth (OAuth2 with PKCE) connector using OpenInt.
+---
+
+# Acme OAuth Integration (OAuth2)
+
+This document guides you through setting up the **Acme OAuth** integration in your app using OpenInt.
+
+Acme OAuth is a social-media integration powered by the OAuth 2.0 protocol with PKCE (S256). This integration enables your users to connect their Acme accounts and sync profile data securely via OpenInt’s unified interface.
+
+## Quickstart: Connecting Acme OAuth via OpenInt
+
+1. **Configure Acme OAuth in OpenInt**
+   - Acme OAuth requires the [OAuth 2.0 Authorization Code Flow with PKCE (S256)](https://datatracker.ietf.org/doc/html/rfc7636) for secure authentication.
+   - Use the following OpenInt connector id: `acme-oauth2`
+
+2. **Register an OAuth App with Acme**
+   - You must register your application with the Acme provider to obtain a **Client ID** and **redirect URI**.
+   - Typically, registration is available in "Account" or "Developer" settings on the provider’s site. As of this writing, refer to Acme's platform documentation for details—substitute with actual URLs when available.
+   - Set your OpenInt callback/redirect URL according to your OpenInt deployment.
+
+3. **Set up Redirect URIs**
+   - Ensure the redirect URI used in OpenInt exactly matches what is registered with Acme (including protocol and path).
+
+4. **Add the Connector to Your App**
+   - Use OpenInt’s API or Portal to embed the Acme connector and initiate the OAuth2 flow from your frontend.
+   - Handle the authentication callback and token exchange—the OpenInt service will handle PKCE for you.
+
+## OAuth 2.0 Connector Details
+
+- **OAuth Type:** Authorization Code with PKCE (S256)
+- **Stage:** General Availability (GA)
+- **Audience:** Consumer
+- **Vertical:** Social Media
+- **Token Endpoints:** OpenInt will manage authorization, token, introspection, and revocation via its own backend endpoints (see below).
+
+**Endpoints used by OpenInt:**
+
+| Endpoint Purpose     | URL Template                                   |
+|---------------------|------------------------------------------------|
+| Authorization       | `{{baseURLs.api}}/acme-oauth2/authorize`        |
+| Token               | `{{baseURLs.api}}/acme-oauth2/token`            |
+| Introspection       | `{{baseURLs.api}}/acme-oauth2/token/introspect` |
+| Revocation          | `{{baseURLs.api}}/acme-oauth2/token/revoke`     |
+
+## Supported Scopes
+
+The Acme OAuth provider offers several OAuth scopes. OpenInt currently supports a subset of these scopes as shown below:
+
+| Scope         | Description               | Supported by OpenInt? |
+|---------------|--------------------------|:---------------------:|
+| <span title="Read profile information">`read:profile`</span> | <span title="Read profile information">Read profile information</span> | ✅ |
+| <span title="Read posts">`write:posts`</span>      | <span title="Read posts">Read posts</span>          | ❌ |
+
+<!-- If upstream documentation for scopes exists, link here; none available. -->
+
+**Note:** Only `read:profile` is enabled by OpenInt for this connector as of now. If your use case requires additional scopes (such as `write:posts`), please contact our support team to discuss implementation timelines.
+
+## Example Configuration
+
+Below is a representative example of how to add and configure the Acme OAuth2 connector in your OpenInt setup:
+
+```json
+{
+  "provider": "acme-oauth2",
+  "auth": {
+    "type": "OAUTH2",
+    "client_id": "<your-acme-client-id>",
+    "client_secret": "<your-acme-client-secret>",
+    "scopes": ["read:profile"]
+  }
+}
+```
+
+You can initiate the connection process via OpenInt's Connect portal or embed flow. OpenInt handles the PKCE flow, token management, and securely stores tokens on your behalf.
+
+## Common Issues and Troubleshooting
+
+> **Redirect URI Mismatch**: Ensure your application's redirect URI matches exactly—including scheme (`https://`), path, and any query parameters—the URI you register on Acme’s app settings page. Mismatched URIs are the most common cause of OAuth errors.
+
+> **Missing or Unsupported Scopes**: If your requested scopes aren't supported by OpenInt (e.g. `write:posts`), the connection may fail or result in limited access.
+
+> **PKCE/Code Challenge Issues**: OpenInt manages the PKCE (S256) process. Ensure your client never sends its own code challenge/code verifier; rely on OpenInt’s flow for maximum compatibility.
+
+> **Testing in Local/Dev Environments**: When testing locally, ensure your OAuth app on Acme supports local development callback URIs (e.g., `https://localhost:PORT/callback`). If Acme doesn't support this, use tools like [local-ssl-proxy](https://openint.dev/docs/getting-started/quickstart) as described in our quickstart docs.
+
+## FAQ
+
+**Where do I find my Acme OAuth client ID and secret?**  
+This is provided by Acme when you register your app in their developer portal. If Acme has no self-service developer portal, reach out to their partnerships/developer support team.
+
+**How do I request more scopes or integrations?**  
+Please open a request with OpenInt support. We are committed to expanding coverage based on customer demand and will prioritize additional scope support as needed.
+
+---
+For more information or support, please contact OpenInt.
