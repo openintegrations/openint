@@ -1,0 +1,62 @@
+---
+title: Connect GitHub
+description: How to link your GitHub account to enable integrations with your app.
+---
+
+# Connect Your GitHub Account
+
+Connect your GitHub account to seamlessly sync data and automate workflows between GitHub and your app. By linking your GitHub profile, you can enable features such as issue syncing, repository management, and more—all directly from your application.
+
+## Prerequisites
+
+- You must have an active GitHub account ([Sign up here](https://github.com/join) if you don't).
+- For some features (like organization-level access), you may need to be an organization admin on GitHub.
+
+## Permissions Requested
+
+When you connect your GitHub account, the following permissions may be requested. These are needed to enable app features such as syncing issues, reading repository information, or managing discussions:
+
+| Permission Scope   | Why This Is Needed                                                                                                           |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| `user:email`      | Read-only access to your email addresses, to identify your account for syncing and notifications.                            |
+| `read:user`       | Read your profile info (name, email, bio) to personalize the app experience.                                                 |
+| `repo`            | Full access to public & private repos (read, write, commit, manage). Required for comprehensive repository integrations.     |
+| `repo:status`     | Mark commits as passing/failing in CI workflows (does not allow code access).                                                |
+| `admin:org`       | Manage organizations/teams, create or delete repos if those admin features are enabled.                                      |
+| `write:discussion`| Read & write team discussions in organizations for collaboration features.                                                    |
+| `workflow`        | Manage GitHub Action workflows for automating CI/CD and other tasks.                                                        |
+
+During the connection process, you’ll see a permissions screen from GitHub explaining exactly which data will be accessed. You may be prompted to grant access for organization-level features if required by your app.
+
+## How to Connect GitHub
+
+1. In your app, navigate to the Integrations or Connections settings page.
+2. Click **Connect GitHub** (or similar button).
+3. A GitHub login window will appear. Sign in with your GitHub account (if not already signed in).
+4. Review the permissions requested and click **Authorize** to proceed.
+5. Once completed, you’ll be redirected back to your app, and the integration will be established.
+
+## Testing the Connection
+
+After connecting, you can confirm everything is set up by:
+
+- Checking that your GitHub username and repositories are visible in your app's integration settings.
+- Trying to sync data, create a test issue, or trigger a workflow, depending on what your app supports.
+- Ensuring there are no error messages in the integrations or activity panel.
+
+## Troubleshooting & Common Issues
+
+- **Wrong account authorized:** You can disconnect and reconnect using the correct GitHub account.
+- **Missing permissions:** If you didn’t grant all requested permissions, you might see errors. Disconnect, then reconnect and approve all permissions.
+- **Organization features not working:** Ask your GitHub admin to approve access for your app or integration if organization-level permission is required.
+- **Access was previously revoked or integration is broken:** Try disconnecting and reconnecting GitHub from your app.
+- **Still having trouble?** Visit the [GitHub documentation](https://docs.github.com/en) or your app’s help center for more detailed help.
+
+## How to Disconnect GitHub
+
+To remove GitHub integration:
+
+1. Go to your app’s integration settings, find GitHub, and select **Disconnect** or **Remove**.
+2. (Optional) Visit [GitHub’s authorized applications](https://github.com/settings/applications) and revoke access for the app.
+
+Once disconnected, your app will no longer have access to your GitHub data or perform actions on your behalf. You can reconnect anytime by following the steps above.
