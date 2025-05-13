@@ -1,0 +1,100 @@
+---
+title: QuickBooks Integration
+---
+
+# QuickBooks Integration (OAuth2)
+
+Integrate QuickBooks Online seamlessly into your application using OpenInt. This guide helps you configure, authenticate, and troubleshoot your QuickBooks connection, providing technical reference and step-by-step guidance.
+
+## Prerequisites
+
+- A [QuickBooks developer account](https://developer.intuit.com/) and access to the [Intuit Developer Dashboard](https://developer.intuit.com/dashboard).
+- A QuickBooks company (for sandbox/testing, [create a sandbox company](https://developer.intuit.com/app/developer/qbo/docs/develop/sandboxes/manage-your-sandboxes)).
+- An OAuth2 App registered on the Intuit Developer Portal.
+
+## Registering Your OAuth App & Getting Credentials
+
+Follow these steps to register your app and obtain your client ID and secret:
+
+1. [Sign in to your Intuit Developer account](https://developer.intuit.com/dashboard).
+2. Select **My Hub > App dashboard** from the upper-right corner.
+3. Click **Create an app** (or open an existing app).
+4. Go to **Keys and credentials** in the left sidebar.
+5. For sandbox, select **Development**; for production, select **Production**. Enable **Show credentials**.
+6. Copy the **Client ID** and **Client Secret**.
+
+For detailed steps, refer to [Get the Client ID and Client Secret for your app](https://developer.intuit.com/app/developer/qbo/docs/get-started/get-client-id-and-client-secret).
+
+You must also configure approved redirect URIs in the app settings (e.g., your OpenInt OAuth callback endpoint).
+
+## Configuring the QuickBooks Connector in OpenInt
+
+The OpenInt QuickBooks connector uses OAuth2. You will need to supply the following fields:
+
+- **Client ID / Client Secret** (from above)
+- **realmId**: The 16-digit Company ID for your QuickBooks company (e.g., `9341453474484455`).
+- **envName**: `sandbox` (default) or `production` depending on which QuickBooks environment you are targeting.
+
+**Example config:**
+```yaml
+quickbooks:
+  clientId: <your-client-id>
+  clientSecret: <your-client-secret>
+  envName: sandbox                # or 'production'
+  realmId: 9341453474484455       # Your QuickBooks company ID
+```
+
+## Initiating the OAuth2 Flow
+
+Your application must redirect users to QuickBooks' authorization URL:
+
+```
+https://appcenter.intuit.com/connect/oauth2
+```
+
+Include the necessary scopes (see next section) and specify your callback/redirect URI. After the user approves access, exchange the authorization code for tokens at:
+
+```
+https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer
+```
+
+Follow [OpenInt’s authentication docs](/docs/core-concepts-v0/magic-link) and [QuickBooks OAuth guide](https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization/oauth-2.0) for implementation details.
+
+## Supported OAuth Scopes
+
+Below is the list of OAuth scopes supported by the OpenInt QuickBooks integration. Choose only those your app requires for least-privilege access.
+
+| Scope | Description |
+|-------|-------------|
+| <Tooltip tip="Full access to accounting data including customers, vendors, invoices, payments, expenses, and all other accounting entities. Allows read and write operations.">`com.intuit.quickbooks.accounting`</Tooltip> | Full access to accounting data (read & write) |
+| <Tooltip tip="Read-only access to accounting data including customers, vendors, invoices, payments, expenses, and other accounting entities. No write operations allowed.">`com.intuit.quickbooks.accounting.readonly`</Tooltip> | Read-only accounting data access |
+| <Tooltip tip="Access to payment operations including processing payments and viewing payment information. Required for integrating with QuickBooks Payments.">`com.intuit.quickbooks.payment`</Tooltip> | Payments operations access |
+| <Tooltip tip="Access to payroll data including employee information, pay runs, and payroll items. Allows read and write operations.">`com.intuit.quickbooks.payroll`</Tooltip> | Payroll data access (read & write) |
+| <Tooltip tip="Read-only access to payroll data including employee information, pay runs, and payroll items. No write operations allowed.">`com.intuit.quickbooks.payroll.readonly`</Tooltip> | Read-only payroll data access |
+| <Tooltip tip="Access to sales receipt operations including creating, updating, and viewing sales receipts.">`com.intuit.quickbooks.salesreceipt`</Tooltip> | Sales receipt access |
+| <Tooltip tip="Basic authentication and user profile information (name, email). Does not provide access to any QuickBooks company data.">`openid`</Tooltip> | OpenID Connect: identity only |
+| <Tooltip tip="Access to the user's email address only. Minimal scope that doesn't provide access to any QuickBooks company data.">`email`</Tooltip> | Read user email |
+| <Tooltip tip="Access to basic user profile information (name, address, phone). Doesn't provide access to any QuickBooks company data.">`profile`</Tooltip> | Read user profile |
+| <Tooltip tip="Access to the user's phone number only. Minimal scope that doesn't provide access to any QuickBooks company data.">`phone`</Tooltip> | Read user phone |
+| <Tooltip tip="Access to the user's address information only. Doesn't provide access to any QuickBooks company data.">`address`</Tooltip> | Read user address |
+
+If you require additional scopes for other QuickBooks APIs, review the [upstream QuickBooks scopes documentation](https://developer.intuit.com/app/developer/qbo/docs/learn/scopes). Currently, all public and most private QuickBooks OAuth scopes used for core accounting and payments are supported.
+
+## Common Mistakes & Troubleshooting
+
+- **Invalid realmId**: The realmId must be exactly 16 digits. Confirm with your QuickBooks company admin.
+- **Redirect URI mismatch**: The redirect URI configured in the Intuit developer dashboard **must** exactly match the callback you provide to OpenInt.
+- **Insufficient scopes**: If users do not see the expected QuickBooks company or data, verify that the correct scopes (e.g., `com.intuit.quickbooks.accounting`) are requested.
+- **User role**: The authenticating user must be an admin in the target QuickBooks company.
+- **Token refresh errors**: See [OAuth errors](https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/oauth-errors) and [QuickBooks API status](https://status.developer.intuit.com/).
+- **Production vs Sandbox client credentials**: Each environment uses different credentials and companies.
+
+For other common OAuth and integration issues, consult [QuickBooks OAuth troubleshooting](https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/oauth-errors).
+
+## References
+
+- [QuickBooks Authentication & Authorization docs](https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization)
+- [Get your Client ID and Secret](https://developer.intuit.com/app/developer/qbo/docs/get-started/get-client-id-and-client-secret)
+- [QuickBooks Learn about scopes](https://developer.intuit.com/app/developer/qbo/docs/learn/scopes)
+- [QuickBooks OAuth errors troubleshooting](https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/oauth-errors)
+- [QuickBooks Online API documentation](https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api)
