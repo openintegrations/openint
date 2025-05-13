@@ -1,0 +1,93 @@
+# Reddit Integration
+
+Integrate Reddit with your application using OpenInt’s OAuth2 connector. This guide provides technical details, step-by-step setup instructions, scope documentation, and troubleshooting tips for connecting Reddit to your SaaS platform via OpenInt.
+
+<Info>
+Reddit OAuth2 integration is available for the `wikiread` scope by default. Additional scopes will be supported in future updates.
+</Info>
+
+## Prerequisites
+- A Reddit account with permission to create developer applications.
+- Admin/owner access to your OpenInt dashboard.
+
+## Step 1: Register Your Reddit OAuth2 App
+Create a Reddit application to obtain a Client ID and Secret:
+1. Go to [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps).
+2. Under **Developed Applications**, click **Create App** or **Create Another App**.
+3. Fill out:
+   - **Name**: Any internal name.
+   - **Redirect URI**: Must match your OpenInt integration callback, e.g. `https://YOUR_APP/callback/reddit`.
+   - **Type**: Web App.
+4. Save. Copy the **client ID** (under the app name) and **client secret** (beside "secret").
+5. See [official Reddit registration docs](https://github.com/reddit-archive/reddit/wiki/OAuth2#registering-your-app) for more details.
+
+## Step 2: Configure Reddit in OpenInt
+Example connector config (for supported `wikiread` scope):
+```json
+{
+  "provider": "reddit",
+  "auth": {
+    "client_id": "YOUR_CLIENT_ID",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "scopes": ["wikiread"]
+  }
+}
+```
+
+**Notes:**
+- Only `wikiread` is currently supported—additional scopes coming soon.
+- Token duration is set to "permanent" by default for background integrations.
+
+## Reddit OAuth2 Scopes: Supported Matrix
+For all scopes, see Reddit’s [OAuth2 API documentation](https://github.com/reddit-archive/reddit/wiki/OAuth2#authorization-scopes).
+
+| Scope | Description | Supported by OpenInt? |
+|-------|-------------|----------------------|
+| <Tooltip tip="Access your Reddit username and signup date, karma, trophies, and other public info shown on your profile">identity</Tooltip> | See tooltip | No |
+| <Tooltip tip="Edit and delete your comments and submissions">edit</Tooltip> | See tooltip | No |
+| <Tooltip tip="Select and edit your user flair in subreddits">flair</Tooltip> | See tooltip | No |
+| <Tooltip tip="Access your voting history and comments/submissions you've hidden/saved">history</Tooltip> | See tooltip | No |
+| <Tooltip tip="Manage moderator configuration for subreddits you moderate (flair, settings, etc.)">modconfig</Tooltip> | See tooltip | No |
+| <Tooltip tip="Manage user flair in subreddits you moderate">modflair</Tooltip> | See tooltip | No |
+| <Tooltip tip="Access moderation logs for subreddits you moderate">modlog</Tooltip> | See tooltip | No |
+| <Tooltip tip="Approve, remove, mark NSFW, and distinguish content in subreddits you moderate">modposts</Tooltip> | See tooltip | No |
+| <Tooltip tip="Modify wiki pages in subreddits you moderate">modwiki</Tooltip> | See tooltip | No |
+| <Tooltip tip="Access the list of subreddits you moderate, contribute to, and subscribe to">mysubreddits</Tooltip> | See tooltip | No |
+| <Tooltip tip="Read and send private messages">privatemessages</Tooltip> | See tooltip | No |
+| <Tooltip tip="Access posts and comments through your account (required for most read operations)">read</Tooltip> | See tooltip | No |
+| <Tooltip tip="Report content for rules violations">report</Tooltip> | See tooltip | No |
+| <Tooltip tip="Save and unsave comments and submissions">save</Tooltip> | See tooltip | No |
+| <Tooltip tip="Submit links and comments from your account">submit</Tooltip> | See tooltip | No |
+| <Tooltip tip="Manage your subreddit subscriptions">subscribe</Tooltip> | See tooltip | No |
+| <Tooltip tip="Submit and change votes on comments and submissions">vote</Tooltip> | See tooltip | No |
+| <Tooltip tip="Edit wiki pages in subreddits you have access to">wikiedit</Tooltip> | See tooltip | No |
+| <Tooltip tip="Read wiki pages in public subreddits">wikiread</Tooltip> | See tooltip | Yes |
+
+## Example Usage: Authenticate and Retrieve Reddit Wiki Data
+With your connector configured and users authenticating via OpenInt, fetch subreddit wiki pages:
+```js
+// Step 1: Get OAuth2 connect URL via OpenInt
+const url = getOpenIntConnectUrl('reddit'); // Implement as per your UI
+window.location.href = url;
+
+// Step 2: After authentication, retrieve wiki data
+fetch('/api/openint/reddit/wiki?subreddit=mySubreddit&page=SomePage')
+  .then(res => res.json())
+  .then(data => {/* handle wiki results */});
+```
+
+**When more scopes are released by OpenInt:** update your config and prompt users to re-authenticate to grant new permissions.
+
+## Common Mistakes & Troubleshooting
+<Warning>
+**Key setup pitfalls:**
+- Redirect URI mismatch: The URI in Reddit app and your OpenInt config must match exactly.
+- Unverified Reddit account: Some scopes/features require account verification.
+- Scope not supported: Only `wikiread` allowed currently.
+- Check Reddit API limits if you encounter throttle/429 errors.
+</Warning>
+
+## Additional Resources
+- [Reddit OAuth2 API Docs](https://github.com/reddit-archive/reddit/wiki/OAuth2)
+- [Reddit App Registration](https://www.reddit.com/prefs/apps)
+- [OpenInt Integration Quickstart](/getting-started/quickstart)
