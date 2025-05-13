@@ -1,0 +1,119 @@
+---
+title: Discord Integration
+sidebar_label: Discord
+---
+
+# Discord Integration for Developers
+
+Integrate Discord into your app using OpenInt to allow your end users to authenticate with and fetch key data from their Discord accounts. The current OpenInt Discord connector supports the OAuth2 Authorization Code flow and provides access to basic user identity data via the `identify` scope. This document guides you through setup, configuration, and best practices for a secure and successful integration.
+
+<Info>
+The Discord connector is **GA (Generally Available)** as of connector version 1. Only the `identify` scope is currently supported via OpenInt.
+</Info>
+
+---
+
+## Capabilities & Scope Support
+
+The OpenInt Discord connector lets you authenticate users and fetch their Discord basic identity (user ID, username, discriminator, avatar, etc.).
+
+<Note>
+Advanced features such as reading a user's email, server/guild data, direct messages, or bot-level permissions are not currently supported via OpenInt. Only the `identify` scope is enabled.
+</Note>
+
+---
+
+## Quickstart: How to Register a Discord OAuth App
+
+You will need a Discord application (OAuth2 client) to use with OpenInt. Follow these steps to obtain your **Client ID** and **Client Secret**, and set up your redirect URI:
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and log in.
+2. Click **New Application** (top right), provide a name, and click **Create**.
+3. In the left sidebar, select **OAuth2**.
+4. In the **Redirects** panel, click **Add Redirect** and enter your OpenInt redirect URI (e.g., `https://yourapp.com/openint/oauth/callback`).
+   - For local development: `http://localhost:YOUR_PORT/openint/oauth/callback`
+   - Ensure the URI matches exactly, including protocol and path.
+5. Click **Save Changes** below the redirects list.
+6. Copy your **Client ID** (shown at the top of the page).
+7. Click to reveal and copy your **Client Secret**. **Do not share this or commit it to version control.**
+
+For detailed screenshots, see the [Unified.to Discord OAuth guide](https://docs.unified.to/guides/how_to_get_your_discord_oauth_2_credentials_and_bot_token) or [Discord's OAuth2 docs](https://discord.com/developers/docs/topics/oauth2).
+
+---
+
+## Configuring in OpenInt
+
+Example connector config (JSON):
+
+```json
+{
+  "provider": "discord",
+  "client_id": "YOUR_DISCORD_CLIENT_ID",
+  "client_secret": "YOUR_DISCORD_CLIENT_SECRET",
+  "scopes": ["identify"],
+  "redirect_uri": "https://yourapp.com/openint/oauth/callback"
+}
+```
+
+Pass these credentials into your OpenInt integration configuration. Ensure the redirect URI in Discord matches exactly the URI configured in OpenInt.
+
+---
+
+## OAuth2 Flow (Handled by OpenInt)
+
+OpenInt manages the Discord OAuth2 authorization code flow end to end. On user connect, they are redirected to Discord’s authorization URL:
+
+```
+https://discord.com/api/oauth2/authorize?response_type=code&client_id=YOUR_CLIENT_ID&scope=identify&redirect_uri=YOUR_URI&state=STATE
+```
+
+After granting access, Discord calls back to your provided redirect URI with an authorization code, which OpenInt exchanges for an access token. Only the `identify` scope is requested and supported.
+
+---
+
+## Supported & Available Discord Scopes
+
+Below is a table of major Discord OAuth2 scopes, with those currently supported by OpenInt highlighted. For the full, up-to-date list, see the [Discord OAuth2 scope documentation](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
+
+| Scope               | Description                                                                                                      | Supported by OpenInt  |
+|---------------------|------------------------------------------------------------------------------------------------------------------|:---------------------:|
+| <Tooltip tip="Allows fetching the user's basic information (user ID, username, avatar, discriminator, etc.). This is read-only access to basic profile data.">identify</Tooltip>           | Fetch basic user profile (read-only, required for most OAuth uses)                                  | ✓                     |
+| <Tooltip tip="Allows access to the user's email address (requires identify scope; considered sensitive")>email</Tooltip>               | Fetch user's email address (requires identify)                                                      |                       |
+| <Tooltip tip="Read user's connected third-party accounts (like Steam, Battle.net, etc.)">connections</Tooltip>                        | Fetch user's linked external services                                                               |                       |
+| <Tooltip tip="List of Discord servers (guilds) the user is in; read-only.">guilds</Tooltip>                                          | List user's Discord guilds                                                                          |                       |
+| <Tooltip tip="Allows app to join servers on user's behalf (write)">guilds.join</Tooltip>                                             | Add user to server (write)                                                                         |                       |
+| <Tooltip tip="Join group DMs on user's behalf (write)">gdm.join</Tooltip>                                                            | Join group DMs                                                                                     |                       |
+| <Tooltip tip="Read messages in private channels DMs/group DMs (high privilege)">messages.read</Tooltip>                              | Read private channel messages                                                                      |                       |
+| <Tooltip tip="Add an OAuth2 bot to user's selected guild">bot</Tooltip>                                                              | Authorize a bot for server                                                                         |                       |
+| <Tooltip tip="Generate webhook URLs for a channel (write as webhook)">webhook.incoming</Tooltip>                                     | Generate incoming webhook URL                                                                      |                       |
+
+<Check>**Only the `identify` scope is supported via OpenInt's Discord integration at this time. Other scopes are not yet available through this connector.**</Check>
+
+---
+
+## Common Mistakes & Troubleshooting
+
+<Warning>
+**Redirect URI mismatch:** The most common error is providing a redirect URI to Discord that does not _exactly_ match the one configured in OpenInt. Protocol, trailing slashes, and path all matter! Discord will reject the OAuth flow if there's a mismatch.
+</Warning>
+
+<Warning>
+**Requesting unsupported scopes:** Only the `identify` scope is currently available. Do not try to request additional scopes such as `email`, `guilds`, or others—they will not work via OpenInt until further support is added.
+</Warning>
+
+<Note>
+**Keep your Client Secret safe!** Never commit it to source control or expose it in client-side code. If you believe a secret has been leaked, invalidate and re-issue one in the Discord developer portal immediately.
+</Note>
+
+---
+
+## Helpful Resources
+
+- [Discord Developer Portal](https://discord.com/developers/applications)
+- [Discord OAuth2 Documentation](https://discord.com/developers/docs/topics/oauth2)
+- [Full Discord OAuth2 Scopes List](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes)
+- [Unified.to Guide: Get Discord OAuth2 Credentials](https://docs.unified.to/guides/how_to_get_your_discord_oauth_2_credentials_and_bot_token)
+
+---
+
+If you have questions or want to request support for more Discord API scopes or features, please contact OpenInt support.
