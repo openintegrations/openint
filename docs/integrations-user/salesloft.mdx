@@ -1,0 +1,72 @@
+---
+title: Connecting Salesloft
+description: Learn how to securely connect your Salesloft account to your [Customer]'s app, grant the required permissions, and troubleshoot common OAuth connection issues.
+---
+
+# Connect Your Salesloft Account
+
+Integrate your Salesloft account with [Customer]'s app to sync your calls, emails, cadences, contacts, and sales activities. This secure integration allows you to view and manage your Salesloft data directly in [Customer], helping streamline your sales processes.
+
+<Note>
+You will need a Salesloft account and the correct permissions from your Salesloft administrator to complete this setup.
+</Note>
+
+## How to Connect Salesloft
+
+<Steps>
+  <Step title="Start Salesloft Connection">
+    In [Customer]'s app, look for the option to connect Salesloft. This is usually shown as a <strong>Connect Salesloft</strong> button. Click it to begin.
+  </Step>
+  <Step title="Sign in to Salesloft">
+    A Salesloft window will appear. Sign in using your Salesloft credentials if prompted.
+  </Step>
+  <Step title="Grant Permissions">
+    Review the permissions requested. These allow [Customer] to sync and manage your Salesloft data as needed. Click <strong>Allow</strong> to continue.
+  </Step>
+  <Step title="Finish Setup">
+    Once you approve access, you will be redirected back to [Customer]'s app. The connection may take a few moments to complete.
+  </Step>
+</Steps>
+
+## What Permissions Are Requested and Why?
+
+When connecting, the following permissions may be requested by [Customer] (actual requested permissions may vary):
+
+- **users:read** – View your user profile (name, email, role). *Needed to associate your Salesloft identity with [Customer].*
+- **calls:read** – View your call recordings, transcripts, and call metadata. *Enables call log syncing and analytics in [Customer].*
+- **emails:read** – Read your sales email templates and sent email content. *For email tracking and template suggestions.*
+- **people:read** – Read your contacts and lead information. *So you can work with all your sales contacts in [Customer].*
+- **cadences:read** – View your cadence workflows/sequences. *Allows you to see and analyze your outreach workflows.*
+- **activities:write** – Add and update sales activities like calls, emails, meetings. *So [Customer] can log and sync your new activities back to Salesloft.*
+- **people:write** – Full access to create, update, delete contacts/leads. *Needed to keep contact information synchronized as you manage records in [Customer].*
+- **admin** – Full administrative access. *Usually only requested if you are an admin and wish to connect accounts at organizational level.*
+
+## How to Confirm Your Connection
+
+After setup, you can confirm everything is working by:
+
+- Checking that your Salesloft contacts, activities, or emails appear in [Customer]'s app.
+- Creating a new activity in [Customer] and verifying it appears in Salesloft.
+- Reviewing the integration settings page for a status indicator or last sync timestamp.
+
+<Tip>
+It may take a few moments for data to sync after initial connection. Refresh the page if you don’t see your Salesloft data right away.
+</Tip>
+
+## Troubleshooting & Common Issues
+
+<Warning>
+If you see "Access Denied" or "Not Authorized":
+</Warning>
+- Ensure you approved all required permissions during the Salesloft connection process.
+- Double-check that you are using the correct Salesloft user account, with appropriate permissions to connect integrations.
+
+<Info>
+If you connected the wrong Salesloft account or need to change permissions:
+</Info>
+- Open [Customer]'s app integration settings and disconnect Salesloft. Then repeat the connection steps above, signing in as the correct user.
+
+- If issues persist, ask your Salesloft admin to verify your account permissions. Some permissions can only be granted or adjusted by an administrator.
+
+---
+If you need more help, contact [Customer]'s support team for further assistance.
