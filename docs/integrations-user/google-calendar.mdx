@@ -1,0 +1,67 @@
+---
+title: Connecting Google Calendar
+---
+
+# Connect Your Google Calendar
+
+Easily sync your Google Calendar with {{customerApp}} to manage your events, meetings, and reminders directly within our platform. With a few simple steps, you can securely authorize access and start syncing your calendar events.
+
+## Why Connect Google Calendar?
+
+- Automatically sync events and meetings between Google Calendar and {{customerApp}}.
+- View, create, or edit calendar events without switching apps.
+- Receive reminders and updates seamlessly.
+
+## How to Connect
+
+Follow these steps to link your Google Calendar account:
+
+1. **Go to Settings > Integrations** in {{customerApp}}.
+2. Select **Google Calendar** from the list of available integrations.
+3. Click **Connect** or **Sign in with Google**.
+4. A secure Google login screen will open. Choose the Google account you’d like to connect.
+5. Review the permissions requested and click **Allow** to continue.
+6. You will be redirected back to {{customerApp}}. Your calendar will begin syncing automatically.
+
+## Permissions Requested
+
+To provide full calendar functionality, {{customerApp}} requests the following permissions when you connect Google Calendar:
+
+| Permission | What it Allows | Why We Need It |
+|------------|---------------|---------------|
+| **Full calendar access**<br>`https://www.googleapis.com/auth/calendar` | View and manage all calendars and events | Enables automatic syncing, event creation, edits, and two-way updates |
+| **Event management**<br>`https://www.googleapis.com/auth/calendar.events` | View and manage events only (not calendar settings) | Allows updating or creating events from {{customerApp}} |
+| **Read-only events**<br>`https://www.googleapis.com/auth/calendar.events.readonly` | View calendar events only | If you only want to view (not edit) events in {{customerApp}} |
+| **Read-only calendar**<br>`https://www.googleapis.com/auth/calendar.readonly` | View calendars and events, but not change them | Safest option for users who do not want to make changes from {{customerApp}} |
+| **Read-only settings**<br>`https://www.googleapis.com/auth/calendar.settings.readonly` | View your calendar’s settings (like time zone) | Aligns event times with your local settings & preferences |
+
+> **Tip:** You can choose which Google account to connect if you have more than one. Grant only the minimum permissions needed for your use case.
+
+## Confirming Your Connection
+
+Once connected, you should see your Google Calendar events appear in {{customerApp}} within a few moments. Try adding a test event in Google Calendar— it should sync and display automatically.
+
+If you don’t see your events, refresh the page or check your integration settings for errors.
+
+## Common Issues & Fixes
+
+**Permission Denied / Access Blocked**
+- Make sure you grant all requested permissions when signing in with Google.
+- If your organization restricts Google app permissions, contact your Google Workspace admin.
+
+**Multiple Google Accounts**
+- Ensure you’re signed in to the correct Google account in your browser before connecting.
+
+**Sync Delays**
+- Sometimes it takes a few minutes for new events to appear. Try refreshing or waiting and verify again.
+
+**Disconnected or Revoked Access**
+- If your account becomes disconnected, you may need to re-authenticate. Return to the integration settings and click "Reconnect."
+
+**General Troubleshooting**
+- Log out and log in to your Google account, then retry the connection.
+- Clear your browser cache and cookies if authentication screens don’t appear.
+
+## Need Help?
+
+If you continue to have trouble connecting Google Calendar, please reach out to our support team for personalized assistance.
