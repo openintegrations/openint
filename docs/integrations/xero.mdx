@@ -1,0 +1,98 @@
+---
+title: Xero Integration
+description: How to integrate Xero with your application using OpenInt
+---
+
+# Xero Integration (Developer Guide)
+
+Integrate Xero accounting features into your SaaS product using OpenInt. This guide explains how to set up the Xero connector, configure OAuth2 authentication, manage scopes, and avoid common issues.
+
+## Overview
+
+The OpenInt Xero connector enables your users to connect their Xero accounts in a white-labeled, secure, and extensible way—using your application. OpenInt handles OAuth authentication and token refresh flows, so you can access identity and accounting data per the scopes defined.
+
+**Connector stage:** General availability (GA)  
+**Supported auth:** OAuth 2.0  
+**Verticals:** Accounting, finance  
+**Intended audience:** B2B SaaS developers
+
+## Prerequisites
+
+- A [Xero developer account](https://developer.xero.com/)
+- Access to the [Xero App Management Portal](https://developer.xero.com/app/manage)
+- Your OpenInt project configuration
+
+## 1. Create an OAuth2 App in Xero
+
+1. Go to the [Xero App Management Portal](https://developer.xero.com/app/manage) and create a new app.
+2. Choose the "Auth Code" grant type.
+3. After creation, note your **Client ID** and generate a **Client Secret**.
+4. Set your app's redirect URI to your OpenInt application’s callback endpoint. This must be HTTPS (for local testing you can use `http://localhost/`; `127.0.0.1` is not accepted).
+5. Add the scopes you require (see below).
+
+See the [Xero OAuth2 Flow Documentation](https://developer.xero.com/documentation/guides/oauth2/auth-flow) for more details about the full workflow.
+
+## 2. Configuring Xero in OpenInt
+
+Configure the Xero connector in your OpenInt deployment by providing the `client_id`, `client_secret`, and the required authorization/token endpoints.
+
+Example configuration (pseudo-code, adapt per your environment):
+
+```json
+{
+  "provider": "xero",
+  "client_id": "YOUR_CLIENT_ID",
+  "client_secret": "YOUR_CLIENT_SECRET",
+  "auth": {
+    "type": "OAUTH2",
+    "authorization_request_url": "https://login.xero.com/identity/connect/authorize",
+    "token_request_url": "https://identity.xero.com/connect/token",
+    "scope_separator": " ",
+    "params_config": {
+      "authorize": { "response_type": "code" }
+    },
+    "scopes": "offline_access openid" // Only offline_access and openid currently supported
+  }
+}
+```
+
+**Note:** Update the scopes field as OpenInt adds support for more Xero scopes.
+
+## 3. Supported Scopes
+
+OpenInt currently supports the following Xero OAuth scopes for the Xero connector:
+
+| Scope | Description |
+|-------|-------------|
+| <Tooltip tip="This scope allows the application to obtain a refresh token, which can be used to request new access tokens even when the user is not actively using the application. This is essential for long-term access to the user's resources without requiring repeated authentication.">offline_access</Tooltip> | Obtain refresh tokens for offline access |
+| <Tooltip tip="This scope enables the application to authenticate the user and receive basic profile information (like user ID) as part of an OpenID Connect request. It does not grant access to any other user data or resources beyond basic identity verification.">openid</Tooltip> | User identity and basic profile |
+
+
+#### Full Xero OAuth Scope Reference
+
+Xero provides a comprehensive set of OAuth scopes for fine-grained access. As of now, OpenInt implements only `openid` and `offline_access`. See the [Xero OAuth scopes documentation](https://developer.xero.com/documentation/oauth2/scopes) for all available scopes. If your use-case requires a scope not currently supported by OpenInt, please contact the OpenInt team to request support.
+
+## 4. OAuth Flow (Quickstart)
+
+1. Your application initiates the OAuth flow via OpenInt’s Connect Portal or programmatic flow.
+2. The user is redirected to Xero's authorization endpoint (`/identity/connect/authorize`).
+3. Post-successful authorization, the user is redirected to your redirect URI.
+4. OpenInt exchanges the code for tokens at `https://identity.xero.com/connect/token`.
+5. OpenInt provides you with tokens so your backend, via OpenInt, can access secured Xero API resources. See [Xero’s OAuth Flow Reference](https://developer.xero.com/documentation/guides/oauth2/auth-flow).
+
+## 5. Common Pitfalls & Troubleshooting
+
+- **Redirect URI mismatch:** Ensure the URI you enter in Xero's portal exactly matches the one provided to OpenInt and used by your app. `localhost` is allowed for testing; `127.0.0.1` is not.
+- **Insufficient scopes:** Scopes requested during OAuth *must* match those configured for your Xero app. Only supported scopes will work; requesting unsupported or extra scopes causes errors.
+- **Client secret/certificate errors:** Double-check you copy your client credentials exactly, and do not expose them in frontend code.
+- **Refresh tokens lost:** If you do not request the `offline_access` scope, refresh tokens are not granted; users will need to re-authenticate regularly.
+- **Tenant selection errors:** Xero is multi-tenant; after OAuth, confirm you are operating on the correct tenant (see [Xero Tenants](https://developer.xero.com/documentation/guides/oauth2/tenants)).
+
+## 6. Resources
+
+- [Xero OAuth2 Auth Flow Guide](https://developer.xero.com/documentation/guides/oauth2/auth-flow)
+- [Xero OAuth2 Scopes Reference](https://developer.xero.com/documentation/oauth2/scopes)
+- [OpenInt Docs: Quickstart](../getting-started/quickstart)
+
+---
+For more help, contact your OpenInt support representative.
