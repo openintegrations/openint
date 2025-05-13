@@ -1,0 +1,68 @@
+---
+title: "Connect Slack to Your Account"
+---
+
+# Connect Slack to Your Account
+
+Easily link your Slack workspace to your account to enable deeper collaboration and automate workflows between your app and Slack channels.
+
+## What Can You Do With the Slack Integration?
+
+- Receive notifications directly in your Slack channels.
+- Send messages or alerts from your app to Slack users or channels.
+- Sync important activity between your app and your Slack workspace.
+
+## How to Connect Slack
+
+Follow these steps to connect your Slack account:
+
+1. **Go to Integrations:** Navigate to the Integrations section within your app and select **Slack**.
+2. **Start Connection:** Click **Connect Slack**. You will be redirected to Slack's official website.
+3. **Log in to Slack:** If prompted, log in to your Slack account.
+4. **Review Permissions:** Slack will show you a list of permissions being requested. Review these carefully (see details below).
+5. **Allow Access:** Click **Allow** to grant access.
+6. **Return to Your App:** You will be redirected back automatically once setup is complete.
+
+## Permissions Requested
+
+When you connect Slack, the following permissions are requested to provide full integration features:
+
+| Permission                | Why It's Needed |
+|---------------------------|-----------------|
+| View messages mentioning the app (`app_mentions:read`) | Let the app see and act on messages where it's directly mentioned. |
+| View channel info (`channels:read`) | Display channel names and details in your app. |
+| View channel history (`channels:history`) | Enable the app to read conversations in accessible channels. |
+| Manage channels (`channels:write`) | Allow creation, renaming, or archiving of channels from your app. |
+| Post messages (`chat:write`) | Let the app post messages or alerts in Slack via your app. |
+| Use custom commands (`commands`) | Trigger custom actions in Slack via slash commands. |
+| View direct messages (`im:history`) | Enable workflows based on messages in direct messages. |
+| Start direct messages (`im:write`) | Allow your app to initiate DMs with users. |
+| View user info (`users:read`) | Show Slack users in your app for mentions or mapping. |
+| View user email (`users:read.email`) | Identify users by email for matching purposes. |
+| View user profiles (`users.profile:read`) | Display richer user profiles in your app. |
+| Perform admin actions (`admin`) | Let the app perform admin-level tasks if required by your organization. |
+| View shared files (`files:read`) | Access files in channels and DMs shared through Slack. |
+| Manage files (`files:write`) | Upload or delete files in Slack from your app. |
+
+> **Tip:** Only the permissions your organization enables will be requested. You will always see a summary before authorizing.
+
+## How to Test Your Integration
+
+After connecting, try one of these steps to confirm the Slack integration is active:
+
+- Send a test message from your app to a Slack channel.
+- Check if you can select a Slack channel or user from within the app.
+- Use a feature (like notifications) that requires Slack.
+
+If you see confirmation in Slack, the integration is working.
+
+## Troubleshooting Common Issues
+
+- **Accidentally chose the wrong Slack workspace?** Disconnect and repeat the setup, choosing the correct workspace.
+- **Didn’t grant all required permissions?** Remove the app from your Slack settings and try connecting again, ensuring all permissions are allowed.
+- **Not receiving messages or channel list is empty?** Make sure you selected the right workspace and channels, and granted all requested permissions.
+- **OAuth errors or connection failures?** Try logging out and back in to Slack, clear browser cache, or contact your admin if the issue persists.
+
+## Need More Help?
+
+If these steps don’t resolve your issue, reach out to your support team or administrator for further assistance.
