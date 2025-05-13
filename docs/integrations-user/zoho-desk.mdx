@@ -1,0 +1,63 @@
+---
+title: Connect Zoho Desk
+---
+
+# Connect Zoho Desk
+
+Sync your Zoho Desk tickets, contacts, and accounts with your app in just a few quick steps. Once connected, you can manage support tickets and contacts seamlessly between the two platforms.
+
+<Steps>
+  <Step title="Click Connect Zoho Desk">
+    In your app, locate and click on the <b>Connect Zoho Desk</b> button. This is often found on your Integrations, Settings, or Connections page.
+  </Step>
+  <Step title="Sign In and Authorize">
+    You'll be redirected to Zoho Desk. Sign in if prompted, then review the permissions requested by your app. These permissions allow your app to synchronize support tickets and contact data securely.
+  </Step>
+  <Step title="Grant Permissions">
+    Click <b>Allow</b> or <b>Authorize</b> to grant access. Your data is used only to sync with Zoho Desk as described below.
+  </Step>
+  <Step title="Return to Your App">
+    After approval, you'll be redirected back. The connection should now show as active.
+  </Step>
+</Steps>
+
+## Permissions Requested
+
+The following Zoho Desk permissions are requested by your app. These are needed to synchronize and manage support tickets, contacts, and to access basic account information:
+
+| Permission | Description |
+|------------|-------------|
+| ZohoDesk.tickets.READ    | Allows reading tickets in Zoho Desk. |
+| ZohoDesk.tickets.CREATE  | Allows creating new tickets. |
+| ZohoDesk.tickets.UPDATE  | Allows updating existing tickets. |
+| ZohoDesk.tickets.DELETE  | Allows deleting tickets. |
+| ZohoDesk.contacts.READ   | Allows viewing contacts. |
+| ZohoDesk.basic.READ      | Allows access to basic account info. |
+| ZohoDesk.settings.READ   | Allows viewing account settings. |
+| ZohoDesk.tickets.ALL     | Full access to tickets (create, read, update, delete). |
+| ZohoDesk.accounts.READ   | Allows reading account-level information. |
+
+<Note>
+  Your app only uses the permissions required to provide the sync features you enable. You can review or revoke access from your Zoho Desk account at any time.
+</Note>
+
+## How to Test Your Connection
+
+- After connecting, you should see your Zoho Desk tickets and contacts appear or become available for sync in your app.
+- Try creating or updating a ticket in your app and confirm it appears in Zoho Desk.
+- Check your integration status within your app’s integration settings.
+
+## Troubleshooting & Common Issues
+
+<Warning>
+If your Zoho Desk account uses a localized domain (such as zoho.eu, zoho.com.cn, etc.), ensure you use the correct region when authorizing. If you encounter errors during connection, try the following:
+</Warning>
+
+- Make sure you are logging in to the correct Zoho region for your organization.
+- Ensure you grant all listed permissions during the authorization step.
+- If you see an access denied or timeout error, disconnect and reconnect the integration.
+- If you’re unsure of your Zoho Desk region, check with your Zoho Desk admin or see your Zoho Desk login page URL.
+
+<Info>
+If you continue having trouble, please reach out to your app's support team for assistance.
+</Info>
