@@ -1,0 +1,62 @@
+---
+title: Connecting Your Gong Account
+---
+
+# Connect Your Gong Account
+
+You can easily link your Gong account with your [Customer App] to sync call recordings, analytics, and more. This guide walks you through the secure connection process, explains permissions, and helps you troubleshoot common issues.
+
+## What You'll Need
+
+- Access to your Gong account (with permission to authorize third-party apps)
+- Your Gong account's web address (e.g., `https://example.gong.io`)
+
+## How to Connect Gong
+
+1. **Start the Connection**  
+   In your [Customer App], go to the Integrations page and select **Gong**. Click "Connect Gong" to begin.
+
+2. **Enter Your Gong Base URL**  
+   You'll be asked for your Gong account base URL. This is typically the web address you use to log into Gong, such as `https://yourcompany.gong.io`.
+
+   <Tip>Use the full address, including `https://`. If in doubt, copy the URL from your browser's address bar after logging into Gong.</Tip>
+
+3. **Sign in to Gong & Authorize**  
+   A secure Gong window will open. Sign into your Gong account (if you aren't already) and review the permissions requested. Click **Authorize** to approve access.
+
+4. **Return to [Customer App]**  
+   After approval, you'll return to [Customer App]. Your Gong account should now be connected!
+
+## Permissions Requested
+
+Connecting Gong grants [Customer App] the following access to your Gong data:
+
+| Permission | Why It's Needed |
+|------------|----------------|
+| **user:read** | Read-only access to your basic user profile to identify and personalize your workspace. |
+| **calls:read** | Lets [Customer App] sync and analyze your Gong call recordings and metadata. |
+| **analytics:read** | Allows your app to provide insights using Gong's analytics and reporting data. |
+| **admin:write** | Needed for managing users and settings when offering administration features directly from your app. |
+| **conversations:full** | Enables viewing and managing all conversation data, including transcripts and comments, to support robust workflows. |
+
+<Info>You can revoke access at any time from your Gong account settings.</Info>
+
+## How to Verify Your Gong Connection
+
+- Check for a confirmation message or "Gong Connected!" badge in your [Customer App]'s integrations section.
+- Optionally, try syncing or viewing data (like recent calls) from Gong to ensure the integration is working.
+
+## Troubleshooting & Common Issues
+
+<Warning>If you see an error about the Gong base URL, double-check that you entered your full Gong web address (e.g., `https://yourcompany.gong.io`).</Warning>
+
+- **Permissions Denied:**  
+  If you declined any permissions, the integration may not work. Retry the connection and accept all requested permissions.
+
+- **Wrong Account:**  
+  Ensure you log into the correct Gong workspace if you have access to more than one.
+
+- **Admin Approval Needed:**  
+  Your Gong administrator may need to approve new integrations. Contact your admin if you cannot authorize the app.
+
+If the issue persists, refer to your [Customer App]'s support resources.
