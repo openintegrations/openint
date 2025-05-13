@@ -1,0 +1,59 @@
+---
+title: Connect your Confluence account
+description: Guide for connecting your Confluence account to your {{appName}} workspace.
+---
+
+# Connect Your Confluence Account to {{appName}}
+
+Integrate your Confluence workspace with {{appName}} to seamlessly access, sync, and manage Confluence content directly from your {{appName}} account.
+
+---
+
+## How to Connect Confluence
+
+1. **Go to the Integrations page** in your {{appName}} workspace.
+2. Select **Confluence** from the list of available integrations.
+3. Click **Connect Confluence**.
+4. You will be redirected to Atlassian (Confluence) to securely log in and authorize {{appName}}.
+5. **Review and accept the requested permissions.**
+6. After authorizing, you will be redirected back to {{appName}}. Your Confluence account is now connected.
+
+---
+
+## Permissions
+
+When you connect Confluence, you will be asked to grant several permissions to {{appName}}. Here's what each is for:
+
+| Permission                   | Why It's Needed                                                                                |
+|------------------------------|----------------------------------------------------------------------------------------------|
+| **read:confluence-content**  | Read Confluence pages, blog posts, and attachments.                                           |
+| **write:confluence-content** | Create, update, or delete Confluence content (pages, posts, attachments) via {{appName}}.     |
+| **read:confluence-space**    | Access information about your Confluence spaces.                                              |
+| **read:confluence-user**     | View your basic user profile information for identity verification.                           |
+| **read:confluence-props**    | Read properties and metadata on your Confluence content.                                      |
+| **write:confluence-props**   | Read and modify custom properties or metadata linked to your content.                         |
+| **read:confluence-groups**   | View your group memberships for workspace-based permission management.                        |
+| **manage:confluence-space**  | Manage space settings, including permissions, from within {{appName}} if supported.           |
+
+---
+
+## Testing the Connection
+
+After connecting, return to {{appName}} and:
+
+1. Navigate to the Confluence integration tile.
+2. You should see a status indicator (e.g., "Connected").
+3. Try creating or syncing a page to confirm the integration works.
+
+---
+
+## Troubleshooting & Common Issues
+
+- **Wrong Account**: Make sure you are logged into the correct Confluence/Atlassian account before connecting.
+- **Permission Denied**: If you declined permissions, the connection may not complete. Try reconnecting and accepting all required permissions.
+- **Workspace Restrictions**: Some Confluence admins restrict third-party integrations. If you see authorization errors, contact your Confluence admin.
+- **Timeouts or Redirect Issues**: Disable any aggressive ad blockers or try a different browser if you do not see a redirect or confirmation.
+
+---
+
+If you need additional help, please reach out to {{appName}} support.
