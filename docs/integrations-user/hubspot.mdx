@@ -1,0 +1,85 @@
+---
+title: Connect HubSpot to Your App
+description: Learn how to securely connect your HubSpot account to {{APP_NAME}} and start syncing your CRM data in just a few steps.
+---
+
+# Connect HubSpot to {{APP_NAME}}
+
+You can connect your HubSpot account to {{APP_NAME}} in just a few steps. This lets you sync contacts, companies, deals, tickets, forms, files, and more directly between HubSpot and {{APP_NAME}} — so your work is always up-to-date across platforms.
+
+---
+
+## How to Connect HubSpot
+
+1. **Go to the Integrations page** in {{APP_NAME}} (usually in Settings or Integrations).
+2. Find **HubSpot** and select **Connect**.
+3. You’ll be redirected to HubSpot’s secure login and permissions screen.
+4. **Sign in with your HubSpot account** if prompted.
+5. Review the permissions requested and click **Allow**.
+6. You’ll be redirected back to {{APP_NAME}} — your HubSpot account is now connected!
+
+---
+
+## What Permissions Are Requested?
+
+When connecting, you’ll be asked to grant certain permissions so {{APP_NAME}} can access and sync your data. Below are the primary permissions that may be requested. What {{APP_NAME}} uses depends on the features you enable.
+
+| Permission Scope                  | Why It's Needed |
+|-----------------------------------|-----------------|
+| **contacts**                      | Read/write access to your contacts and their properties               |
+| **contacts-ro**                   | Read-only access to contacts                                         |
+| **content**                       | Manage blog posts, pages, and templates                              |
+| **crm.objects.companies.read**    | Read company data in your CRM                                        |
+| **crm.objects.companies.write**   | Create and update companies in CRM                                   |
+| **crm.objects.contacts.read**     | Read contact details in the CRM                                      |
+| **crm.objects.contacts.write**    | Add and update contacts                                              |
+| **crm.objects.custom.read/write** | Access custom CRM objects                                            |
+| **crm.objects.deals.read/write**  | Access deals and manage their properties                             |
+| **crm.objects.owners.read**       | Identify/contact owner information                                   |
+| **crm.objects.users.read/write**  | Manage CRM users                                                     |
+| **crm.schemas.*.read/write**      | Read/write CRM schema/configuration (companies, contacts, deals, etc) |
+| **forms / forms-ro**              | Access forms and form submissions                                    |
+| **sales-email-read**              | Access your sales emails (read-only)                                 |
+| **settings.users.*.read/write**   | Access or manage user/team settings                                  |
+| **timeline**                      | Access and record timeline events                                    |
+| **tickets / tickets-ro**          | Access or manage support tickets                                     |
+| **e-commerce**                    | Access sales/e-commerce data                                         |
+| **files / files-ro**              | Access files stored in HubSpot                                       |
+| **automation**                    | Manage workflow automations                                          |
+| **integration-sync**              | Sync data between HubSpot and {{APP_NAME}}                           |
+| **oauth**                         | Maintain a secure, authorized connection                             |
+
+> **Tip:** Only the minimum necessary permissions required for {{APP_NAME}} to work are requested.
+
+---
+
+## Test Your Connection
+
+Once connected, you should see a confirmation message in {{APP_NAME}} and (if enabled) your HubSpot data will begin syncing. You can:
+
+- Check the integration status under your Integrations page
+- View newly imported data (like contacts, companies, or deals)
+- Try an action (like syncing or exporting data) to confirm everything is working
+
+---
+
+## Troubleshooting & Common Issues
+
+**1. Incorrect HubSpot account**  
+Make sure you’re logged into the correct HubSpot account when authorizing access.
+
+**2. Permissions not granted**  
+If you deny required permissions, integration cannot proceed. Please restart the connection process and accept the requested permissions.
+
+**3. Pop-up blockers**  
+If nothing happens when you click Connect, disable your browser’s pop-up blockers and try again.
+
+**4. Integration fails or disconnects**  
+Try reconnecting from the Integrations page in {{APP_NAME}}. If problems persist, check your HubSpot user role or contact your admin.
+
+**5. Unexpected data issues**  
+If data isn’t syncing as expected, verify that you’ve granted all necessary permissions and that your HubSpot account has access to the relevant objects.
+
+---
+
+If you have additional questions, please contact your admin or support team for {{APP_NAME}}.
