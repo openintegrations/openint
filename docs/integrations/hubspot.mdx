@@ -1,0 +1,135 @@
+---
+title: HubSpot Integration
+description: Guide to integrating HubSpot via OpenInt for developers
+---
+
+# HubSpot Integration (OAuth2)
+
+This guide enables engineers to connect HubSpot to your application using OpenInt's white-labeled integration toolkit. HubSpot is a leading CRM and automation platform supporting a variety of business and ticketing use cases. OpenInt manages authentication using OAuth2, and provides granular scope control and a streamlined data synchronization flow.
+
+## Prerequisites
+
+1. **HubSpot Developer Account**
+   - [Sign up for a HubSpot developer account](https://app.hubspot.com/signup-hubspot/developers).
+2. **Create a Public App in HubSpot**
+   - Follow the [official HubSpot guide for creating a public app](https://developers.hubspot.com/docs/guides/apps/public-apps/overview#create-a-public-app).
+3. Record your app's **Client ID** and **Client Secret** (available in the Auth tab after app creation).
+
+<Info>
+OpenInt uses OAuth2 for authentication with HubSpot. Ensure your app is set up for OAuth2 flows and your redirect URIs are correctly configured.
+</Info>
+
+## Setting Up Your HubSpot App
+
+1. In your HubSpot developer account, navigate to **Apps** and click **Create app**.
+2. Fill in the app name, description, and logo as prompted.
+3. Proceed to the **Auth** tab. Note your **Client ID** and **Client Secret**.
+4. Add your integration's redirect URI (test with http://localhost for development; use HTTPS and a valid domain in production).
+
+For details and screenshots, see the [HubSpot public app creation docs](https://developers.hubspot.com/docs/guides/apps/public-apps/overview#create-a-public-app).
+
+## Configuring OAuth2 with OpenInt
+
+### Authorization URLs
+
+Configure your integration to use the following endpoints:
+
+- **Authorization Request URL:**  `https://app.hubspot.com/oauth/authorize`
+- **Token Request URL:** `https://api.hubapi.com/oauth/v1/token`
+
+### Required Scopes
+
+When creating or configuring your HubSpot app, select the necessary OAuth scopes. Scopes define which resources and operations your integration can access.
+
+All available HubSpot OAuth scopes are documented [here](https://developers.hubspot.com/docs/guides/apps/authentication/working-with-oauth#configure-scopes).
+
+Below is a table of notable HubSpot scopes. <br />
+<em>Scopes in <strong>bold</strong> are supported by OpenInt.</em>
+
+| Scope | Description | Supported by OpenInt |
+|---|---|---|
+| <Tooltip tip="Provides read and write access to all contacts and contact properties in HubSpot.">contacts</Tooltip> | Read/write all contacts | No |
+| <Tooltip tip="Provides read-only access to contacts and contact properties in HubSpot.">contacts-ro</Tooltip> | Read-only contacts | No |
+| <Tooltip tip="Provides read and write access to content, including blog posts, pages, and templates.">content</Tooltip> | Content access | No |
+| <Tooltip tip="Provides read-only access to company objects in the CRM.">crm.objects.companies.read</Tooltip> | Read company objects | No |
+| <Tooltip tip="Provides write access to company objects in the CRM.">crm.objects.companies.write</Tooltip> | Write company objects | No |
+| <Tooltip tip="Provides read-only access to contact objects in the CRM.">crm.objects.contacts.read</Tooltip> | <strong>Read contact objects</strong> | **Yes** |
+| <Tooltip tip="Provides write access to contact objects in the CRM.">crm.objects.contacts.write</Tooltip> | Write contact objects | No |
+| <Tooltip tip="Provides read-only access to custom objects in the CRM.">crm.objects.custom.read</Tooltip> | Read custom objects | No |
+| <Tooltip tip="Provides write access to custom objects in the CRM.">crm.objects.custom.write</Tooltip> | Write custom objects | No |
+| <Tooltip tip="Provides read-only access to deal objects in the CRM.">crm.objects.deals.read</Tooltip> | Read deal objects | No |
+| <Tooltip tip="Provides write access to deal objects in the CRM.">crm.objects.deals.write</Tooltip> | Write deal objects | No |
+| <Tooltip tip="Provides read-only access to owner objects in the CRM.">crm.objects.owners.read</Tooltip> | Read owner objects | No |
+| <Tooltip tip="Provides read-only access to user objects in the CRM.">crm.objects.users.read</Tooltip> | Read user objects | No |
+| <Tooltip tip="Provides write access to user objects in the CRM.">crm.objects.users.write</Tooltip> | Write user objects | No |
+| <Tooltip tip="Provides read-only access to company schemas in the CRM.">crm.schemas.companies.read</Tooltip> | Read company schemas | No |
+| <Tooltip tip="Provides write access to company schemas in the CRM.">crm.schemas.companies.write</Tooltip> | Write company schemas | No |
+| <Tooltip tip="Provides read-only access to contact schemas in the CRM.">crm.schemas.contacts.read</Tooltip> | Read contact schemas | No |
+| <Tooltip tip="Provides write access to contact schemas in the CRM.">crm.schemas.contacts.write</Tooltip> | Write contact schemas | No |
+| <Tooltip tip="Provides read-only access to custom schemas in the CRM.">crm.schemas.custom.read</Tooltip> | Read custom schemas | No |
+| <Tooltip tip="Provides write access to custom schemas in the CRM.">crm.schemas.custom.write</Tooltip> | Write custom schemas | No |
+| <Tooltip tip="Provides read-only access to deal schemas in the CRM.">crm.schemas.deals.read</Tooltip> | Read deal schemas | No |
+| <Tooltip tip="Provides read and write access to forms and form submissions.">forms</Tooltip> | Forms access | No |
+| <Tooltip tip="Provides read-only access to forms and form submissions.">forms-ro</Tooltip> | Read-only forms | No |
+| <Tooltip tip="Allows the app to make OAuth requests to HubSpot's API.">oauth</Tooltip> | OAuth basic | No |
+| <Tooltip tip="Provides read-only access to sales email data.">sales-email-read</Tooltip> | Read-only sales email | No |
+| <Tooltip tip="Provides read-only access to user settings information.">settings.users.read</Tooltip> | Read user settings | No |
+| <Tooltip tip="Provides read-only access to user team settings information.">settings.users.teams.read</Tooltip> | Read user team settings | No |
+| <Tooltip tip="Provides write access to user team settings information.">settings.users.teams.write</Tooltip> | Write user team settings | No |
+| <Tooltip tip="Provides write access to user settings information.">settings.users.write</Tooltip> | Write user settings | No |
+| <Tooltip tip="Provides read and write access to timeline events for objects.">timeline</Tooltip> | Timeline events | No |
+| <Tooltip tip="Provides read and write access to tickets in HubSpot.">tickets</Tooltip> | Read/write tickets | No |
+| <Tooltip tip="Provides read-only access to tickets in HubSpot.">tickets-ro</Tooltip> | Read-only tickets | No |
+| <Tooltip tip="Provides read and write access to e-commerce data including products, line items, and orders.">e-commerce</Tooltip> | E-commerce data | No |
+| <Tooltip tip="Provides read and write access to files in HubSpot.">files</Tooltip> | Read/write files | No |
+| <Tooltip tip="Provides read-only access to files in HubSpot.">files-ro</Tooltip> | Read-only files | No |
+| <Tooltip tip="Provides access to workflow automation features.">automation</Tooltip> | Workflow automation | No |
+| <Tooltip tip="Allows for syncing data between HubSpot and external systems.">integration-sync</Tooltip> | Data sync | No |
+
+Refer to [HubSpot OAuth scope docs](https://developers.hubspot.com/docs/guides/apps/authentication/working-with-oauth#configure-scopes) for the full official list.
+
+<Note>
+Currently, OpenInt supports the scope <code>crm.objects.contacts.read</code> (read-only access to contact objects). If your use case requires additional scopes, contact the OpenInt team to discuss roadmap support.
+</Note>
+
+## Quickstart: Integrate HubSpot via OpenInt
+
+1. **Set up your HubSpot OAuth app** as described above.
+2. In OpenInt, configure your connector with your HubSpot **Client ID**, **Client Secret**, and the supported scope:
+
+```json
+{
+  "type": "hubspot",
+  "clientId": "YOUR_CLIENT_ID",
+  "clientSecret": "YOUR_CLIENT_SECRET",
+  "scopes": ["crm.objects.contacts.read"],
+  "redirectUri": "YOUR_REDIRECT_URI"
+}
+```
+
+3. Direct your users to the authorization URL generated by OpenInt, or use OpenInt's built-in Connect Portal embedding.
+4. Upon successful authorization, OpenInt will handle token exchange and subsequent API calls securely.
+
+For full details on connection data flow, see [Data Flow](/docs/connect/data-flow.mdx).
+
+## Common Pitfalls and Troubleshooting
+
+<Warning>
+Ensure that your **redirect URI** is set exactly the same in HubSpot and OpenInt. Mismatches will result in failed OAuth flows.
+</Warning>
+
+- **Missing Scopes:** If you request a scope your app or user account doesn’t support, installation will fail. Only request the scopes your integration and HubSpot account have access to.
+- **Account Permissions:** Users must have proper permissions in HubSpot to authorize apps. [Super Admin or App Marketplace Access is required.](https://knowledge.hubspot.com/user-management/hubspot-user-permissions-guide#super-admin)
+- **Token Expiration:** Access tokens expire frequently; always handle token refresh using the provided refresh_token.
+- **Testing on Developer Accounts:** HubSpot does not allow public app installation on developer accounts. Use a [HubSpot test account](https://developers.hubspot.com/docs/getting-started/account-types) for QA.
+
+## Further Reading
+
+- [HubSpot Working with OAuth](https://developers.hubspot.com/docs/guides/apps/authentication/working-with-oauth)
+- [HubSpot OAuth scope reference](https://developers.hubspot.com/docs/guides/apps/authentication/working-with-oauth#configure-scopes)
+- [HubSpot Public Apps Overview](https://developers.hubspot.com/docs/guides/apps/public-apps/overview)
+- [OpenInt Data Flow](/docs/connect/data-flow.mdx)
+
+<Tip>
+If your integration needs additional object types or features from HubSpot, please report your use case to OpenInt—scope expansion is in active development based on customer demand.
+</Tip>
