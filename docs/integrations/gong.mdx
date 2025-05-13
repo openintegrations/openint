@@ -1,0 +1,122 @@
+---
+title: Gong Integration
+description: Integrate Gong into your platform via OpenInt
+---
+
+# Gong Integration (Developer Guide)
+
+Integrate Gong—an AI-powered revenue intelligence and conversation analytics platform—into your application via OpenInt. This guide covers OAuth setup, required permissions/scopes, configuration hints, and troubleshooting.
+
+---
+
+## Overview
+
+OpenInt enables you to securely connect customer Gong accounts to your product. With this integration, you can:
+- Access Gong user profile metadata (`user:read` scope)
+- (Coming soon) Access calls data, analytics, admin features, and conversation details
+
+This guide focuses on the *OAuth 2* flow and required settings.
+
+---
+
+## Prerequisites
+
+- You must have admin access to your Gong organization (to create an app and retrieve credentials).
+- You have an OpenInt account and access to your integration’s configuration.
+
+---
+
+## Registering Your OpenInt App in Gong
+
+Follow these steps to create an OAuth application in Gong and retrieve the credentials needed for OpenInt:
+
+1. **Log in as a Gong technical admin.**
+2. Go to **Company Settings → Ecosystem → API → Integrations tab** ([step-by-step official guide](https://help.gong.io/hc/en-us/articles/13944551222157-Create-an-app-for-Gong)).
+3. Click **Create Integration** and fill out name, description, upload logos, etc.
+4. In **Required authorization scopes**, select the scopes your OpenInt integration will use (see table below). Currently, OpenInt supports only `user:read` (read-only user info), but you may wish to provision additional scopes for future use.
+5. Enter your **OAuth Redirect URI** (provided by OpenInt dashboard or your app config).
+6. Complete required fields: privacy policy, T&C URLs, etc.
+7. Click **Save**: Gong will generate your **Client ID** and **Client Secret**. Copy these for use in OpenInt.
+
+See detailed walkthrough: [Create an app for Gong (official docs)](https://help.gong.io/hc/en-us/articles/13944551222157-Create-an-app-for-Gong)
+
+---
+
+## OAuth 2.0 Settings For Gong
+
+- **Authorization URL**: `https://app.gong.io/oauth2/authorize`
+- **Token URL**: `https://app.gong.io/oauth2/generate-customer-token`
+- **Scope Separator**: Space (` `)
+- **Required OpenInt scope**: `user:read` (minimum for basic functionality)
+- **Redirect URI**: Set in Gong to match your OpenInt registration
+- **Base API URL**: `api_base_url_for_customer` (see below)
+
+#### API Base URL Requirement
+When a customer finishes authenticating, Gong provides an `api_base_url_for_customer` in the OAuth response. Save this value in your OpenInt config—it is required for all further API operations with Gong.
+
+---
+
+## Supported Scopes
+
+Below is a comparison table of Gong’s known OAuth 2 scopes and their support in OpenInt.
+Refer to [Gong’s API Documentation](https://app.gong.io/settings/api/documentation#overview) for current and future scope details. _(Note: Official API doc access requires login with a Gong admin account.)_
+
+| Scope              | Description                                                                         | Supported by OpenInt? |
+|--------------------|-------------------------------------------------------------------------------------|----------------------|
+| <span title="Allows read-only access to basic user profile information">user:read</span> | Read-only access to user profile information                                 | ✅                  |
+| <span title="Provides access to read call recordings and metadata">calls:read</span>    | Access to read call recordings and metadata                                   | 🚫                  |
+| <span title="Grants permission to view analytics and reporting data">analytics:read</span> | View analytics and reporting data                                             | 🚫                  |
+| <span title="Provides full administrative access including user management and system settings">admin:write</span> | Full administrative access (user/system management)                           | 🚫                  |
+| <span title="Grants complete read/write access to all conversation data including recordings, transcripts, and comments">conversations:full</span> | Complete read/write access to all conversation data                           | 🚫                  |
+
+> **Tip:** Hover on each scope for a short description. For the latest scope list and permissions, always consult Gong’s [API documentation](https://app.gong.io/settings/api/documentation#overview) or the [Create an app for Gong](https://help.gong.io/hc/en-us/articles/13944551222157-Create-an-app-for-Gong) guide.
+
+---
+
+## Minimal Setup Example
+
+Configure your OpenInt integration for Gong as follows (replace placeholders with your real data):
+
+```json
+{
+  "client_id": "<your Gong Client ID>",
+  "client_secret": "<your Gong Client Secret>",
+  "redirect_uri": "<your OAuth redirect URI>",
+  "scopes": ["user:read"],
+  "api_base_url_for_customer": "https://<yourcustomer>.api.gong.io"
+}
+```
+
+### OAuth2 Flow (Summary)
+1. Direct user to Gong authorize URL with required parameters.
+2. User completes Gong consent for required scopes.
+3. Receive code at your registered redirect URI.
+4. Exchange code at Gong’s token endpoint to obtain access & refresh tokens and `api_base_url_for_customer`.
+5. Save all these values for your user in OpenInt’s connection store.
+
+> Full details and sample requests: [Official OAuth app creation guide](https://help.gong.io/hc/en-us/articles/13944551222157-Create-an-app-for-Gong).
+
+---
+
+## Common Issues & Troubleshooting
+
+- **App not registering or missing credentials:**
+  - Only Gong technical admins can register an app and view Client Secret/ID.
+- **Invalid redirect URI:**
+  - Ensure your redirect URI is exactly as configured in both Gong and OpenInt.
+- **Missing `api_base_url_for_customer`:**
+  - This must be saved after successful OAuth—Gong uses a unique base URL per customer.
+- **Incorrect scope errors:**
+  - Only request `user:read` unless OpenInt adds more scope support in the future.
+- **400/401 authentication errors:**
+  - Double-check credentials; the most common cause is mismatched Client ID/Secret or failure to use Basic Auth (base64) during token exchange.
+
+---
+
+## References and Further Reading
+
+- [Create an app for Gong (Official How-to)](https://help.gong.io/hc/en-us/articles/13944551222157-Create-an-app-for-Gong)
+- [Gong API Documentation (login required)](https://app.gong.io/settings/api/documentation#overview)
+- [OAuth 2.0 RFC Reference](https://www.rfc-editor.org/rfc/rfc6749.txt)
+
+For technical support with Gong’s portal, contact your Gong admin, or refer to the [Gong Help Center](https://help.gong.io/hc/en-us/categories/4410271045393-APIs-Integrations).
