@@ -1,0 +1,105 @@
+---
+title: Outreach Integration
+---
+
+# Outreach Integration (Developer Guide)
+
+Integrate your application with Outreach using OpenInt’s white-labeled connector. This guide describes how to configure and enable OAuth-based connections for your users.
+
+## Overview
+
+The Outreach connector enables read-only access to a user’s profile information within Outreach via [OAuth 2.0](https://api.outreach.io/api/v2/docs/oauth/). Only **read:user** scope is currently supported by OpenInt, granting access to basic user details. Additional scopes are listed below but are _not yet implemented_ in OpenInt.
+
+## Prerequisites
+
+- Access to your organization’s [Outreach Developer Portal](https://api.outreach.io/api/v2/docs/developer-portal/)
+- Admin privileges on Outreach
+- An OpenInt account with integration setup permissions
+
+## Step 1: Register an OAuth Application in Outreach
+
+To use the Outreach API via OpenInt, you’ll need to create an OAuth application in your Outreach admin console. This provides a Client ID and Client Secret for secure authorization.
+
+**Steps:**
+1. Log into your Outreach account as an admin or developer.
+2. Navigate to the [Outreach Developer Portal](https://api.outreach.io/api/v2/docs/developer-portal/).
+3. Select “Create Application” (or similar, per UI changes).
+4. Complete the registration form:
+    - **Application Name**: A meaningful label (e.g., “My SaaS via OpenInt”)
+    - **Redirect URI**: 
+      - For local dev: `https://localhost:YOUR_PORT/api/integrations/oauth/callback/outreach`
+      - For production: `{your_app_url}/api/integrations/oauth/callback/outreach`
+5. Submit and save. Your application dashboard will show the **Client ID** and **Client Secret**.
+
+For detailed Outreach guidance, see [Outreach OAuth Setup](https://api.outreach.io/api/v2/docs/oauth/).
+
+## Step 2: Configure Outreach in OpenInt
+
+You must provide the newly obtained credentials to OpenInt’s Outreach connector configuration, e.g.:
+
+```ts
+// openint.config.js
+{
+  outreach: {
+    clientId: '<YOUR_OUTREACH_CLIENT_ID>',
+    clientSecret: '<YOUR_OUTREACH_CLIENT_SECRET>',
+    redirectUri: 'https://YOUR_APP/api/integrations/oauth/callback/outreach'
+  }
+}
+```
+
+Ensure the redirect URI matches what was registered with Outreach.
+
+## Step 3: Sync and Authorize
+
+Once credentials are provided and the integration is enabled, your users can initiate the OAuth connection flow from your app. They will be redirected to Outreach’s authorization consent screen and, once completed, redirected back to your designated callback.
+
+### Supported Scopes
+
+Currently, OpenInt only requests the `read:user` scope from Outreach. Additional scopes in the Outreach API are listed below for your planning.
+
+| Scope             | Supported by OpenInt | Description |
+|-------------------|:-------------------:|-------------|
+| <Tooltip tip="Allows read-only access to basic user profile information (name, email, etc.)">read:user</Tooltip>        | ✅                 | Read user info |
+| <Tooltip tip="Provides read access to prospect data including contact information and engagement history">read:prospects</Tooltip>     | ❌                 | Read prospects |
+| <Tooltip tip="Allows creating and updating prospect records in the Outreach platform">write:prospects</Tooltip>   | ❌                 | Write prospects |
+| <Tooltip tip="Grants read access to sequence data including steps and templates">read:sequences</Tooltip>      | ❌                 | Read sequences |
+| <Tooltip tip="Allows creating and modifying email sequences and templates">write:sequences</Tooltip>    | ❌                 | Write sequences |
+| <Tooltip tip="Provides full administrative access to all Outreach data and functions">admin:all</Tooltip>           | ❌                 | Full admin     |
+
+> For a complete, current reference, see the [official Outreach scopes documentation](https://api.outreach.io/api/v2/docs/scopes/).
+
+<Tip>
+Only `read:user` is currently supported. Using unsupported scopes in your configuration will result in errors or denied authorization.
+</Tip>
+
+## Common Integration Pitfalls
+
+- **Redirect URI mismatch:** Ensure your redirect URI exactly matches between Outreach and OpenInt.
+- **Invalid scopes:** Only `read:user` is supported. Other scopes requested in OAuth may cause the flow to fail.
+- **Client Secret/ID typos:** Copy credentials carefully from Outreach Developer Portal.
+- **OAuth consent issues:** Confirm the Outreach app is not in a restricted/test state and is approved for production use.
+
+## Resources & References
+
+- [Outreach OAuth Documentation](https://api.outreach.io/api/v2/docs/oauth/)
+- [Outreach Scopes Reference](https://api.outreach.io/api/v2/docs/scopes/)
+
+## Example OAuth Authorization Request
+
+The OpenInt connector uses the following OAuth URLs:
+
+```txt
+Authorization endpoint: https://api.outreach.io/oauth/authorize
+Token endpoint:         https://api.outreach.io/oauth/token
+Scope separator:        (space)
+```
+
+Example authorization URL (with supported scope):
+
+```txt
+https://api.outreach.io/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_CALLBACK&scope=read:user
+```
+
+---
+If you require additional scopes, please [contact OpenInt support](mailto:support@openint.dev) to discuss roadmap and enablement.
