@@ -1,0 +1,61 @@
+---
+title: Connect SharePoint with Your App
+description: Learn how to securely connect your SharePoint account to your app to sync files and collaborate easily.
+---
+
+# Connect SharePoint to your app
+
+Connect your SharePoint account to your app to easily sync documents, collaborate, and share files directly within your workspace. This guide walks you through connecting with SharePoint, explains the permissions required, and helps you troubleshoot common issues—so you’re up and running in minutes!
+
+<Steps>
+  <Step title="Start the Connection">
+    In your app, go to the section where you can connect new integrations. Select <b>SharePoint</b> from the list of available services, then click <b>Connect</b> or <b>Add Account</b>.
+  </Step>
+  <Step title="Sign in to Microsoft">
+    A secure Microsoft login window will appear. Enter your usual Microsoft account credentials for SharePoint, then click <b>Sign in</b>.
+  </Step>
+  <Step title="Grant Permissions">
+    Review the permissions requested. Approve access so your app can work with your SharePoint files and identity. (You’ll find the exact permissions explained below.)
+  </Step>
+  <Step title="Finish the Setup">
+    Once approved, you’ll be automatically redirected back to your app. You should see SharePoint listed as a connected service and may be able to test syncing or sharing files right away.
+  </Step>
+</Steps>
+
+## What permissions are requested and why?
+
+When connecting SharePoint, your app will request the following permissions to ensure everything works smoothly:
+
+- **offline_access**: Lets your app keep working with your SharePoint account even after you close your browser, so you don’t need to reconnect every time. This enables background updates and syncing.
+- **openid**: Used to securely confirm your identity and help your app recognize you across sessions. This helps keep your account safe and personalized.
+
+<Info>
+Your app will never access or change anything in your SharePoint account without your permission. The integration only uses the access granted to sync files and enable collaboration features.
+</Info>
+
+## How to verify your SharePoint connection
+
+After connecting, try the following to ensure everything is set up correctly:
+
+- Check that SharePoint shows as "connected" in your app’s integration settings.
+- Optionally, upload or sync a file to/from SharePoint to confirm the connection is active.
+- Refresh your app to see if your SharePoint content appears as expected.
+
+<AccordionGroup>
+  <Accordion title="I see an error when logging into Microsoft">
+    Double-check that you are using the correct Microsoft/SharePoint account credentials. If your company requires Single Sign-On (SSO), make sure to use your work account.
+  </Accordion>
+  <Accordion title="Permission denied or consent failed">
+    You might have declined one of the requested permissions. Try the connection process again and accept all permissions shown. If you still see this error, please ask your company IT administrator to ensure SharePoint third-party app connections are allowed.
+  </Accordion>
+  <Accordion title="SharePoint is connected but I don’t see my files">
+    First, refresh your app. If files do not appear, disconnect and reconnect SharePoint from your app. Confirm the correct account was used and that you have access to the intended SharePoint drive or folder.
+  </Accordion>
+  <Accordion title="Still having trouble?">
+    Disconnect SharePoint and try connecting again (you may need to clear your browser cache or use an incognito window). If the issue continues, please reach out to your app support team for help.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+You can always review or revoke SharePoint access from your Microsoft account’s permissions page at any time for maximum control over your data.
+</Tip>
