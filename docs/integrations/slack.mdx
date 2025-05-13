@@ -1,0 +1,84 @@
+---
+title: Slack Integration
+description: Integrate Slack into your application using OpenInt’s OAuth2 toolkit. Includes supported scopes, setup instructions, and troubleshooting for engineers embedding the Slack connector.
+---
+
+# Slack Integration via OpenInt
+
+Integrate Slack into your product using OpenInt to give your users seamless access to Slack API functionality through a secure OAuth2 connection, without the need to handle tokens or scopes directly.
+
+> **Audience:** This guide is for technical teams responsible for embedding and configuring integrations inside your SaaS via OpenInt.
+
+---
+
+## Prerequisites
+
+1. [Create a Slack app](https://api.slack.com/apps) in your Slack workspace.
+2. In your app’s **OAuth & Permissions**, add your OpenInt backend endpoint as a Redirect URL (e.g., `https://your-domain.com/api/openint/oauth/callback`).
+3. Copy your **Client ID** and **Client Secret** from the Slack app settings; you’ll need to provide these to OpenInt.
+4. [Review Slack OAuth documentation](https://api.slack.com/authentication/oauth-v2).
+
+---
+
+## Quickstart
+
+OpenInt handles the Slack OAuth2 Authorization Code flow for you:
+
+1. Provide your Slack **Client ID** and **Client Secret** to OpenInt’s Slack configuration.
+2. Set the Slack scopes you wish to use (see table below). _Currently, only `users:read` is supported by OpenInt._
+3. Embed the OpenInt connect portal or button in your app.
+
+---
+
+## OAuth2 for Slack
+
+- **Authorization URL:** `https://slack.com/oauth/v2/authorize`
+- **Token Exchange URL:** `https://slack.com/api/oauth.v2.access`
+- **Scope Separator:** Comma (`,`) — e.g., `users:read,channels:read`
+
+### Locating Your Client ID & Secret
+1. Visit the [Slack Apps dashboard](https://api.slack.com/apps) and select your app.
+2. Under **Basic Information**, copy your **Client ID** and **Client Secret**.
+3. In **OAuth & Permissions**, configure your redirect URLs to exactly match your integration.
+
+See also [Slack OAuth setup docs](https://api.slack.com/authentication/oauth-v2).
+
+---
+
+## Supported Slack OAuth Scopes
+
+> For a full list, see [Slack OAuth scopes](https://api.slack.com/scopes).
+
+| Scope                | OpenInt Supported | Description                                      |
+|----------------------|:-----------------:|--------------------------------------------------|
+| `app_mentions:read`  |        ❌         | <Tooltip tip="Allows the app to view messages that directly mention the app in channels it has access to.">details</Tooltip> |
+| `channels:read`      |        ❌         | <Tooltip tip="Allows the app to view basic information about public channels in the workspace, including channel names, topics, and purposes.">details</Tooltip> |
+| `channels:history`   |        ❌         | <Tooltip tip="Allows the app to view messages and other content in public channels.">details</Tooltip> |
+| `channels:write`     |        ❌         | <Tooltip tip="Allows the app to create, rename, and archive public channels, as well as set their purpose and topic.">details</Tooltip> |
+| `chat:write`         |        ❌         | <Tooltip tip="Allows the app to post messages in channels and conversations it has access to.">details</Tooltip> |
+| `commands`           |        ❌         | <Tooltip tip="Allows the app to add custom slash commands that users can invoke in Slack.">details</Tooltip> |
+| `im:history`         |        ❌         | <Tooltip tip="Allows the app to view messages and other content in direct messages.">details</Tooltip> |
+| `im:write`           |        ❌         | <Tooltip tip="Allows the app to start direct message conversations with users.">details</Tooltip> |
+| `users:read`         |        ✅         | <Tooltip tip="Allows the app to view basic information about users in the workspace, including names, emails, and avatars.">details</Tooltip> |
+| `users:read.email`   |        ❌         | <Tooltip tip="Allows the app to view email addresses of users in the workspace (in addition to basic user information).">details</Tooltip> |
+| `users.profile:read` |        ❌         | <Tooltip tip="Allows the app to view users' profile details, including custom profile fields.">details</Tooltip> |
+| `admin`              |        ❌         | <Tooltip tip="Allows the app to perform administrative actions, including managing users, channels, and workspace settings.">details</Tooltip> |
+| `files:read`         |        ❌         | <Tooltip tip="Allows the app to view files shared in channels and conversations it has access to.">details</Tooltip> |
+| `files:write`        |        ❌         | <Tooltip tip="Allows the app to upload, edit, and delete files in channels and conversations it has access to.">details</Tooltip> |
+
+---
+
+## Common Pitfalls
+
+- **Redirect URI mismatch**: Slack requires the redirect URI for authorization and token exchange to match _exactly_.
+- **Requesting unsupported scopes**: Only `users:read` is supported via OpenInt for Slack.
+- **Copy-paste issues**: Watch out for whitespace in client IDs/secrets.
+- **Delayed propagation**: Permissions/redirect changes may take minutes to take effect in Slack.
+
+---
+
+## Resources
+
+- [Slack OAuth2 Overview](https://api.slack.com/authentication/oauth-v2)
+- [Slack OAuth Scopes](https://api.slack.com/scopes)
+- [Slack App Management](https://api.slack.com/apps)
