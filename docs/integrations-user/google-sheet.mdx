@@ -1,0 +1,47 @@
+# ---
+# title: Connecting Google Sheets
+# ---
+
+# Connect Google Sheets
+
+You can connect your Google Sheets account to {{CUSTOMER_APP_NAME}} to easily sync spreadsheets, import data, or automate workflows directly from your Google account.
+
+## How to Connect
+
+1. Open the **Integrations** or **Settings** page in {{CUSTOMER_APP_NAME}}.
+2. Find the **Google Sheets** integration and click **Connect**.
+3. A Google sign-in window will open. Choose the Google account you want to connect.
+4. Review the permissions requested, then click **Allow** to grant access.
+5. You’ll be redirected back to {{CUSTOMER_APP_NAME}} and should see a confirmation message.
+
+## Permissions Required
+
+When you connect Google Sheets, the app may request one or more of the following permissions:
+
+| Permission | Why It’s Needed |
+| ---------- | -------------- |
+| **Full access to your Sheets** (`spreadsheets`) | Read, write, and modify all Google Sheets, including creating, updating, and sharing them. |
+| **Read-only sheets** (`spreadsheets.readonly`) | Allows viewing spreadsheets without making changes. |
+| **Created/opened sheets only** (`drive.file`) | Access only to spreadsheets you’ve created through the app or explicitly selected. |
+| **Read-only Drive access** (`drive.readonly`) | Lets the app read your sheets from Google Drive, but not change them. |
+| **Currently open sheet only** (`spreadsheets.currentonly`) | Restrict access to the current spreadsheet in use. |
+
+You can choose whether to grant full or limited access depending on the actions you wish to perform in {{CUSTOMER_APP_NAME}}.
+
+## Test Your Connection
+
+After connecting:
+
+- Try importing a Google Sheet or accessing Sheets from within {{CUSTOMER_APP_NAME}}.
+- If you see your files or can create new ones, the connection is working correctly.
+
+## Troubleshooting Common Issues
+
+- **Pop-up blocked**: Make sure your browser allows pop-ups.
+- **Wrong Google account**: Log out of other Google accounts or use a private/incognito window to select the right one.
+- **Missing Sheets**: The app can see only those files for which it has permissions. If files are missing, check which option you picked during connection.
+- **Consent screen denied**: Double-check that all requested permissions are granted. If access is denied in error, try reconnecting.
+- **Error connecting or syncing**: Disconnect and reconnect the integration. If the problem continues, contact {{CUSTOMER_APP_NAME}} support.
+
+---
+If you have any questions or run into problems, reach out to {{CUSTOMER_APP_NAME}} support for assistance.
