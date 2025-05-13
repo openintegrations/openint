@@ -1,0 +1,89 @@
+---
+title: Salesloft Integration
+description: Integrate Salesloft with your application via OpenInt using OAuth2 and granular scope control.
+---
+
+# Salesloft Integration for Developers
+
+Integrate Salesloft into your SaaS application using OpenInt to enable secure, white-labeled access to Salesloft resources on behalf of your users. This guide walks you through OAuth setup and best practices for smooth integration.
+
+## Quickstart
+
+1. **Register a Salesloft OAuth App**
+2. **Configure OAuth credentials in OpenInt**
+3. **Set required scopes**
+4. **Test the connection via your OpenInt-powered integration UI**
+
+### Example Connector Configuration
+
+```json
+{
+  "provider": "salesloft",
+  "auth": {
+    "client_id": "<your-client-id>",
+    "client_secret": "<your-client-secret>",
+    "redirect_uri": "https://<your-app-domain>/api/openint/oauth/callback",
+    "scopes": ["users:read"]
+  }
+}
+```
+
+---
+
+## Registering your OAuth App with Salesloft
+
+To allow your users to connect their Salesloft accounts, you must register your application with Salesloft and obtain a **Client ID** and **Client Secret**.
+
+**Steps:**
+1. **Go to the Salesloft Developer Portal:**
+   - Log in to [Salesloft](https://app.salesloft.com/) with your admin or developer account.
+   - Navigate to `Settings` > `Integrations` or `Developer` > `OAuth Applications` (the exact path may depend on your account type; for the latest instructions, see [Salesloft API Docs](https://developers.salesloft.com/docs/oauth/overview/)).
+2. **Create a new OAuth application.**
+   - Provide a descriptive name and (optionally) icon or description for your integration.
+   - Enter your **redirect URI** provided by OpenInt (e.g. `https://<your-app-domain>/api/openint/oauth/callback`).
+3. **Save and retrieve your credentials.**
+   - After creation, you’ll receive a **Client ID** and **Client Secret** for your application. Copy these for use in your OpenInt configuration.
+
+<Tip>
+For additional guidance and screenshots, see the [Salesloft OAuth App Documentation](https://developers.salesloft.com/docs/oauth/overview/). If you do not see Developer/Admin menus, contact your Salesloft support representative.
+</Tip>
+
+---
+
+## Supported OAuth2 Scopes
+
+Below is a list of OAuth scopes known to be supported by Salesloft. OpenInt currently supports the listed subset. You may request additional scopes from OpenInt support.
+
+> **Note:** If Salesloft updates their scopes, refer to their [API documentation scopes section](https://developers.salesloft.com/docs/oauth/scopes/) for the canonical list (link subject to change).
+
+| Scope            | Description                                                                                                                        | Supported by OpenInt? |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------|:----------------------:|
+| users:read       | <Tooltip tip="Allows read-only access to user profile information (name, email, role, etc.) but no access to sales data or actions">User profile read</Tooltip> | ✅                    |
+| calls:read       | <Tooltip tip="Provides access to read call recordings, transcripts, and metadata but cannot initiate calls or modify call data">Calls read</Tooltip> |                    |
+| emails:read      | <Tooltip tip="Grants permission to read email templates and sent email content but cannot send or modify emails">Emails read</Tooltip> |                    |
+| people:read      | <Tooltip tip="Allows reading contact/lead information in the CRM but no editing or creation capabilities">People read</Tooltip> |                    |
+| cadences:read    | <Tooltip tip="Provides read access to sales cadence workflows and sequences but cannot modify or execute them">Cadence read</Tooltip> |                    |
+| activities:write | <Tooltip tip="Enables creating and updating sales activities (calls, emails, meetings) in the system">Activities write</Tooltip> |                    |
+| people:write     | <Tooltip tip="Allows full create/read/update/delete operations on contact/lead records">People write</Tooltip> |                    |
+| admin            | <Tooltip tip="Provides full administrative access including user management, settings, and all data operations">Admin</Tooltip> |                    |
+
+| Checkmark (✅) indicates natively supported scopes by OpenInt. |
+
+---
+
+## Common Mistakes & Troubleshooting
+
+- **Incorrect redirect URI:** The redirect URI registered in Salesloft _must_ exactly match what is configured in OpenInt.
+- **Insufficient scopes:** If you select scopes not yet supported by OpenInt, access will be denied. Use only those with a ✅.
+- **Client Secret mishandling:** Never commit client secrets to public repos.
+- **Salesloft admin approval:** Ensure your OAuth Salesloft app is approved and activated in your Salesloft organization.
+
+For additional troubleshooting, consult the OpenInt logs for specific errors or reach out to support.
+
+---
+
+## Further Resources
+
+- [Salesloft API Documentation](https://developers.salesloft.com/docs/)
+- [Salesloft OAuth Overview](https://developers.salesloft.com/docs/oauth/overview/)
+- [OpenInt Support](mailto:support@openint.dev)
