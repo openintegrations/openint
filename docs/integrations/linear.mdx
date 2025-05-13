@@ -1,0 +1,91 @@
+---
+title: Linear Integration
+sidebar_position: 1
+---
+
+# Linear Integration (OAuth2)
+
+Integrate the Linear platform with your application using OpenInt. This guide walks you through creating a Linear OAuth2 app, configuring credentials, understanding scopes, and handling common issues.
+
+## Overview
+
+Linear is a modern issue tracking and project management tool. By integrating Linear through OpenInt, your users can authorize secure, scoped access to their Linear accounts directly from your product, enabling features such as fetching issues, tickets, and workspace data.
+
+## Prerequisites
+
+- A Linear workspace (admin access required to register OAuth apps)
+- Access to your application's instance of OpenInt
+
+## Registering a Linear OAuth2 Application
+
+Follow these steps to create and configure an OAuth2 application in Linear:
+
+1. **Go to the OAuth Applications page:**
+   - Visit [Linear OAuth Applications](https://linear.app/settings/api/applications) (requires admin login).
+   - Or, in the Linear app: Click your workspace name > **Settings** > **API** > **OAuth Applications** > **Create new OAuth Application**.
+2. **Fill out the application form:**
+   - **Name:** Enter a descriptive app name (shown to your users).
+   - **Description/Logo:** (Optional)
+   - **Callback URLs:** Add your OpenInt callback URI (e.g., `https://YOUR_OPENINT_DOMAIN/api/oauth/callback/linear`). This must match exactly.
+3. **Save and retrieve credentials:**
+   - After saving, copy the **Client ID** and **Client Secret**. The secret is shown only once—store it securely.
+
+For step-by-step screenshots, see [Clerk: Create a Linear App](https://clerk.com/docs/authentication/social-connections/linear#create-a-linear-app).
+
+**Official Linear OAuth doc:** [OAuth2 Authentication](https://developers.linear.app/docs/oauth/authentication)
+
+## Configuring OpenInt with Linear Credentials
+
+In your OpenInt dashboard or config, provide:
+
+```json
+{
+  "provider": "linear",
+  "client_id": "<YOUR_CLIENT_ID>",
+  "client_secret": "<YOUR_CLIENT_SECRET>",
+  "redirect_uri": "https://YOUR_OPENINT_DOMAIN/api/oauth/callback/linear",
+  "scopes": ["read"]
+}
+```
+- The only required scope for basic read/issue sync is `read`. Additional scopes are not currently supported by OpenInt.
+
+## Supported & Optional OAuth Scopes
+
+Below are all available Linear OAuth2 scopes. Only **read** access is currently supported by OpenInt (as of this integration version).
+
+| Scope               | Supported by OpenInt | Description |
+|---------------------|:-------------------:|-------------|
+| <Tooltip tip="(Default) Read access for the user's account. This scope will always be present.">read</Tooltip>               | ✅                 | Read access |
+| <Tooltip tip="Write access for the user's account. If your application only needs to create comments, use a more targeted scope.">write</Tooltip>              | ❌                 | Write access |
+| <Tooltip tip="Allows creating new issues and their attachments.">issues:create</Tooltip>      | ❌                 | Create issues |
+| <Tooltip tip="Allows creating new issue comments.">comments:create</Tooltip>    | ❌                 | Create comments |
+| <Tooltip tip="Allows creating and modifying time schedules.">timeSchedule:write</Tooltip> | ❌                 | Schedule access |
+| <Tooltip tip="Full access to admin level endpoints. You should never ask for this permission unless it's absolutely needed.">admin</Tooltip>              | ❌                 | Admin access |
+
+> See the [Linear OAuth2 Scopes Reference](https://developers.linear.app/docs/oauth/authentication) for up-to-date details.
+
+## Quickstart: Happy Path
+
+1. Register your OAuth application in Linear and get the client ID/secret (see above).
+2. Add these credentials to your OpenInt configuration (see sample above).
+3. Ensure your redirect URI matches between Linear and OpenInt.
+4. Enable the Linear integration in your app.
+5. Test by authorizing with a real Linear user account and verifying connection.
+
+## Common Pitfalls & Troubleshooting
+
+- **Redirect URI mismatch:** The redirect URI you configure in Linear must match *exactly* with the URI configured in OpenInt. Even minor mismatches will result in OAuth errors.
+- **Missing or incorrect scopes:** If your integration requests unsupported scopes, authorization may fail. Currently, only the `read` scope is supported by OpenInt.
+- **Lost client secret:** Linear only shows the client secret once—store it securely.
+- **Insufficient permissions:** Users must have the appropriate permissions in Linear to authorize the requested scopes.
+- **Over-permissioning:** Do *not* request the `admin` scope unless absolutely needed; this is strongly discouraged.
+
+If you encounter errors during setup, review the [Linear OAuth documentation](https://developers.linear.app/docs/oauth/authentication) and verify your configuration.
+
+---
+
+**Further resources:**
+- [Linear OAuth Management](https://linear.app/settings/api/applications)
+- [Linear OAuth2 Authentication Docs](https://developers.linear.app/docs/oauth/authentication)
+
+For more help with OpenInt configuration, contact our support or consult the main [getting started guide](/getting-started/quickstart).
