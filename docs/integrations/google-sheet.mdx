@@ -1,0 +1,108 @@
+---
+title: Google Sheet Integration
+description: How to integrate Google Sheet with your app using OpenInt
+---
+
+# Google Sheet Integration (Developer Guide)
+
+This document is intended for engineers integrating Google Sheets with their applications via OpenInt. It covers OAuth setup, supported API scopes, OpenInt connector configuration, and common setup pitfalls.
+
+## Overview
+
+The OpenInt Google Sheet connector enables your users to securely connect and sync data between your app and their Google Sheets accounts through OAuth 2.0. This integration facilitates reading and writing data to the user's Sheets while maintaining strong consent and compliance requirements.
+
+Supported integration features include:
+- Secure OAuth 2.0 authorization (authorization code flow)
+- Access only to the currently opened spreadsheet (for GA support)
+- Fine-grained scope control for minimal permissions
+
+## Prerequisites
+
+Before integrating, you need:
+- Access to the [Google Cloud Console](https://console.cloud.google.com/)
+- A Google Cloud project with the [Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com) and [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com) **enabled**
+
+## Creating OAuth Credentials for Google Sheets
+
+Follow these steps to obtain a Client ID and Client Secret for your integration:
+
+1. **Create/select a Google Cloud project** at the [Cloud Console](https://console.cloud.google.com/).
+2. **Enable the APIs**:
+   - [Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com)
+   - [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com)
+3. **Configure the OAuth consent screen**:
+   - Go to [OAuth consent screen config](https://console.cloud.google.com/apis/credentials/consent)
+   - Choose User Type (External for most SaaS apps)
+   - Fill required app and contact info
+   - Add all your app's authorized domains and required OAuth scopes
+   - Add test users if needed for development
+   - Save and submit (for restricted scopes: follow [Google’s app verification](https://support.google.com/cloud/answer/9110914))
+4. **Create OAuth 2.0 credentials**:
+   - Go to [APIs & Services > Credentials](https://console.cloud.google.com/apis/credentials)
+   - Click **Create Credentials → OAuth client ID**
+   - Application type: **Web application** usually
+   - Authorized redirect URIs: add your OpenInt redirect URI, e.g., `https://your-app.com/oauth2/callback`
+   - Download/save your **Client ID** and **Client Secret**
+
+More: See [Create OAuth credentials (Google Docs)](https://developers.google.com/workspace/guides/create-credentials).
+
+## OAuth Scopes: Supported vs. Available
+
+Google exposes a variety of OAuth 2.0 scopes for Google Sheets and Drive. You should request _only_ the minimal scope required for your use case, as excessive scope requests can cause user friction or require extra Google verification.
+
+As of now, OpenInt supports the following scope for Google Sheet:
+
+> `https://www.googleapis.com/auth/spreadsheets.currentonly`
+
+Other common scopes from the provider are documented below. Only the currentonly scope is available in OpenInt’s GA connector at this time.
+
+For the full and most up-to-date list, see:
+- [Google Sheets API scopes](https://developers.google.com/sheets/api/guides/authorizing)
+- [Google OAuth Scopes Directory](https://developers.google.com/identity/protocols/oauth2/scopes)
+
+| Scope | Supported by OpenInt | Description |
+|-------|---------------------|-------------|
+| <Tooltip tip="Full access to read, write, and modify all Google Sheets and their properties. This includes creating, deleting, and sharing spreadsheets.">https://www.googleapis.com/auth/spreadsheets</Tooltip> | ❌ | Full read/write Sheets access |
+| <Tooltip tip="Read-only access to view Google Sheets and their properties, but cannot make any changes or access drive metadata.">https://www.googleapis.com/auth/spreadsheets.readonly</Tooltip> | ❌ | Read-only Sheets access |
+| <Tooltip tip="Access to only Google Sheets files that the app has created or been explicitly opened by the user. Cannot access all user spreadsheets.">https://www.googleapis.com/auth/drive.file</Tooltip> | ❌ | Per-file Drive access |
+| <Tooltip tip="Read-only access to all Google Sheets files in the user's Drive, but cannot make modifications.">https://www.googleapis.com/auth/drive.readonly</Tooltip> | ❌ | Read-only Drive access |
+| <Tooltip tip="Access limited to only the currently opened spreadsheet. Cannot access other spreadsheets or perform drive-level operations.">https://www.googleapis.com/auth/spreadsheets.currentonly</Tooltip> | ✅ | **Supported:** Only the currently opened spreadsheet |
+
+## Quickstart: Integrating Google Sheet with OpenInt
+
+Add the following to your OpenInt connector configuration (example in TypeScript):
+
+```ts
+{
+  provider: "google-sheet",
+  client_id: "<YOUR_OAUTH_CLIENT_ID>",
+  client_secret: "<YOUR_OAUTH_CLIENT_SECRET>",
+  redirect_uri: "https://your-app.com/oauth2/callback",
+  scopes: ["https://www.googleapis.com/auth/spreadsheets.currentonly"],
+}
+```
+
+- Use your real client credentials and correct redirect URI
+- Ensure the redirect URI _matches exactly_ both in your Google Cloud config and OpenInt setup
+- For more detail on OpenInt connector config, see [Connector Configuration](/core-concepts-v0/connector-config)
+
+## Common Pitfalls and Troubleshooting
+
+- **Redirect URI mismatch:** The redirect URI used in OpenInt **must exactly match** the one registered in Google Cloud Console, including protocol (http/https) and trailing slashes.
+- **Unverified app warnings:** If using sensitive or restricted scopes (not supported by OpenInt Google Sheet GA), you may hit Google's verification wall. Only `spreadsheets.currentonly` is supported for GA.
+- **Incorrect scopes:** Only request scopes actually supported in the OpenInt connector, _not_ the full set offered by Google unless your connector and consent screen are appropriately configured.
+- **Consent screen issues:** Ensure all details and privacy URLs are filled in and your domain is authorized for OAuth.
+- **Test user access:** If your app is in testing mode, the authenticating Google Account must be included as a test user.
+
+## Further Reading and References
+
+- [Google Sheets API Authorization Guide](https://developers.google.com/sheets/api/guides/authorizing)
+- [Google Drive API Auth Guide](https://developers.google.com/drive/api/guides/about-auth)
+- [Configure OAuth Consent Screen](https://developers.google.com/workspace/guides/configure-oauth-consent)
+- [Google OAuth 2.0 Scopes Directory](https://developers.google.com/identity/protocols/oauth2/scopes)
+- [Google: App Verification Process](https://support.google.com/cloud/answer/9110914)
+
+<br />
+
+----
+This page is for app developers using OpenInt. For end-user help, contact your app's support team or Google Workspace support.
