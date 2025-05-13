@@ -1,0 +1,51 @@
+---
+title: Connect Gmail
+description: How to connect your Gmail account to your app and enable email syncing and actions.
+---
+
+# Connect Your Gmail Account
+
+You can securely connect your Gmail account to this app to sync emails, view message data, and enable additional features such as sending or labeling emails—all within one place. Connecting your account is safe, and you are always in control of the permissions you grant.
+
+## How to Connect Gmail
+
+1. **Click "Connect Gmail"** in your app’s integrations or account settings page.
+2. A secure Google window will open. If prompted, sign in to the Gmail (Google) account you want to use.
+3. Review the requested permissions. (See details below.)
+4. Click **Allow** to grant access.
+5. Wait to be redirected back to the app. Your Gmail account is now connected!
+
+## Permissions Explained
+Depending on the features your app supports, it may request some or all of these Gmail permissions:
+
+| Permission | What it allows | Why it's needed |
+|------------|----------------|-----------------|
+| **Read-only email access** (`gmail.readonly`) | View your emails and threads, but cannot change, delete, or send anything. | Used to show your message list and details inside the app. |
+| **Send emails** (`gmail.send`) | Send messages as you, without reading existing messages. | Enables sending emails from within the app. |
+| **Compose emails** (`gmail.compose`) | Create, read, and send new drafts—but can’t access inbox messages. | Allows composing drafts and sending them from the app. |
+| **Insert emails** (`gmail.insert`) | Insert emails into your account, but not read or delete existing emails. | Used for features like email import. |
+| **Labels management** (`gmail.labels`) | Create, view, and edit Gmail labels (does not access message contents). | Lets you organize emails, e.g., automatic labeling. |
+| **Metadata only** (`gmail.metadata`) | Access message headers and labels only (no bodies or attachments). | Useful for syncing just message status or for analytics. |
+| **Full mailbox access** (`gmail.modify` / `mail.google.com`) | Full access: read, send, delete, and modify all messages and threads. | Required for advanced features like full mailbox search and syncing.
+
+> **Note:** The app will only ask for the minimum permissions required for the specific Gmail features it offers. Review the access screen to confirm exactly what is being requested.
+
+## How to Test Your Gmail Connection
+
+After connecting Gmail:
+
+- Check if your emails, labels, or drafts appear in the app as expected.
+- Try sending a message or adding a label (if supported by your app).
+- If you don’t see any Gmail data, try refreshing or reconnecting your account.
+
+## Troubleshooting & Common Issues
+
+**Problem connecting?**
+
+- Ensure you are using the correct Google account.
+- Confirm you allowed all required permissions in the popup window.
+- If denied, you can try to connect again and accept permissions.
+- If you accidentally connected the wrong account or want to disconnect, visit [your Google account’s "Third-party apps with account access" page](https://myaccount.google.com/permissions) to manage or remove access.
+- Sometimes browser pop-up blockers can interfere. Try disabling pop-up blockers for this site while connecting.
+
+If issues persist, use the in-app help or support channels.
