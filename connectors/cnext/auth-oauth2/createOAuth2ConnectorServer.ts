@@ -74,7 +74,11 @@ export function createOAuth2ConnectorServer<
           env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         scopes: getRequestedScopes(config, oauthConfig),
         state: JSON.stringify({
+          // TODO: Move this to a lookup token and enforce CSRF protection
           connection_id: connectionId,
+          connector_config_id: input.connector_config_id,
+          customer_id: context.extCustomerId,
+          org_id: context.orgId,
           redirect_uri: new URL(
             ...resolveRoute('/connect/callback', null),
           ).toString(),

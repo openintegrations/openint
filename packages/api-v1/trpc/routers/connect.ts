@@ -3,6 +3,7 @@ import type {
   ConnectorDef,
   ConnectorServer,
   ExtCustomerId,
+  Id,
 } from '@openint/cdk'
 
 import {TRPCError} from '@trpc/server'
@@ -190,6 +191,8 @@ export const connectRouter = router({
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
+        connectorConfigId: input.connector_config_id,
+        orgId: ctx.viewer.orgId,
         connectionExternalId: input.options?.connectionExternalId,
         fetch: ctx.fetch,
         baseURLs: getBaseURLs(null),
@@ -272,6 +275,11 @@ export const connectRouter = router({
         })
       }
 
+      console.log(
+        'Post Connect called with input',
+        JSON.stringify(input, null, 2),
+      )
+
       const postConnect =
         connector.postConnect ??
         (({connectOutput}): ConnectionUpdate => ({
@@ -285,6 +293,8 @@ export const connectRouter = router({
         extCustomerId: (ctx.viewer.role === 'customer'
           ? ctx.viewer.customerId
           : ctx.viewer.userId) as ExtCustomerId,
+        connectorConfigId: ccfg.id as Id['ccfg'],
+        orgId: input.discriminated_data.connect_output.org_id,
         fetch: ctx.fetch,
         baseURLs: getBaseURLs(null),
       }

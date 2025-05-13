@@ -80,6 +80,11 @@ export const oauth2Schemas = {
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
   pre_connect_input: z.object({
+    // NOTE: remove when we have a token in place for the state to prevent replay attacks
+    connector_config_id: z
+      .string()
+      .optional()
+      .describe('The the connector config id of the connection'),
     /** @deprecated. This is part of the connectContext, not pre-connect input */
     connection_id: z
       .string()
@@ -107,6 +112,9 @@ export const oauth2Schemas = {
 export const zOauthState = z.object({
   connection_id: z.string(),
   redirect_uri: z.string().optional(),
+  connector_config_id: z.string(),
+  customer_id: z.string(),
+  org_id: z.string(),
 })
 
 export const zOauthCallbackSearchParams = z.object({
