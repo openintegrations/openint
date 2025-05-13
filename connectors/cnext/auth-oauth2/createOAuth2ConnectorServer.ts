@@ -80,8 +80,11 @@ export function createOAuth2ConnectorServer<
           ).toString(),
         }),
         code_challenge: codeChallenge,
-        ...oauthConfig.params_config.authorize,
+        additional_params: oauthConfig.params_config.authorize,
       })
+
+      // console.log(oauthConfig.params_config.authorize)
+      // console.log('authorizeUrl', authorizeUrl)
 
       return {
         authorization_url: authorizeUrl,
@@ -121,7 +124,7 @@ export function createOAuth2ConnectorServer<
       //   }
       //   throw err
       // })
-      console.log('[oauth2] postConnect res', res, config)
+      // console.log('[oauth2] postConnect res', res, config)
 
       return {
         // TODO: Fix this connectionExternalId abstraction
