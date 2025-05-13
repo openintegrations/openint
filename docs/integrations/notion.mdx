@@ -1,0 +1,106 @@
+---
+title: Notion Integration
+description: Developer documentation to integrate Notion with your app using OpenInt. Covers OAuth app setup, supported scopes, and troubleshooting.
+---
+
+# Notion Integration (Developer Guide)
+
+Integrate Notion into your application using OpenInt. This guide walks you through OAuth registration, supported scopes, implementation details, and common issues specific to Notion.
+
+## Prerequisites
+
+- A Notion account with workspace admin access
+- Access to [Notion integrations dashboard](https://www.notion.so/my-integrations)
+- OpenInt project set up
+
+## Register your Notion OAuth App
+
+1. Go to the [Notion integration dashboard](https://www.notion.so/my-integrations).
+2. Click **New integration**.
+3. Fill out basic info (name, logo, etc). Set **Type** to `Public`.
+4. Specify your application's **redirect URI** & complete required fields.
+5. After creation, navigate to the **Configuration** tab. Copy the **Client ID** and **Client Secret**—you will need these for OpenInt.
+
+Refer to [Notion’s official OAuth setup guide](https://developers.notion.com/docs/authorization#public-integration-auth-flow-set-up) for annotated screenshots.
+
+## OAuth2: How OpenInt Authenticates Notion
+
+OpenInt uses the standard Notion public OAuth2.0 flow:
+
+* **Authorization endpoint:** `https://api.notion.com/v1/oauth/authorize`
+* **Token endpoint:** `https://api.notion.com/v1/oauth/token`
+
+Example (handled by OpenInt):
+
+```js Exchange Notion OAuth Code for Token
+const encoded = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
+fetch('https://api.notion.com/v1/oauth/token', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Basic ${encoded}`,
+  },
+  body: JSON.stringify({
+    grant_type: 'authorization_code',
+    code: 'TEMP_CODE',
+    redirect_uri: 'YOUR_REDIRECT_URI',
+  }),
+});
+```
+
+If using OpenInt’s Connect UI, you only provide the client credentials; OpenInt manages the rest internally.
+
+## Supported Notion Scopes / Capabilities
+
+OpenInt currently supports:
+
+| Scope        | Supported by OpenInt | Description |
+| ------------ |:-------------------:| ----------- |
+| <Tooltip tip="Allows the application to read user information, such as the user's name, email, and profile picture. This is a read-only scope with no write permissions.">user:read</Tooltip> | ✅ | User info (read-only) |
+| <Tooltip tip="Allows the application to update user information, such as the user's name or profile picture. This includes the permissions of user:read.">user:write</Tooltip> | ❌ | User info (write) |
+| <Tooltip tip="Allows the application to read all content that the user has access to in Notion, including pages, databases, and blocks. This is a read-only scope.">content:read</Tooltip> | ❌ | Read pages, databases |
+| <Tooltip tip="Allows the application to create, update, and delete content in Notion, including pages, databases, and blocks. This includes the permissions of content:read.">content:write</Tooltip> | ❌ | Create/update content |
+| <Tooltip tip="Allows the application to read workspace information, such as the workspace name, settings, and members. This is a read-only scope.">workspace:read</Tooltip> | ❌ | Workspace info (read) |
+| <Tooltip tip="Allows the application to update workspace information, such as settings and members. This includes the permissions of workspace:read.">workspace:write</Tooltip> | ❌ | Workspace info (write) |
+
+See the [official Notion scopes/capabilities reference](https://developers.notion.com/reference/capabilities) for an up-to-date list.
+
+:::info
+Need additional scopes? Contact support to request expanded capabilities for your use case.
+:::
+
+## Quickstart Integration Steps
+
+1. Register your Notion OAuth integration as above.
+2. In your OpenInt dashboard, add a Notion connector and paste the Client ID and Secret. Redirect URI must match what you set in Notion.
+3. Embed OpenInt Connect UI in your app, or call the API to initiate the OAuth connection.
+4. Users authorize Notion—OpenInt stores the access tokens securely for calling Notion APIs.
+
+```js OpenInt Notion Connector Example
+openint.createConnection({
+  provider: 'notion',
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  redirectUri: 'YOUR_REDIRECT_URI',
+});
+```
+
+## Common Pitfalls
+
+- **Redirect URI mismatch:** Must match exactly between Notion and OpenInt config, including trailing slashes.
+- **Insufficient/not supported scopes:** Only `user:read` is currently supported. Don't request more.
+- **No workspace/page selected:** Users must select at least one page/database during OAuth or all API access will fail.
+- **Token errors:** Ensure Client Secret and Redirect URI are valid, and token isn’t expired/revoked.
+
+For OAuth/user auth errors, review the [Notion OAuth error docs](https://developers.notion.com/docs/authorization#user-authorization-failures).
+
+## Resources/References
+
+- [My Integrations (Notion dashboard)](https://www.notion.so/my-integrations)
+- [Notion OAuth/Authorization Docs](https://developers.notion.com/docs/authorization)
+- [Notion Capabilities Reference](https://developers.notion.com/reference/capabilities)
+- [OpenInt Quickstart Guide](../getting-started/quickstart)
+
+---
+_Generated from OpenInt Notion config & Notion API docs (2025-05-13)._  
