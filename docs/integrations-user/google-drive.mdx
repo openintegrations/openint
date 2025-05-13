@@ -1,0 +1,55 @@
+---
+title: Connecting Google Drive
+description: How to connect your Google Drive account to your app and troubleshoot common issues
+---
+
+# Connect your Google Drive account
+
+Connect your Google Drive to your account to enable seamless file import, synchronization, and document access within this app. You’ll only need to do this once.
+
+## Prerequisites
+
+- A Google account (personal, work, or school).
+
+## How to Connect
+
+1. Navigate to the integrations section or settings within your app.
+2. Select **Google Drive** from the list of available integrations.
+3. Click **Connect** (or similar) to begin the process.
+4. When prompted, a Google window will appear. Sign in to Google, if necessary.
+5. Review the requested permissions, then click **Allow** to grant access.
+6. You will be redirected back to your app, where the integration setup completes automatically.
+
+Once connected, your app can now securely access files and folders on your Google Drive, as permitted by your selections.
+
+## Permissions Requested
+
+When connecting, the app will ask for one or more of the following permissions:
+
+| Permission scope | Why it’s requested |
+|------------------|-------------------|
+| Full access to all files and folders (`https://www.googleapis.com/auth/drive`) | Allows the app to view, create, update, or delete any file or folder in your Google Drive. Usually needed for full-featured integrations. |
+| Access only to files created/opened via the app (`https://www.googleapis.com/auth/drive.file`) | Restricts access to just files and folders you’ve interacted with using this app. Safer for limited-use cases. |
+| App data folder access (`https://www.googleapis.com/auth/drive.appdata`) | Lets the app store and manage configuration files privately. |
+| Read-only access to file metadata (`https://www.googleapis.com/auth/drive.metadata.readonly`/`https://www.googleapis.com/auth/drive.metadata`) | Lets the app see file names, folders, and properties, but not file contents. |
+| Read access to all files and metadata (`https://www.googleapis.com/auth/drive.readonly`) | Allows the app to view but not modify your files and folders. |
+| Read-only access to Google Photos in Drive (`https://www.googleapis.com/auth/drive.photos.readonly`) | Permits the app to view photos and videos stored in your Google Drive. |
+| Access to Google Apps Script projects (`https://www.googleapis.com/auth/drive.scripts`) | Lets the app manage and run Google Apps Script projects in your Drive. |
+
+You will always be shown a consent screen by Google listing the specific permissions being requested. The app will only access information needed to provide its features.
+
+## Testing the Connection
+
+After connecting, you can verify everything works by:
+- Importing a file from Google Drive
+- Creating a document within the app and saving it to Google Drive
+- Navigating to the integration settings page and checking for a “Connected” or “Synced” status
+
+## Troubleshooting
+
+- **Multiple Google Accounts:** If you have several Google accounts, double check you’re logged into the correct one when connecting.
+- **Permission denied:** If you see errors about permissions, reconnect and approve all requested permissions.
+- **Revoking Access:** To disconnect, go to the integrations section in your app, or visit your [Google Account permissions](https://myaccount.google.com/permissions) to remove access for this app.
+- **“App not verified” warning:** Some apps may display a Google warning if the app isn’t fully verified with Google. If you trust the app, you can proceed, or contact support for assistance.
+
+If you encounter other issues, check for messages in the app or visit the Help or Support section.
