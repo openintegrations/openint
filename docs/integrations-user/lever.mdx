@@ -1,0 +1,51 @@
+---
+title: Connecting Lever
+---
+
+# Connect Lever to Your App
+
+You can securely connect your Lever account to {{APP_NAME}} to sync your recruiting and candidate data. This guide will walk you through the connection process, describe the permissions needed, and help you troubleshoot common issues.
+
+## How to Connect Lever
+
+1. **Start the connection:** In {{APP_NAME}}, go to the Integrations section and find Lever. Click **Connect**.
+2. **Authorize Lever:**
+    - You'll be redirected to Lever's secure authorization page.
+    - Log into your Lever account, if prompted.
+3. **Review requested permissions:**
+    - You'll see a list of permissions the app is requesting (details below).
+    - Click **Allow** to grant access.
+4. **Complete setup:** You'll be redirected back to {{APP_NAME}}. The connection is now active.
+
+## Permissions Requested
+
+When you connect, {{APP_NAME}} will ask for certain permissions in order to read or manage your Lever data. The exact permissions requested may vary, but could include:
+
+| Permission | What it means |
+|------------|---------------|
+| **read** | Read-only access to all data in Lever: candidates, postings, opportunities, etc. (no changes can be made). |
+| **write** | Full read and write access: create, update, and delete data in Lever including candidates and postings. |
+| **admin** | Administrative access: full data access plus ability to adjust Lever account settings and configurations. |
+| **offline_access** | Lets {{APP_NAME}} stay connected without you signing in every time (no extra access to your data). |
+| **read:applications** | View-only access to job applications and related data (no changes, and no access to unrelated info). |
+| **read:candidates** | View-only access to candidate profiles (no editing or other data access). |
+| **write:candidates** | Create or update candidate information (read and write for candidate profiles only). |
+
+*You will be shown the specific permissions requested during setup. Only grant what you're comfortable with.*
+
+## Confirming Your Integration
+
+After connecting, you can:
+- View Lever data (like candidates or job applications) directly in {{APP_NAME}}.
+- Start automated syncs, depending on your app’s features.
+
+If you don’t see your Lever data or encounter errors, see troubleshooting below.
+
+## Troubleshooting & Common Issues
+
+- **Login issues:** Make sure you are using the correct Lever account and have sufficient permissions in Lever.
+- **Permission denied:** If access is refused, ensure you approve all permissions requested during the connection step.
+- **Authorization expired:** If the connection stops working, try reconnecting Lever from the Integrations page.
+- **Changes not appearing:** Sync may take a few minutes. If problems persist, try disconnecting and reconnecting Lever.
+
+If you continue to experience issues, contact {{APP_NAME}} support.
