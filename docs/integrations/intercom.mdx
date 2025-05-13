@@ -1,0 +1,90 @@
+---
+title: Intercom Integration
+---
+
+# Intercom Integration (via OpenInt)
+
+Easily integrate [Intercom](https://intercom.com) into your app using OpenInt's secure OAuth2 connector. This guide walks through setting up OAuth, obtaining and configuring your Intercom app credentials, and understanding permission scopes.
+
+<Info>
+This documentation is for engineers integrating Intercom as a white-labeled provider via OpenInt.
+</Info>
+
+## Overview
+
+OpenInt provides an abstraction over Intercom's API, letting your users securely and seamlessly connect their Intercom workspaces to your product. Authentication uses OAuth2, and only the minimal required Intercom scopes are requested by default.
+
+## Quickstart
+
+1. **Register an OAuth App in the [Intercom Developer Hub](https://app.intercom.com/a/apps/_/developer-hub):**
+   - Go to "Developer Hub" > "Your Apps" > Create new app.
+   - In the Authentication section, tick **Use OAuth**.
+   - Enter your redirect URLs (must be HTTPS, e.g. `https://your-product.com/openint/oauth/callback`).
+   - Set permission scopes (see table below).
+
+2. **Locate your Client ID & Secret:**
+   - Go to the app's "Basic Information" page in Intercom's Developer Hub.
+   - Copy `Client ID` and `Client Secret`.
+
+3. **Configure OpenInt:**
+   - In your OpenInt dashboard or connector config, provide your Intercom Client ID and Secret.
+   - Specify the redirect URL you configured with Intercom.
+
+4. **Initiate User OAuth Flow:**
+   - Use OpenInt’s Connect Portal/UI or API to initiate the OAuth flow for your users.
+   - Upon completion, the user’s account will be linked and OpenInt can sync data according to the permissioned scopes.
+
+```ts
+// Example partial connector config (TypeScript)
+intercom: {
+  auth: {
+    clientId: 'YOUR_CLIENT_ID',
+    clientSecret: 'YOUR_CLIENT_SECRET',
+    redirectUri: 'https://your-product.com/openint/oauth/callback',
+    scopes: ['users.read'], // currently supported by OpenInt
+  }
+}
+```
+
+<Warning>
+**Redirect URLs must use HTTPS.** Make sure the redirect URI in your Intercom app matches what you supply to OpenInt exactly.
+</Warning>
+
+## Permission Scopes: Intercom vs. OpenInt
+
+OpenInt currently supports:
+
+- `users.read`: <Tooltip tip="Allows read-only access to user data only. Cannot access companies, conversations, or other data types.">Read user data only</Tooltip>
+
+Intercom provides a broad set of OAuth scopes. Below is a comparison:
+
+| Scope | Description | Supported by OpenInt? |
+|-------|-------------|----------------------|
+| <Tooltip tip="Allows read-only access to Intercom data, including users, companies, conversations, and more. Cannot modify any data.">read</Tooltip> | Read all data (cannot modify) | No |
+| <Tooltip tip="Allows read and write access to Intercom data. Can create and update users, companies, conversations, etc.">write</Tooltip> | Read/write all data | No |
+| <Tooltip tip="Allows read-only access to user data only. Cannot access companies, conversations, or other data types.">users.read</Tooltip> | <strong>Read user data only</strong> | Yes |
+| <Tooltip tip="Allows read-only access to company data only. Cannot access user data or other data types.">companies.read</Tooltip> | Read company data only | No |
+| <Tooltip tip="Allows read-only access to conversations only. Cannot access user or company data.">conversations.read</Tooltip> | Read conversation data only | No |
+| <Tooltip tip="Allows read and write access to contact data only. More limited than full write access.">contacts.write</Tooltip> | Modify contact data only | No |
+| <Tooltip tip="Provides full access to all Intercom data and administrative functions, including account settings.">admin</Tooltip> | Admin access | No |
+
+See the [full list of Intercom OAuth scopes here](https://developers.intercom.com/docs/build-an-integration/learn-more/authentication/oauth-scopes/) for their latest details and expanded permissions.
+
+<Tip>
+Need support for more scopes? Contact the OpenInt team or request an enhancement!
+</Tip>
+
+## Common Setup Issues & Troubleshooting
+
+- <Tooltip tip="Check both in Intercom and in your OpenInt configuration."><strong>Mismatched or incorrect redirect URL</strong></Tooltip>: URLs must match exactly between your OpenInt config and Intercom’s app settings.
+- <Tooltip tip="Double-check, especially after apps are copied or promoted between environments."><strong>Incorrect client ID or secret</strong></Tooltip>
+- <Tooltip tip="You can only select scopes OpenInt supports. Request more if needed."><strong>Requesting unsupported scopes</strong></Tooltip>
+- <Tooltip tip="Intercom only grants scopes you request and which your app is authorized for."><strong>Not requesting needed scopes up front</strong></Tooltip>
+- Intercom apps must use HTTPS everywhere in OAuth setup.
+- [Official Intercom OAuth troubleshooting guide](https://developers.intercom.com/docs/build-an-integration/learn-more/authentication/setting-up-oauth)
+
+## Additional Resources
+
+- [Configure OAuth in Intercom](https://developers.intercom.com/docs/build-an-integration/learn-more/authentication/setting-up-oauth/)
+- [Intercom OAuth Scopes reference](https://developers.intercom.com/docs/build-an-integration/learn-more/authentication/oauth-scopes/)
+- [OpenInt Connect Data Flow](../connect/data-flow)
