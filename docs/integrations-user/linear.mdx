@@ -1,0 +1,52 @@
+---
+title: Connect Linear
+description: Learn how to securely connect your Linear workspace to your [Customer App] account.
+---
+
+# Connect Linear to [Customer App]
+
+Connect your Linear workspace to [Customer App] to seamlessly sync and manage your tickets and team workflows. This integration lets you view, create, and update issues within your preferred workspace, so you can move faster without switching between tools.
+
+## How to Connect Linear
+
+Follow these steps to securely link your Linear account to [Customer App]:
+
+1. **Start the connection:** In [Customer App], navigate to **Settings > Integrations** (or equivalent menu) and click **Connect Linear**.
+2. **Sign in to Linear:** A new window will open. If you aren’t already signed in, enter your Linear account credentials.
+3. **Review permissions:** Linear will ask you to review the permissions requested by [Customer App].
+4. **Authorize access:** Click **Authorize** to grant access. You will be returned to [Customer App] once the connection is successful.
+5. **Integration complete:** You should see Linear listed as a connected integration. You can now begin syncing and managing issues directly from [Customer App].
+
+## Permissions Explained
+
+When connecting your Linear account, [Customer App] will request some or all of the following permissions:
+
+- **read** _(required)_: Read access to your Linear account (view issues, projects, teams, etc). Required for any integration.
+- **write**: Write access to your Linear account. Allows updating issues, comments, and other data.
+- **issues:create**: Create new issues and their attachments in your workspace.
+- **comments:create**: Create new comments on issues.
+- **timeSchedule:write**: Create or modify time schedules.
+- **admin**: Full admin-level access. (You should only see this requested if your admin explicitly enabled it.)
+
+Depending on your needs, not all permissions may be required. [Customer App] will only request what’s needed for enabled features. If in doubt, your workspace admin can review and manage granted permissions in Linear at any time.
+
+## Testing the Integration
+
+To verify your Linear connection:
+
+1. Return to **Settings > Integrations** in [Customer App].
+2. Ensure Linear appears as **Connected**.
+3. Try creating or updating an issue from within [Customer App]. It should immediately sync to your Linear workspace.
+4. If you encounter issues, try disconnecting and reconnecting Linear.
+
+## Troubleshooting
+
+If you have trouble connecting Linear, here are some common solutions:
+
+- **Authorization window didn’t open:** Make sure your browser allows pop-ups for [Customer App].
+- **Access denied or permissions error:** Ensure you approve all required permissions during the connection flow.
+- **Wrong Linear account:** Double-check you are signed in to the correct Linear account in your browser.
+- **Previously connected, now disconnected:** If access was revoked in Linear or your password changed, return to Integrations and reconnect.
+- **Admin access:** Only grant "admin" permissions if your workspace requires it. For most teams, this is not necessary.
+
+If problems persist, reach out to your workspace admin or support team for help.
