@@ -1,0 +1,67 @@
+---
+title: Connect Your Jira Account
+description: How to connect your Jira account with your app to manage issues, projects, and more.
+---
+
+# Connect Your Jira Account
+
+Easily link your Jira account to your app to manage issues, view projects, and collaborate directly—all within one place. This guide will help you securely connect your Jira account in just a few steps.
+
+## How to Connect Jira
+
+1. **Navigate to the Jira integration option:**
+   - Go to your app’s integrations or connections page.
+   - Find and select **Jira** from the list of available integrations.
+2. **Click "Connect" or "Sign in with Jira":**
+   - This will redirect you to a secure Jira login page.
+3. **Login and grant permissions:**
+   - Sign in with your Jira account credentials.
+   - Review the permissions requested (see below), then click **Allow** to grant access.
+4. **Finish and confirm:**
+   - Once you grant access, you’ll be redirected back to your app, and the connection will be established.
+
+<Tip>
+You only need to connect Jira once per account. You can revoke access at any time from your app’s settings or directly in your Jira account settings.
+</Tip>
+
+## Permissions Explained
+
+When linking your Jira account, the following permissions are requested:
+
+- **read:jira-user** — See your Jira user profile info (like name, email, avatar) to personalize your experience.
+- **read:jira-work** — Read access to your Jira issues, projects, boards, and other work items so your app can display and sync your work.
+- **write:jira-work** — Create, update, or transition issues and work items directly from your app.
+- **manage:jira-project** — Make changes to project settings, components, or versions as needed by workflows in your app.
+- **manage:jira-configuration** — Adjust global Jira configurations if required.
+- **offline_access** — Allows your app to stay connected, so actions and syncing continue without needing to log in every time.
+
+Your data and permissions are only used to provide the features of the integration—nothing else.
+
+## Testing the Connection
+
+After connecting Jira:
+
+- Go to your app’s integration or Jira settings page.
+- You should see Jira listed as **Connected**.
+- Try viewing your Jira projects or syncing issues as a quick check.
+
+If you experience issues, see the troubleshooting section below.
+
+## Troubleshooting & Common Issues
+
+<Warning>
+If you deny required permissions during setup, the integration will not be able to function properly. Always review and accept the requested permissions to ensure a smooth connection.
+</Warning>
+
+- **Accidentally connected the wrong Jira account?**
+    - Disconnect the integration (in your app’s settings) and reconnect using the correct account.
+- **Permission denied or consent screen keeps appearing?**
+    - Make sure you are logged into the correct Jira account and accept all permissions.
+- **Integration suddenly stopped working?**
+    - Your Jira session or permissions may have expired. Try disconnecting and reconnecting Jira.
+- **Don’t see your projects or issues?**
+    - Check that your Jira account has access to the relevant projects; contact your Jira admin if needed.
+
+## Need Help?
+
+If you’re still having trouble or have questions, contact your app’s support team for further assistance.
