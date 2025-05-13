@@ -1,0 +1,105 @@
+---
+title: Gmail Integration (Google Mail)
+---
+
+# Gmail Integration (Google Mail)
+
+Easily embed Gmail (Google Mail) connectivity in your application using OpenInt. This guide walks through the OAuth setup, supported scopes, integration configuration, and common troubleshooting steps specific to Gmail.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- Access to the [Google Cloud Console](https://console.cloud.google.com/)
+- An active Google Cloud project
+- The ability to create OAuth credentials (requires Google Cloud Platform permissions)
+- Your OpenInt environment set up (see [OpenInt Quickstart](/getting-started/quickstart))
+
+## Step 1: Enable Gmail API & Create OAuth Credentials
+
+1. **Enable the Gmail API:**
+   - In your Google Cloud project, navigate to [APIs & Services → Library](https://console.cloud.google.com/apis/library).
+   - Search for "Gmail API" and click **Enable**.
+2. **Configure the OAuth consent screen:**
+   - Go to **APIs & Services → OAuth consent screen**.
+   - Fill required fields (app name, user support email, authorized domains, etc.).
+   - Under "Scopes", add the Gmail API scopes you need for your integration (details below).
+   - Save and proceed.
+3. **Create OAuth client credentials:**
+   - Navigate to **APIs & Services → Credentials**.
+   - Click **Create Credentials** → **OAuth client ID**.
+   - Select your application type (e.g., Web application).
+   - Add your application's authorized redirect URIs (these must exactly match what OpenInt is configured to use).
+   - Click **Create** and record the **Client ID** and **Client Secret**.
+
+For more detail, see: [Google's OAuth 2.0 setup](https://developers.google.com/identity/protocols/oauth2).
+
+## Step 2: Configure Scopes
+
+Google Mail (Gmail) API supports multiple OAuth scopes, each granting a specific level of access. **OpenInt currently supports:**
+
+- `https://www.googleapis.com/auth/gmail.metadata`: Minimal, read-only access to message metadata (headers, labels, but not content).
+
+Below is a comparison of all official Gmail scopes and OpenInt's supported subset. Scopes not currently supported by OpenInt are shown but unavailable for use at this time.
+
+[See full official Gmail scopes documentation →](https://developers.google.com/workspace/gmail/api/auth/scopes)
+
+| Scope URL | Supported by OpenInt | Description |
+|---|:---:|---|
+| <Tooltip tip="Read-only access to message metadata (headers, labels). No message body or attachments.">https://www.googleapis.com/auth/gmail.metadata</Tooltip> | ✅ | Minimal access (supported by OpenInt) |
+| <Tooltip tip="Read all resources and metadata, but not modify.">https://www.googleapis.com/auth/gmail.readonly</Tooltip> |  | Read-only access |
+| <Tooltip tip="Allows sending messages only, without access to read, modify, or delete messages.">https://www.googleapis.com/auth/gmail.send</Tooltip> |  | Send emails |
+| <Tooltip tip="Allows creating, reading, and sending draft messages (not inbox messages).">https://www.googleapis.com/auth/gmail.compose</Tooltip> |  | Compose and send drafts |
+| <Tooltip tip="Allows inserting/importing messages into mailbox. No reading/modifying existing messages.">https://www.googleapis.com/auth/gmail.insert</Tooltip> |  | Insert messages only |
+| <Tooltip tip="Allows managing labels only, no message contents.">https://www.googleapis.com/auth/gmail.labels</Tooltip> |  | Manage labels only |
+| <Tooltip tip="Allows reading, sending, deleting, and modifying all messages and threads. Includes all actions of readonly, send, and compose.">https://www.googleapis.com/auth/gmail.modify</Tooltip> |  | Full read/write access (except permanent delete) |
+| <Tooltip tip="Full access to the mailbox, including permanent deletion. Superset of all other scopes.">https://mail.google.com/</Tooltip> |  | Full mailbox access |
+
+_Tip: OpenInt currently uses the most limited, metadata-only scope for best-practice privacy defaults._
+
+---
+
+## Step 3: Configure OpenInt for Gmail
+
+Configure your connector in OpenInt using the created **Client ID**, **Client Secret**, and specify the Gmail metadata scope. Example (TypeScript/JSON):
+
+```ts
+const connectorConfig = {
+  provider: 'google-mail',
+  clientId: '<your-google-client-id>',
+  clientSecret: '<your-google-client-secret>',
+  authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+  tokenUrl: 'https://oauth2.googleapis.com/token',
+  scopes: ['https://www.googleapis.com/auth/gmail.metadata'],
+  // ...other OpenInt-specific config options here
+};
+```
+
+Ensure your redirect URI matches between your Google Cloud credential and OpenInt app registration.
+
+---
+
+## Step 4: OAuth Flow Overview
+
+1. Your application initializes the OAuth connect flow via OpenInt.
+2. User is redirected to Google's OAuth screen, reviews requested scope(s).
+3. Upon consent, Google redirects back to your application's redirect URI with a code.
+4. OpenInt exchanges the code for tokens and establishes the integration.
+
+---
+
+## Troubleshooting & Common Issues
+
+- **Redirect URI mismatch:** The redirect URI configured in Google Cloud credentials _must exactly match_ the URI registered in your OpenInt config.
+- **Consent screen not approved:** If using sensitive or restricted scopes (not currently supported by OpenInt), Google requires manual OAuth app review.
+- **Invalid client secret:** Double-check you copied credentials accurately.
+- **Missing scope error:** Only `gmail.metadata` is currently supported. Other scopes will be ignored if added.
+- **User denied consent:** User must grant all requested scopes for successful integration.
+
+---
+
+## References & Further Reading
+
+- [Gmail API OAuth Scopes List (Google)](https://developers.google.com/workspace/gmail/api/auth/scopes)
+- [Create OAuth Credentials (Google Cloud Console)](https://console.cloud.google.com/apis/credentials)
+- [OpenInt Quickstart](/getting-started/quickstart)
