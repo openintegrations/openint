@@ -1,0 +1,54 @@
+---
+title: Connecting Google Docs
+description: How to connect your Google Docs account to {{customer_app}} and what permissions are requested.
+---
+
+# Connect Your Google Docs Account
+
+Easily link your Google Docs account to {{customer_app}} so you can sync documents and collaborate without leaving the app.
+
+## How to Connect
+
+1. Go to the **Integrations** or **Settings** page in {{customer_app}}.
+2. Find **Google Docs** and click **Connect**.
+3. A window will open asking you to sign into your Google account (if you are not already signed in).
+4. Review the permissions requested and click **Allow** to grant access.
+5. Once authorized, you’ll return to {{customer_app}} and Google Docs will be connected!
+
+> **Note:**
+> Be sure to use the correct Google account, especially if you manage personal and work accounts.
+
+## What Permissions Are Needed and Why?
+
+When connecting, you will be asked to grant access to one or more of the following permissions:
+
+| Permission (Scope) | What it Allows | Why Needed |
+|--------------------|---------------|-------------------------------------------|
+| **View & manage Docs**<br>(`https://www.googleapis.com/auth/documents`) | View, create, edit, and delete Google Docs documents. | Lets you create or update Docs from {{customer_app}}. |
+| **Read-only Docs**<br>(`https://www.googleapis.com/auth/documents.readonly`) | View your Google Docs and their metadata. | Lets you browse Docs inside {{customer_app}}. |
+| **Manage specific Drive files**<br>(`https://www.googleapis.com/auth/drive.file`) | Access to Docs and files created by or shared with {{customer_app}}. | Needed if {{customer_app}} will only read/write files it owns or creates. |
+| **Read-only Drive access**<br>(`https://www.googleapis.com/auth/drive.readonly`) | View files in your Google Drive, including Docs. | Lets you browse or pick Docs from Drive in {{customer_app}}. |
+| **Full Drive access**<br>(`https://www.googleapis.com/auth/drive`) | View, create, edit, or delete all Google Drive files. | Enables full import/export features with your entire Drive. |
+| **Current Doc only**<br>(`https://www.googleapis.com/auth/documents.currentonly`) | Access only to the currently open Doc. | Used for temporary/limited access, e.g. add-ons. |
+
+You may see a slightly different set of permission requests depending on the features available in {{customer_app}}.
+
+## How to Test the Integration
+
+After connecting Google Docs, try one of these actions to confirm everything’s working:
+
+- Open or import a Google Doc from inside {{customer_app}}.
+- Create a new Google Doc using the app (if supported).
+- Sync data or changes and verify that documents update in both places.
+
+If something doesn’t work as expected, check the troubleshooting section below.
+
+## Troubleshooting & Common Issues
+
+- **Pop-up blocked:** If nothing happens after clicking Connect, your browser may have blocked the pop-up. Unblock pop-ups for this site and try again.
+- **Wrong Google account connected:** You can disconnect by going to Integrations > Google Docs > Disconnect, then reconnect with the correct account.
+- **Permissions denied:** If you clicked "Deny" or removed permissions, you’ll need to reconnect and grant access.
+- **Stuck or blank window:** Refresh the page and reconnect. If issues persist, check any ad or script blockers.
+- **Still can’t connect?** Sign out of your Google account, then log back in and try connecting again.
+
+If you continue to have problems, please contact {{customer_app}} support for help.
