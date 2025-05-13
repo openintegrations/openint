@@ -1,0 +1,95 @@
+---
+title: Google Calendar Integration (Developer)
+description: Integrate Google Calendar into your application using OpenInt with OAuth 2.0 authentication. Includes supported scopes, step-by-step setup, code examples, troubleshooting, and links to official resources.
+
+# Google Calendar Integration
+
+Integrate Google Calendar capabilities into your application via OpenInt, enabling seamless bi-directional event sync, user calendar settings access, and more. This guide provides the technical steps to authenticate users via OAuth 2.0, manage scopes, and ensure a robust integration for your SaaS product.
+
+---
+
+## Prerequisites
+
+- **Google Cloud Project** – You need a Google Cloud project ([Google Cloud Console](https://console.developers.google.com/)).
+- **Google Calendar API enabled** – Make sure the [Google Calendar API](https://developers.google.com/workspace/calendar/api) is enabled for your project.
+- **OAuth 2.0 credentials** – Create an OAuth client ID and secret for your application.
+- **Redirect URI** – Register your application's OAuth redirect URI in the Google Cloud Console to match OpenInt's requirements.
+- **OpenInt account** – Ensure you have access to your OpenInt deployment to configure the connector.
+
+---
+
+## Quickstart: Connecting Google Calendar via OpenInt
+
+### 1. Configure your Google Cloud Project
+
+Follow Google’s official [OAuth 2.0 setup guide](https://developers.google.com/identity/protocols/oauth2) to:
+
+1. Go to [Google Cloud Console](https://console.developers.google.com/)
+2. Select your project or create a new one.
+3. From the left menu, navigate to **APIs & Services > Library**, search for "Google Calendar API", and enable it.
+4. Under **APIs & Services > Credentials**, click **Create Credentials > OAuth client ID**.
+5. Configure the consent screen (set app name, support email, etc.), required before creating credentials.
+6. Select your application type (usually "Web application") and add your authorized redirect URIs (e.g. `https://YOUR_OPENINT_URL/api/oauth/callback/google-calendar`).
+7. Save the client ID and secret for integration configuration.
+
+Reference: [Google OAuth 2.0 Documentation](https://developers.google.com/identity/protocols/oauth2)
+
+### 2. Add your OAuth credentials to OpenInt
+
+Configure OpenInt to use the client ID and secret you obtained above for the Google Calendar connector. Example configuration snippet:
+
+```json
+{
+  "provider": "google-calendar",
+  "client_id": "YOUR_GOOGLE_CLIENT_ID",
+  "client_secret": "YOUR_GOOGLE_CLIENT_SECRET",
+  "redirect_uri": "https://YOUR_OPENINT_URL/api/oauth/callback/google-calendar"
+}
+```
+
+### 3. Select and Grant Scopes
+
+Minimum required scope for most read-only integrations via OpenInt:
+
+```
+https://www.googleapis.com/auth/calendar.settings.readonly
+```
+
+Request broader scopes as required (see table below for all available and supported scopes).
+
+---
+
+## OAuth 2.0 Scopes for Google Calendar
+
+The following table lists all relevant Google Calendar OAuth scopes, their purpose, and whether they are currently supported by OpenInt. Consult the [official Google API scope reference](https://developers.google.com/identity/protocols/oauth2/scopes#calendar) for additional details.
+
+| Scope | Description | Supported by OpenInt? |
+|-------|-------------|:---------------------:|
+| <Tooltip tip="Full access to calendars including management of events, ACLs, and settings.">[calendar](https://www.googleapis.com/auth/calendar)</Tooltip> | Full read/write access to user's calendars, events, ACLs, and settings. | ❌ |
+| <Tooltip tip="Read/write access to calendar events only.">[calendar.events](https://www.googleapis.com/auth/calendar.events)</Tooltip> | Read/write access to events only. | ❌ |
+| <Tooltip tip="Read-only access to calendar events.">[calendar.events.readonly](https://www.googleapis.com/auth/calendar.events.readonly)</Tooltip> | Read-only events access. | ❌ |
+| <Tooltip tip="Read-only access to calendars, events, ACLs, and settings.">[calendar.readonly](https://www.googleapis.com/auth/calendar.readonly)</Tooltip> | Read-only access to calendars, events, ACLs, and settings. | ❌ |
+| <Tooltip tip="Read-only access to calendar settings.">[calendar.settings.readonly](https://www.googleapis.com/auth/calendar.settings.readonly)</Tooltip> | Read-only access to calendar settings (e.g., timezone, working hours). | ✅ |
+
+---
+
+## Common Pitfalls & Troubleshooting
+
+- **Calendar API not enabled**: Ensure the Google Calendar API is enabled in your Cloud project.
+- **Incorrect redirect URIs**: OAuth consent will fail if your application's redirect URI does not precisely match what is registered in the Google Cloud Console.
+- **Insufficient scope**: Attempting to use features (e.g., creating or updating events) without granting the necessary scopes will result in authorization errors.
+- **Unverified app/consent screen issues**: If your OAuth consent screen is not fully set up and verified (especially in production), users may receive warnings or not be able to complete authentication.
+- **Not requesting 'offline' access**: Ensure `access_type=offline` is included so refresh tokens are issued and long-lived access is possible.
+- **Prompt not set**: Use `prompt=consent` on initial authorization to always retrieve a refresh token (see Google's [incremental and offline access guide](https://developers.google.com/identity/protocols/oauth2/web-server#incrementalAuth)).
+
+---
+
+## References
+
+- [Google OAuth 2.0 Overview](https://developers.google.com/identity/protocols/oauth2)
+- [Configuring OAuth Consent Screen](https://console.developers.google.com/apis/credentials/consent)
+- [Google Calendar API - First App Guide](https://developers.google.com/google-apps/calendar/firstapp)
+- [Google Calendar API Reference](https://developers.google.com/workspace/calendar/api)
+- [Official OAuth 2.0 Scopes List](https://developers.google.com/identity/protocols/oauth2/scopes#calendar)
+
+---
