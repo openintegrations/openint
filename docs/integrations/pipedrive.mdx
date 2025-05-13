@@ -1,0 +1,73 @@
+# Pipedrive Integration
+
+Integrate Pipedrive CRM into your product using OpenInt. This connector enables secure OAuth2 authentication and selective access to Pipedrive resources.
+
+## Overview
+
+This guide walks you through integrating Pipedrive using OpenInt, including OAuth client setup, scope management, required configuration, and troubleshooting.
+
+## Quickstart
+
+1. **Register your app** in [Pipedrive Developer Hub](https://app.pipedrive.com/developer-hub). See instructions below.
+2. **Configure the OpenInt Pipedrive connector** with your credentials:
+
+    provider: 'pipedrive',
+    client_id: 'YOUR_CLIENT_ID',
+    client_secret: 'YOUR_CLIENT_SECRET',
+    api_domain: 'https://company.pipedrive.com', # Your account's domain
+    scopes: ['base'] # OpenInt supports 'base' only; see below for details.
+
+3. **Test the OAuth flow** in your app. Your registered redirect URI in Pipedrive **must exactly match** your deployment URI, including protocol and path.
+
+## Setting Up OAuth with Pipedrive
+
+1. Visit [Pipedrive Developer Hub](https://app.pipedrive.com/developer-hub).
+2. Click "Create an app". Choose app type (public/private; cannot be changed).
+3. Name your app and supply the OAuth **Callback URL** (redirect URI). <Note>Only one is allowed; must be exact, use `https` (except local dev).</Note>
+4. Save the app. Your **Client ID** and **Client Secret** appear in the OAuth & scopes tab.
+
+Official guide: [Get client_id and client_secret](https://pipedrive.readme.io/docs/client-id-and-client-secret)
+
+<Warning>Most errors are due to redirect URI mismatches. Match *exactly* (protocol, path, ports, no trailing slash differences).</Warning>
+
+More help: [Redirect URL FAQ](https://pipedrive.readme.io/docs/faq#when-installing-the-app-the-user-gets-an-error-containing-the-message-error-invalid-redirect-url-how-can-i-fix-that)
+
+## Scope Support & Permissions
+
+Pipedrive uses OAuth scopes to restrict app access. OpenInt currently supports only the `base` scope (basic info). Here's a table comparing all [official scopes](https://pipedrive.readme.io/docs/marketplace-scopes-and-permissions-explanations):
+
+| Scope | Description | Supported by OpenInt? |
+|-------|-------------|:--------------------:|
+| <Tooltip tip="Provides access to basic user information such as name, email, and company details. Does not include access to any deal, person, or organization data.">base</Tooltip> | Basic user details | ✅ |
+| <Tooltip tip="Allows reading user information across the organization, including team members' details, but no modifications.">users:read</Tooltip> | Read user data |  |
+| <Tooltip tip="Manage users and settings.">users:full</Tooltip> | Manage users | |
+| <Tooltip tip="Grants read-only access to deals including their stages, values, and associated data, but doesn't allow any changes.">deals:read</Tooltip> | Read deals | |
+| <Tooltip tip="Provides full access to deals including creating, modifying, and deleting deals, as well as changing deal stages.">deals:full</Tooltip> | Manage deals | |
+| <Tooltip tip="Allows read-only access to contacts (persons and organizations) including their details, but doesn't permit any modifications.">contacts:read</Tooltip> | Read contacts | |
+| <Tooltip tip="Provides read and write access to contacts (persons and organizations), allowing creation, modification, and deletion of contact information.">contacts:write</Tooltip> | Manage contacts | |
+| <Tooltip tip="Provides full administrative access including organization settings, user management, and all data. This is the most privileged scope.">admin</Tooltip> | Administrator access | |
+
+Full list upstream: [Scopes explanations](https://pipedrive.readme.io/docs/marketplace-scopes-and-permissions-explanations)
+
+<Info>Need more than `base`? Contact OpenInt or customize your requested scopes once support is available.</Info>
+
+## Configuring `api_domain`
+
+Set `api_domain` to your Pipedrive instance's URL (eg. `https://company.pipedrive.com`). This ensures OpenInt targets the right organization.
+
+<Tip>Always use `https`, and your actual Pipedrive workspace domain.</Tip>
+
+## Common Issues & Troubleshooting
+
+- <Warning>"Invalid redirect URL": URI must match your app and the developer portal exactly.</Warning>
+- <Note>Incorrect `api_domain` format will cause failed requests. Verify protocol and subdomain.</Note>
+- <Note>Data needs beyond basic info require additional scopes (integration expansion planned).</Note>
+
+---
+
+## Additional Resources
+
+- [OAuth App Registration Guide](https://pipedrive.readme.io/docs/client-id-and-client-secret)
+- [Redirect URL Troubleshooting](https://pipedrive.readme.io/docs/faq#when-installing-the-app-the-user-gets-an-error-containing-the-message-error-invalid-redirect-url-how-can-i-fix-that)
+- [Scopes Reference (Official)](https://pipedrive.readme.io/docs/marketplace-scopes-and-permissions-explanations)
+- [Pipedrive API Reference](https://developers.pipedrive.com/docs/api/v1/)
