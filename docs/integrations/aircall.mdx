@@ -1,0 +1,103 @@
+---
+title: Aircall
+description: Integrate Aircall into your SaaS application using OpenInt – configuration, OAuth setup, scopes, and troubleshooting for developers.
+---
+
+# Aircall Integration (Developer Guide)
+
+Integrate Aircall’s cloud call center platform into your product using OpenInt. This guide walks developers through OAuth setup, scope management, and common issues to ensure a smooth embed experience.
+
+## Overview
+
+[Aircall](https://aircall.io/) is a business phone and call center solution that offers voice infrastructure for modern teams. The OpenInt Aircall connector enables your SaaS to sync Aircall data, currently supporting read-only access to contacts via OAuth2.
+
+> **Stage:** General Availability (`ga`)
+> 
+> **Supported OpenInt scope:** `contacts.read` (Aircall contacts directory read-only)
+
+---
+
+## Quickstart: Connecting Aircall via OpenInt
+
+### Prerequisites
+- Aircall admin privileges (for OAuth app approval)
+- Public (HTTPS) redirect & install URIs (localhost is not permitted by Aircall!)
+- Access to your OpenInt dashboard or configuration management
+
+### 1. Register Your Integration with Aircall
+
+Aircall does **not** support self-serve OAuth app registration. Instead, email [marketplace@aircall.io](mailto:marketplace@aircall.io) with the following details:
+- **Install URI:** where users begin the OAuth flow with your app (typically your integration page)
+- **Redirect URI:** where Aircall sends users after consent (must be HTTPS & stable)
+
+References:
+- [Aircall OAuth/Scopes Doc](https://developer.aircall.io/api-references/#oauth-technology-partners)
+- [Aircall OAuth Flow Tutorial](https://developer.aircall.io/tutorials/how-aircall-oauth-flow-works/)
+
+Aircall will review your request and reply with a `client_id` and `client_secret`.
+
+### 2. Configure OAuth in OpenInt
+
+In your OpenInt integration configuration, set the following:
+
+```json
+{
+  "client_id": "<YOUR AIRCALL CLIENT ID>",
+  "client_secret": "<YOUR AIRCALL CLIENT SECRET>",
+  "authorization_url": "https://dashboard.aircall.io/oauth/authorize",
+  "token_url": "https://api.aircall.io/v1/oauth/token",
+  "scope": "public_api",
+  "redirect_uri": "<YOUR REGISTERED REDIRECT URI>"
+}
+```
+
+**Scopes:** OpenInt requests `public_api`, but currently only `contacts.read` is exposed to downstream applications.
+
+### 3. Start the OAuth Flow
+
+Embed or trigger the Aircall connection in your product via OpenInt’s embeddable Connect Portal or your backend integration:
+
+```ts
+// Example: starting the OAuth flow via OpenInt
+openint.connect("aircall");
+```
+
+When a user authenticates, OpenInt will exchange the grant for an access token and sync the available contacts to your SaaS.
+
+---
+
+## OAuth Scopes: Support Matrix
+
+OpenInt currently supports only `contacts.read`. Aircall’s API defines additional OAuth scopes. Below is a comparison of all available scopes, their descriptions, and OpenInt support status.
+
+| Scope           | Description                                                                                                            | Supported by OpenInt |
+|-----------------|------------------------------------------------------------------------------------------------------------------------|:--------------------:|
+| public_api      | <Tooltip tip="Provides access to public API endpoints, typically read-only access to non-sensitive data.">public_api</Tooltip> |        No            |
+| users.read      | <Tooltip tip="Allows read-only access to user info like names, emails, and basic profile data.">users.read</Tooltip>            |        No            |
+| calls.read      | <Tooltip tip="Read-only access to call logs, durations, and participants.">calls.read</Tooltip>                              |        No            |
+| contacts.read   | <Tooltip tip="Read-only access to contact info in Aircall directory.">contacts.read</Tooltip>                               |       **Yes**        |
+| numbers.read    | <Tooltip tip="Read-only access to phone number info associated with the account.">numbers.read</Tooltip>                       |        No            |
+| calls.write     | <Tooltip tip="Allows creating and modifying calls, including initiating new calls and updating statuses.">calls.write</Tooltip> |        No            |
+| users.write     | <Tooltip tip="Full access to user data including creating, updating, and deleting users.">users.write</Tooltip>                |        No            |
+| admin           | <Tooltip tip="Full administrative access to all account features and sensitive operations.">admin</Tooltip>                   |        No            |
+
+> See the [official Aircall OAuth scope list](https://developer.aircall.io/api-references/#oauth-technology-partners) for the most up-to-date details.
+
+---
+
+## Common Pitfalls & Troubleshooting
+
+- **Invalid redirect_uri**: The redirect URI in OpenInt must exactly match what you provided Aircall. It must be public, HTTPS, and registered – localhost/127.0.0.1 is rejected.
+- **Missing or incorrect client credentials**: Ensure you’re using the latest `client_id` and `client_secret` as provisioned by Aircall (they are not self-serve, and must be requested).
+- **Requesting unsupported scopes**: OpenInt currently surfaces only `contacts.read` – requesting other scopes via OpenInt will result in permission errors.
+- **OAuth consent issues**: Only Aircall Admins can authorize apps via OAuth. Check your test user’s role.
+
+---
+
+## Additional Resources
+
+- [Aircall Developer Docs: OAuth](https://developer.aircall.io/api-references/#oauth-technology-partners)
+- [How Aircall OAuth Flow Works (Tutorial)](https://developer.aircall.io/tutorials/how-aircall-oauth-flow-works/)
+- [OpenInt Docs: Quickstart](../getting-started/quickstart)
+
+If you need access to additional scopes, or run into integration issues, contact OpenInt support.
