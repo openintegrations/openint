@@ -1,0 +1,86 @@
+---
+title: GitHub Integration
+---
+
+# GitHub Integration
+
+Integrate GitHub with your SaaS app using OpenInt. This guide describes the setup, supported permissions, and common configuration issues for engineers embedding native GitHub integration via OpenInt.
+
+## Overview
+
+OpenInt enables seamless OAuth-based connections to GitHub for your users, allowing your SaaS product to access selected GitHub data (such as user profile, email, and—where configured—repositories, organizations, or workflows).
+
+## Quickstart: Connecting GitHub
+
+Follow these steps to enable GitHub integration within your app:
+
+1. **Register a GitHub OAuth App**
+
+   1. Go to [GitHub Settings → Developer settings → OAuth apps](https://github.com/settings/developers).
+   2. Click **New OAuth App** (or **Register a new application**).
+   3. Fill in the application name.
+   4. Use your frontend’s base URL for `Homepage URL` (e.g., `https://yourapp.com`).
+   5. Set the **Authorization callback URL** to your OpenInt redirect/callback endpoint (e.g., `https://yourapp.com/api/openint/oauth/callback/github`). You can find the exact URL pattern in your OpenInt admin/config docs.
+   6. Register the app and record the **Client ID** and **Client Secret**.
+   7. For full steps, see: [GitHub’s OAuth App Registration docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app).
+
+2. **Configure OpenInt**
+
+   - Provide the GitHub OAuth app’s Client ID and Secret in your OpenInt connector configuration for GitHub. Ensure the configured scopes match both your product requirements and OpenInt’s supported scopes.
+   - Typically, your OpenInt deployment will allow you to set this in an admin UI or via config files.
+
+## Supported Permissions and Scopes
+
+GitHub uses **OAuth scopes** to define the permissions granted to your integration. OpenInt currently exposes a subset of GitHub’s scopes; others may be pending support. For each requested scope, the user will be prompted to approve on consent screen.
+
+Below is a comparison of GitHub OAuth scopes and their support in OpenInt:
+
+| Scope | Description | Supported by OpenInt |
+|-------|-------------|---------------------|
+| <Tooltip tip="Grants read-only access to a user's email addresses. Only allows viewing email addresses associated with the user's account.">user:email</Tooltip> | Grants read-only access to a user's email addresses. | ✔️ |
+| <Tooltip tip="Provides access to read a user's profile data (name, email, bio), not repository or modifiable data.">read:user</Tooltip> | Provides access to read a user's profile data. | ❌ |
+| <Tooltip tip="Grants full access to public and private repositories (read/write code, manage issues/settings, very broad).">repo</Tooltip> | Full access to public and private repositories. | ❌ |
+| <Tooltip tip="Allows read and write access to repository commit statuses (used for CI services). Does NOT provide code access.">repo:status</Tooltip> | Read/write access to repository commit statuses. | ❌ |
+| <Tooltip tip="Full organization and team management access, including manage team membership and repo settings (admin privileges).">admin:org</Tooltip> | Full organization and team management access. | ❌ |
+| <Tooltip tip="Grants permission to read and write team discussions within organizations. No code access.">write:discussion</Tooltip> | Read/write access to team discussions. | ❌ |
+| <Tooltip tip="Ability to add and update GitHub Actions workflow files. Does NOT grant code access beyond workflows.">workflow</Tooltip> | Add/update GitHub Actions workflow files. | ❌ |
+
+<!-- Add more rows for additional scopes available at https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps -->
+
+For the full authoritative list, see [GitHub's OAuth Scopes documentation](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps).
+
+#### Notes on Permissions
+- The only scope currently enabled via OpenInt is `user:email` (read-only email access). If you need broader access (such as repositories or workflow modification), please contact OpenInt support.
+- GitHub’s `user` scope implicitly includes `user:email` and `user:follow` (see upstream docs for details).
+- If a requested scope is not supported, OpenInt will not pass it in the OAuth request and API calls requiring that permission will fail.
+
+## OAuth Flow Details
+
+GitHub OAuth via OpenInt follows the standard [OAuth 2.0 Authorization Code Grant](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow):
+
+1. User triggers GitHub connect inside your app UI.
+2. OpenInt redirects to GitHub’s consent screen, including any requested (supported) scopes.
+3. After user accepts, GitHub redirects back to your callback URL with a code.
+4. OpenInt exchanges the code for a token, then performs permitted operations on behalf of your app.
+
+> :warning: **GitHub only allows a single callback URL per OAuth app.** Make sure the value provided during registration exactly matches what your OpenInt deployment expects for the callback.
+
+## Common Mistakes & Troubleshooting
+
+<Callout type="warning">**Redirect URI mismatch**: The most frequent issue is misconfigured redirect URIs. Ensure the callback URL in your GitHub OAuth app configuration **exactly** matches the value used by OpenInt (including protocol, subdomain, and path).
+</Callout>
+
+<Callout type="info">**Insufficient scopes**: If your integration requires permissions not currently available via OpenInt, you must request these from OpenInt support. Attempting to use unsupported scopes will result in user flow failures or insufficient access errors.
+</Callout>
+
+- **Invalid client credentials**: Double-check your Client ID and Secret.
+- **GitHub rate limits**: Be aware of [GitHub API rate limits](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) and handle gracefully.
+- **User denies access**: Your flow should handle declines by showing an error or fallback UI.
+
+## References
+
+- [GitHub OAuth App Registration](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app)
+- [GitHub OAuth Scopes](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps)
+- [GitHub OAuth Authorization Flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)
+
+If you need additional functionality or run into issues with scope parity, [contact OpenInt support](mailto:support@openint.dev).
