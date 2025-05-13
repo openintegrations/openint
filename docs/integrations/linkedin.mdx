@@ -1,0 +1,72 @@
+---
+# LinkedIn Integration
+
+Integrate LinkedIn into your application using OpenInt to enable your users to securely connect their LinkedIn accounts. This integration is ideal for ATS (Applicant Tracking) and social media products, such as syncing professional profiles or importing user data.
+
+---
+
+## Quickstart: Connect LinkedIn via OpenInt
+
+### 1. Register an OAuth App with LinkedIn
+
+To enable LinkedIn OAuth, you must register your app with LinkedIn and obtain your Client ID and Client Secret:
+1. Go to the [LinkedIn Developer Portal](https://www.linkedin.com/developers/apps).
+2. Click **Create app** and complete your app details.
+3. After creation, find your **Client ID** and **Client Secret** in the **Auth** tab.
+4. Under the **Products** tab, enable "Sign In with LinkedIn" for profile/email access.
+5. Under "OAuth 2.0 settings", add your OpenInt callback URI (e.g., `https://YOUR_OPENINT_DOMAIN/api/web/connect/oauth/redirect`).
+6. Save your changes.
+
+For more details, see the [LinkedIn Permissions Reference](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access).
+
+### 2. Configure OpenInt for LinkedIn
+
+Add your LinkedIn credentials and set up the connector in your OpenInt backend. Example configuration (pseudocode):
+
+```js
+{
+  provider: 'linkedin',
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  scopes: ['profile', 'email', 'openid'],
+  redirectUri: 'https://YOUR_OPENINT_DOMAIN/api/web/connect/oauth/redirect',
+}
+```
+
+---
+
+## Supported OAuth Scopes
+
+LinkedIn offers numerous OAuth scopes for granular API access. OpenInt currently supports a subset, focusing on authentication and member identification. See the [official permissions list](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access).
+
+| Scope                  | Supported by OpenInt | Description |
+|------------------------|:-------------------:|-------------|
+| <Tooltip tip="Retrieve the authenticated member's name, headline, and photo (OpenID Connect equivalent).">profile</Tooltip> | ✓ | Basic profile access |
+| <Tooltip tip="Retrieve the authenticated member's primary email address (OpenID Connect equivalent).">email</Tooltip> | ✓ | Email address access |
+| <Tooltip tip="OpenID Connect: enables user authentication and basic identity assertion.">openid</Tooltip> | ✓ | OpenID authentication |
+| <Tooltip tip="Read an authenticated member's full basic profile (legacy; more extensive than 'profile/liteprofile').">r_basicprofile</Tooltip> |  | Not supported |
+| <Tooltip tip="Post, comment, and like posts as the member on LinkedIn.">w_member_social</Tooltip> |  | Not supported |
+| <Tooltip tip="Read/write access to company pages the member can administer.">rw_organization_admin</Tooltip> |  | Not supported |
+| <Tooltip tip="Read organization posts and engagement data for accessible organizations.">r_organization_social</Tooltip> |  | Not supported |
+| <Tooltip tip="Read LinkedIn Ad accounts, campaigns, analytics.">r_ads</Tooltip> |  | Not supported |
+| <Tooltip tip="Post content/comments as organizations the member administers.">w_organization_social</Tooltip> |  | Not supported |
+
+---
+
+## Common Pitfalls
+
+- **Redirect URI mismatch:** The redirect URI in LinkedIn's settings must exactly match OpenInt's expected URI.
+- **Unsupported or missing scopes:** Only `profile`, `email`, and `openid` are supported. Additional scopes require LinkedIn approval and are not yet available via OpenInt.
+- **Consent flow issues:** Requesting unapproved scopes can cause consent failures or review delays.
+- **App not published:** Users may be blocked if your LinkedIn app is not published or publicly available.
+- **Email scope requires user consent:** Always include the `email` scope if you need access to a user’s email address.
+
+---
+
+## Useful References
+
+- [Create and manage LinkedIn applications](https://www.linkedin.com/developers/apps)
+- [LinkedIn OAuth and permissions](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+- [LinkedIn OAuth 2.0 Authorization Code Flow](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow)
+
+---
