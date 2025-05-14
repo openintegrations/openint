@@ -1,10 +1,11 @@
 'use client'
 
+import type {ReactElement} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
 import type {Id} from '@openint/cdk'
 
 import {SearchIcon} from 'lucide-react'
-import {ReactElement, useState} from 'react'
+import {useState} from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
@@ -141,10 +142,6 @@ export function AddConnectionCard({
 }) {
   const [_, setSearchParams] = useMutableSearchParams()
 
-  const handleSelect = () => {
-    setSearchParams({view: 'manage'}, {shallow: false})
-  }
-
   return (
     <ConnectorConnectContainer
       connectorName={connectorConfig.connector_name as ConnectorName}
@@ -169,7 +166,6 @@ export function AddConnectionCard({
                 if (isConnecting) {
                   return
                 }
-                handleSelect()
                 handleConnect()
               }}
             />
@@ -190,7 +186,6 @@ export function AddConnectionCard({
                 if (isConnecting) {
                   return
                 }
-                handleSelect()
                 handleConnect()
               }}
             />
