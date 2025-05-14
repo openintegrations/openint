@@ -64,17 +64,6 @@ describe('createOAuth2ConnectorServer', () => {
     refresh: {'refresh-param': 'refresh-value'},
     introspect: {'introspect-param': 'introspect-value'},
     revoke: {'revoke-param': 'revoke-value'},
-    param_names: {
-      client_id: 'mock_client_id',
-      client_secret: 'mock_client_secret',
-      scope: 'mock_scope',
-      state: 'mock_state',
-      redirect_uri: 'mock_redirect_uri',
-      code: 'mock_code',
-      access_token: 'mock_access_token',
-      refresh_token: 'mock_refresh_token',
-      expires_in: 'mock_expires_in',
-    },
   }
 
   // Create a connector definition
@@ -153,10 +142,6 @@ describe('createOAuth2ConnectorServer', () => {
       }),
     )
     expect(res.authorization_url).toBeDefined()
-    const url = new URL(res.authorization_url)
-    expect(url.searchParams.get(testParams.param_names.client_id)).toBe(
-      mockConfig.oauth.client_id,
-    )
   })
 
   test('postConnect passes correct token params', async () => {

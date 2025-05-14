@@ -190,18 +190,25 @@ export function createOAuth2Client(
       additional_params: z.record(z.string(), z.string()).optional(),
     }),
     async ({code_challenge, scopes, additional_params, ...rest}) => {
-      const searchParams = {
-        ...rest,
-        response_type: 'code',
-        client_id: config.clientId,
-        ...(scopes && scopes.length > 0 && {scope: joinScopes(scopes)}),
-        ...(code_challenge && {
-          code_challenge:
-            code_challenge.method === 'S256'
-              ? await createCodeChallenge(code_challenge.verifier)
-              : code_challenge.verifier,
-          code_challenge_method: code_challenge.method,
-        }),
+      let searchParams = renameObjectKeys(
+        {
+          ...rest,
+          response_type: 'code',
+          client_id: config.clientId,
+          ...(scopes && scopes.length > 0 && {scope: joinScopes(scopes)}),
+          ...(code_challenge && {
+            code_challenge:
+              code_challenge.method === 'S256'
+                ? await createCodeChallenge(code_challenge.verifier)
+                : code_challenge.verifier,
+            code_challenge_method: code_challenge.method,
+          }),
+        },
+        config.paramKeyMapping ?? {},
+      )
+      // apply additional params after any possible renaming
+      searchParams = {
+        ...searchParams,
         ...additional_params,
       }
       const url = new URL(config.authorizeURL)
