@@ -22,7 +22,7 @@ export function createOAuth2ConnectorServer<
 >(
   connectorDef: ConnectorDef<T>,
   oauthConfigTemplate: Z.infer<typeof zOAuthConfig>,
-) {
+): ConnectorServer<T, ReturnType<typeof getClient>> {
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
     connectorDef.metadata?.authType !== 'OAUTH2'
@@ -175,6 +175,9 @@ export function createOAuth2ConnectorServer<
       const {expires_at: expiresAt, refresh_token: refreshToken} =
         settings.oauth.credentials
 
+      // NOTE: Currently introspection is not called unless the access token is NOT expired AND refresh token does not exist,
+      // !refreshToken & access_token & isExpired & introspectUrlExists this will ALWAYS throw an error instead of just trying the introspection URL, which I'm not sure if accurate.
+
       const isTokenExpired = expiresAt && new Date(expiresAt) < new Date()
       const shouldRefreshToken = isTokenExpired || refreshToken
 
@@ -210,6 +213,10 @@ export function createOAuth2ConnectorServer<
           throw new Error(`Failed to refresh token: ${error}`)
         }
       } else if (oauthConfig.introspection_request_url) {
+        console.warn(
+          '[oauth2] Introspecting token',
+          settings.oauth.credentials.access_token,
+        )
         const res = await client.introspectToken({
           token: settings.oauth.credentials.access_token,
           additional_params: oauthConfig.params_config.introspect,
