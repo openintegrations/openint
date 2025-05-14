@@ -46,7 +46,7 @@ export const disabledSchema = z.object({
     )
     .openapi({
       title: 'Disabled',
-      'ui:field': 'DisabledField',
+      'ui:field': 'ConnectorConfigDisabledField',
     }),
 })
 
