@@ -9,6 +9,7 @@ import {
   CommandPopover,
   ConnectionStatusBadge,
   ConnectionTableCell,
+  ConnectorScopes,
   CopyID,
   useStateFromSearchParams,
 } from '@openint/ui-v1'
@@ -310,21 +311,17 @@ export function ConnectionsPage() {
                         )}
 
                         <div className="px-5 py-3">
-                          <h4 className="text-muted-foreground mb-1 text-sm">
+                          <h4 className="text-muted-foreground mb-3 text-sm">
                             Scopes
                           </h4>
-                          {/* TODO: use same component as in ccfg sheet  */}
-                          <div className="grid grid-cols-2 gap-1.5 md:grid-cols-3">
-                            {selectedConnection.settings.oauth.credentials.scope
-                              .split(' ')
-                              .map((scope: string) => (
-                                <span
-                                  key={scope}
-                                  className="border-border/60 bg-muted/30 inline-flex items-center rounded-md border px-2 py-0.5 text-xs"
-                                  title={scope}>
-                                  <span className="truncate">{scope}</span>
-                                </span>
-                              ))}
+                          <div className="border-border/40 bg-muted/5 rounded-lg border p-4">
+                            <ConnectorScopes
+                              scopes={selectedConnection.settings.oauth.credentials.scope.split(
+                                ' ',
+                              )}
+                              editable={false}
+                              view="no-card"
+                            />
                           </div>
                         </div>
                       </div>

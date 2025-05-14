@@ -635,3 +635,29 @@ const scopeLookup = {
     description: 'Administrative control over billing and payments',
   },
 }
+
+// Basic example with default configuration
+export const CardView: Story = {
+  args: {
+    scopes: manyScopes.slice(0, 10),
+    editable: true,
+    availableScopes: availableScopes,
+    view: 'card',
+  },
+}
+
+// Example with no-card view
+export const NoCardView: Story = {
+  args: {
+    scopes: manyScopes.slice(0, 10),
+    editable: false,
+    view: 'no-card',
+  },
+  decorators: [
+    (Story) => (
+      <div className="border-border/40 bg-muted/5 rounded-lg border p-4">
+        <Story />
+      </div>
+    ),
+  ],
+}
