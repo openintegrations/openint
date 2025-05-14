@@ -64,6 +64,17 @@ describe('createOAuth2ConnectorServer', () => {
     refresh: {'refresh-param': 'refresh-value'},
     introspect: {'introspect-param': 'introspect-value'},
     revoke: {'revoke-param': 'revoke-value'},
+    param_names: {
+      client_id: 'mock_client_id',
+      client_secret: 'mock_client_secret',
+      scope: 'mock_scope',
+      state: 'mock_state',
+      redirect_uri: 'mock_redirect_uri',
+      code: 'mock_code',
+      access_token: 'mock_access_token',
+      refresh_token: 'mock_refresh_token',
+      expires_in: 'mock_expires_in',
+    },
   }
 
   // Create a connector definition
@@ -126,7 +137,7 @@ describe('createOAuth2ConnectorServer', () => {
   })
 
   test('preConnect passes correct authorization params', async () => {
-    await (server as any).preConnect({
+    const res = await (server as any).preConnect({
       config: mockConfig,
       input: {},
       instance,
@@ -140,6 +151,11 @@ describe('createOAuth2ConnectorServer', () => {
       expect.objectContaining({
         additional_params: testParams.authorize,
       }),
+    )
+    expect(res.authorization_url).toBeDefined()
+    const url = new URL(res.authorization_url)
+    expect(url.searchParams.get(testParams.param_names.client_id)).toBe(
+      mockConfig.oauth.client_id,
     )
   })
 
@@ -209,7 +225,6 @@ describe('createOAuth2ConnectorServer', () => {
       },
     }
 
-    console.warn('[oauth2] Checking connection', validSettings)
     await (server as any).checkConnection({
       settings: validSettings,
       config: mockConfig,
