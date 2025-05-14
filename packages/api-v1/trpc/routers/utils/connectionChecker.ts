@@ -73,6 +73,14 @@ export async function checkConnection(
       message: `Connector config ${connection.connector_config_id} not found`,
     })
   }
+
+  if (connection.status === 'disconnected') {
+    return {
+      id: connection.id,
+      status: 'disconnected',
+      status_message: connection.status_message,
+    }
+  }
   if (connector.checkConnection) {
     const context = {
       webhookBaseUrl: getAbsoluteApiV1URL(`/webhook/${ccfg.connector_name}`),

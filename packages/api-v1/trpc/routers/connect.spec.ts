@@ -266,9 +266,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       // NOTE: this particular test i'm on the fence about... if it can't check connection, should we somehow return the previous status instead of updating it to error?
       // After revocation, the token is no longer valid, so checkConnection will return error
-      expect(res.status).toBe('error')
+      expect(res.status).toBe('disconnected')
       // The check connection error message is set by connectionChecker.ts
-      expect(res.status_message).toMatch(/Token refresh failed with error/)
+      expect(res.status_message).toMatch(/Connection was revoked via OpenInt/)
     })
 
     // Reconnect
