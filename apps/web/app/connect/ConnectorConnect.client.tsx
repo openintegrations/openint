@@ -79,10 +79,19 @@ export function ConnectorConnectContainer({
 
   const handleConnect = React.useCallback(async () => {
     try {
-      setIsConnecting(true)
-      // console.log('ref.current', ref.current)
+      if (!ref.current) {
+        // Give React time to render and run effects
+        await new Promise((resolve) => setTimeout(resolve, 0))
+
+        // Wait up to 1 second for ref.current to be set
+        const startTime = Date.now()
+        while (!ref.current && Date.now() - startTime < 1000) {
+          await new Promise((resolve) => setTimeout(resolve, 50))
+        }
+      }
+
       const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
-        connectorConfigId: connectorConfigId as `ccfg_${string}`,
+        connectorConfigId,
         connectionExternalId: undefined,
         integrationExternalId: undefined,
       })
@@ -134,7 +143,7 @@ export function ConnectorConnectContainer({
       setIsConnecting(false)
     }
     // TODO: This is not exhaustive. WHat do we need to do to fix it here
-  }, [connectorConfigId, preConnectRes])
+  }, [connectorConfigId, name, preConnectRes.data])
 
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
@@ -162,18 +171,17 @@ export function ConnectorConnectContainer({
        Very careful to not cause infinite loop here during rendering
        need to make ourselves a pure component
        */}
-
       {Component && (
         <Component
           key={name}
           connector_name={name}
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          onConnectFn={React.useCallback((fn) => {
-            ref.current = fn
-
+          onConnectFn={(fn?: ConnectFn) => {
+            if (fn) {
+              ref.current = fn
+            }
             // onReady(c, name)
             // setFn(c)
-          }, [])}
+          }}
         />
       )}
 

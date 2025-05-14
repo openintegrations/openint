@@ -17,6 +17,7 @@ import {
 import {JSONSchemaForm} from '@openint/ui-v1'
 import {Deferred} from '@openint/util/promise-utils'
 import {openOAuthPopup} from './callback/openOAuthPopup'
+import {useConnectContext} from './ConnectContextProvider'
 
 // MARK: - Connector Client Components
 
@@ -69,14 +70,14 @@ export function makeNativeOauthConnectorClientComponent(preConnectRes: {
     connector_name?: string
     onConnectFn: (fn?: ConnectFn) => void
   }) {
-    const connectFn = React.useCallback(
-      () =>
-        openOAuthPopup(preConnectRes).then((data) => ({
-          ...data,
-          code_verifier: preConnectRes.code_verifier,
-        })),
-      [],
-    )
+    const {setIsConnecting} = useConnectContext()
+    const connectFn = React.useCallback(() => {
+      setIsConnecting(true)
+      return openOAuthPopup(preConnectRes).then((data) => ({
+        ...data,
+        code_verifier: preConnectRes.code_verifier,
+      }))
+    }, [])
     React.useEffect(() => {
       onConnectFn(connectFn)
     }, [onConnectFn, connectFn])
@@ -123,13 +124,12 @@ export function makeManualConnectorClientComponent(
             deferredRef.current = undefined
           }
         }}>
-        {/* Leave z-20 here to ensure it shows when ConnectOpWrapper blurs the background */}
-        <DialogContent className="z-20">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Configure {connector_name}</DialogTitle>
           </DialogHeader>
           <JSONSchemaForm
-            ref={formRef}
+            formRef={formRef}
             jsonSchema={settingsJsonSchema}
             onSubmit={({formData}) => {
               deferredRef.current?.resolve(formData)
