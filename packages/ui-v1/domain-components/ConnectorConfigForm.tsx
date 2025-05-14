@@ -37,6 +37,15 @@ export type ConnectorConfigFormProps = {
     }
 )
 
+type ConnectorConfigFormData = Omit<
+  Core['connector_config_insert'],
+  'display_name'
+> & {
+  advanced_fields?: {
+    display_name?: string
+  }
+}
+
 /**
  * ConnectorConfigForm component that displays the configuration form for a specific connector
  */
@@ -63,6 +72,15 @@ export function ConnectorConfigForm({
   const disabledField = zodToOas31Schema(disabledSchema)
   const advancedFields = zodToOas31Schema(advancedFieldsSchema)
 
+  const handleSubmit = (data: {formData: ConnectorConfigFormData}) => {
+    const {advanced_fields, ...rest} = data.formData
+    onSubmit?.({
+      formData: {
+        ...rest,
+        ...advanced_fields,
+      },
+    })
+  }
   /**
    * TODO: This is a temporary form schema, we need to move this to the connector config models.
    * In the connector schemas we only have connector_config for this form, but we need to add the rest
@@ -95,13 +113,13 @@ export function ConnectorConfigForm({
     <div className="flex h-full flex-col">
       <div className="flex-1">
         <div className="flex h-full flex-col space-y-8 px-8 pb-24">
-          <JSONSchemaForm<Core['connector_config_insert']>
+          <JSONSchemaForm<ConnectorConfigFormData>
             jsonSchema={formSchema}
             formData={initialValues}
             formContext={formContext}
             formRef={formRef}
             changedFieldsRef={changedFieldsRef}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
           />
         </div>
       </div>
