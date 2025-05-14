@@ -143,7 +143,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         redirectUri,
       )
 
-      console.warn('authorizationUrl', authorizationUrl.searchParams)
       expect(authorizationUrl.searchParams.get('authorize-test-param')).toEqual(
         'authorize-test-value',
       )
