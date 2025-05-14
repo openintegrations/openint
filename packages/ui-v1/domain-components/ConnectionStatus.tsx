@@ -1,8 +1,18 @@
+'use client'
+
 import type {ConnectionExpanded} from '@openint/api-v1/models'
 
 import {AlertCircle, CheckCircle2, HelpCircle, XCircle} from 'lucide-react'
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Badge, Button} from '@openint/shadcn/ui'
+import {
+  Badge,
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@openint/shadcn/ui'
 
 export interface ConnectionStatusBadgeProps {
   status: ConnectionExpanded['status']
@@ -101,28 +111,51 @@ export function ConnectionStatusPill({
   onClick?: () => void
 }) {
   const {
-    icon: StatusIcon,
     label,
     pillColor,
     message,
+    icon: StatusIcon,
   } = getConnectionStatusStyles(status)
 
   return (
-    <div className={cn('group relative inline-flex', className)}>
-      <div className={cn('flex items-center gap-1')}>
-        <div className={cn('h-2 w-2 rounded-full', pillColor)} />
-        {status !== 'disconnected' ? (
-          <div className="text-xs text-gray-500">{label}</div>
-        ) : (
-          <Button variant="ghost" onClick={onClick}>
-            Reconnect
-          </Button>
-        )}
-      </div>
-      <div className="absolute left-0 top-full z-10 mt-1 hidden min-w-[200px] rounded-md bg-white p-3 text-xs shadow-md group-hover:block">
-        <StatusIcon className="mb-2 h-4 w-4" />
-        {message}
-      </div>
-    </div>
+    <TooltipProvider>
+      <Tooltip delayDuration={200}>
+        <TooltipTrigger asChild>
+          <div className={cn('inline-flex', className)}>
+            <div className={cn('flex items-center gap-1')}>
+              <div className={cn('h-2 w-2 rounded-full', pillColor)} />
+              {status !== 'disconnected' ? (
+                <div className="text-xs text-gray-500">{label}</div>
+              ) : (
+                <Button variant="ghost" onClick={onClick}>
+                  Reconnect
+                </Button>
+              )}
+            </div>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          className="z-50 flex max-w-[260px] items-start gap-2.5"
+          side="bottom"
+          align="start"
+          sideOffset={5}>
+          <StatusIcon
+            className={cn(
+              'mt-0.5 h-4 w-4 flex-shrink-0',
+              status === 'healthy'
+                ? 'text-emerald-600'
+                : status === 'error'
+                  ? 'text-rose-600'
+                  : status === 'disconnected'
+                    ? 'text-amber-600'
+                    : 'text-slate-600',
+            )}
+          />
+          <span className="text-background text-xs leading-relaxed">
+            {message}
+          </span>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
