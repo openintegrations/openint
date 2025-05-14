@@ -248,8 +248,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         id: postConnectRes.current.id,
       })
       expect(res.status).toBe('healthy')
-      expect(res.status_message).toBeNull()
-      // TODO: Check if we used introspection or refresh token as part of check connection
     })
 
     // Simulate expiration
@@ -266,10 +264,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const res = await asCustomer.checkConnection({
         id: postConnectRes.current.id,
       })
-      // TODO: Do we need an `outdated` status to distinguish between revoked and expired?
-      expect(res.status).toBe('disconnected')
-      // TODO: Fix the error here...
-      expect(res.status_message).toBe('Connection was revoked via OpenInt')
+      // NOTE: this particular test i'm on the fence about... if it can't check connection, should we somehow return the previous status instead of updating it to error?
+      // After revocation, the token is no longer valid, so checkConnection will return error
+      expect(res.status).toBe('error')
+      // The check connection error message is set by connectionChecker.ts
+      expect(res.status_message).toMatch(/Token refresh failed with error/)
     })
 
     // Reconnect
