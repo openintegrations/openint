@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@openint/shadcn/ui/accordion'
+import {titleCase} from '@openint/util/string-utils'
 
 interface ExtendedJSONSchema extends RJSFSchema {
   'ui:options'?: {
@@ -14,12 +15,6 @@ interface ExtendedJSONSchema extends RJSFSchema {
     placeholder?: string
     [key: string]: unknown
   }
-}
-
-function toTitleCase(str: string) {
-  return str
-    .replace(/_/g, ' ')
-    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.slice(1))
 }
 
 /**
@@ -53,7 +48,7 @@ export function AdvancedField<T extends Record<string, string | number>>(
             return (
               <div key={String(fieldName)} className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">
-                  {fieldOptions?.title || toTitleCase(String(fieldName))}
+                  {fieldOptions?.title || titleCase(String(fieldName))}
                 </Label>
                 <Input
                   value={formData?.[fieldName]}
