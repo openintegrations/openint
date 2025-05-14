@@ -10,6 +10,7 @@ import {ConnectorBadges} from '../../domain-components/ConnectorDisplay'
 import {ConnectorScopes} from '../ConnectorScopes'
 import {CopyID} from '../CopyID'
 import {SecureInput} from '../SecureInput'
+import {AdvancedField} from './fields/AdvancedField'
 import {CredentialsField} from './fields/CredentialsField'
 
 interface Scope {
@@ -155,7 +156,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
   )
 }
 
-export function DisabledField(props: FieldProps<boolean>) {
+export function ConnectorConfigDisabledField(props: FieldProps<boolean>) {
   const {formData, onChange, formContext} = props
   const {initialData, connector} = formContext as OAuthFormContext
 
@@ -246,8 +247,9 @@ export function DisabledField(props: FieldProps<boolean>) {
  */
 export const fields = {
   OAuthField,
-  DisabledField,
+  ConnectorConfigDisabledField,
   CredentialsField,
+  AdvancedField,
   // Default fields we can override
   // - ArrayField
   // - ArraySchemaField
