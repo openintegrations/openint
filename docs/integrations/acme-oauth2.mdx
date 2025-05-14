@@ -1,0 +1,94 @@
+---
+title: Acme OAuth Integration
+---
+
+# Acme OAuth Integration (via OpenInt)
+
+This guide will walk you through integrating the Acme OAuth provider into your application using OpenInt. Acme OAuth is designed for social media verticals, enabling your product to request and sync user profile information securely via OAuth 2.0 (with PKCE support).
+
+## Quickstart
+
+1. **Configure the Acme OAuth connector in OpenInt**.
+2. **Register your application with Acme** and create OAuth credentials (Client ID and Secret).
+3. **Set your OpenInt authorization and token endpoints** using:
+   - Authorization: `https://YOUR_OPENINT_BASE_URL/acme-oauth2/authorize`
+   - Token: `https://YOUR_OPENINT_BASE_URL/acme-oauth2/token`
+4. **Provide the required OAuth2 parameters** (see below for details).
+5. **Select requested scopes**—by default, OpenInt supports a subset of Acme's scopes.
+6. **Complete the OAuth flow to allow users to connect Acme accounts to your platform.**
+
+## OAuth2 Setup for Acme
+
+OpenInt uses the OAuth2 Authorization Code Grant with PKCE (SHA-256). This flow improves security for native and single-page applications.
+
+### Registering Your Application with Acme
+
+- Sign in to Acme’s developer portal (contact Acme if you don’t have access).
+- Create a new application to obtain a **Client ID** and **Client Secret**.
+- Set your redirect URI to:<br>
+  `https://YOUR_OPENINT_BASE_URL/connect/callback/acme-oauth2`
+
+> **Note:** Replace `YOUR_OPENINT_BASE_URL` with your actual OpenInt deployment URL.
+
+### OAuth2 Endpoints
+
+OpenInt will route your OAuth requests through the following endpoints:
+
+| Endpoint        | URL                                    | Notes                                                            |
+|-----------------|----------------------------------------|------------------------------------------------------------------|
+| Authorize       | `/acme-oauth2/authorize`               | Uses S256 PKCE, add custom param: `authorize-test-param`         |
+| Token           | `/acme-oauth2/token`                   | Add custom param: `token-test-param`                             |
+| Introspect      | `/acme-oauth2/token/introspect`        | Add custom param: `introspect-test-param`                        |
+| Revoke          | `/acme-oauth2/token/revoke`            | Add custom param: `revoke-test-param`                            |
+
+These endpoints support the required OAuth2 params for Acme. You can override or extend custom params in your OpenInt configuration as needed.
+
+### Required OAuth2 Parameters Example
+
+```json OAuth2 Example Configuration
+{
+  "authorize": { "authorize-test-param": "authorize-test-value" },
+  "token": { "token-test-param": "token-test-value" },
+  "refresh": { "refresh-test-param": "refresh-test-value" },
+  "introspect": { "introspect-test-param": "introspect-test-value" },
+  "revoke": { "revoke-test-param": "revoke-test-value" }
+}
+```
+
+## Scopes
+
+OpenInt currently supports a subset of the scopes available from Acme. Below is a table of each scope provided by Acme and its status in OpenInt:
+
+| Scope         | Description                                    | Supported by OpenInt? |
+|-------------- |----------------------------------------------- |----------------------|
+| <Tooltip tip="Read profile information">read:profile</Tooltip> | Read profile information | ✅ Yes (default)
+| <Tooltip tip="Read posts">write:posts</Tooltip>                | Read posts                | ❌ No
+
+<!-- If a link to upstream scopes documentation exists, add it here. No link available in config. -->
+
+> **Tip:** Unsupported scopes (❌) will not be requested or available in OpenInt until implemented.
+
+## Example Connector Configuration
+
+```ts Acme OAuth2 Connector Example
+import {acmeOauth2Def} from 'openint/connectors/acme-oauth2';
+
+export const connector = acmeOauth2Def({
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  redirectUri: 'https://YOUR_OPENINT_BASE_URL/connect/callback/acme-oauth2',
+  scopes: ['read:profile'] // scopes can be an array or a space-separated string
+});
+```
+
+## Common Pitfalls & Troubleshooting
+
+- **Invalid redirect URI:** Ensure the redirect URI in Acme matches exactly what is configured in OpenInt.
+- **Scope errors:** Attempting to request unsupported scopes (like `write:posts`) will result in denied access or errors.
+- **PKCE errors:** Ensure your OAuth2 client is set to "Authorization Code Grant with PKCE (S256)".
+- **Missing parameters:** Required custom params must be included—see above for parameter details.
+- **Stale/invalid client credentials:** Always use up-to-date Client ID and Secret—rotate credentials as necessary.
+
+---
+
+If you need more scopes or custom behavior, contact OpenInt support for guidance on extending the integration.
