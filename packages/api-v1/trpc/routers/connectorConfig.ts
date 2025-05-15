@@ -169,10 +169,7 @@ export const connectorConfigRouter = router({
             //     )
             //   : undefined,
           ),
-          orderBy: [
-            desc(schema.connector_config.updated_at),
-            asc(schema.connector_config.id),
-          ],
+          orderBy: [asc(schema.connector_config.created_at)],
           limit,
           offset,
         })
