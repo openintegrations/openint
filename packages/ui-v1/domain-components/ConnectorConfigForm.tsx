@@ -3,6 +3,8 @@
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {JSONSchemaFormRef} from '../components/schema-form'
 
+import {advancedFieldsSchema, disabledSchema} from '@openint/api-v1/models'
+import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form'
 
 export type ConnectorConfigFormProps = {
@@ -35,6 +37,15 @@ export type ConnectorConfigFormProps = {
     }
 )
 
+type ConnectorConfigFormData = Omit<
+  Core['connector_config_insert'],
+  'display_name'
+> & {
+  advanced_fields?: {
+    display_name?: string
+  }
+}
+
 /**
  * ConnectorConfigForm component that displays the configuration form for a specific connector
  */
@@ -50,12 +61,26 @@ export function ConnectorConfigForm({
     connectorConfig
       ? {
           ...connectorConfig.config,
-          display_name: connectorConfig.display_name ?? '',
+          advanced_fields: {
+            display_name: connectorConfig.display_name ?? '',
+          },
           disabled: connectorConfig.disabled ?? false,
         }
       : {}
   ) as Core['connector_config_insert']
 
+  const disabledField = zodToOas31Schema(disabledSchema)
+  const advancedFields = zodToOas31Schema(advancedFieldsSchema)
+
+  const handleSubmit = (data: {formData: ConnectorConfigFormData}) => {
+    const {advanced_fields, ...rest} = data.formData
+    onSubmit?.({
+      formData: {
+        ...rest,
+        ...advanced_fields,
+      },
+    })
+  }
   /**
    * TODO: This is a temporary form schema, we need to move this to the connector config models.
    * In the connector schemas we only have connector_config for this form, but we need to add the rest
@@ -64,19 +89,9 @@ export function ConnectorConfigForm({
   const formSchema = {
     type: 'object' as const,
     properties: {
-      disabled: {
-        type: 'boolean' as const,
-        title: 'Disabled',
-        description:
-          'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
-        'ui:field': 'DisabledField',
-      },
-      display_name: {
-        type: 'string' as const,
-        title: 'Display Name',
-        description: 'A friendly name for this connector configuration',
-      },
+      ...disabledField.properties,
       ...(configSchema?.['properties'] || {}),
+      ...(advancedFields?.properties || {}),
     },
   }
 
@@ -98,13 +113,13 @@ export function ConnectorConfigForm({
     <div className="flex h-full flex-col">
       <div className="flex-1">
         <div className="flex h-full flex-col space-y-8 px-8 pb-24">
-          <JSONSchemaForm<Core['connector_config_insert']>
+          <JSONSchemaForm<ConnectorConfigFormData>
             jsonSchema={formSchema}
             formData={initialValues}
             formContext={formContext}
             formRef={formRef}
             changedFieldsRef={changedFieldsRef}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
           />
         </div>
       </div>

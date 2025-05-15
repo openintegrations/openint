@@ -35,6 +35,7 @@ interface ConnectorScopesProps {
   scopeLookup?: Record<string, ScopeLookup>
   scopes: string[]
   maxVisible?: number
+  view?: 'card' | 'no-card'
 }
 
 const RequestLink: FC<{className?: string}> = ({className}) => (
@@ -103,6 +104,7 @@ export function ConnectorScopes({
   scopeLookup,
   scopes,
   maxVisible = 8,
+  view = 'card',
 }: ConnectorScopesProps) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [isMorePopoverOpen, setIsMorePopoverOpen] = useState(false)
@@ -256,126 +258,134 @@ export function ConnectorScopes({
   }
 
   return (
-    <div className="border-border bg-card rounded-lg border shadow-sm">
-      <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/50 p-4">
-        <div className="text-card-foreground text-base font-medium">Scopes</div>
-        {editable && (
-          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-8 text-xs font-medium">
-                Manage scopes
-              </Button>
-            </PopoverTrigger>
-
-            <PopoverContent
-              className="w-[380px] p-2"
-              align="end"
-              side="left"
-              onOpenAutoFocus={(e) => e.preventDefault()}>
-              <div className="flex flex-col">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-sm font-medium">Available scopes</div>
-                  <Badge
-                    variant={scopes.length > 0 ? 'secondary' : 'outline'}
-                    className={cn(
-                      'text-xs font-normal',
-                      scopes.length === 0 &&
-                        'text-muted-foreground border-dashed',
-                    )}>
-                    {scopes.length} selected
-                  </Badge>
-                </div>
-
-                {!hideCustomInput && (
-                  <div className="mb-3">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Search scopes"
-                        className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (
-                            e.key === 'Enter' &&
-                            filteredScopes.length === 0
-                          ) {
-                            handleAddCustomScope()
-                          }
-                        }}
-                      />
-                      <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
-                  role="listbox"
-                  tabIndex={0}
-                  style={{
-                    scrollbarWidth: 'thin',
-                    WebkitOverflowScrolling: 'touch',
-                  }}
-                  onWheel={(e) => e.stopPropagation()}>
-                  {filteredScopes.length > 0 ? (
-                    filteredScopes.map(renderAvailableScope)
-                  ) : (
-                    <div className="flex flex-col items-center py-3">
-                      <div className="text-muted-foreground mb-1 text-xs">
-                        No scopes found
-                      </div>
-                      {searchQuery.trim() && !hideCustomInput && (
-                        <div className="mt-2 flex flex-col items-center">
-                          <div className="text-muted-foreground mb-1.5 text-xs">
-                            Add custom scope?
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-7 text-xs"
-                            onClick={handleAddCustomScope}>
-                            Add &quot;{searchQuery.trim()}&quot;
-                          </Button>
-                        </div>
-                      )}
-                      <div className="border-border mt-4 w-full border-t pt-3">
-                        <RequestLink className="justify-center" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
+    <div
+      className={cn(
+        view === 'card' && 'border-border bg-card rounded-lg border shadow-sm',
+        view === 'no-card' && 'bg-transparent',
+      )}>
+      {view === 'card' && (
+        <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/50 p-4">
+          <div className="text-card-foreground text-base font-medium">
+            Scopes
+          </div>
+          {editable && (
+            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+              <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
                   size="sm"
-                  className={cn(
-                    'mt-auto h-8 w-full text-xs',
-                    scopes.length === 0
-                      ? 'text-muted-foreground cursor-not-allowed opacity-50'
-                      : 'text-destructive hover:bg-destructive/10',
-                  )}
-                  disabled={scopes.length === 0}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleClearAllScopes()
-                  }}>
-                  Clear all scopes
+                  variant="outline"
+                  className="h-8 text-xs font-medium">
+                  Manage scopes
                 </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
+              </PopoverTrigger>
 
-      <div className={cn('w-full p-5', className)}>
+              <PopoverContent
+                className="w-[380px] p-2"
+                align="end"
+                side="left"
+                onOpenAutoFocus={(e) => e.preventDefault()}>
+                <div className="flex flex-col">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="text-sm font-medium">Available scopes</div>
+                    <Badge
+                      variant={scopes.length > 0 ? 'secondary' : 'outline'}
+                      className={cn(
+                        'text-xs font-normal',
+                        scopes.length === 0 &&
+                          'text-muted-foreground border-dashed',
+                      )}>
+                      {scopes.length} selected
+                    </Badge>
+                  </div>
+
+                  {!hideCustomInput && (
+                    <div className="mb-3">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search scopes"
+                          className="border-input h-7 w-full rounded border pl-7 pr-2 text-xs"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === 'Enter' &&
+                              filteredScopes.length === 0
+                            ) {
+                              handleAddCustomScope()
+                            }
+                          }}
+                        />
+                        <Search className="text-muted-foreground absolute left-2 top-1/2 size-3.5 -translate-y-1/2" />
+                      </div>
+                    </div>
+                  )}
+
+                  <div
+                    className="border-border mb-3 max-h-[170px] space-y-1 overflow-y-auto rounded-sm border p-1.5"
+                    role="listbox"
+                    tabIndex={0}
+                    style={{
+                      scrollbarWidth: 'thin',
+                      WebkitOverflowScrolling: 'touch',
+                    }}
+                    onWheel={(e) => e.stopPropagation()}>
+                    {filteredScopes.length > 0 ? (
+                      filteredScopes.map(renderAvailableScope)
+                    ) : (
+                      <div className="flex flex-col items-center py-3">
+                        <div className="text-muted-foreground mb-1 text-xs">
+                          No scopes found
+                        </div>
+                        {searchQuery.trim() && !hideCustomInput && (
+                          <div className="mt-2 flex flex-col items-center">
+                            <div className="text-muted-foreground mb-1.5 text-xs">
+                              Add custom scope?
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              onClick={handleAddCustomScope}>
+                              Add &quot;{searchQuery.trim()}&quot;
+                            </Button>
+                          </div>
+                        )}
+                        <div className="border-border mt-4 w-full border-t pt-3">
+                          <RequestLink className="justify-center" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      'mt-auto h-8 w-full text-xs',
+                      scopes.length === 0
+                        ? 'text-muted-foreground cursor-not-allowed opacity-50'
+                        : 'text-destructive hover:bg-destructive/10',
+                    )}
+                    disabled={scopes.length === 0}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleClearAllScopes()
+                    }}>
+                    Clear all scopes
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      )}
+
+      <div className={cn('w-full', view === 'card' ? 'p-5' : 'p-0', className)}>
         {children || (
           <>
             {/* List of scopes */}
-            <div className="mb-6">
+            <div className={cn('mb-6', view === 'no-card' && 'mb-0')}>
               {scopes.length > 0 ? (
                 <div className="flex flex-wrap">
                   {visibleScopes.map(renderScopeBadge)}
@@ -423,11 +433,13 @@ export function ConnectorScopes({
             </div>
 
             {/* Request Scopes link with divider */}
-            <div className="border-border mt-5 border-t pt-4">
-              <div className="flex justify-start">
-                <RequestLink />
+            {view === 'card' && (
+              <div className="border-border mt-5 border-t pt-4">
+                <div className="flex justify-start">
+                  <RequestLink />
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
       </div>

@@ -36,3 +36,38 @@ export type ConnectorConfig<
   T extends keyof ConnectorConfigExtensions = keyof ConnectorConfigExtensions,
 > = Core['connector_config_select'] &
   Partial<Pick<ConnectorConfigExtensions, T>>
+
+// Disabled field schema
+export const disabledSchema = z.object({
+  disabled: z
+    .boolean()
+    .describe(
+      'Disable connector config property, when disabled it will not be used in connect. Essentially a reversible soft-delete',
+    )
+    .openapi({
+      title: 'Disabled',
+      'ui:field': 'ConnectorConfigDisabledField',
+    }),
+})
+
+// Advanced fields schema
+export const advancedFieldsSchema = z.object({
+  advanced_fields: z
+    .object({
+      display_name: z
+        .string()
+        .optional()
+        .openapi({
+          'ui:options': {
+            title: 'Display Name',
+            placeholder: 'Enter Display Name',
+          },
+        }),
+      // Add other advanced fields here as needed
+    })
+    .describe('Additional configuration options for this connector')
+    .openapi({
+      title: 'Advanced Settings',
+      'ui:field': 'AdvancedField',
+    }),
+})
