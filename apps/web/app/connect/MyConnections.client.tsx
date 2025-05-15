@@ -76,7 +76,7 @@ export function MyConnectionsClient(props: {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
         <h1 className="text-xl font-bold">My Integrations</h1>
         <Button
           size="lg"
@@ -93,7 +93,7 @@ export function MyConnectionsClient(props: {
       <DataTileView
         data={res.data.items}
         columns={[]}
-        className="grid grid-cols-2 gap-6 md:grid-cols-4"
+        className="grid grid-cols-1 gap-6 sm:grid-cols-3 md:grid-cols-4"
         getItemId={(conn) => conn.id}
         renderItem={(conn) => {
           const renderCard = ({

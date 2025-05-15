@@ -140,8 +140,6 @@ export function AddConnectionCard({
   connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
 }) {
-  const [_, setSearchParams] = useMutableSearchParams()
-
   return (
     <ConnectorConnectContainer
       connectorName={connectorConfig.connector_name as ConnectorName}
