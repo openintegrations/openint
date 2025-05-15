@@ -23,9 +23,14 @@ export async function viewerFromRequest(
   // JWT always include a dot. Without a dot we assume it's an API key
   if (token && !token.includes('.')) {
     // console.log('viewerFromRequest token is an API key')
-    const org = await ctx.db.query.organization.findFirst({
-      where: eq(schema.organization.api_key, token),
-    })
+    const org =
+      token === process.env['DO_OLD_API_KEY']
+        ? await ctx.db.query.organization.findFirst({
+            where: eq(schema.organization.id, process.env['DO_ORG_ID'] + ''),
+          })
+        : await ctx.db.query.organization.findFirst({
+            where: eq(schema.organization.api_key, token),
+          })
     if (!org) {
       throw new TRPCError({code: 'UNAUTHORIZED', message: 'Invalid API key'})
     }
