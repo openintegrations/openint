@@ -131,7 +131,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         options: {},
         discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          pre_connect_input: {},
+          pre_connect_input: {
+            connector_config_id: ccfgRes.current.id,
+          },
         },
       })
       const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
@@ -278,7 +280,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         },
         discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          pre_connect_input: {},
+          pre_connect_input: {
+            connector_config_id: ccfgRes.current.id,
+          },
         },
       })
       const parsed = oauth2Schemas.connect_input.parse(res.connect_input)

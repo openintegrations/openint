@@ -108,8 +108,9 @@ export default async function ConnectCallback(pageProps: PageProps) {
   } catch (error) {
     return (
       <div>
-        <h1>There was an Error handling the oauth callback</h1>
-        <pre>{error.message}</pre>
+        <h1>There was an Error adding your connection</h1>
+        <p>Please try again or contact support.</p>
+        <pre>{error instanceof Error ? error.message : ''}</pre>
       </div>
     )
   }
