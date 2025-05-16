@@ -120,59 +120,84 @@ export function createOAuth2Client(
       ).toString('base64')}`
     }
 
-    const response = await fetch(
-      new Request(url, {method: 'POST', headers, body}),
-    )
+    try {
+      const response = await fetch(
+        new Request(url, {method: 'POST', headers, body}),
+      )
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => null)
-      const errorJSON = safeJSONParseObject(errorText)
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => null)
+        const errorJSON = safeJSONParseObject(errorText)
+        const errPayload = {
+          status: response.status,
+          status_text: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          ...(errorJSON ?? {error_text: errorText}),
+          request_url: url,
+          request_body: body,
+        }
+        throw new OAuth2Error(
+          config.errorToString?.(errPayload) ?? JSON.stringify(errPayload),
+          errPayload,
+          {
+            status: response.status,
+            statusText: response.statusText,
+            method: 'POST',
+            headers: Object.fromEntries(response.headers.entries()),
+            url,
+          },
+        )
+      }
+
+      // First try JSON parsing
+      const text = await response.text()
+      const json = safeJSONParseObject(text)
+      if (json) {
+        return json as T
+      }
+
+      // Then try parsing as URL-encoded form data
+      try {
+        const formData = new URLSearchParams(text)
+        const result: Record<string, string | number> = {}
+
+        // Convert numeric values where appropriate
+        formData.forEach((value, key) => {
+          result[key] = /^\d+$/.test(value) ? parseInt(value, 10) : value
+        })
+
+        return result as unknown as T
+        // eslint-disable-next-line no-empty
+      } catch {}
+
+      // If all else fails, throw error
+      throw new Error(
+        `Failed to parse oauth post response: ${text.substring(0, 100)}...`,
+      )
+    } catch (error) {
+      if (error instanceof OAuth2Error) {
+        throw error
+      }
+
       const errPayload = {
-        status: response.status,
-        status_text: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-        ...(errorJSON ?? {error_text: errorText}),
+        error_message: error instanceof Error ? error.message : String(error),
+        error_name: error instanceof Error ? error.name : 'Unknown Error',
         request_url: url,
         request_body: body,
       }
+
       throw new OAuth2Error(
         config.errorToString?.(errPayload) ?? JSON.stringify(errPayload),
         errPayload,
         {
-          status: response.status,
-          statusText: response.statusText,
+          status: 500, // Default error status for network/unexpected errors
+          statusText: 'Internal Error',
           method: 'POST',
-          headers: Object.fromEntries(response.headers.entries()),
+          headers: Object.fromEntries(Object.entries(headers)),
           url,
         },
       )
     }
-
-    // First try JSON parsing
-    const text = await response.text()
-    const json = safeJSONParseObject(text)
-    if (json) {
-      return json as T
-    }
-
-    // Then try parsing as URL-encoded form data
-    try {
-      const formData = new URLSearchParams(text)
-      const result: Record<string, string | number> = {}
-
-      // Convert numeric values where appropriate
-      formData.forEach((value, key) => {
-        result[key] = /^\d+$/.test(value) ? parseInt(value, 10) : value
-      })
-
-      return result as unknown as T
-      // eslint-disable-next-line no-empty
-    } catch {}
-
-    // If all else fails, throw error
-    throw new Error(
-      `Failed to parse oauth post response: ${text.substring(0, 100)}...`,
-    )
   }
 
   const getAuthorizeUrl = zFunction(
