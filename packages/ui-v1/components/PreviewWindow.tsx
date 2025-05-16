@@ -344,8 +344,10 @@ export function TabletScreen({
 }
 
 interface PreviewWindowProps extends PreviewProps {
-  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile' | 'Button'
-  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile' | 'Button'>
+  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile' | 'Connect Button'
+  supportedViews?: Array<
+    'Magic Link' | 'Embedded' | 'Mobile' | 'Connect Button'
+  >
   // TODO: Improve this, page children could be dynamic according to the selected view but we're not
   // aware if this in the parent component.
   customContent?: React.ReactNode
@@ -357,7 +359,7 @@ export function PreviewWindow({
   shareUrl,
   isLoading = false,
   defaultView = 'Magic Link',
-  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Button'],
+  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Connect Button'],
   customContent,
 }: PreviewWindowProps) {
   const [view, setView] =
@@ -380,7 +382,10 @@ export function PreviewWindow({
               {view === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
               {view === 'Embedded' && <TabletIcon className="h-4 w-4" />}
               {view === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
-              {view === 'Button' && <PanelTopIcon className="h-4 w-4" />}
+              {view === 'Connect Button' && (
+                <PanelTopIcon className="h-4 w-4" />
+              )}
+              {view}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -414,7 +419,7 @@ export function PreviewWindow({
           {children}
         </MobileScreen>
       </TabsContent>
-      <TabsContent value="Button" className="mt-0 flex justify-center">
+      <TabsContent value="Connect Button" className="mt-0 flex justify-center">
         <BrowserWindow shareUrl={shareUrl} isLoading={isLoading}>
           {customContent ?? children}
         </BrowserWindow>
