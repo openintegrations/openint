@@ -8,7 +8,7 @@ import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
 import {createOAuth2Client} from './createOAuth2Client'
 import {createOAuth2Server} from './createOAuth2Server'
-import {createCodeVerifier} from './utils.client'
+import {createCodeVerifier, renameObjectKeys} from './utils.client'
 
 const client = {
   id: 'client1',
@@ -165,4 +165,76 @@ $test('previous refresh token is now invalid', async () => {
   })
 
   expect(res.active).toBe(false)
+})
+
+describe('paramKeyMapping tests', () => {
+  // Test the direct utility function that performs the renaming
+  test('renameObjectKeys correctly renames object keys', () => {
+    const mapping = {
+      redirect_uri: 'redirect',
+      code_verifier: 'pkce_verifier',
+      token: 'access_token',
+      client_id: 'app_id',
+      client_secret: 'app_secret',
+      refresh_token: 'refresh',
+    }
+
+    const input = {
+      redirect_uri: 'http://example.com/callback',
+      code_verifier: 'test_verifier',
+      client_id: 'client123',
+      client_secret: 'secret123',
+      token: 'token123',
+      refresh_token: 'refresh123',
+      unrelated_key: 'unchanged',
+    }
+
+    const result = renameObjectKeys(input, mapping)
+
+    expect(result).toEqual({
+      redirect: 'http://example.com/callback',
+      pkce_verifier: 'test_verifier',
+      app_id: 'client123',
+      app_secret: 'secret123',
+      access_token: 'token123',
+      refresh: 'refresh123',
+      unrelated_key: 'unchanged',
+    })
+  })
+
+  // Test that getAuthorizeUrl with param mapping produces correct URL
+  test('getAuthorizeUrl uses paramKeyMapping for parameters', async () => {
+    const clientWithMapping = createOAuth2Client({
+      clientId: 'client123',
+      clientSecret: 'secret123',
+      authorizeURL: 'http://example.com/authorize',
+      tokenURL: 'http://example.com/token',
+      paramKeyMapping: {
+        redirect_uri: 'redirect',
+        client_id: 'app_id',
+        state: 'session_state',
+        scope: 'permissions',
+      },
+    })
+
+    const url = await clientWithMapping.getAuthorizeUrl({
+      redirect_uri: 'http://example.com/callback',
+      scopes: ['read', 'write'],
+      state: 'test_state',
+    })
+
+    const parsedUrl = new URL(url)
+    expect(parsedUrl.searchParams.get('redirect')).toBe(
+      'http://example.com/callback',
+    )
+    expect(parsedUrl.searchParams.get('app_id')).toBe('client123')
+    expect(parsedUrl.searchParams.get('session_state')).toBe('test_state')
+    expect(parsedUrl.searchParams.get('permissions')).toBe('read write')
+
+    // Original param names should not be present
+    expect(parsedUrl.searchParams.has('redirect_uri')).toBe(false)
+    expect(parsedUrl.searchParams.has('client_id')).toBe(false)
+    expect(parsedUrl.searchParams.has('state')).toBe(false)
+    expect(parsedUrl.searchParams.has('scope')).toBe(false)
+  })
 })

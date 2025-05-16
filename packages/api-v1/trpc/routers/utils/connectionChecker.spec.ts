@@ -385,6 +385,47 @@ describeEachDatabase(
       )
     })
 
+    test('should return disconnected status without checking connection if connection is disconnected', async () => {
+      // Create a mock connection object with disconnected status
+      const connection = {
+        id: connIdAcme,
+        connector_name: connectorAcme,
+        connector_config_id: ccfgIdAcme,
+        customer_id: customerId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'disconnected',
+        status_message: 'Manually disconnected',
+        settings: {oauth: {credentials: {access_token: 'acme-token'}}},
+        metadata: null,
+        disabled: false,
+        display_name: null,
+        integration_id: null,
+      } as Z.infer<typeof core.connection_select>
+
+      const contextMock = {
+        ...asCustomer,
+      }
+
+      // Spy on checkConnection to verify it's not called
+      const checkConnectionSpy = jest.spyOn(
+        serverConnectors[connectorAcme],
+        'checkConnection' as any,
+      )
+
+      const result = await checkConnection(connection, contextMock as any)
+
+      // Verify checkConnection was not called
+      expect(checkConnectionSpy).not.toHaveBeenCalled()
+
+      // Verify the result preserves the disconnected status
+      expect(result).toEqual({
+        id: connIdAcme,
+        status: 'disconnected',
+        status_message: 'Manually disconnected',
+      })
+    })
+
     // Note: Testing "Connector not found" requires manipulating the input
     // `connection.connector_name` or mocking serverConnectors, which deviates
     // from the minimal mocking approach here.
