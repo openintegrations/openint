@@ -103,7 +103,7 @@ export function createOAuth2ConnectorServer<
       //   `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
       // )
 
-      const tokenRes = await client.exchangeCodeForToken({
+      const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
         redirect_uri:
           config.oauth?.redirect_uri?.trim() ||
@@ -126,33 +126,22 @@ export function createOAuth2ConnectorServer<
       // })
       // console.log('[oauth2] postConnect res', res, config)
 
-      const introspectRes = oauthConfig.introspection_request_url
-        ? await client.introspectToken({
-            token: tokenRes.access_token,
-            additional_params: oauthConfig.params_config.introspect,
-          })
-        : undefined
-
       return {
         // TODO: Fix this connectionExternalId abstraction
         connectionExternalId: extractId(state.connection_id as Id['conn'])[2],
         settings: {
-          introspection_result: introspectRes,
           oauth: {
             credentials: {
               client_id: client.config.clientId,
-              access_token: tokenRes.access_token,
+              access_token: res.access_token,
               // NOTE: in case of a pre-existing connection, the previous refresh token may get lost?
-              refresh_token: tokenRes.refresh_token,
-              expires_in: tokenRes.expires_in,
-              expires_at: tokenRes.expires_in
-                ? new Date(
-                    Date.now() + tokenRes.expires_in * 1000,
-                  ).toISOString()
+              refresh_token: res.refresh_token,
+              expires_in: res.expires_in,
+              expires_at: res.expires_in
+                ? new Date(Date.now() + res.expires_in * 1000).toISOString()
                 : undefined,
-              scope:
-                tokenRes.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
-              raw: tokenRes,
+              scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
+              raw: res,
               token_type: undefined, // What should this be?
             },
           },

@@ -88,7 +88,6 @@ export function getClient({
       authorizeURL: oauthConfig.authorization_request_url,
       tokenURL: oauthConfig.token_request_url,
       revokeUrl: oauthConfig.revocation_request_url,
-      introspectUrl: oauthConfig.introspection_request_url,
       scopeDelimiter: oauthConfig.scope_separator,
       paramKeyMapping: oauthConfig.params_config.param_names,
       clientAuthLocation: connectorName === 'notion' ? 'header' : 'body', // Make this configurable

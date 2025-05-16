@@ -256,7 +256,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** acme-oauth2 */
@@ -307,7 +306,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** aircall */
@@ -447,7 +445,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** confluence */
@@ -498,7 +495,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** discord */
@@ -549,7 +545,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** facebook */
@@ -711,7 +706,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** github */
@@ -762,7 +756,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
                 /** @description The base URL of your Gong account (e.g., example) */
                 api_base_url_for_customer: string;
             };
@@ -815,7 +808,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** google-calendar */
@@ -866,7 +858,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** google-docs */
@@ -917,7 +908,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** google-drive */
@@ -968,7 +958,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** google-mail */
@@ -1019,7 +1008,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** google-sheet */
@@ -1110,7 +1098,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** hubspot */
@@ -1161,7 +1148,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** instagram */
@@ -1212,7 +1198,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** intercom */
@@ -1263,7 +1248,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** jira */
@@ -1314,7 +1298,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** lever */
@@ -1365,7 +1348,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** linear */
@@ -1416,7 +1398,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** linkedin */
@@ -1556,7 +1537,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** notion */
@@ -1671,7 +1651,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** outreach */
@@ -1722,7 +1701,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
                 /** @description The API URL of your Pipedrive account (e.g., example) */
                 api_domain: string;
             };
@@ -1848,7 +1826,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
                 /** @description The realmId of your quickbooks company (e.g., 9341453474484455) */
                 realmId: string;
             };
@@ -1932,7 +1909,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** reddit */
@@ -1983,7 +1959,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** salesloft */
@@ -2056,7 +2031,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** sharepoint */
@@ -2107,7 +2081,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** slack */
@@ -2305,7 +2278,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** twitter */
@@ -2406,7 +2378,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
             };
         };
         /** xero */
@@ -2507,7 +2478,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                introspection_result?: unknown;
                 /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
                 extension: string;
             };
