@@ -22,7 +22,7 @@ export function createOAuth2ConnectorServer<
 >(
   connectorDef: ConnectorDef<T>,
   oauthConfigTemplate: Z.infer<typeof zOAuthConfig>,
-) {
+): ConnectorServer<T, ReturnType<typeof getClient>> {
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
     connectorDef.metadata?.authType !== 'OAUTH2'
@@ -172,16 +172,13 @@ export function createOAuth2ConnectorServer<
       }
       // console.log('[oauth2] Check connection called', oauthConfig)
 
-      const {expires_at: expiresAt, refresh_token: refreshToken} =
+      const {refresh_token: refreshToken, expires_at: expiresAt} =
         settings.oauth.credentials
 
-      const isTokenExpired = expiresAt && new Date(expiresAt) < new Date()
-      const shouldRefreshToken = isTokenExpired || refreshToken
+      // NOTE: Currently introspection is not called unless the access token is NOT expired AND refresh token does not exist,
+      // !refreshToken & access_token & isExpired & introspectUrlExists this will ALWAYS throw an error instead of just trying the introspection URL, which I'm not sure if accurate.
 
-      if (shouldRefreshToken) {
-        if (!refreshToken) {
-          throw new Error('Token expired and no refresh token available')
-        }
+      if (refreshToken && oauthConfig.token_request_url) {
         try {
           const res = await client.refreshToken({
             refresh_token: refreshToken,
@@ -207,28 +204,50 @@ export function createOAuth2ConnectorServer<
           // Attempt to refresh the token
           return {settings, status: 'healthy', status_message: null}
         } catch (error: unknown) {
-          throw new Error(`Failed to refresh token: ${error}`)
-        }
-      } else if (oauthConfig.introspection_request_url) {
-        const res = await client.introspectToken({
-          token: settings.oauth.credentials.access_token,
-          additional_params: oauthConfig.params_config.introspect,
-        })
-        if (res.active) {
-          return {settings, status: 'healthy', status_message: null}
-        } else {
-          console.log('[oauth2] Token introspection failed', res)
-          // Should this be revoked?
-          return {settings, status: 'disconnected', status_message: null}
+          return {
+            settings,
+            status: 'error',
+            status_message: `Token refresh failed with error ${
+              error instanceof Error ? error.message : 'Unknown error'
+            }`,
+          }
         }
       }
-      // TODO: Return proper `status` for connection
+
+      if (oauthConfig.introspection_request_url) {
+        try {
+          const res = await client.introspectToken({
+            token: settings.oauth.credentials.access_token,
+            additional_params: oauthConfig.params_config.introspect,
+          })
+          if (res.active) {
+            return {settings, status: 'healthy', status_message: null}
+          } else {
+            console.error('[oauth2] Token introspection failed', res)
+            // Should this be revoked?
+            return {settings, status: 'disconnected', status_message: null}
+          }
+        } catch (error: unknown) {
+          return {
+            settings,
+            status: 'error',
+            status_message: `Token introspection failed with error ${error instanceof Error ? error.message : 'Unknown error'}`,
+          }
+        }
+      }
+      const tokenIsExpired = expiresAt && new Date(expiresAt) < new Date()
+      if (tokenIsExpired) {
+        return {
+          settings,
+          status: 'disconnected',
+          status_message: `Token expired at ${expiresAt}`,
+        }
+      }
 
       // NOTE:
-      // 1) in the future we could have connector def set up a test connection url, such as /user/info
+      // 1) in the future we could also have connector def set up a test connection url, such as /user/info
       // and then we could use that to validate the connection
       // for now we're just going to check if the token is expired and try to refresh it
-      // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
 
       return {settings, status: 'healthy', status_message: null}
     },

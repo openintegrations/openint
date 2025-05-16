@@ -14,7 +14,23 @@ export default {
     introspection_request_url: '{{baseURLs.api}}/acme-oauth2/token/introspect',
     revocation_request_url: '{{baseURLs.api}}/acme-oauth2/token/revoke',
     scope_separator: ' ',
-    params_config: {},
+    params_config: {
+      authorize: {
+        'authorize-test-param': 'authorize-test-value',
+      },
+      token: {
+        'token-test-param': 'token-test-value',
+      },
+      refresh: {
+        'refresh-test-param': 'refresh-test-value',
+      },
+      introspect: {
+        'introspect-test-param': 'introspect-test-value',
+      },
+      revoke: {
+        'revoke-test-param': 'revoke-test-value',
+      },
+    },
     openint_scopes: ['read:profile'],
     scopes: [
       {
