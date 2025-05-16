@@ -74,6 +74,7 @@ export function createOAuth2ConnectorDef<
 
   const connectionSettings = () => {
     let schema = oauth2Schemas.connection_settings
+    // TODO: This will need to be modified 
     if (def.auth.connection_settings) {
       schema = z.object({
         ...schema.shape,

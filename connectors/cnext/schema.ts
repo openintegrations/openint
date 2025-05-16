@@ -3,7 +3,7 @@ import type {Z} from '@openint/util/zod-utils'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 import {zAPIKeyConnectorDef} from './auth-apikey'
-import {zOAuthConfig} from './auth-oauth2'
+import {zOAuthConfigJson} from './auth-oauth2'
 
 // the idea is that this is provided by a CMS like payload and
 // is searchable based on the connector name
@@ -46,13 +46,13 @@ export const zJsonConnectorDef = z.object({
     .array(zVerticalKey)
     .describe('The industry verticals this provider belongs to'),
   links: zlinks.optional(),
-  auth: z.discriminatedUnion('type', [zOAuthConfig, zAPIKeyConnectorDef]),
+  auth: z.discriminatedUnion('type', [zOAuthConfigJson, zAPIKeyConnectorDef]),
 })
 
 export type JsonConnectorDef = Z.infer<typeof zJsonConnectorDef>
 
 const zAuthType = z
-  .union([zOAuthConfig.shape.type, zAPIKeyConnectorDef.shape.type])
+  .union([zOAuthConfigJson.shape.type, zAPIKeyConnectorDef.shape.type])
   .describe('Union of supported authentication types')
 
 export type AuthType = Z.infer<typeof zAuthType>

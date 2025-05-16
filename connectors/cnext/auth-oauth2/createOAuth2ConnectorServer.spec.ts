@@ -4,7 +4,7 @@ import {describe, expect, jest, test} from '@jest/globals'
 import {makeId} from '@openint/cdk'
 import {makeUlid} from '@openint/util/id-utils'
 import {createOAuth2ConnectorServer} from './createOAuth2ConnectorServer'
-import {oauth2Schemas, zOAuthConfig} from './schemas'
+import {oauth2Schemas, zOAuthConfigJson} from './schemas'
 
 // Mock the client methods directly
 const mockExchangeCodeForToken = jest
@@ -79,7 +79,7 @@ describe('createOAuth2ConnectorServer', () => {
   }
 
   // OAuth config template
-  const oauthConfigTemplate: Z.infer<typeof zOAuthConfig> = {
+  const oauthConfigTemplate: Z.infer<typeof zOAuthConfigJson> = {
     type: 'OAUTH2',
     authorization_request_url: 'https://example.com/authorize',
     token_request_url: 'https://example.com/token',

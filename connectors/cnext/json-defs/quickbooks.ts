@@ -73,6 +73,7 @@ export default {
           "Access to the user's address information only. Doesn't provide access to any QuickBooks company data.",
       },
     ],
+    // TODO: Fix me thiese are not working just yet...
     connection_settings: z.object({
       realmId: z
         .string()

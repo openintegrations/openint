@@ -116,7 +116,7 @@ export const zOauthCallbackSearchParams = z.object({
 
 // MARK; - JSON Def schemas
 
-export const zAuthParamsConfig = z.object({
+export const zAuthParamsConfigJson = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
   token: z.record(z.string(), z.string()).optional(),
   refresh: z.record(z.string(), z.string()).optional(),
@@ -137,7 +137,7 @@ export const zAuthParamsConfig = z.object({
     .optional(),
 })
 
-export const zOAuthConfig = z.object({
+export const zOAuthConfigJson = z.object({
   type: z
     .enum(['OAUTH2', 'OAUTH2CC'])
     .describe('The authentication type for OAuth-based providers'),
@@ -177,6 +177,10 @@ export const zOAuthConfig = z.object({
     .optional()
     .describe('Separator used to join multiple scopes. Defaults to space.'),
 
+  // TODO: zod schema is not actually a JSON object
+  // Perhaps we should either remove it or convert it to JSONSchema when defining
+  // the variable itself?
+  // This should go hand-in-hand with custom lifecycle script spport...
   connector_config: z.union([zOauthConnectorConfig, z.any()]).optional(),
   connection_settings: z.union([zOAuthConnectionSettings, z.any()]).optional(),
   scopes: z
@@ -195,5 +199,5 @@ export const zOAuthConfig = z.object({
     .describe(
       'Possible OAuth scopes for connector with their descriptions and optional display names',
     ),
-  params_config: zAuthParamsConfig.optional().default({}),
+  params_config: zAuthParamsConfigJson.optional().default({}),
 })
