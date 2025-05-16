@@ -49,14 +49,19 @@ export const eventMap = {
   'connect.session-cancelled': {connector_name: z.string(), meta: z.unknown()},
   'connect.session-succeeded': {connector_name: z.string(), meta: z.unknown()},
   'connect.session-errored': {connector_name: z.string(), meta: z.unknown()},
-  'connect.connection-connected': {connection_id: zId('conn')},
-  'connect.connection.deleted': {
+  'connect.connection-connected': {
     connection_id: zId('conn'),
+    customer_id: z.string().nullable(), // added after the fact so nullable
   },
-  'connect.connection.checked': {
+  'connect.connection-deleted': {
+    connection_id: zId('conn'),
+    customer_id: z.string(),
+  },
+  'connect.connection-checked': {
     connection_id: zId('conn'),
     status: z.string().nullable(),
     status_message: z.string().nullable(),
+    customer_id: z.string(),
   },
   'api.token-copied': {},
   'api.graphql-request': {},
