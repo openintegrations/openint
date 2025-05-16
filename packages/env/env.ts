@@ -149,6 +149,9 @@ export const isProduction =
   env['VERCEL_ENV'] === 'production' ||
   env['NEXT_PUBLIC_VERCEL_ENV'] === 'production'
 
+export const isVercelMainEnvironment =
+  env['VERCEL_ENV'] === 'preview' || env['NEXT_PUBLIC_VERCEL_ENV'] === 'preview'
+
 export function getSentryEnvironment() {
   const serverUrl =
     process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
