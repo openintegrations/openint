@@ -1,6 +1,7 @@
 import {
   ExternalLinkIcon,
   MonitorIcon,
+  PanelTopIcon,
   SmartphoneIcon,
   TabletIcon,
 } from 'lucide-react'
@@ -343,8 +344,11 @@ export function TabletScreen({
 }
 
 interface PreviewWindowProps extends PreviewProps {
-  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile'
-  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile'>
+  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile' | 'Button'
+  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile' | 'Button'>
+  // TODO: Improve this, page children could be dynamic according to the selected view but we're not
+  // aware if this in the parent component.
+  customContent?: React.ReactNode
 }
 
 export function PreviewWindow({
@@ -353,7 +357,8 @@ export function PreviewWindow({
   shareUrl,
   isLoading = false,
   defaultView = 'Magic Link',
-  supportedViews = ['Magic Link', 'Embedded', 'Mobile'],
+  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Button'],
+  customContent,
 }: PreviewWindowProps) {
   const [view, setView] =
     React.useState<(typeof supportedViews)[number]>(defaultView)
@@ -375,7 +380,7 @@ export function PreviewWindow({
               {view === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
               {view === 'Embedded' && <TabletIcon className="h-4 w-4" />}
               {view === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
-              {view}
+              {view === 'Button' && <PanelTopIcon className="h-4 w-4" />}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -408,6 +413,11 @@ export function PreviewWindow({
         <MobileScreen shareUrl={shareUrl} isLoading={isLoading}>
           {children}
         </MobileScreen>
+      </TabsContent>
+      <TabsContent value="Button" className="mt-0 flex justify-center">
+        <BrowserWindow shareUrl={shareUrl} isLoading={isLoading}>
+          {customContent ?? children}
+        </BrowserWindow>
       </TabsContent>
     </Tabs>
   )
