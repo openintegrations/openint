@@ -1,4 +1,4 @@
-import type {ConnectorServer, zId} from '@openint/cdk'
+import type {ConnectorServer} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 
 import {TRPCError} from '@trpc/server'
@@ -214,9 +214,10 @@ export const connectionRouter = router({
         })
       }
       await ctx.dispatch({
-        name: 'connect.connection.deleted',
+        name: 'connect.connection-deleted',
         data: {
           connection_id: deleted.id as `conn_${string}`,
+          customer_id: deleted.customer_id ?? '',
         },
       })
       return {id: deleted.id}
