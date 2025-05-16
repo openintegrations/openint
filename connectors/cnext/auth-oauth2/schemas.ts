@@ -159,6 +159,14 @@ export const zOAuthConfig = z.object({
     .url()
     .optional()
     .describe('URL to introspect an access token from the provider'),
+  introspection_non_standard_get_request_url: z
+    .string()
+    .url()
+    .optional()
+    .describe(
+      'Some providers use a non-standard GET request to introspect a token (e.g. hubspot)',
+    ),
+
   revocation_request_url: z
     .string()
     .url()

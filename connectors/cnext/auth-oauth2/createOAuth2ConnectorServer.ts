@@ -126,7 +126,7 @@ export function createOAuth2ConnectorServer<
       // })
       // console.log('[oauth2] postConnect res', res, config)
 
-      const introspectRes = oauthConfig.introspection_request_url
+      const introspectRes = client.canIntrospect
         ? await client.introspectToken({
             token: tokenRes.access_token,
             additional_params: oauthConfig.params_config.introspect,
@@ -225,7 +225,7 @@ export function createOAuth2ConnectorServer<
         }
       }
 
-      if (oauthConfig.introspection_request_url) {
+      if (client.canIntrospect) {
         try {
           const res = await client.introspectToken({
             token: settings.oauth.credentials.access_token,

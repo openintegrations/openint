@@ -1,7 +1,7 @@
 import type {Z} from '@openint/util/zod-utils'
 
 import {safeJSONParseObject} from '@openint/util/json-utils'
-import {stringifyQueryParams} from '@openint/util/url-utils'
+import {joinPath, stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
@@ -27,6 +27,7 @@ const zOAuth2ClientConfig = z.object({
   tokenURL: z.string(),
   revokeUrl: z.string().optional(),
   introspectUrl: z.string().optional(),
+  introspectNonStandardGetRequestUrl: z.string().optional(),
   clientAuthLocation: z.enum(['body', 'header']).optional(),
   errorToString: z.function().args(z.unknown()).returns(z.string()).optional(),
   /** renameObjectKeys to the names used by the oauth provider */
@@ -119,10 +120,11 @@ export function createOAuth2Client(
         `${config.clientId}:${config.clientSecret}`,
       ).toString('base64')}`
     }
+    return request(new Request(url, {method: 'POST', headers, body}))
+  }
 
-    const response = await fetch(
-      new Request(url, {method: 'POST', headers, body}),
-    )
+  async function request<T>(request: Request): Promise<T> {
+    const response = await fetch(request)
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => null)
@@ -132,8 +134,8 @@ export function createOAuth2Client(
         status_text: response.statusText,
         headers: Object.fromEntries(response.headers.entries()),
         ...(errorJSON ?? {error_text: errorText}),
-        request_url: url,
-        request_body: body,
+        request_url: request.url,
+        request_body: request.body,
       }
       throw new OAuth2Error(
         config.errorToString?.(errPayload) ?? JSON.stringify(errPayload),
@@ -141,9 +143,9 @@ export function createOAuth2Client(
         {
           status: response.status,
           statusText: response.statusText,
-          method: 'POST',
+          method: request.method,
           headers: Object.fromEntries(response.headers.entries()),
-          url,
+          url: request.url,
         },
       )
     }
@@ -291,20 +293,30 @@ export function createOAuth2Client(
       additional_params: z.record(z.string(), z.string()).optional(),
     }),
     ({token, token_type_hint, additional_params}) => {
-      if (!config.introspectUrl) {
-        throw new Error('Missing introspectUrl. Cannot introspect token')
+      if (config.introspectUrl) {
+        return post<TokenIntrospectionResponse>(config.introspectUrl, {
+          token,
+          ...(token_type_hint && {token_type_hint}),
+          ...additional_params,
+        }).then((data) => zTokenIntrospectionResponse.parse(data))
       }
-      return post<TokenIntrospectionResponse>(config.introspectUrl, {
-        token,
-        ...(token_type_hint && {token_type_hint}),
-        ...additional_params,
-      }).then((data) => zTokenIntrospectionResponse.parse(data))
+      if (config.introspectNonStandardGetRequestUrl) {
+        return request(
+          new Request(
+            joinPath(config.introspectNonStandardGetRequestUrl, token),
+          ),
+        ).then((data) => zTokenIntrospectionResponse.parse(data))
+      }
+      throw new Error('Missing introspectUrl. Cannot introspect token')
     },
   )
 
   return {
     get config() {
       return config
+    },
+    get canIntrospect() {
+      return config.introspectUrl || config.introspectNonStandardGetRequestUrl
     },
     joinScopes,
     getAuthorizeUrl,

@@ -10,6 +10,10 @@ export default {
     type: 'OAUTH2',
     authorization_request_url: 'https://app.hubspot.com/oauth/authorize',
     token_request_url: 'https://api.hubapi.com/oauth/v1/token',
+    introspection_non_standard_get_request_url:
+      'https://api.hubapi.com/oauth/v1/access-tokens',
+    // Technically hubspot also has another endpoint. How do we handle this?
+    // 'https://api.hubapi.com/oauth/v1/refresh-tokens',
     scope_separator: ' ',
     params_config: {},
     required_scopes: [''],
