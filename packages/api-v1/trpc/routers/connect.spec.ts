@@ -183,6 +183,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.id).toEqual(preConnectRes.current.state.connection_id)
       expect(settings.oauth.credentials?.expires_in).toBeDefined()
       expect(settings.oauth.credentials?.expires_at).toBeDefined()
+      expect(settings.introspection_result).toMatchObject({active: true})
       // adding this if to satisfy the type checker
       if (settings.oauth.credentials?.expires_in) {
         const expiresAt = new Date(
