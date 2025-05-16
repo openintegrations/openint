@@ -114,7 +114,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -131,7 +131,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             page = client.list_connectors()
             page = page.items[0]
@@ -249,6 +249,7 @@ paths:
                       - $ref: '#/components/schemas/connector.merge.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.moota.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                      - $ref: '#/components/schemas/connector.openledger.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.plaid.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.postgres.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.ramp.discriminated_connector_config'
@@ -308,6 +309,7 @@ paths:
                         merge: '#/components/schemas/connector.merge.discriminated_connector_config'
                         moota: '#/components/schemas/connector.moota.discriminated_connector_config'
                         onebrick: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                        openledger: '#/components/schemas/connector.openledger.discriminated_connector_config'
                         plaid: '#/components/schemas/connector.plaid.discriminated_connector_config'
                         postgres: '#/components/schemas/connector.postgres.discriminated_connector_config'
                         ramp: '#/components/schemas/connector.ramp.discriminated_connector_config'
@@ -403,6 +405,12 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/core.connector.name'
+        - in: query
+          name: search_query
+          schema:
+            type:
+              - string
+              - 'null'
       responses:
         '200':
           description: Successful response
@@ -495,6 +503,7 @@ paths:
                             - $ref: '#/components/schemas/connector.merge.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.moota.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.openledger.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.plaid.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.postgres.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.ramp.discriminated_connector_config'
@@ -554,6 +563,7 @@ paths:
                               merge: '#/components/schemas/connector.merge.discriminated_connector_config'
                               moota: '#/components/schemas/connector.moota.discriminated_connector_config'
                               onebrick: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                              openledger: '#/components/schemas/connector.openledger.discriminated_connector_config'
                               plaid: '#/components/schemas/connector.plaid.discriminated_connector_config'
                               postgres: '#/components/schemas/connector.postgres.discriminated_connector_config'
                               ramp: '#/components/schemas/connector.ramp.discriminated_connector_config'
@@ -634,7 +644,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -651,7 +661,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             page = client.list_connection_configs()
             page = page.items[0]
@@ -812,6 +822,7 @@ paths:
                       - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -871,6 +882,7 @@ paths:
                         merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
                         moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
                         onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                        openledger: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                         plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                         postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                         ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -927,7 +939,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -943,7 +955,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.get_connection(
                 id="conn_",
@@ -1015,7 +1027,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1031,7 +1043,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.delete_connection(
                 "conn_",
@@ -1097,6 +1109,10 @@ paths:
               description: 'Fields to expand: connector (includes connector details)'
             default: []
             description: Expand the response with additional optionals
+        - in: query
+          name: search_query
+          schema:
+            type: string
       responses:
         '200':
           description: Successful response
@@ -1216,6 +1232,7 @@ paths:
                             - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -1275,6 +1292,7 @@ paths:
                               merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
                               moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
                               onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                              openledger: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                               plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                               postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                               ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -1352,7 +1370,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1369,7 +1387,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             page = client.list_connections()
             page = page.items[0]
@@ -1444,6 +1462,7 @@ paths:
                     - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -1503,6 +1522,7 @@ paths:
                       merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
                       moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
                       onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                      openledger: '#/components/schemas/connector.openledger.discriminated_connection_settings'
                       plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
                       postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
                       ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -1561,7 +1581,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1581,7 +1601,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.create_connection(
                 connector_config_id="ccfg_",
@@ -1690,7 +1710,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1706,7 +1726,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.create_magic_link(
                 customer_id="x",
@@ -1810,7 +1830,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1826,7 +1846,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.create_token(
                 customer_id="x",
@@ -1906,7 +1926,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1922,491 +1942,12 @@ paths:
             from openint import Openint
 
             client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
             )
             response = client.check_connection(
                 "conn_",
             )
             print(response.id)
-  /event:
-    post:
-      operationId: createEvent
-      security:
-        - ApiKey: []
-        - CustomerToken: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                event:
-                  oneOf:
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: debug.debug
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: webhook.received
-                        data:
-                          type: object
-                          properties:
-                            traceId:
-                              type: string
-                            method:
-                              type: string
-                            path:
-                              type: string
-                            query:
-                              type: object
-                              additionalProperties: {}
-                            headers:
-                              type: object
-                              additionalProperties: {}
-                            body: {}
-                          required:
-                            - traceId
-                            - method
-                            - path
-                            - query
-                            - headers
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: db.user-created
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: db.user-deleted
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: db.connection-created
-                        data:
-                          type: object
-                          properties:
-                            connection_id:
-                              type: string
-                              description: Must start with 'conn_'
-                          required:
-                            - connection_id
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: db.connection-deleted
-                        data:
-                          type: object
-                          properties:
-                            connection_id:
-                              type: string
-                              description: Must start with 'conn_'
-                          required:
-                            - connection_id
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: user.signin
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: user.signout
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: connect.session-started
-                        data:
-                          type: object
-                          properties:
-                            connector_name:
-                              type: string
-                            meta: {}
-                          required:
-                            - connector_name
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: connect.session-cancelled
-                        data:
-                          type: object
-                          properties:
-                            connector_name:
-                              type: string
-                            meta: {}
-                          required:
-                            - connector_name
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: connect.session-succeeded
-                        data:
-                          type: object
-                          properties:
-                            connector_name:
-                              type: string
-                            meta: {}
-                          required:
-                            - connector_name
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: connect.session-errored
-                        data:
-                          type: object
-                          properties:
-                            connector_name:
-                              type: string
-                            meta: {}
-                          required:
-                            - connector_name
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: connect.connection-connected
-                        data:
-                          type: object
-                          properties:
-                            connection_id:
-                              type: string
-                              description: Must start with 'conn_'
-                          required:
-                            - connection_id
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: api.token-copied
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: api.graphql-request
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: api.rest-request
-                        data:
-                          type: object
-                      required:
-                        - name
-                        - data
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          const: pageview
-                        data:
-                          type: object
-                          properties:
-                            current_url:
-                              type: string
-                            path:
-                              type: string
-                          required:
-                            - current_url
-                            - path
-                      required:
-                        - name
-                        - data
-              required:
-                - event
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/core.event'
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-    get:
-      operationId: listEvents
-      summary: List Organization Events
-      description: List all events for an organization
-      security:
-        - ApiKey: []
-        - CustomerToken: []
-      parameters:
-        - in: query
-          name: limit
-          description: Limit the number of items returned
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 500
-            default: 50
-            description: Limit the number of items returned
-        - in: query
-          name: offset
-          description: Offset the items returned
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-            description: Offset the items returned
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/core.event'
-                  total:
-                    type: integer
-                    minimum: 0
-                    description: Total number of items in the database for the organization
-                  limit:
-                    type: integer
-                    minimum: 0
-                    description: Limit the number of items returned
-                  offset:
-                    type: integer
-                    minimum: 0
-                    description: Offset the items returned
-                  has_next_page:
-                    type: boolean
-                    description: Convenience flag = offset + limit >= total
-                required:
-                  - items
-                  - total
-                  - limit
-                  - offset
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.NOT_FOUND'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-  /event/{id}:
-    get:
-      operationId: getEvent
-      summary: Get Event
-      description: Get a single event by ID
-      security:
-        - ApiKey: []
-        - CustomerToken: []
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/core.event'
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.NOT_FOUND'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-  /debug:
-    get:
-      operationId: debug
-      security:
-        - ApiKey: []
-        - CustomerToken: []
-      parameters:
-        - in: query
-          name: crash
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                required:
-                  - ok
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.NOT_FOUND'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
   /webhook/{connector_name}:
     post:
       operationId: handleWebhook
@@ -4890,6 +4431,57 @@ components:
         - connector_name
         - config
       title: onebrick
+    connector.openledger.discriminated_connection_settings:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: openledger
+        settings:
+          type: object
+          properties:
+            entity_id:
+              type: string
+              description: Your entity's identifier, aka customer ID
+          required:
+            - entity_id
+      required:
+        - connector_name
+      title: openledger
+    connector.openledger.discriminated_connector_config:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: openledger
+        config:
+          type: object
+          properties:
+            developer_id:
+              type: string
+              description: Your developer ID for authentication
+            developer_secret:
+              type: string
+              description: Your developer secret
+            environment:
+              type: string
+              enum:
+                - development
+                - production
+              description: Switch to "production" for live data
+            api_url:
+              type: string
+              format: uri
+              description: API endpoint
+          required:
+            - developer_id
+            - developer_secret
+            - environment
+            - api_url
+      required:
+        - connector_name
+        - config
+      title: openledger
     connector.outreach.discriminated_connection_settings:
       type: object
       properties:
@@ -6663,6 +6255,7 @@ components:
             - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.openledger.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -6722,6 +6315,7 @@ components:
               merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
               moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
               onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+              openledger: '#/components/schemas/connector.openledger.discriminated_connection_settings'
               plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
               postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
               ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
@@ -6773,7 +6367,7 @@ components:
             connect_input: {}
             connect_output: {}
           additionalProperties: false
-        authType:
+        auth_type:
           type: string
           enum:
             - BASIC
@@ -6799,6 +6393,8 @@ components:
                 type: string
             required:
               - scope
+        has_openint_credentials:
+          type: boolean
       required:
         - name
       title: Connector
@@ -6839,6 +6435,7 @@ components:
         - moota
         - notion
         - onebrick
+        - openledger
         - outreach
         - pipedrive
         - plaid
@@ -6862,292 +6459,6 @@ components:
         - yodlee
         - zoho-desk
       title: connector
-    core.event:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: string
-            timestamp:
-              type: string
-            user:
-              anyOf:
-                - anyOf:
-                    - type: string
-                    - type: number
-                    - type: boolean
-                    - type: 'null'
-                - type: object
-                  additionalProperties: {}
-                - type: array
-                  items: {}
-                - type: 'null'
-            v:
-              type:
-                - string
-                - 'null'
-            org_id:
-              type:
-                - string
-                - 'null'
-            user_id:
-              type:
-                - string
-                - 'null'
-            customer_id:
-              type:
-                - string
-                - 'null'
-          required:
-            - id
-            - timestamp
-            - user
-            - v
-            - org_id
-            - user_id
-            - customer_id
-        - oneOf:
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: debug.debug
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: webhook.received
-                data:
-                  type: object
-                  properties:
-                    traceId:
-                      type: string
-                    method:
-                      type: string
-                    path:
-                      type: string
-                    query:
-                      type: object
-                      additionalProperties: {}
-                    headers:
-                      type: object
-                      additionalProperties: {}
-                    body: {}
-                  required:
-                    - traceId
-                    - method
-                    - path
-                    - query
-                    - headers
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: db.user-created
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: db.user-deleted
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: db.connection-created
-                data:
-                  type: object
-                  properties:
-                    connection_id:
-                      type: string
-                      description: Must start with 'conn_'
-                  required:
-                    - connection_id
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: db.connection-deleted
-                data:
-                  type: object
-                  properties:
-                    connection_id:
-                      type: string
-                      description: Must start with 'conn_'
-                  required:
-                    - connection_id
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: user.signin
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: user.signout
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: connect.session-started
-                data:
-                  type: object
-                  properties:
-                    connector_name:
-                      type: string
-                    meta: {}
-                  required:
-                    - connector_name
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: connect.session-cancelled
-                data:
-                  type: object
-                  properties:
-                    connector_name:
-                      type: string
-                    meta: {}
-                  required:
-                    - connector_name
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: connect.session-succeeded
-                data:
-                  type: object
-                  properties:
-                    connector_name:
-                      type: string
-                    meta: {}
-                  required:
-                    - connector_name
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: connect.session-errored
-                data:
-                  type: object
-                  properties:
-                    connector_name:
-                      type: string
-                    meta: {}
-                  required:
-                    - connector_name
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: connect.connection-connected
-                data:
-                  type: object
-                  properties:
-                    connection_id:
-                      type: string
-                      description: Must start with 'conn_'
-                  required:
-                    - connection_id
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: api.token-copied
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: api.graphql-request
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: api.rest-request
-                data:
-                  type: object
-              required:
-                - name
-                - data
-            - type: object
-              properties:
-                name:
-                  type: string
-                  const: pageview
-                data:
-                  type: object
-                  properties:
-                    current_url:
-                      type: string
-                    path:
-                      type: string
-                  required:
-                    - current_url
-                    - path
-              required:
-                - name
-                - data
-      title: event
     core.integration_select:
       type: object
       properties:

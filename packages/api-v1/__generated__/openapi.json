@@ -3248,7 +3248,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -3382,7 +3383,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -3718,7 +3720,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -3852,7 +3855,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -3986,7 +3990,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -4427,7 +4432,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -4562,6 +4568,7 @@
                   }
                 }
               },
+              "introspection_result": {},
               "api_base_url_for_customer": {
                 "type": "string",
                 "pattern": "https?:\\/\\/.*",
@@ -4701,7 +4708,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -4835,7 +4843,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -4969,7 +4978,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5103,7 +5113,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5237,7 +5248,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5455,7 +5467,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5589,7 +5602,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5723,7 +5737,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5857,7 +5872,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -5991,7 +6007,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -6125,7 +6142,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -6259,7 +6277,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -6592,7 +6611,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -6874,7 +6894,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -7009,6 +7030,7 @@
                   }
                 }
               },
+              "introspection_result": {},
               "api_domain": {
                 "type": "string",
                 "pattern": "https?:\\/\\/.*",
@@ -7359,6 +7381,7 @@
                   }
                 }
               },
+              "introspection_result": {},
               "realmId": {
                 "type": "string",
                 "pattern": "\\d{16}",
@@ -7576,7 +7599,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -7710,7 +7734,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -7893,7 +7918,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -8027,7 +8053,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -8574,7 +8601,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -8829,7 +8857,8 @@
                     "additionalProperties": {}
                   }
                 }
-              }
+              },
+              "introspection_result": {}
             },
             "required": [
               "oauth"
@@ -9146,6 +9175,7 @@
                   }
                 }
               },
+              "introspection_result": {},
               "extension": {
                 "type": "string",
                 "pattern": "https:\\/\\/accounts\\.zoho\\.([a-z.]+)\\/",
