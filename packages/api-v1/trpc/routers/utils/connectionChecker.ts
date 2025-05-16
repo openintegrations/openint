@@ -121,6 +121,16 @@ export async function checkConnection(
             ...(res.settings && {settings: res.settings}),
           })
           .where(eq(schema.connection.id, connection.id))
+
+        await ctx.dispatch({
+          name: 'connect.connection-checked',
+          data: {
+            connection_id: connection.id as `conn_${string}`,
+            status: res.status as string | null,
+            status_message: res.status_message as string | null,
+            customer_id: connection.customer_id ?? '',
+          },
+        })
       }
 
       // TODO: persist the result of checkConnection for settings
