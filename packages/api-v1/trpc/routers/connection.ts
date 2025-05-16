@@ -213,6 +213,13 @@ export const connectionRouter = router({
           message: 'Connection not found',
         })
       }
+      await ctx.dispatch({
+        name: 'connect.connection-deleted',
+        data: {
+          connection_id: deleted.id as `conn_${string}`,
+          customer_id: deleted.customer_id ?? '',
+        },
+      })
       return {id: deleted.id}
     }),
 
