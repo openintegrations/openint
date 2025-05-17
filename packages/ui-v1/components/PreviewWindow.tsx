@@ -143,7 +143,7 @@ export function MobileScreen({
     <div
       className={cn(
         'bg-background relative overflow-hidden rounded-[3rem] border-8 border-gray-900 shadow-lg',
-        'h-[852px] w-[393px]', // iPhone 14 Pro dimensions
+        'flex h-[852px] w-[393px] flex-col', // iPhone 14 Pro dimensions + flex container
         className,
       )}>
       {/* Status Bar */}
@@ -220,7 +220,7 @@ export function MobileScreen({
       </div>
 
       {/* Content */}
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="flex-1 overflow-auto">{children}</div>
 
       {/* Home Indicator */}
       <div className="absolute bottom-2 left-1/2 h-1.5 w-32 -translate-x-1/2 rounded-full bg-gray-900" />
@@ -338,16 +338,14 @@ export function TabletScreen({
       </div>
 
       {/* Content */}
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="flex-1 overflow-auto">{children}</div>
     </div>
   )
 }
 
 interface PreviewWindowProps extends PreviewProps {
-  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile' | 'Connect Button'
-  supportedViews?: Array<
-    'Magic Link' | 'Embedded' | 'Mobile' | 'Connect Button'
-  >
+  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile' | 'Button'
+  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile' | 'Button'>
   // TODO: Improve this, page children could be dynamic according to the selected view but we're not
   // aware if this in the parent component.
   customContent?: React.ReactNode
@@ -359,7 +357,7 @@ export function PreviewWindow({
   shareUrl,
   isLoading = false,
   defaultView = 'Magic Link',
-  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Connect Button'],
+  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Button'],
   customContent,
 }: PreviewWindowProps) {
   const [view, setView] =
@@ -382,9 +380,7 @@ export function PreviewWindow({
               {view === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
               {view === 'Embedded' && <TabletIcon className="h-4 w-4" />}
               {view === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
-              {view === 'Connect Button' && (
-                <PanelTopIcon className="h-4 w-4" />
-              )}
+              {view === 'Button' && <PanelTopIcon className="h-4 w-4" />}
               {view}
             </TabsTrigger>
           ))}
@@ -419,7 +415,7 @@ export function PreviewWindow({
           {children}
         </MobileScreen>
       </TabsContent>
-      <TabsContent value="Connect Button" className="mt-0 flex justify-center">
+      <TabsContent value="Button" className="mt-0 flex justify-center">
         <BrowserWindow shareUrl={shareUrl} isLoading={isLoading}>
           {customContent ?? children}
         </BrowserWindow>
