@@ -243,7 +243,7 @@ jobs:
         uses: stablyhq/stably-runner-action@v3
         with:
           api-key: ${{ secrets.STABLY_API_KEY }}
-          test-suite-id: cm51kvjhy0000ii03gqva15i9
+          test-suite-id: cm5g8i6nc0005l103urkixuxz
 
   # slack-notification:
   #   runs-on: ubuntu-latest
