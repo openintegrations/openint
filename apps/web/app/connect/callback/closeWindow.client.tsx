@@ -1,7 +1,9 @@
 'use client'
 
 import React from 'react'
-import {LoadingSpinner} from '@openint/ui-v1'
+import {Button} from '@openint/shadcn/ui'
+import {ConnectTransitionWindow, LoadingSpinner} from '@openint/ui-v1'
+import {useConnectContext} from '../ConnectContextProvider'
 
 export function CloseWindowClient({
   connectorName,
@@ -10,52 +12,51 @@ export function CloseWindowClient({
   connectorName: string
   error?: string
 }) {
+  const {setIsConnecting} = useConnectContext()
+
+  const handleClose = React.useCallback(() => {
+    setIsConnecting(false)
+  }, [setIsConnecting])
+
   const [isPopup, setIsPopup] = React.useState(false)
 
   React.useEffect(() => {
-    // Check if the current window is a popup (has an opener)
-    setIsPopup(Boolean(window.opener))
-
-    if (!error) {
-      setTimeout(() => {
-        console.log('closing popup')
-        window.close()
-      }, 3000)
-    }
-  }, [error])
+    try {
+      setIsPopup(Boolean(window.opener))
+    } catch {}
+  }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <ConnectTransitionWindow
+      onClose={handleClose}
+      autoCloseInMs={error ? -1 : 2000}>
       {error ? (
         <div>
-          <h1>There was an Error connecting to {connectorName}</h1>
-          <p>{error}</p>
+          <h1 className="text-xl font-semibold text-gray-900">
+            There was an Error connecting to {connectorName}
+          </h1>
+          <p className="mt-4 text-sm text-gray-600">
+            <b>Error:</b> {error}
+          </p>
         </div>
       ) : (
         <div>
-          <h1>Successfully connected to {connectorName}</h1>
-          <p>
+          <h1 className="text-xl font-semibold text-gray-900">
+            Successfully connected to {connectorName}
+          </h1>
+          <p className="mt-2 text-sm text-gray-600">
             {isPopup
               ? 'This window will automatically close'
               : 'You can close this window and return to the application'}
           </p>
-          <LoadingSpinner />
+          <LoadingSpinner className="mt-4" />
         </div>
       )}
-      <button
-        onClick={() => {
-          if (window.opener) {
-            window.close()
-          } else if (error) {
-            // If not a popup and there was an error, go back
-            window.history.back()
-          } else {
-            // If not a popup and successful, provide indication
-            window.location.href = '/'
-          }
-        }}>
-        {isPopup ? 'Close Window' : error ? 'Go Back' : 'Return to Home'}
-      </button>
-    </div>
+      {isPopup && (
+        <Button className="mt-4" onClick={handleClose}>
+          Close Window
+        </Button>
+      )}
+    </ConnectTransitionWindow>
   )
 }

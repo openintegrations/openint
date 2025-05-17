@@ -45,8 +45,6 @@ export default async function ConnectCallback(pageProps: PageProps) {
     searchParams: zOauthCallbackSearchParams,
   })
 
-  const {viewer, token} = await getServerComponentContext(pageProps)
-
   const state = zOauthState.parse(JSON.parse(searchParams.state))
   if (
     state.redirect_uri &&
@@ -77,8 +75,6 @@ export default async function ConnectCallback(pageProps: PageProps) {
   }
 
   try {
-    console.log('token33', token)
-    console.log('viewer33', viewer)
     const ctx = routerContextFromViewer({
       db,
       viewer: createCustomerViewer({
@@ -114,15 +110,4 @@ export default async function ConnectCallback(pageProps: PageProps) {
       </div>
     )
   }
-
-  // const isAcme = state.connection_id.startsWith('conn_acme')
-
-  // server side call postConnect
-  // change NativeOauthConnectorClientComponent to call onConnectFn with empty data
-  // return (
-  //   <ConnectCallbackClient
-  //     data={searchParams}
-  //     debug={!isProduction || isAcme}
-  //   />
-  // )
 }
