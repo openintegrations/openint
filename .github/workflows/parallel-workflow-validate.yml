@@ -229,15 +229,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: UnlyEd/github-action-await-vercel@v1
-        id: await-vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        with:
-          deployment-url: v1-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
-          timeout: 10 # Wait for 10 seconds before failing
-          poll-interval: 1 # Wait for 1 second before each retry
+      - name: Sleep for 5 minutes while Vercel Main branch builds
+        run: sleep 300
+      # - uses: UnlyEd/github-action-await-vercel@v1
+      #   id: await-vercel
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #   with:
+      #     deployment-url: v1-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+      #     timeout: 10 # Wait for 10 seconds before failing
+      #     poll-interval: 1 # Wait for 1 second before each retry
 
+      ## Improvements: pass the branch name to stably and have that be the parameter that is used to visit the vercel URL
       - name: Stably Runner Action
         id: stably-runner
         uses: stablyhq/stably-runner-action@v3
