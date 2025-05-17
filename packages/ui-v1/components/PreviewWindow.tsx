@@ -338,7 +338,7 @@ export function TabletScreen({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto">{children}</div>
+      <div className="h-full overflow-auto">{children}</div>
     </div>
   )
 }

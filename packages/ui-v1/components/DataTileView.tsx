@@ -64,7 +64,8 @@ export function DataTileView<TData>({
       }).map((_, index) => (
         <div
           key={`placeholder-${index}`}
-          className="invisible h-0 w-[calc(25%-1rem)]"
+          // same width as connection card but 0 height so that it doesn't create new rows of space
+          className="invisible h-0 w-[150px]"
           aria-hidden="true"
         />
       ))}

@@ -57,24 +57,22 @@ export function ConnectButton({
 
       {/* Modal Overlay */}
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${
+        className={`fixed inset-0 z-50 flex items-center justify-center ${
           isOpen ? 'visible' : 'hidden'
         }`}>
         {/* Backdrop */}
         <div className="absolute inset-0 bg-black/80" />
         <div className="openint-modal relative z-10 w-full max-w-md overflow-hidden rounded-lg bg-white shadow-xl">
           {/* Body - Contains the iframe */}
-          <div className="p-6">
-            <div
-              ref={containerRef}
-              className="w-full"
-              style={{
-                height: height || '500px',
-                width: '100%',
-                minHeight: '400px',
-              }}
-            />
-          </div>
+          <div
+            ref={containerRef}
+            className="w-full"
+            style={{
+              height: height || '500px',
+              width: '100%',
+              minHeight: '400px',
+            }}
+          />
         </div>
       </div>
     </>
