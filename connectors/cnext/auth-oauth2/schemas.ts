@@ -115,6 +115,7 @@ export const zOauthState = z.object({
   connector_config_id: z.string(),
   customer_id: z.string(),
   org_id: z.string(),
+  code_verifier: z.string().optional(),
 })
 
 export const zOauthCallbackSearchParams = z.object({

@@ -79,6 +79,8 @@ export function createOAuth2ConnectorServer<
           connector_config_id: input.connector_config_id,
           customer_id: context.extCustomerId,
           org_id: context.orgId,
+          // QQ NOTE: not sure if this if sending this unencrypted to the client is a problem, may be fixed when we tokenize/encrypt the whole state based on a lookup token
+          code_verifier: codeChallenge?.verifier,
           redirect_uri: new URL(
             ...resolveRoute('/connect/callback', null),
           ).toString(),
@@ -112,7 +114,7 @@ export function createOAuth2ConnectorServer<
         redirect_uri:
           config.oauth?.redirect_uri?.trim() ||
           env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
-        code_verifier: connectOutput.code_verifier,
+        code_verifier: state.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
       // TODO: Handle error properly...
