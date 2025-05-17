@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  contents: write
+
 concurrency:
   group: validate-${{ github.ref }}
   cancel-in-progress: true
