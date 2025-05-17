@@ -72,7 +72,7 @@ export function createOAuth2Server({
     .post('/token', async ({request}) =>
       requestFromVanilla(request)
         .then(async (req) => {
-          // console.log('req', req)
+          // console.log('token req', req)
           const res = await authServer.respondToAccessTokenRequest(req)
           // console.log('res', res)
           return res

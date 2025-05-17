@@ -112,6 +112,8 @@ export interface BaseContext {
 /** Context providers get during the connection establishing phase */
 export interface ConnectContext<TSettings> extends ConnectOptions, BaseContext {
   extCustomerId: ExtCustomerId
+  connectorConfigId: Id['ccfg']
+  orgId: Id['org']
   /** Used for OAuth based integrations, e.g. https://plaid.com/docs/link/oauth/#create-and-register-a-redirect-uri */
   redirectUrl?: string
   connection?: {

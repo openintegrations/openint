@@ -4,11 +4,7 @@ import type {Core} from '@openint/api-v1/models'
 import type {Id} from '@openint/cdk'
 import type {ConnectFn} from './ConnectorClientComponents.client'
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
@@ -27,7 +23,6 @@ export function ConnectorConnectContainer({
   connectorName,
   connector,
   connectorConfigId,
-  /** For reconnecting to an existing connection. How do we ensure it matches the connector config though? */
   connectionId,
   children,
 }: {
@@ -41,33 +36,19 @@ export function ConnectorConnectContainer({
   }) => React.ReactNode
 }) {
   const {isConnecting: _isConnecting, setIsConnecting} = useConnectContext()
-
+  const [connectionState, setConnectionState] = React.useState<{
+    isActive: boolean
+    connectData: any
+  }>({isActive: false, connectData: null})
   const name = connectorName
+  const connectFnRef = React.useRef<ConnectFn | null>(null)
 
-  if (!connector) {
-    throw new Error(`Connector missing in ConnectorConnectContainer`)
-  }
-
-  // console.log('AddConnectionInner rendering', name, connectorConfig)
-
-  const ref = React.useRef<ConnectFn | undefined>(undefined)
-
+  // TRPC setup
   const trpc = useTRPC()
-  // Should load script immediately (via useConnectHook) rather than waiting for suspense query?
-  const preConnectRes = useSuspenseQuery(
-    trpc.preConnect.queryOptions({
-      connector_config_id: connectorConfigId,
-      discriminated_data: {
-        connector_name: name,
-        pre_connect_input: {},
-      },
-      options: connectionId
-        ? {connectionExternalId: extractId(connectionId)[2]}
-        : {},
-    }),
-  )
   const queryClient = useQueryClient()
+  const router = useRouter()
 
+  // Post-connect mutation
   const postConnect = useMutation(
     trpc.postConnect.mutationOptions({
       onSuccess: () => {},
@@ -75,116 +56,193 @@ export function ConnectorConnectContainer({
     }),
   )
 
-  const router = useRouter()
+  // Handle connector completion
+  const handleConnectorResult = React.useCallback(
+    async (connectOutput: any) => {
+      try {
+        console.log(
+          `[ConnectorConnect] Processing connection result for ${name}:`,
+          connectOutput,
+        )
 
-  const handleConnect = React.useCallback(async () => {
-    try {
-      if (!ref.current) {
-        // Give React time to render and run effects
-        await new Promise((resolve) => setTimeout(resolve, 0))
+        // For OAuth2 connectors, we skip the post connect mutation
+        // (it's handled elsewhere in the callback flow)
+        const postConnectRes =
+          connector?.auth_type === 'OAUTH2'
+            ? {display_name: prettyConnectorName(name)}
+            : await postConnect.mutateAsync({
+                connector_config_id: connectorConfigId,
+                discriminated_data: {
+                  connector_name: name,
+                  connect_output: connectOutput,
+                },
+                options: {},
+              })
 
-        // Wait up to 1 second for ref.current to be set
-        const startTime = Date.now()
-        while (!ref.current && Date.now() - startTime < 1000) {
-          await new Promise((resolve) => setTimeout(resolve, 50))
-        }
+        // Show success message
+        toast.success(
+          `${postConnectRes?.display_name || prettyConnectorName(name)} connected successfully.`,
+        )
+
+        // Navigate to manage view
+        const url = new URL(window.location.href)
+        url.searchParams.set('view', 'manage')
+        router.replace((url.search || `?view=manage`) as never)
+
+        return postConnectRes
+      } catch (error) {
+        console.error(`[ConnectorConnect] Error processing connection:`, error)
+        toast.error('Error connecting', {description: `${error}`})
+        return undefined
+      } finally {
+        // Reset connection state regardless of outcome
+        setConnectionState({isActive: false, connectData: null})
+        setIsConnecting(false)
       }
+    },
+    [
+      connectorConfigId,
+      name,
+      connector?.auth_type,
+      postConnect,
+      queryClient,
+      router,
+      trpc,
+      setIsConnecting,
+    ],
+  )
 
-      const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
-        connectorConfigId,
-        connectionExternalId: undefined,
-        integrationExternalId: undefined,
-      })
-      // console.log('connectRes', connectRes)
-      /// todo: always validate schema even if pre/post connect are not
-      // implemented
-      const postConnectRes = await postConnect.mutateAsync({
-        connector_config_id: connectorConfigId,
-        discriminated_data: {
-          connector_name: name,
-          connect_output: connectRes,
-        },
-        options: {},
-      })
+  // Start the connection process
+  const handleConnect = React.useCallback(async () => {
+    console.log(`[ConnectorConnect] Starting connection for ${name}`)
+    setIsConnecting(true)
 
-      // console.log('postConnectRes', postConnectRes)
-
-      // Need to invalidate listConnections regardless of params. operating on a prefix basis
-      // back up in case refetchQueries doesn't work, query is still marked as stale
-      void queryClient.invalidateQueries({
-        queryKey: trpc.listConnections.queryKey({}),
-      })
-      // We also invalidate listCustomers here to ensure that the customer list connection count is updated
-      void queryClient.invalidateQueries({
-        queryKey: trpc.listCustomers.queryKey(),
-      })
-      // Immediately trigger refetch to not need to wait until refetchOnMount
-      void queryClient.refetchQueries({
-        // stale: true, // This is another option
-        queryKey: trpc.listConnections.queryKey({}),
-      })
-
-      // TODO: update local cache state with result from postConnect
-      toast.success(
-        `${postConnectRes.display_name || prettyConnectorName(name)} connected successfully.`,
+    try {
+      // 1. Fetch the pre-connect data
+      console.log(`[ConnectorConnect] Fetching pre-connect data for ${name}`)
+      const preConnectData = await queryClient.fetchQuery(
+        trpc.preConnect.queryOptions({
+          connector_config_id: connectorConfigId,
+          discriminated_data: {
+            connector_name: name,
+            pre_connect_input: {
+              connector_config_id: connectorConfigId,
+            },
+          },
+          options: connectionId
+            ? {connectionExternalId: extractId(connectionId)[2]}
+            : {},
+        }),
       )
 
-      const url = new URL(window.location.href)
-      url.searchParams.set('view', 'manage')
-      router.replace((url.search || `?view=manage`) as never) // FIXME: This typing is problematic
-      return postConnectRes
-    } catch (error) {
-      console.error('Error connecting', error)
-      toast.error('Error connecting', {
-        description: `${error}`,
+      // 2. Set connection state to active with the fetched data
+      setConnectionState({
+        isActive: true,
+        connectData: preConnectData,
       })
-      return undefined
-    } finally {
+
+      // 3. The ConnectorComponent will be rendered and will call its connect function
+      // 4. The connect function will call handleConnectorResult when complete
+    } catch (error) {
+      console.error(`[ConnectorConnect] Error starting connection:`, error)
+      toast.error('Error preparing connection', {description: `${error}`})
       setIsConnecting(false)
+      setConnectionState({isActive: false, connectData: null})
     }
-    // TODO: This is not exhaustive. WHat do we need to do to fix it here
-  }, [connectorConfigId, name, preConnectRes.data])
+  }, [
+    connectorConfigId,
+    name,
+    connectionId,
+    queryClient,
+    trpc,
+    setIsConnecting,
+  ])
 
-  let Component =
-    ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
+  // Function that connector components call to register their connect function
+  const registerConnectFn = React.useCallback(
+    (fn: ConnectFn | undefined) => {
+      if (fn) {
+        console.log(`[ConnectorConnect] Connector registered connect function`)
+        connectFnRef.current = fn
 
-  if (!Component && connector?.auth_type === 'OAUTH2') {
-    Component = makeNativeOauthConnectorClientComponent(
-      preConnectRes.data.connect_input,
-    )
-  } else if (!Component) {
-    // TODO: handle me, for thigns like oauth connectors
-    // console.warn(`Unhandled connector: ${name}`)
-    // throw new Error(`Unhandled connector: ${name}`)
-    const settingsJsonSchema = connector?.schemas?.connection_settings
-    if (settingsJsonSchema) {
-      Component = makeManualConnectorClientComponent(settingsJsonSchema)
-    } else {
-      console.warn(`No Component for connector: ${name}`)
+        // If we have connection data, automatically trigger the connect function
+        if (connectionState.isActive && connectionState.connectData) {
+          console.log(`[ConnectorConnect] Auto-triggering connect function`)
+          Promise.resolve().then(async () => {
+            try {
+              const result = await fn(
+                connectionState.connectData.connect_input,
+                {
+                  connectorConfigId,
+                  connectionExternalId: undefined,
+                  integrationExternalId: undefined,
+                },
+              )
+
+              if (result) {
+                await handleConnectorResult(result)
+              } else {
+                console.log(
+                  `[ConnectorConnect] Connect function returned no result`,
+                )
+              }
+            } catch (error) {
+              console.error(
+                `[ConnectorConnect] Error in connect function:`,
+                error,
+              )
+              setIsConnecting(false)
+              setConnectionState({isActive: false, connectData: null})
+            }
+          })
+        }
+      }
+    },
+    [
+      connectionState,
+      connectorConfigId,
+      handleConnectorResult,
+      setIsConnecting,
+    ],
+  )
+
+  // Determine which component to render based on connection state and connector type
+  let ConnectorComponent = null
+  if (connectionState.isActive && connectionState.connectData) {
+    // Look up in predefined components first
+    ConnectorComponent =
+      ConnectorClientComponents[
+        name as keyof typeof ConnectorClientComponents
+      ] || null
+
+    // If not found, create appropriate component based on connector type
+    if (!ConnectorComponent) {
+      if (connector?.auth_type === 'OAUTH2') {
+        ConnectorComponent = makeNativeOauthConnectorClientComponent(
+          connectionState.connectData.connect_input,
+        )
+      } else if (connector?.schemas?.connection_settings) {
+        ConnectorComponent = makeManualConnectorClientComponent(
+          connector.schemas.connection_settings,
+        )
+      }
     }
   }
+
   const isConnecting = _isConnecting || postConnect.isPending
 
   return (
     <>
-      {/*
-       Very careful to not cause infinite loop here during rendering
-       need to make ourselves a pure component
-       */}
-      {Component && (
-        <Component
+      {/* Only render connector component when active */}
+      {connectionState.isActive && ConnectorComponent && (
+        <ConnectorComponent
           key={name}
           connector_name={name}
-          onConnectFn={(fn?: ConnectFn) => {
-            if (fn) {
-              ref.current = fn
-            }
-            // onReady(c, name)
-            // setFn(c)
-          }}
+          onConnectFn={registerConnectFn}
         />
       )}
 
+      {/* Always render children with connection state */}
       {children({isConnecting, handleConnect})}
     </>
   )

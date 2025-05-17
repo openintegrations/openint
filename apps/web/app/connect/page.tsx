@@ -304,8 +304,7 @@ async function AddConnections({
     <div className="flex flex-col gap-4">
       <Suspense fallback={<LoadingSpinner />}>
         {availableToConnect.map((ccfg) => (
-          <AddConnectionCardPrefetch
-            key={ccfg.id}
+          <AddConnectionCard
             connectorConfig={{
               // NOTE: Be extremely careful that sensitive data is not exposed here
               // TODO: Consider using row level security make asOrgIfCustomer unnecessary
@@ -313,49 +312,10 @@ async function AddConnections({
               connector_name: ccfg.connector_name,
               connector: ccfg.connector,
             }}
-            viewer={viewer}
           />
         ))}
       </Suspense>
     </div>
-  )
-}
-
-function AddConnectionCardPrefetch({
-  viewer,
-  connectorConfig,
-}: {
-  viewer: Viewer
-  connectorConfig: ConnectorConfigForCustomer
-}) {
-  const {trpc} = serverComponentContextForViewer(viewer)
-  // create a fresh query client to avoid having to send down more cache
-  const queryClient = createQueryClient()
-
-  const name = connectorConfig.connector_name
-  void queryClient.prefetchQuery(
-    trpc.preConnect.queryOptions({
-      connector_config_id: connectorConfig.id,
-      discriminated_data: {connector_name: name, pre_connect_input: {}},
-      options: {},
-    }),
-  )
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {/* 
-      TODO: IMprove this error boundary so that it still shows the connector card
-      but with a message that it is temporarily unavailable
-      and ideally an ID to copy to contact support with
-       */}
-
-      {/* TODO NOTE: This used to have <div>Unable to connect to {connectorConfig.connector_name}</div> as a fallback
-       but this shows in the initial stages of loading consistently so moving it to a spinner while we ensure that ErrorBoundarySuspense
-       does not show by default when loading */}
-      <ErrorBoundarySuspense fallback={<LoadingSpinner />}>
-        <AddConnectionCard connectorConfig={connectorConfig} />
-      </ErrorBoundarySuspense>
-    </HydrationBoundary>
   )
 }
 
