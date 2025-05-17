@@ -31,7 +31,12 @@ export function DataTileView<TData>({
   } satisfies TableOptions<TData>)
 
   return (
-    <div className={cn('flex flex-wrap gap-4', className)}>
+    <div
+      // In small devices we want to justify center but in larger ones at the start of the row
+      className={cn(
+        'flex flex-wrap justify-center gap-4 md:justify-start',
+        className,
+      )}>
       {table.getRowModel().rows.map((row) => (
         <div
           key={row.id}
@@ -51,6 +56,17 @@ export function DataTileView<TData>({
             </div>
           )}
         </div>
+      ))}
+
+      {/* Add placeholders to ensure number of items is a multiple of 4 and the content spreads evenly */}
+      {Array.from({
+        length: data.length % 4 === 0 ? 0 : 4 - (data.length % 4),
+      }).map((_, index) => (
+        <div
+          key={`placeholder-${index}`}
+          className="invisible h-0 w-[calc(25%-1rem)]"
+          aria-hidden="true"
+        />
       ))}
     </div>
   )
