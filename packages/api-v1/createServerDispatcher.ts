@@ -32,7 +32,7 @@ export function createServerDispatcher({
           user: {
             org_id: viewer.orgId,
             user_id: viewer.userId,
-            customer_id: viewer.customerId,
+            customer_id: viewer.customerId ?? (event.data as any)?.customer_id,
           },
         })
         .returning()

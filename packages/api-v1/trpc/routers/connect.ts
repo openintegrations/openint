@@ -343,7 +343,10 @@ export const connectRouter = router({
 
       await ctx.dispatch({
         name: 'connect.connection-connected',
-        data: {connection_id: conn!.id as `conn_${string}`},
+        data: {
+          connection_id: conn!.id as `conn_${string}`,
+          customer_id: conn?.customer_id ?? '',
+        },
       })
 
       return {

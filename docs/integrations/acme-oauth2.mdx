@@ -1,0 +1,96 @@
+---
+title: Acme OAuth Integration
+---
+
+# Acme OAuth Integration
+
+Integrate Acme's OAuth2 authentication with your app using OpenInt to provide seamless user access to Acme's social media APIs. This guide covers configuration, OAuth2 flow details, scope mapping, and common implementation tips.
+
+## Quickstart
+
+To enable Acme OAuth in your platform via OpenInt:
+
+1. **Create an Acme Developer Application** in the Acme developer console to obtain your OAuth client credentials.
+2. **Configure your OpenInt instance** with Acme's client ID, client secret, and callback URL.
+3. **Enable the integration** in your application's UI, allowing users to securely authorize data access from Acme.
+
+## OAuth2 Configuration
+
+OpenInt handles the OAuth2 Authorization Code flow, including PKCE using the `S256` code challenge method. Below are the relevant endpoint configurations:
+
+- **Authorization URL**: `/acme-oauth2/authorize`
+- **Token URL**: `/acme-oauth2/token`
+- **Token Introspection**: `/acme-oauth2/token/introspect`
+- **Token Revocation**: `/acme-oauth2/token/revoke`
+- **Scope Separator**: Space (` `)
+
+#### Custom Parameters
+The Acme OAuth implementation requires specific parameters to be sent at each step:
+
+- Authorization: `authorize-test-param=authorize-test-value`
+- Token: `token-test-param=token-test-value`
+- Token Refresh: `refresh-test-param=refresh-test-value`
+- Introspection: `introspect-test-param=introspect-test-value`
+- Revocation: `revoke-test-param=revoke-test-value`
+
+OpenInt injects these parameters automatically where needed.
+
+## Setting Up Your Acme OAuth Application
+
+To obtain your client ID and client secret:
+
+1. Visit the Acme Developer Portal (typically at `https://developer.acme.com/`).
+2. Register a new OAuth2 application.
+3. Set the redirect URI to your OpenInt callback endpoint (e.g., `https://YOUR_DOMAIN/openint/callback/acme-oauth2`).
+4. Copy the generated client ID and client secret. Set these in your OpenInt configuration.
+
+> If Acme changes its developer portal URL or process, refer to their official docs or support channels for the latest OAuth2 registration steps.
+
+## Supported Scopes
+
+Acme defines its own permission scopes for API access. The table below compares all vendor scopes with OpenInt support.
+
+| Scope         | Description                                                   | Supported by OpenInt |
+|-------------- |--------------------------------------------------------------|:-------------------:|
+| <Tooltip tip="Read profile information">read:profile</Tooltip> | Allows reading end-user profile data               | ✅                |
+| <Tooltip tip="Read posts">write:posts</Tooltip>         | Allows reading posts (not yet supported by OpenInt) | ❌                |
+
+---
+
+Currently, OpenInt only supports the `read:profile` scope. If your use case requires additional scopes (e.g., `write:posts`), please [contact the OpenInt team](mailto:support@openint.dev) or monitor the feature request tracker for updates.
+
+## Example: OpenInt Connector Definition
+
+```ts
+import { openint } from 'openint'
+
+openint.createConnector({
+  provider: 'acme-oauth2',
+  clientId: '<YOUR_CLIENT_ID>',
+  clientSecret: '<YOUR_CLIENT_SECRET>',
+  redirectUri: 'https://YOUR_DOMAIN/openint/callback/acme-oauth2',
+  scopes: ['read:profile'],
+  // Additional configuration...
+});
+```
+
+## Common Issues & Troubleshooting
+
+**1. Invalid Redirect URI**  
+Ensure the redirect URI registered in Acme matches exactly what your app sends.
+
+**2. Invalid Client ID/Secret**  
+Copy your credentials carefully—avoid trailing spaces or incomplete input.
+
+**3. Unsupported Scope Requested**  
+Only `read:profile` is currently supported through OpenInt. Requests for unsupported scopes result in OAuth errors.
+
+**4. PKCE Code Challenge Errors**  
+Acme requires PKCE (`S256`). Make sure your integration handles the code challenge and verifier fields as expected (OpenInt's SDK does this for you by default).
+
+**5. Missing Custom Parameters**  
+Ensure you are not stripping out custom parameters required at each OAuth step. These are managed by OpenInt but may cause trouble if removed by proxy layers.
+
+---
+
+For further help integrating Acme OAuth or for troubleshooting advanced issues, [refer to the OpenInt documentation](/getting-started/intro) or [contact our support team](mailto:support@openint.dev).

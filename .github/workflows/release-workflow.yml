@@ -176,20 +176,3 @@ jobs:
           git checkout production
           git reset --hard origin/main
           git push origin production --force
-
-      - uses: UnlyEd/github-action-await-vercel@v1
-        id: await-vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        with:
-          deployment-url: v1-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
-          timeout: 10 # Wait for 10 seconds before failing
-          poll-interval: 1 # Wait for 1 second before each retry
-
-
-      # - name: Stably Runner Action
-      #   id: stably-runner
-      #   uses: stablyhq/stably-runner-action@v3
-      #   with:
-      #     api-key: ${{ secrets.STABLY_API_KEY }}
-      #     test-group-id: cm5g8i6nc0005l103urkixuxz

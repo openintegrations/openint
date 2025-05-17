@@ -14,21 +14,23 @@ export function ConnectCallbackClient({
     const channel = new BroadcastChannel('oauth-channel')
     const opener = window.opener as Window | null
 
-    if (!debug) {
-      try {
-        // Try direct communication first
-        if (opener) {
-          opener.postMessage(data, '*')
+    if (!debug && Object.keys(data as any).length > 0) {
+      setTimeout(() => {
+        try {
+          // Try direct communication first
+          if (opener) {
+            opener.postMessage(data, '*')
+          }
+        } catch (e) {
+          console.log('Direct communication failed, using broadcast channel')
         }
-      } catch (e) {
-        console.log('Direct communication failed, using broadcast channel')
-      }
 
-      // Always broadcast as fallback
-      channel.postMessage({
-        type: 'oauth_complete',
-        data,
-      })
+        // Always broadcast as fallback
+        channel.postMessage({
+          type: 'oauth_complete',
+          data,
+        })
+      }, 3000)
     }
 
     return () => {
