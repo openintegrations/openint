@@ -19,27 +19,46 @@ export function AddConnectionCard({
   connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
 }) {
+  console.log(
+    '[AddConnectionCard] Rendering for',
+    connectorConfig.connector_name,
+  )
+
   return (
     <ConnectorConnectContainer
       connectorName={connectorConfig.connector_name as ConnectorName}
       connector={connectorConfig.connector!}
       connectorConfigId={connectorConfig.id as Id['ccfg']}>
-      {({isConnecting, handleConnect}) => (
-        <ConnectorConfigCard
-          displayNameLocation="right"
-          // TODO: fix this
-          connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
-          onPress={() => {
-            if (isConnecting) {
-              return
-            }
-            handleConnect()
-          }}>
-          <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
-            {isConnecting ? 'Connecting...' : 'Connect'}
-          </Label>
-        </ConnectorConfigCard>
-      )}
+      {({isConnecting, handleConnect}) => {
+        console.log(
+          '[AddConnectionCard] ConnectorConnectContainer child rendered with isConnecting:',
+          isConnecting,
+        )
+        return (
+          <ConnectorConfigCard
+            displayNameLocation="right"
+            // TODO: fix this
+            connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
+            onPress={() => {
+              console.log(
+                '[AddConnectionCard] Card pressed, isConnecting:',
+                isConnecting,
+              )
+              if (isConnecting) {
+                console.log(
+                  '[AddConnectionCard] Already connecting, ignoring press',
+                )
+                return
+              }
+              console.log('[AddConnectionCard] Calling handleConnect')
+              handleConnect()
+            }}>
+            <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
+              {isConnecting ? 'Connecting...' : 'Connect'}
+            </Label>
+          </ConnectorConfigCard>
+        )
+      }}
     </ConnectorConnectContainer>
   )
 }
