@@ -1,5 +1,5 @@
 import type {ConnectContext} from '@openint/cdk'
-import type {oauth2Schemas, zOAuthConfig} from './schemas'
+import type {oauth2Schemas, zOAuthConfigJson} from './schemas'
 
 import {getConnectorDefaultCredentials} from '@openint/env'
 import {createOAuth2Client} from '@openint/oauth2/createOAuth2Client'
@@ -9,7 +9,7 @@ import {renderTemplateObject} from '../lib/template'
 export function injectCcfgDefaultCredentialsIfNeeded(
   connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
   connectorName: string,
-  oauthConfig: Z.infer<typeof zOAuthConfig>,
+  oauthConfig: Z.infer<typeof zOAuthConfigJson>,
 ): Z.infer<typeof oauth2Schemas.connector_config> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
@@ -62,7 +62,7 @@ export function getClient({
   ...connectCtx
 }: {
   connectorName: string
-  oauthConfigTemplate: Z.infer<typeof zOAuthConfig>
+  oauthConfigTemplate: Z.infer<typeof zOAuthConfigJson>
   connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>
   connectionSettings:
     | Z.infer<typeof oauth2Schemas.connection_settings>
@@ -99,7 +99,7 @@ export function getClient({
 
 export function getRequestedScopes(
   config: Z.infer<typeof oauth2Schemas.connector_config>,
-  oauthConfig: Z.infer<typeof zOAuthConfig>,
+  oauthConfig: Z.infer<typeof zOAuthConfigJson>,
 ) {
   const scopes = config.oauth?.scopes
     ? // here because some old ccfgs have scopes as a string

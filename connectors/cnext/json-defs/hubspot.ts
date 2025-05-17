@@ -14,6 +14,7 @@ export default {
     params_config: {},
     required_scopes: [''],
     openint_scopes: ['crm.objects.contacts.read'],
+    // connector_config: {},
     scopes: [
       {
         scope: 'contacts',

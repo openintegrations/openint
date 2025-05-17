@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorServer, Id} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
-import type {oauth2Schemas, zOAuthConfig} from './schemas'
+import type {oauth2Schemas, zOAuthConfigJson} from './schemas'
 
 import {extractId, makeId} from '@openint/cdk'
 import {env, resolveRoute} from '@openint/env'
@@ -21,7 +21,7 @@ export function createOAuth2ConnectorServer<
   T extends typeof oauth2Schemas & {name: Z.ZodLiteral<TName>},
 >(
   connectorDef: ConnectorDef<T>,
-  oauthConfigTemplate: Z.infer<typeof zOAuthConfig>,
+  oauthConfigTemplate: Z.infer<typeof zOAuthConfigJson>,
 ): ConnectorServer<T, ReturnType<typeof getClient>> {
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
