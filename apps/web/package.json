@@ -39,7 +39,8 @@
     "posthog-js": "^1.236.5",
     "posthog-node": "^4.13.0",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
