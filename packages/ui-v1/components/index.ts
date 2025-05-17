@@ -1,8 +1,9 @@
-// codegen:start {preset: barrel, include: "./{*.{ts,tsx},*/index.{ts,tsx}}", exclude: ["./**/*.{d,spec,test,fixture,gen,node,stories}.{ts,tsx}"]}
+// codegen:start {preset: barrel, include: "./{*.{ts,tsx},*/index.{ts,tsx}}", exclude: ["./**/*.{d,spec,test,fixture,gen,node,stories}.{ts,tsx}}"]}
 export * from './BaseTableCell'
 export * from './CheckboxFilter'
 export * from './command'
 export * from './ConnectorScopes'
+export * from './ConnectTransitionWindow'
 export * from './CopyID'
 export * from './DataTable'
 export * from './DataTileView'
