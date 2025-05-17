@@ -225,7 +225,10 @@ jobs:
           onlyChanged: true
           exitZeroOnChanges: true
           autoAcceptChanges: main
-
+  stably:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
       - uses: UnlyEd/github-action-await-vercel@v1
         id: await-vercel
         env:
