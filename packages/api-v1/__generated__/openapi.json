@@ -3166,6 +3166,123 @@
           }
         }
       }
+    },
+    "/ai/message_template": {
+      "get": {
+        "operationId": "messageTemplate",
+        "summary": "Get Message Template",
+        "description": "Get a message template for an AI agent",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "language",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "javascript"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "useEnvironmentVariables",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "customerId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "language",
+                    "template"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7358,16 +7475,10 @@
                     "additionalProperties": {}
                   }
                 }
-              },
-              "realmId": {
-                "type": "string",
-                "pattern": "\\d{16}",
-                "description": "The realmId of your quickbooks company (e.g., 9341453474484455)"
               }
             },
             "required": [
-              "oauth",
-              "realmId"
+              "oauth"
             ]
           }
         },
@@ -7423,19 +7534,8 @@
                 },
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "production"
-                ],
-                "default": "sandbox"
               }
-            },
-            "required": [
-              "envName"
-            ]
+            }
           }
         },
         "required": [

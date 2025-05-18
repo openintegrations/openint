@@ -7,7 +7,7 @@ import {connectionRouter} from './connection'
 const messageLanguage = z.enum(['javascript'])
 
 export const aiRouter = router({
-  health: orgProcedure
+  messageTemplate: orgProcedure
     .meta({
       openapi: {
         method: 'GET',

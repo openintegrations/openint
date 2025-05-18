@@ -222,6 +222,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/ai/message_template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Message Template
+         * @description Get a message template for an AI agent
+         */
+        get: operations["messageTemplate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1826,8 +1846,6 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                /** @description The realmId of your quickbooks company (e.g., 9341453474484455) */
-                realmId: string;
             };
         };
         /** quickbooks */
@@ -1846,11 +1864,6 @@ export interface components {
                     /** @description Custom redirect URI */
                     redirect_uri?: string | null;
                 } | null;
-                /**
-                 * @default sandbox
-                 * @enum {string}
-                 */
-                envName: "sandbox" | "production";
             };
         };
         /** ramp */
@@ -3832,6 +3845,78 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    messageTemplate: {
+        parameters: {
+            query: {
+                language?: "javascript";
+                useEnvironmentVariables?: boolean;
+                customerId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        language: string;
+                        template: string;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
