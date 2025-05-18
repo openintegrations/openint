@@ -77,16 +77,17 @@ export default {
           "Access to the user's address information only. Doesn't provide access to any QuickBooks company data.",
       },
     ],
-    connection_settings: z.object({
-      realmId: z
-        .string()
-        .regex(/\d{16}/)
-        .describe(
-          'The realmId of your quickbooks company (e.g., 9341453474484455)',
-        ),
-    }),
-    connector_config: z.object({
-      envName: z.enum(['sandbox', 'production']).default('sandbox'),
-    }),
+    // These are not currently working... We need to add custom postConnect script and then fix it
+    // connection_settings: z.object({
+    //   realmId: z
+    //     .string()
+    //     .regex(/\d{16}/)
+    //     .describe(
+    //       'The realmId of your quickbooks company (e.g., 9341453474484455)',
+    //     ),
+    // }),
+    // connector_config: z.object({
+    //   envName: z.enum(['sandbox', 'production']).default('sandbox'),
+    // }),
   },
 } satisfies JsonConnectorDef
