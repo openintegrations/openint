@@ -1,8 +1,8 @@
-import type {CustomerId, Viewer} from '@openint/cdk'
+import type {CustomerId, Id, Viewer} from '@openint/cdk'
 import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import Elysia from 'elysia'
-import {extractId, Id} from '@openint/cdk'
+import {extractId} from '@openint/cdk'
 import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
@@ -179,6 +179,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.id).toEqual(preConnectRes.current.state.connection_id)
       expect(settings.oauth.credentials?.expires_in).toBeDefined()
       expect(settings.oauth.credentials?.expires_at).toBeDefined()
+      expect(settings.oauth.credentials?.access_token).toBeDefined()
+      expect(settings.access_token).toBeDefined()
+      expect(settings.access_token).toEqual(
+        settings.oauth.credentials?.access_token,
+      )
+
       // adding this if to satisfy the type checker
       if (settings.oauth.credentials?.expires_in) {
         const expiresAt = new Date(

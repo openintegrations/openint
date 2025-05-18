@@ -74,9 +74,24 @@ export const oauth2Schemas = {
     oauth: zOauthConnectorConfig.nullish(),
   }),
 
-  connection_settings: z.object({
-    oauth: zOAuthConnectionSettings,
-  }),
+  connection_settings: z
+    .object({
+      oauth: zOAuthConnectionSettings,
+
+      access_token: z
+        .string()
+        .optional()
+        .describe(
+          'Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field',
+        ),
+    })
+    .transform((settings) => {
+      if (!settings.access_token) {
+        settings.access_token = settings.oauth.credentials?.access_token
+      }
+      return settings
+    })
+    .openapi({effectType: 'input'}),
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
   pre_connect_input: z.object({
