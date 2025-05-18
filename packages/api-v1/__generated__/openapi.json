@@ -4545,6 +4545,66 @@
           "settings": {
             "type": "object",
             "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
+              },
               "api_base_url_for_customer": {
                 "type": "string",
                 "pattern": "https?:\\/\\/.*",
@@ -4552,6 +4612,7 @@
               }
             },
             "required": [
+              "oauth",
               "api_base_url_for_customer"
             ]
           }
@@ -6991,6 +7052,66 @@
           "settings": {
             "type": "object",
             "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
+              },
               "api_domain": {
                 "type": "string",
                 "pattern": "https?:\\/\\/.*",
@@ -6998,6 +7119,7 @@
               }
             },
             "required": [
+              "oauth",
               "api_domain"
             ]
           }
@@ -9082,6 +9204,66 @@
           "settings": {
             "type": "object",
             "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
+              },
               "extension": {
                 "type": "string",
                 "pattern": "https:\\/\\/accounts\\.zoho\\.([a-z.]+)\\/",
@@ -9089,6 +9271,7 @@
               }
             },
             "required": [
+              "oauth",
               "extension"
             ]
           }
