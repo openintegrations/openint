@@ -85,6 +85,7 @@ export const oauth2Schemas = {
           'Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field',
         ),
     })
+    // Logic is duplicated in createOAuth2ConnectorDef.ts
     .transform((settings) => {
       if (!settings.access_token) {
         settings.access_token = settings.oauth.credentials?.access_token
