@@ -33,6 +33,7 @@ import {zConnectorName} from './connector.models'
 import {
   checkConnection,
   connectionCanBeChecked,
+  connectionExpired,
 } from './utils/connectionChecker'
 import {
   formatListResponse,
@@ -85,14 +86,20 @@ export const connectionRouter = router({
         })
       }
 
-      if (
+      const shouldCheckConnection =
         (input.refresh_policy === 'force' || input.refresh_policy === 'auto') &&
         connectionCanBeChecked(connection)
-      ) {
-        const {status, status_message} = await checkConnection(connection, ctx)
-        connection.status = status
-        connection.status_message = status_message ?? null
+
+      const isAutoRefreshNotExpired =
+        input.refresh_policy === 'auto' && !connectionExpired(connection)
+
+      if (!shouldCheckConnection || isAutoRefreshNotExpired) {
+        return expandConnection(connection!, input.expand)
       }
+
+      const {status, status_message} = await checkConnection(connection, ctx)
+      connection.status = status
+      connection.status_message = status_message ?? null
 
       return expandConnection(connection!, input.expand)
     }),
@@ -213,6 +220,13 @@ export const connectionRouter = router({
           message: 'Connection not found',
         })
       }
+      await ctx.dispatch({
+        name: 'connect.connection-deleted',
+        data: {
+          connection_id: deleted.id as `conn_${string}`,
+          customer_id: deleted.customer_id ?? '',
+        },
+      })
       return {id: deleted.id}
     }),
 

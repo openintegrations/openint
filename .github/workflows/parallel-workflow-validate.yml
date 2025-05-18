@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  contents: write
+
 concurrency:
   group: validate-${{ github.ref }}
   cancel-in-progress: true
@@ -225,6 +229,28 @@ jobs:
           onlyChanged: true
           exitZeroOnChanges: true
           autoAcceptChanges: main
+  stably:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Sleep for 5 minutes while Vercel Main branch builds
+        run: sleep 300
+      # - uses: UnlyEd/github-action-await-vercel@v1
+      #   id: await-vercel
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #   with:
+      #     deployment-url: v1-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+      #     timeout: 10 # Wait for 10 seconds before failing
+      #     poll-interval: 1 # Wait for 1 second before each retry
+
+      ## Improvements: pass the branch name to stably and have that be the parameter that is used to visit the vercel URL
+      - name: Stably Runner Action
+        id: stably-runner
+        uses: stablyhq/stably-runner-action@v3
+        with:
+          api-key: ${{ secrets.STABLY_API_KEY }}
+          test-suite-id: cm5g8i6nc0005l103urkixuxz
 
   # slack-notification:
   #   runs-on: ubuntu-latest

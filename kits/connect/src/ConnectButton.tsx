@@ -16,12 +16,12 @@ interface ButtonStyleProps {
 
 interface ConnectButtonProps extends ConnectProps {
   text?: string
-  style?: ButtonStyleProps
+  buttonStyle?: ButtonStyleProps
 }
 
 export function ConnectButton({
   text = 'Manage Integrations',
-  style = {},
+  buttonStyle = {},
   ...props
 }: ConnectButtonProps) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -85,13 +85,13 @@ export function ConnectButton({
     boxShadow:
       '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     width: '28rem',
-    maxHeight: '90vh',
+    minHeight: '50vh',
   }
 
   // Merge default styles with user provided styles
   const mergedButtonStyle = {
     ...defaultButtonStyles,
-    ...style,
+    ...buttonStyle,
   }
 
   // Generate final styles
@@ -142,7 +142,7 @@ export function ConnectButton({
       zIndex: 10,
       width: '100%',
       maxWidth: modalStyle.width,
-      maxHeight: modalStyle.maxHeight,
+      maxHeight: '90vh',
       overflow: 'hidden',
       borderRadius: modalStyle.borderRadius,
       backgroundColor: modalStyle.backgroundColor,
@@ -150,7 +150,7 @@ export function ConnectButton({
     } as React.CSSProperties,
     iframeContainer: {
       width: '100%',
-      minHeight: '400px',
+      minHeight: '50vh',
       overflow: 'auto',
     } as React.CSSProperties,
     closeButton: {
