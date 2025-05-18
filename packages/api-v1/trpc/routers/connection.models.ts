@@ -4,7 +4,6 @@ import type {ConnectorName} from './connector.models'
 
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {oauth2Schemas} from '@openint/cnext/auth-oauth2'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {core} from '../../models'
 import {getConnectorModelByName} from './connector.models'

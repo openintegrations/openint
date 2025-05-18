@@ -256,6 +256,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** acme-oauth2 */
@@ -306,6 +308,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** aircall */
@@ -445,6 +449,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** confluence */
@@ -495,6 +501,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** discord */
@@ -545,6 +553,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** facebook */
@@ -706,6 +716,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** github */
@@ -734,28 +746,6 @@ export interface components {
              */
             connector_name: "gong";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
                 /** @description The base URL of your Gong account (e.g., example) */
                 api_base_url_for_customer: string;
             };
@@ -808,6 +798,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-calendar */
@@ -858,6 +850,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-docs */
@@ -908,6 +902,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-drive */
@@ -958,6 +954,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-mail */
@@ -1008,6 +1006,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-sheet */
@@ -1098,6 +1098,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** hubspot */
@@ -1148,6 +1150,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** instagram */
@@ -1198,6 +1202,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** intercom */
@@ -1248,6 +1254,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** jira */
@@ -1298,6 +1306,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** lever */
@@ -1348,6 +1358,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** linear */
@@ -1398,6 +1410,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** linkedin */
@@ -1537,6 +1551,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** notion */
@@ -1651,6 +1667,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** outreach */
@@ -1679,28 +1697,6 @@ export interface components {
              */
             connector_name: "pipedrive";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
                 /** @description The API URL of your Pipedrive account (e.g., example) */
                 api_domain: string;
             };
@@ -1826,8 +1822,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                /** @description The realmId of your quickbooks company (e.g., 9341453474484455) */
-                realmId: string;
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** quickbooks */
@@ -1846,11 +1842,6 @@ export interface components {
                     /** @description Custom redirect URI */
                     redirect_uri?: string | null;
                 } | null;
-                /**
-                 * @default sandbox
-                 * @enum {string}
-                 */
-                envName: "sandbox" | "production";
             };
         };
         /** ramp */
@@ -1909,6 +1900,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** reddit */
@@ -1959,6 +1952,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** salesloft */
@@ -2031,6 +2026,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** sharepoint */
@@ -2081,6 +2078,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** slack */
@@ -2278,6 +2277,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** twitter */
@@ -2378,6 +2379,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** xero */
@@ -2456,28 +2459,6 @@ export interface components {
              */
             connector_name: "zoho-desk";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
                 /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
                 extension: string;
             };
@@ -3186,6 +3167,8 @@ export interface operations {
                 include_secrets?: boolean;
                 expand?: "connector"[];
                 search_query?: string;
+                /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
+                refresh_policy?: "none" | "force" | "auto";
             };
             header?: never;
             path?: never;

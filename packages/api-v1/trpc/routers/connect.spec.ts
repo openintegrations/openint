@@ -184,6 +184,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(settings.access_token).toEqual(
         settings.oauth.credentials?.access_token,
       )
+      
 
       // adding this if to satisfy the type checker
       if (settings.oauth.credentials?.expires_in) {
