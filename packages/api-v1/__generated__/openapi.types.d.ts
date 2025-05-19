@@ -105,26 +105,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    [path: `/customer/${string}/magic-link`]: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create Magic Link
-         * @description Create a @Connect magic link that is ready to be shared with customers who want to use @Connect
-         */
-        post: operations["createMagicLink"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     [path: `/customer/${string}/token`]: {
         parameters: {
             query?: never;
@@ -159,6 +139,26 @@ export interface paths {
          * @description Verify that a connection is healthy
          */
         post: operations["checkConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Upsert Customer
+         * @description Create or update a customer
+         */
+        put: operations["upsertCustomer"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2609,6 +2609,17 @@ export interface components {
          * @enum {string}
          */
         "core.connector.name": "acme-oauth2" | "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "moota" | "notion" | "onebrick" | "openledger" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesloft" | "saltedge" | "sharepoint" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zoho-desk";
+        /** customer_select */
+        "core.customer_select": {
+            org_id: string;
+            id: string;
+            api_key: string | null;
+            metadata: (string | number | boolean | null) | {
+                [key: string]: unknown;
+            } | unknown[] | null;
+            created_at: string;
+            updated_at: string;
+        };
         /** integration_select */
         "core.integration_select": {
             id: string;
@@ -3412,106 +3423,6 @@ export interface operations {
             };
         };
     };
-    createMagicLink: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The unique ID of the customer to create the magic link for */
-                customer_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description How long the magic link will be valid for (in seconds) before it expires
-                     * @default 2592000
-                     */
-                    validity_in_seconds?: number;
-                    connect_options?: {
-                        /**
-                         * Return URL
-                         * @description Optional URL to return customers after adding a connection or if they press the Return To Organization button
-                         */
-                        return_url?: string;
-                        /**
-                         * Connector Names
-                         * @description The names of the connectors to show in the connect page. If not provided, all connectors will be shown
-                         */
-                        connector_names?: components["schemas"]["core.connector.name"][];
-                        /**
-                         * Default View to load
-                         * @description The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not
-                         * @enum {string}
-                         */
-                        view?: "add" | "manage";
-                        /**
-                         * Debug
-                         * @description Whether to enable debug mode
-                         */
-                        debug?: boolean;
-                        /**
-                         * Is Embedded
-                         * @description Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
-                         */
-                        is_embedded?: boolean;
-                    };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description The Connect magic link url to share with the user. */
-                        magic_link_url: string;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createToken: {
         parameters: {
             query?: never;
@@ -3660,6 +3571,80 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    upsertCustomer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.customer_select"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
