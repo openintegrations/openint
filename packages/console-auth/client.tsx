@@ -73,6 +73,8 @@ export function OrganizationSwitcher() {
     <DynamicOrganizationSwitcher
       hidePersonal={true}
       appearance={{baseTheme: isDark ? darkTheme : undefined}}
+      // Redirect to the current page after creating an organization
+      afterCreateOrganizationUrl={() => '/console'}
     />
   )
 }
