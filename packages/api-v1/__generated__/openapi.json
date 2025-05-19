@@ -1701,6 +1701,21 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "refresh_policy",
+            "description": "Controls credential refresh: none (never), force (always), or auto (when expired, default)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "none",
+                "force",
+                "auto"
+              ],
+              "description": "Controls credential refresh: none (never), force (always), or auto (when expired, default)",
+              "default": "none"
+            }
           }
         ],
         "responses": {
@@ -3248,6 +3263,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3382,6 +3401,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3718,6 +3741,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3852,6 +3879,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3986,6 +4017,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4427,6 +4462,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4561,6 +4600,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               },
               "api_base_url_for_customer": {
                 "type": "string",
@@ -4701,6 +4744,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4835,6 +4882,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4969,6 +5020,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5103,6 +5158,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5237,6 +5296,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5455,6 +5518,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5589,6 +5656,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5723,6 +5794,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5857,6 +5932,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5991,6 +6070,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6125,6 +6208,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6259,6 +6346,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6592,6 +6683,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6874,6 +6969,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7008,6 +7107,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               },
               "api_domain": {
                 "type": "string",
@@ -7359,15 +7462,13 @@
                   }
                 }
               },
-              "realmId": {
+              "access_token": {
                 "type": "string",
-                "pattern": "\\d{16}",
-                "description": "The realmId of your quickbooks company (e.g., 9341453474484455)"
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
-              "oauth",
-              "realmId"
+              "oauth"
             ]
           }
         },
@@ -7423,19 +7524,8 @@
                 },
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "production"
-                ],
-                "default": "sandbox"
               }
-            },
-            "required": [
-              "envName"
-            ]
+            }
           }
         },
         "required": [
@@ -7576,6 +7666,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7710,6 +7804,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7893,6 +7991,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8027,6 +8129,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8574,6 +8680,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8829,6 +8939,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -9145,6 +9259,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               },
               "extension": {
                 "type": "string",
