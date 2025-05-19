@@ -1,4 +1,4 @@
-import type {Id, Viewer} from '@openint/cdk'
+import type {CustomerId, Id, Viewer} from '@openint/cdk'
 import type {AnyDatabase} from '@openint/db/db'
 
 import {TRPCError} from '@trpc/server'
@@ -36,20 +36,33 @@ export async function viewerFromRequest(
         'Auth token is an old API key. This will be removed in the future.',
       )
     }
-    if (!org) {
-      throw new TRPCError({code: 'UNAUTHORIZED', message: 'Invalid API key'})
-    }
-    if (!org?.metadata?.api_key_used) {
-      await ctx.db.update(schema.organization).set({
-        metadata: {
-          ...org.metadata,
-          api_key_used: new Date().toISOString(),
-        },
-        updated_at: new Date().toISOString(),
-      })
+    if (org) {
+      if (!org?.metadata?.api_key_used) {
+        await ctx.db.update(schema.organization).set({
+          metadata: {
+            ...org.metadata,
+            api_key_used: new Date().toISOString(),
+          },
+          updated_at: new Date().toISOString(),
+        })
+      }
+      return {role: 'org', orgId: org.id as Id['org']}
     }
 
-    return {role: 'org', orgId: org.id as Id['org']}
+    // Check if it's a customer API key
+    const customer = await ctx.db.query.customer.findFirst({
+      where: eq(schema.customer.api_key, token),
+    })
+
+    if (customer) {
+      return {
+        role: 'customer',
+        orgId: customer.org_id as Id['org'],
+        customerId: customer.id as CustomerId,
+      }
+    }
+
+    throw new TRPCError({code: 'UNAUTHORIZED', message: 'Invalid API key'})
   }
 
   try {
