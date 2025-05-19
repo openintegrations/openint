@@ -47,7 +47,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     return createTRPCCaller({db}, viewer)
   }
 
-  const apiKey = `key_${makeUlid()}`
+  const orgApiKey = `key_${makeUlid()}`
+  const customerApiKey = `key_${makeUlid()}`
 
   beforeAll(async () => {
     const client = getClient({role: 'org', orgId: 'org_123'})
@@ -55,8 +56,15 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
     await db.insert(schema.organization).values({
       id: 'org_123',
-      api_key: apiKey,
+      api_key: orgApiKey,
     })
+
+    await db.insert(schema.customer).values({
+      id: 'cus_123',
+      org_id: 'org_123',
+      api_key: customerApiKey,
+    })
+
     await client.createConnectorConfig.mutate({
       connector_name: 'quickbooks',
       config: {
@@ -66,10 +74,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     })
   })
 
-  test('apikey auth success', async () => {
-    const client = getTestTRPCClient({db}, {api_key: apiKey})
+  test('org apikey auth success', async () => {
+    const client = getTestTRPCClient({db}, {api_key: orgApiKey})
     const res = await client.viewer.query()
-    expect(res).toMatchObject({role: 'org'})
+    expect(res).toMatchObject({role: 'org', orgId: 'org_123'})
+  })
+
+  test('customer apikey auth success', async () => {
+    const client = getTestTRPCClient({db}, {api_key: customerApiKey})
+    const res = await client.viewer.query()
+    expect(res).toMatchObject({
+      role: 'customer',
+      orgId: 'org_123',
+      customerId: 'cus_123',
+    })
   })
 
   test('apikey auth failure', async () => {

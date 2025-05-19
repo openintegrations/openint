@@ -105,26 +105,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    [path: `/customer/${string}/magic-link`]: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create Magic Link
-         * @description Create a @Connect magic link that is ready to be shared with customers who want to use @Connect
-         */
-        post: operations["createMagicLink"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     [path: `/customer/${string}/token`]: {
         parameters: {
             query?: never;
@@ -159,6 +139,26 @@ export interface paths {
          * @description Verify that a connection is healthy
          */
         post: operations["checkConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Upsert Customer
+         * @description Create or update a customer
+         */
+        put: operations["upsertCustomer"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -276,6 +276,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** acme-oauth2 */
@@ -326,6 +328,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** aircall */
@@ -465,6 +469,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** confluence */
@@ -515,6 +521,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** discord */
@@ -565,6 +573,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** facebook */
@@ -726,6 +736,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** github */
@@ -776,6 +788,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
                 /** @description The base URL of your Gong account (e.g., example) */
                 api_base_url_for_customer: string;
             };
@@ -828,6 +842,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-calendar */
@@ -878,6 +894,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-docs */
@@ -928,6 +946,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-drive */
@@ -978,6 +998,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-mail */
@@ -1028,6 +1050,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** google-sheet */
@@ -1118,6 +1142,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** hubspot */
@@ -1168,6 +1194,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** instagram */
@@ -1218,6 +1246,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** intercom */
@@ -1268,6 +1298,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** jira */
@@ -1318,6 +1350,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** lever */
@@ -1368,6 +1402,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** linear */
@@ -1418,6 +1454,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** linkedin */
@@ -1557,6 +1595,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** notion */
@@ -1671,6 +1711,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** outreach */
@@ -1721,6 +1763,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
                 /** @description The API URL of your Pipedrive account (e.g., example) */
                 api_domain: string;
             };
@@ -1846,6 +1890,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** quickbooks */
@@ -1922,6 +1968,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** reddit */
@@ -1972,6 +2020,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** salesloft */
@@ -2044,6 +2094,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** sharepoint */
@@ -2094,6 +2146,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** slack */
@@ -2291,6 +2345,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** twitter */
@@ -2391,6 +2447,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
             };
         };
         /** xero */
@@ -2491,6 +2549,8 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
                 /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
                 extension: string;
             };
@@ -2569,6 +2629,17 @@ export interface components {
          * @enum {string}
          */
         "core.connector.name": "acme-oauth2" | "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "moota" | "notion" | "onebrick" | "openledger" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesloft" | "saltedge" | "sharepoint" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zoho-desk";
+        /** customer_select */
+        "core.customer_select": {
+            org_id: string;
+            id: string;
+            api_key: string | null;
+            metadata: (string | number | boolean | null) | {
+                [key: string]: unknown;
+            } | unknown[] | null;
+            created_at: string;
+            updated_at: string;
+        };
         /** integration_select */
         "core.integration_select": {
             id: string;
@@ -3199,6 +3270,8 @@ export interface operations {
                 include_secrets?: boolean;
                 expand?: "connector"[];
                 search_query?: string;
+                /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
+                refresh_policy?: "none" | "force" | "auto";
             };
             header?: never;
             path?: never;
@@ -3370,106 +3443,6 @@ export interface operations {
             };
         };
     };
-    createMagicLink: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The unique ID of the customer to create the magic link for */
-                customer_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description How long the magic link will be valid for (in seconds) before it expires
-                     * @default 2592000
-                     */
-                    validity_in_seconds?: number;
-                    connect_options?: {
-                        /**
-                         * Return URL
-                         * @description Optional URL to return customers after adding a connection or if they press the Return To Organization button
-                         */
-                        return_url?: string;
-                        /**
-                         * Connector Names
-                         * @description The names of the connectors to show in the connect page. If not provided, all connectors will be shown
-                         */
-                        connector_names?: components["schemas"]["core.connector.name"][];
-                        /**
-                         * Default View to load
-                         * @description The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not
-                         * @enum {string}
-                         */
-                        view?: "add" | "manage";
-                        /**
-                         * Debug
-                         * @description Whether to enable debug mode
-                         */
-                        debug?: boolean;
-                        /**
-                         * Is Embedded
-                         * @description Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
-                         */
-                        is_embedded?: boolean;
-                    };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description The Connect magic link url to share with the user. */
-                        magic_link_url: string;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createToken: {
         parameters: {
             query?: never;
@@ -3526,6 +3499,8 @@ export interface operations {
                     "application/json": {
                         /** @description The authentication token to use for API requests */
                         token: string;
+                        /** @description The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package. */
+                        magic_link_url: string;
                     };
                 };
             };
@@ -3618,6 +3593,80 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    upsertCustomer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.customer_select"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */

@@ -73,12 +73,26 @@ export function createOAuth2ConnectorDef<
   }
 
   const connectionSettings = () => {
-    let schema = oauth2Schemas.connection_settings
+    const schema = oauth2Schemas.connection_settings
     if (def.auth.connection_settings) {
-      schema = z.object({
-        ...schema.shape,
-        ...(def.auth.connection_settings.shape as Record<string, Z.ZodTypeAny>),
-      })
+      return (
+        z
+          .object({
+            ...schema.innerType().shape,
+            ...(def.auth.connection_settings.shape as Record<
+              string,
+              Z.ZodTypeAny
+            >),
+          })
+          // TODO: Figure out how to remove this duplication of logic from schemas.ts
+          .transform((settings) => {
+            if (!settings.access_token) {
+              settings.access_token = settings.oauth.credentials?.access_token
+            }
+            return settings
+          })
+          .openapi({effectType: 'input'})
+      )
     }
     return schema
   }
