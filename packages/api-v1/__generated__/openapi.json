@@ -2498,7 +2498,8 @@
                 "properties": {
                   "validity_in_seconds": {
                     "type": "number",
-                    "default": 2592000
+                    "default": 2592000,
+                    "description": "How long the publishable token and magic link url will be valid for (in seconds) before it expires. By default it will be valid for 30 days unless otherwise specified."
                   },
                   "connect_options": {
                     "type": "object",
@@ -2552,16 +2553,24 @@
                   "properties": {
                     "token": {
                       "type": "string",
-                      "description": "The authentication token to use for API requests"
+                      "description": "A short-lived publishable authentication token to use for customer api requests from the frontend. This token by default expires in 30 days unless otherwise specified via the validity_in_seconds parameter."
                     },
                     "magic_link_url": {
                       "type": "string",
-                      "description": "The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package."
+                      "description": "A link that can be shared with customers to use @Connect in any browser. This link will expire in 30 days by default unless otherwise specified via the validity_in_seconds parameter."
+                    },
+                    "api_key": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "A long-lived customer API key to use for API requests. Not meant to be published to the frontend."
                     }
                   },
                   "required": [
                     "token",
-                    "magic_link_url"
+                    "magic_link_url",
+                    "api_key"
                   ]
                 }
               }
@@ -3081,6 +3090,123 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai/message_template": {
+      "get": {
+        "operationId": "messageTemplate",
+        "summary": "Get Message Template",
+        "description": "Get a message template for an AI agent",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "language",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "javascript"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "useEnvironmentVariables",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "customerId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "language",
+                    "template"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
                 }
               }
             }

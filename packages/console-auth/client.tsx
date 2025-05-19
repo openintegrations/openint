@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import {resolveRoute} from '@openint/env'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
+import {resolveLinkPath} from '@/lib-common/Link'
 
 export {
   ClerkProvider as AuthProvider,
@@ -73,6 +74,8 @@ export function OrganizationSwitcher() {
     <DynamicOrganizationSwitcher
       hidePersonal={true}
       appearance={{baseTheme: isDark ? darkTheme : undefined}}
+      // Redirect to the current page after creating an organization
+      afterCreateOrganizationUrl={() => resolveLinkPath('/console')}
     />
   )
 }

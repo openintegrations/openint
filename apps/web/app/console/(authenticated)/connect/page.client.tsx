@@ -33,7 +33,7 @@ export function ConfigureConnect() {
       <div className="w-sm flex min-h-0 flex-col p-4 pr-2">
         <h2 className="mb-4 text-xl font-semibold">Configure</h2>
         <ZodSchemaForm
-          schema={connectRouterModels.getMagicLinkInput}
+          schema={connectRouterModels.createTokenInput}
           formData={formData}
           onChange={(change) => {
             if (change.formData) {
