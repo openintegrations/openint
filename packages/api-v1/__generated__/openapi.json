@@ -17,10 +17,7 @@
         "description": "List all connectors to understand what integrations are available to configure",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -176,10 +173,7 @@
         "operationId": "getConnectorConfig",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -582,10 +576,7 @@
         "summary": "List Configured Connectors",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1055,10 +1046,7 @@
         "description": "Get details of a specific connection, including credentials",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1513,10 +1501,7 @@
         "description": "Delete a connection",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1613,10 +1598,7 @@
         "description": "List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -2154,10 +2136,7 @@
         "description": "Import an existing connection after validation",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "requestBody": {
@@ -2494,10 +2473,7 @@
         "description": "Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -2650,10 +2626,7 @@
         "description": "Verify that a connection is healthy",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -2758,10 +2731,7 @@
         "description": "Create or update a customer",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "requestBody": {
@@ -2854,10 +2824,7 @@
         "description": "Check if the API is operational",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "responses": {
@@ -2915,10 +2882,7 @@
         "operationId": "healthEcho",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "requestBody": {
@@ -2994,10 +2958,7 @@
         "description": "Get information about the current authenticated user",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "responses": {
@@ -3066,10 +3027,7 @@
         "description": "Handle a webhook event",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -3269,16 +3227,10 @@
   },
   "components": {
     "securitySchemes": {
-      "ApiKey": {
+      "token": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`"
-      },
-      "CustomerToken": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`"
+        "description": "Organization API Key available in the settings page of the OpenInt Console or Customer API Key or Token Customer authentication token created using the create customer token API. It is passed in the `authorization` header with format: `Bearer {token}`"
       }
     },
     "schemas": {

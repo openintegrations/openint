@@ -11,8 +11,7 @@ paths:
       summary: List Connectors
       description: List all connectors to understand what integrations are available to configure
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: query
           name: limit
@@ -113,9 +112,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -127,12 +124,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             page = client.list_connectors()
             page = page.items[0]
             print(page.name)
@@ -140,8 +134,7 @@ paths:
     get:
       operationId: getConnectorConfig
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: id
@@ -368,8 +361,7 @@ paths:
       operationId: listConnectorConfigs
       summary: List Configured Connectors
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: query
           name: limit
@@ -643,9 +635,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -657,12 +647,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             page = client.list_connection_configs()
             page = page.items[0]
             print(page)
@@ -672,8 +659,7 @@ paths:
       summary: Get Connection
       description: Get details of a specific connection, including credentials
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: id
@@ -938,9 +924,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.getConnection('conn_');
@@ -951,12 +935,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.get_connection(
                 id="conn_",
             )
@@ -966,8 +947,7 @@ paths:
       summary: Delete Connection
       description: Delete a connection
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: id
@@ -1026,9 +1006,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.deleteConnection('conn_');
@@ -1039,12 +1017,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.delete_connection(
                 "conn_",
             )
@@ -1055,8 +1030,7 @@ paths:
       summary: List Connections
       description: List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: query
           name: limit
@@ -1369,9 +1343,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -1383,12 +1355,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             page = client.list_connections()
             page = page.items[0]
             print(page)
@@ -1397,8 +1366,7 @@ paths:
       summary: Create Connection
       description: Import an existing connection after validation
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       requestBody:
         required: true
         content:
@@ -1580,9 +1548,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.createConnection({
@@ -1597,12 +1563,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.create_connection(
                 connector_config_id="ccfg_",
                 customer_id="customer_id",
@@ -1617,8 +1580,7 @@ paths:
       summary: Create Magic Link
       description: Create a @Connect magic link that is ready to be shared with customers who want to use @Connect
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: customer_id
@@ -1709,9 +1671,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.createMagicLink('x');
@@ -1722,12 +1682,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.create_magic_link(
                 customer_id="x",
             )
@@ -1738,8 +1695,7 @@ paths:
       summary: Create Customer Authentication Token
       description: Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: customer_id
@@ -1829,9 +1785,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.createToken('x');
@@ -1842,12 +1796,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.create_token(
                 customer_id="x",
             )
@@ -1858,8 +1809,7 @@ paths:
       summary: Check Connection Health
       description: Verify that a connection is healthy
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: id
@@ -1925,9 +1875,7 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN'], // This is the default and can be omitted
-            });
+            const client = new Openint();
 
             async function main() {
               const response = await client.checkConnection('conn_');
@@ -1938,12 +1886,9 @@ paths:
             main();
         - lang: Python
           source: |-
-            import os
             from openint import Openint
 
-            client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN"),  # This is the default and can be omitted
-            )
+            client = Openint()
             response = client.check_connection(
                 "conn_",
             )
@@ -1953,8 +1898,7 @@ paths:
       operationId: handleWebhook
       description: Handle a webhook event
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: path
           name: connector_name
@@ -2003,15 +1947,10 @@ paths:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
 components:
   securitySchemes:
-    ApiKey:
+    token:
       type: http
       scheme: bearer
-      description: 'Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`'
-    CustomerToken:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: 'Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`'
+      description: 'Organization API Key available in the settings page of the OpenInt Console or Customer API Key or Token Customer authentication token created using the create customer token API. It is passed in the `authorization` header with format: `Bearer {token}`'
   schemas:
     connector.acme-oauth2.discriminated_connection_settings:
       type: object
@@ -4876,13 +4815,8 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-            realmId:
-              type: string
-              pattern: \d{16}
-              description: The realmId of your quickbooks company (e.g., 9341453474484455)
           required:
             - oauth
-            - realmId
       required:
         - connector_name
       title: quickbooks
@@ -4921,14 +4855,6 @@ components:
                   description: Custom redirect URI
               description: Base oauth configuration for the connector
               ui:field: OAuthField
-            envName:
-              type: string
-              enum:
-                - sandbox
-                - production
-              default: sandbox
-          required:
-            - envName
       required:
         - connector_name
         - config

@@ -14,10 +14,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
   const orgId = 'org_123'
   const apiKey = `key_${makeUlid()}`
+  const customerApiKey = `key_cus_${makeUlid()}`
   const customerId = 'cus_123'
 
   const apiKeyClient = new Openint({
-    apiKey,
+    token: apiKey,
     baseURL: 'http://localhost/v1',
     fetch: appFetch,
   })
@@ -33,7 +34,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     await db.insert(schema.customer).values({
       id: customerId,
       org_id: orgId,
-      api_key: `key_cus_${makeUlid()}`,
+      api_key: customerApiKey,
     })
   })
 
@@ -46,7 +47,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     test('wrong API key should fail authentication', async () => {
       const wrongApiKey = `key_${makeUlid()}`
       const wrongApiKeyClient = new Openint({
-        apiKey: wrongApiKey,
+        token: wrongApiKey,
         baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
@@ -54,13 +55,23 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       await expect(wrongApiKeyClient.getCurrentUser()).rejects.toThrow()
     })
 
-    test('customer token client should authenticate as customer', async () => {
-      const tokenResponse = await apiKeyClient.createToken(customerId, {})
+    test('client should authenticate as customer with a customer token', async () => {
+      const {token} = await apiKeyClient.createToken(customerId, {})
+
       // console.log('tokenResponse', tokenResponse)
       const tokenClient = new Openint({
-        customerToken: tokenResponse.token,
-        apiKey: null, // not sure why this is needed, but it is
-        // test mysteriously fails without this
+        token,
+        baseURL: 'http://localhost/v1',
+        fetch: appFetch,
+      })
+      const response = await tokenClient.getCurrentUser()
+      expect(response.role).toBe('customer')
+    })
+
+    test('client should authenticate as customer with an api key', async () => {
+      // console.log('tokenResponse', tokenResponse)
+      const tokenClient = new Openint({
+        token: customerApiKey,
         baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
@@ -71,7 +82,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     test('wrong token should fail authentication', async () => {
       const wrongToken = `token_${makeUlid()}`
       const wrongTokenClient = new Openint({
-        customerToken: wrongToken,
+        token: wrongToken,
         baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
@@ -82,7 +93,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     test('enum string array should work', async () => {
       const baseUrl = 'http://localhost/v1'
       const assertFetchSdk = new Openint({
-        apiKey,
+        token: apiKey,
         baseURL: baseUrl,
         fetch: (input) => {
           const urlString =
