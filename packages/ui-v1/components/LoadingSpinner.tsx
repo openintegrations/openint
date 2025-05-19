@@ -3,9 +3,14 @@ import {cn} from '@openint/shadcn/lib/utils'
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg'
   className?: string
+  centerVertical?: boolean
 }
 
-export function LoadingSpinner({size = 'md', className}: LoadingSpinnerProps) {
+export function LoadingSpinner({
+  size = 'md',
+  className,
+  centerVertical = true,
+}: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
@@ -13,7 +18,12 @@ export function LoadingSpinner({size = 'md', className}: LoadingSpinnerProps) {
   }
 
   return (
-    <div className="min-h-100 flex h-full w-full items-center justify-center">
+    <div
+      className={cn(
+        'flex w-full items-center justify-center',
+        centerVertical &&
+          'min-h-100 flex h-full w-full items-center justify-center',
+      )}>
       <div
         className={cn(
           'border-1 animate-spin rounded-full border-[#000000] border-t-transparent',

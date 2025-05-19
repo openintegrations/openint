@@ -1,6 +1,6 @@
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
-import type {ExtCustomerId} from './id.types'
+import type {ExtCustomerId, Id} from './id.types'
 
 import {compact} from '@openint/util/array-utils'
 import {z} from '@openint/util/zod-utils'
@@ -103,4 +103,18 @@ export function resolveViewer(
   viewers: Array<Viewer | null | undefined>,
 ): Viewer {
   return viewers.find((v) => v?.role !== 'anon') ?? {role: 'anon'}
+}
+
+export function createCustomerViewer({
+  orgId,
+  customerId,
+}: {
+  orgId: Id['org']
+  customerId: Z.infer<typeof zCustomerId>
+}): Viewer {
+  return {
+    role: 'customer',
+    orgId,
+    customerId,
+  }
 }
