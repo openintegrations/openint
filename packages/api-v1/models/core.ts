@@ -130,8 +130,6 @@ const integration_select = createSelectSchema(schema.integration)
 
 const customer_select = createSelectSchema(schema.customer)
   .omit({
-    org_id: true,
-    metadata: true,
     // created_at: true,
     // updated_at: true,
   })

@@ -90,6 +90,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         org_id: 'org_222',
         metadata,
       })
+      expect(customer.api_key).toMatch(/^key_cus_/)
     })
 
     test('updates existing customer when id exists', async () => {
@@ -100,22 +101,24 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       }
 
       // First create the customer
-      await asOrgCusRouterCaller.upsertCustomer({
+      const initialCustomer = await asOrgCusRouterCaller.upsertCustomer({
         id: 'cus_444',
         metadata: initialMetadata,
       })
 
       // Then update it
-      const customer = await asOrgCusRouterCaller.upsertCustomer({
+      const updatedCustomer = await asOrgCusRouterCaller.upsertCustomer({
         id: 'cus_444',
         metadata: updatedMetadata,
       })
 
-      expect(customer).toMatchObject({
+      expect(updatedCustomer).toMatchObject({
         id: 'cus_444',
         org_id: 'org_222',
         metadata: updatedMetadata,
       })
+      // API key should be preserved
+      expect(updatedCustomer.api_key).toBe(initialCustomer.api_key)
     })
 
     test('creates customer with auto-generated id when not provided', async () => {
@@ -126,6 +129,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(customer.id).toMatch(/^cus_/)
       expect(customer.org_id).toBe('org_222')
       expect(customer.metadata).toEqual({name: 'Auto ID Customer'})
+      expect(customer.api_key).toMatch(/^key_cus_/)
     })
   })
 })

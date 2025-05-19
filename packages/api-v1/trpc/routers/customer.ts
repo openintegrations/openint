@@ -1,6 +1,8 @@
 import {dbUpsertOne, ilike, or, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {
   formatListResponse,
   zListParams,
@@ -23,15 +25,7 @@ export const customerRouter = router({
         metadata: z.record(z.unknown()).optional(),
       }),
     )
-    .output(
-      z.object({
-        id: z.string(),
-        org_id: z.string(),
-        metadata: z.record(z.unknown()).nullable(),
-        created_at: z.string(),
-        updated_at: z.string(),
-      }),
-    )
+    .output(core.customer_select)
     .mutation(async ({ctx, input}) => {
       const [customer] = await dbUpsertOne(
         ctx.db,
@@ -40,8 +34,12 @@ export const customerRouter = router({
           org_id: ctx.viewer.orgId,
           id: input.id,
           metadata: input.metadata ?? null,
+          api_key: `key_cus_${makeUlid()}`,
         },
-        {keyColumns: ['org_id', 'id']},
+        {
+          keyColumns: ['org_id', 'id'],
+          insertOnlyColumns: ['api_key'],
+        },
       ).returning()
 
       if (!customer) {
