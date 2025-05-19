@@ -33,6 +33,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     await db.insert(schema.customer).values({
       id: customerId,
       org_id: orgId,
+      api_key: `key_cus_${makeUlid()}`,
     })
   })
 
