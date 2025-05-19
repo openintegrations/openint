@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import {resolveRoute} from '@openint/env'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
-import {resolveLinkPath} from '@openint/util/url-utils'
+import {resolveLinkPath} from '@/lib-common/Link'
 
 export {
   ClerkProvider as AuthProvider,
