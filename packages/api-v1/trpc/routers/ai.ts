@@ -19,8 +19,8 @@ export const aiRouter = router({
     .input(
       z.object({
         language: messageLanguage.optional(),
-        useEnvironmentVariables: z.boolean().optional().default(false),
-        customerId: z.string(),
+        use_environment_variables: z.boolean().optional().default(false),
+        customer_id: z.string(),
       }),
     )
     .output(z.object({language: z.string(), template: z.string()}))
@@ -28,15 +28,15 @@ export const aiRouter = router({
       const {api_key} = await connectRouter
         .createCaller(ctx, {onError})
         .createToken({
-          customer_id: input.customerId,
+          customer_id: input.customer_id,
         })
       const {items: connections} = await connectionRouter
         .createCaller(ctx, {onError})
         .listConnections({
-          customer_id: input.customerId,
+          customer_id: input.customer_id,
           expand: ['connector'],
         })
-      const envApiKey = input.useEnvironmentVariables
+      const envApiKey = input.use_environment_variables
         ? `process.env.OPENINT_API_KEY` // TODO: switch this based on language
         : `'${api_key}'`
 
@@ -59,7 +59,7 @@ import Openint from '@openint/sdk'
 
 // Note: This has a hardcoded OpenInt API Key set up to manage integrations
 // You can manage the integration settings by visiting this link
-// https://openint.dev/manage/${envApiKey}${input.useEnvironmentVariables ? '(replace this with the value of your environment variable for OPENINT_API_KEY)' : ''}
+// https://openint.dev/manage/${envApiKey}${input.use_environment_variables ? '(replace this with the value of your environment variable for OPENINT_API_KEY)' : ''}
 const openint = new OpenInt({apiKey: '${envApiKey}'})
 const connections = openInt.listConnections({connector_names: ['google-calendar'], include_secrets: true})?.items ? [];
 if(connections.length === 0) {

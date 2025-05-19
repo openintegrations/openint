@@ -112,7 +112,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -124,9 +126,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             page = client.list_connectors()
             page = page.items[0]
             print(page.name)
@@ -635,7 +640,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -647,9 +654,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             page = client.list_connection_configs()
             page = page.items[0]
             print(page)
@@ -924,7 +934,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               const response = await client.getConnection('conn_');
@@ -935,9 +947,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.get_connection(
                 id="conn_",
             )
@@ -1006,7 +1021,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               const response = await client.deleteConnection('conn_');
@@ -1017,9 +1034,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.delete_connection(
                 "conn_",
             )
@@ -1087,6 +1107,17 @@ paths:
           name: search_query
           schema:
             type: string
+        - in: query
+          name: refresh_policy
+          description: 'Controls credential refresh: none (never), force (always), or auto (when expired, default)'
+          schema:
+            type: string
+            enum:
+              - none
+              - force
+              - auto
+            description: 'Controls credential refresh: none (never), force (always), or auto (when expired, default)'
+            default: none
       responses:
         '200':
           description: Successful response
@@ -1343,7 +1374,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               // Automatically fetches more pages as needed.
@@ -1355,9 +1388,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             page = client.list_connections()
             page = page.items[0]
             print(page)
@@ -1548,7 +1584,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               const response = await client.createConnection({
@@ -1563,9 +1601,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.create_connection(
                 connector_config_id="ccfg_",
                 customer_id="customer_id",
@@ -1574,121 +1615,6 @@ paths:
                 },
             )
             print(response)
-  /customer/{customer_id}/magic-link:
-    post:
-      operationId: createMagicLink
-      summary: Create Magic Link
-      description: Create a @Connect magic link that is ready to be shared with customers who want to use @Connect
-      security:
-        - token: []
-      parameters:
-        - in: path
-          name: customer_id
-          description: The unique ID of the customer to create the magic link for
-          schema:
-            type: string
-            minLength: 1
-            description: The unique ID of the customer to create the magic link for
-          required: true
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                validity_in_seconds:
-                  type: number
-                  default: 2592000
-                  description: How long the magic link will be valid for (in seconds) before it expires
-                connect_options:
-                  type: object
-                  properties:
-                    return_url:
-                      type: string
-                      title: Return URL
-                      description: Optional URL to return customers after adding a connection or if they press the Return To Organization button
-                    connector_names:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/core.connector.name'
-                      title: Connector Names
-                      description: The names of the connectors to show in the connect page. If not provided, all connectors will be shown
-                    view:
-                      type: string
-                      enum:
-                        - add
-                        - manage
-                      title: Default View to load
-                      description: The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not
-                    debug:
-                      type: boolean
-                      title: Debug
-                      description: Whether to enable debug mode
-                    is_embedded:
-                      type: boolean
-                      title: Is Embedded
-                      description: Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  magic_link_url:
-                    type: string
-                    description: The Connect magic link url to share with the user.
-                required:
-                  - magic_link_url
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint();
-
-            async function main() {
-              const response = await client.createMagicLink('x');
-
-              console.log(response.magic_link_url);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            from openint import Openint
-
-            client = Openint()
-            response = client.create_magic_link(
-                customer_id="x",
-            )
-            print(response.magic_link_url)
   /customer/{customer_id}/token:
     post:
       operationId: createToken
@@ -1715,6 +1641,7 @@ paths:
                 validity_in_seconds:
                   type: number
                   default: 2592000
+                  description: How long the publishable token and magic link url will be valid for (in seconds) before it expires. By default it will be valid for 30 days unless otherwise specified.
                 connect_options:
                   type: object
                   properties:
@@ -1753,9 +1680,19 @@ paths:
                 properties:
                   token:
                     type: string
-                    description: The authentication token to use for API requests
+                    description: A short-lived publishable authentication token to use for customer api requests from the frontend. This token by default expires in 30 days unless otherwise specified via the validity_in_seconds parameter.
+                  magic_link_url:
+                    type: string
+                    description: A link that can be shared with customers to use @Connect in any browser. This link will expire in 30 days by default unless otherwise specified via the validity_in_seconds parameter.
+                  api_key:
+                    type:
+                      - string
+                      - 'null'
+                    description: A long-lived customer API key to use for API requests. Not meant to be published to the frontend.
                 required:
                   - token
+                  - magic_link_url
+                  - api_key
         '400':
           description: Invalid input data
           content:
@@ -1785,7 +1722,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               const response = await client.createToken('x');
@@ -1796,9 +1735,12 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.create_token(
                 customer_id="x",
             )
@@ -1875,7 +1817,9 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
               const response = await client.checkConnection('conn_');
@@ -1886,13 +1830,72 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.check_connection(
                 "conn_",
             )
             print(response.id)
+  /customers:
+    put:
+      operationId: upsertCustomer
+      summary: Upsert Customer
+      description: Create or update a customer
+      security:
+        - token: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                metadata:
+                  type: object
+                  additionalProperties: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/core.customer_select'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
   /webhook/{connector_name}:
     post:
       operationId: handleWebhook
@@ -1945,6 +1948,99 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /ai/message_template:
+    get:
+      operationId: messageTemplate
+      summary: Get Message Template
+      description: Get a message template for an AI agent
+      security:
+        - ApiKey: []
+        - CustomerToken: []
+      parameters:
+        - in: query
+          name: language
+          schema:
+            type: string
+            enum:
+              - javascript
+        - in: query
+          name: useEnvironmentVariables
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: customerId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  language:
+                    type: string
+                  template:
+                    type: string
+                required:
+                  - language
+                  - template
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint();
+
+            async function main() {
+              const response = await client.getMessageTemplate({ customerId: 'customerId' });
+
+              console.log(response.language);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            from openint import Openint
+
+            client = Openint()
+            response = client.get_message_template(
+                customer_id="customerId",
+            )
+            print(response.language)
 components:
   securitySchemes:
     token:
@@ -1999,6 +2095,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2090,6 +2189,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2318,6 +2420,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2409,6 +2514,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2500,6 +2608,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2801,6 +2912,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -2892,6 +3006,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
             api_base_url_for_customer:
               type: string
               pattern: https?:\/\/.*
@@ -2988,6 +3105,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3079,6 +3199,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3170,6 +3293,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3261,6 +3387,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3352,6 +3481,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3501,6 +3633,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3592,6 +3727,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3683,6 +3821,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3774,6 +3915,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3865,6 +4009,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -3956,6 +4103,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -4047,6 +4197,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -4273,6 +4426,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -4468,6 +4624,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -4559,6 +4718,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
             api_domain:
               type: string
               pattern: https?:\/\/.*
@@ -4815,6 +4977,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -4951,6 +5116,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -5042,6 +5210,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -5167,6 +5338,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -5258,6 +5432,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -5633,6 +5810,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -5807,6 +5987,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
           required:
             - oauth
       required:
@@ -6023,6 +6206,9 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
             extension:
               type: string
               pattern: https:\/\/accounts\.zoho\.([a-z.]+)\/
@@ -6385,6 +6571,41 @@ components:
         - yodlee
         - zoho-desk
       title: connector
+    core.customer_select:
+      type: object
+      properties:
+        org_id:
+          type: string
+        id:
+          type: string
+        api_key:
+          type:
+            - string
+            - 'null'
+        metadata:
+          anyOf:
+            - anyOf:
+                - type: string
+                - type: number
+                - type: boolean
+                - type: 'null'
+            - type: object
+              additionalProperties: {}
+            - type: array
+              items: {}
+            - type: 'null'
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      required:
+        - org_id
+        - id
+        - api_key
+        - metadata
+        - created_at
+        - updated_at
+      title: customer_select
     core.integration_select:
       type: object
       properties:
