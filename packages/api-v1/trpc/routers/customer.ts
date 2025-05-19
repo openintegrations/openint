@@ -1,6 +1,8 @@
-import {ilike, or, schema, sql} from '@openint/db'
+import {dbUpsertOne, ilike, or, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {
   formatListResponse,
   zListParams,
@@ -8,6 +10,45 @@ import {
 } from './utils/pagination'
 
 export const customerRouter = router({
+  upsertCustomer: orgProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/customers',
+        description: 'Create or update a customer',
+        summary: 'Upsert Customer',
+      },
+    })
+    .input(
+      z.object({
+        id: z.string().optional(),
+        metadata: z.record(z.unknown()).optional(),
+      }),
+    )
+    .output(core.customer_select)
+    .mutation(async ({ctx, input}) => {
+      const [customer] = await dbUpsertOne(
+        ctx.db,
+        schema.customer,
+        {
+          org_id: ctx.viewer.orgId,
+          id: input.id,
+          metadata: input.metadata ?? null,
+          api_key: `key_cus_${makeUlid()}`,
+        },
+        {
+          keyColumns: ['org_id', 'id'],
+          insertOnlyColumns: ['api_key'],
+        },
+      ).returning()
+
+      if (!customer) {
+        throw new Error('Failed to upsert customer')
+      }
+
+      return customer
+    }),
+
   listCustomers: orgProcedure
     .meta({
       openapi: {

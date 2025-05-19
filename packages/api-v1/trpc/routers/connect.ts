@@ -11,7 +11,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {getBaseURLs, resolveRoute} from '@openint/env'
+import {envRequired, getBaseURLs, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {
@@ -32,57 +32,6 @@ import {md} from './utils/md'
 import {zConnectionId} from './utils/types'
 
 export const connectRouter = router({
-  // TODO: Should these all be scoped under `/connect` instead?
-  createMagicLink: orgProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/customer/{customer_id}/magic-link',
-        description:
-          'Create a @Connect magic link that is ready to be shared with customers who want to use @Connect',
-        summary: 'Create Magic Link',
-      },
-    })
-    .input(connectRouterModels.getMagicLinkInput.optional())
-    .output(
-      z.object({
-        magic_link_url: z
-          .string()
-          .describe('The Connect magic link url to share with the user.'),
-      }),
-    )
-    .query(async ({ctx, input}) => {
-      // TODO: replace with new signing and persisting mechanism
-      const jwt = makeJwtClient({
-        secretOrPublicKey: process.env['JWT_SECRET']!,
-      })
-      if (!input || !input.customer_id) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message:
-            'Missing customer_id in path /customer/{customer_id}/magic-link',
-        })
-      }
-      const token = await jwt.signToken(
-        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-          connectOptions: input.connect_options,
-        },
-      )
-
-      const url = new URL(...resolveRoute('/connect', null))
-      url.searchParams.set('token', token)
-      Object.entries(input.connect_options ?? {}).forEach(([key, value]) => {
-        if (value && typeof value === 'string') {
-          url.searchParams.set(key, value)
-        }
-      })
-
-      return {
-        magic_link_url: url.toString(),
-      }
-    }),
   createToken: orgProcedure
     .meta({
       openapi: {
@@ -99,14 +48,17 @@ export const connectRouter = router({
         token: z
           .string()
           .describe('The authentication token to use for API requests'),
+        magic_link_url: z
+          .string()
+          .describe(
+            'The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package.',
+          ),
       }),
     )
     .query(async ({ctx, input}) => {
-      const jwt = makeJwtClient({
-        secretOrPublicKey: process.env['JWT_SECRET']!,
-      })
+      const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
 
-      if (!input || !input.customer_id) {
+      if (!input.customer_id) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Missing customer_id in path /customer/{customer_id}/token',
@@ -114,14 +66,24 @@ export const connectRouter = router({
       }
 
       const token = await jwt.signToken(
-        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
+        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id}),
         {
           validityInSeconds: input.validity_in_seconds,
           connectOptions: input.connect_options,
         },
       )
+      const url = new URL(...resolveRoute('/connect', null))
+      url.searchParams.set('token', token)
+      Object.entries(input.connect_options ?? {}).forEach(([key, value]) => {
+        if (value && typeof value === 'string') {
+          url.searchParams.set(key, value)
+        }
+      })
 
-      return {token}
+      return {
+        token,
+        magic_link_url: url.toString(),
+      }
     }),
   preConnect: customerProcedure
     .meta({
