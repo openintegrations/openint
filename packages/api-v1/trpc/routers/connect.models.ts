@@ -31,26 +31,18 @@ export const zConnectOptions = z.object({
 })
 
 export const connectRouterModels = {
-  getMagicLinkInput: z.object({
+  createTokenInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},
-      description: 'The unique ID of the customer to create the magic link for',
+      description: 'The unique ID of the customer to create the token for',
     }),
     validity_in_seconds: z
       .number()
       .optional()
       .default(2592000)
       .describe(
-        'How long the magic link will be valid for (in seconds) before it expires',
+        'How long the publishable token and magic link url will be valid for (in seconds) before it expires. By default it will be valid for 30 days unless otherwise specified.',
       ),
-    connect_options: zConnectOptions.optional(),
-  }),
-  createTokenInput: z.object({
-    customer_id: zCustomerId.openapi({
-      param: {in: 'path', name: 'customer_id'},
-      description: 'The unique ID of the customer to create the token for',
-    }),
-    validity_in_seconds: z.number().optional().default(2592000),
     connect_options: zConnectOptions.optional(),
   }),
 }
