@@ -460,22 +460,22 @@ export const event = pgTable(
     pgPolicy('org_append', {
       to: 'org',
       for: 'insert',
-      withCheck: sql`org_id = jwt_org_id()`,
+      withCheck: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('org_member_append', {
       to: 'authenticated',
       for: 'insert',
       withCheck: sql`
-        org_id = public.jwt_org_id()
-        AND user_id = public.jwt_sub()
+        org_id = public.jwt_org_id ()
+        AND user_id = public.jwt_sub ()
       `,
     }),
     pgPolicy('customer_append', {
       to: 'customer',
       for: 'insert',
       withCheck: sql`
-        org_id = public.jwt_org_id()
-        AND customer_id = public.jwt_customer_id()
+        org_id = public.jwt_org_id ()
+        AND customer_id = public.jwt_customer_id ()
       `,
     }),
   ],
@@ -536,7 +536,10 @@ export const customer = pgTable(
     org_id: varchar()
       .notNull()
       .references(() => organization.id),
-    id: varchar().default("concat('cus_', generate_ulid())").notNull(),
+    id: varchar()
+      .default(sql`concat('cus_', generate_ulid ())`)
+      .notNull(),
+    api_key: varchar().unique(),
     metadata: jsonb().$type<any>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
