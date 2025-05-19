@@ -14,7 +14,7 @@ export const customerRouter = router({
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/customers/{id}',
+        path: '/customers',
         description: 'Create or update a customer',
         summary: 'Upsert Customer',
       },
