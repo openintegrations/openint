@@ -1,7 +1,5 @@
 import type {JsonConnectorDef} from '../schema'
 
-import {z} from '@openint/util/zod-utils'
-
 export default {
   audience: ['business'],
   verticals: ['accounting'],

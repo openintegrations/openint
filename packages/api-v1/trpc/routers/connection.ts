@@ -97,9 +97,12 @@ export const connectionRouter = router({
         return expandConnection(connection!, input.expand)
       }
 
-      const {status, status_message} = await checkConnection(connection, ctx)
-      connection.status = status
-      connection.status_message = status_message ?? null
+      const res = await checkConnection(connection, ctx)
+      connection.status = res.status
+      connection.status_message = res.status_message ?? null
+      if ('settings' in res) {
+        connection.settings = res.settings
+      }
 
       return expandConnection(connection!, input.expand)
     }),
@@ -133,6 +136,7 @@ export const connectionRouter = router({
         search_query: z.string().optional().openapi({
           description: 'Search query for the connection list',
         }),
+        refresh_policy: zRefreshPolicy.optional().default('none'),
       }),
     )
     .output(
@@ -176,6 +180,31 @@ export const connectionRouter = router({
         limit,
         offset,
       })
+
+      if (input.refresh_policy !== 'none') {
+        await Promise.all(
+          res.map(async (connection) => {
+            if (!connectionCanBeChecked(connection)) {
+              return
+            }
+
+            if (
+              input.refresh_policy === 'auto' &&
+              !connectionExpired(connection)
+            ) {
+              return
+            }
+
+            const res = await checkConnection(connection, ctx)
+            if ('settings' in res) {
+              connection.settings = res.settings
+            }
+            connection.status = res.status
+            connection.status_message = res.status_message ?? null
+          }),
+        )
+      }
+
       if (
         ctx.viewer.orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' &&
         res.length === 0
