@@ -28,7 +28,7 @@ export const connection = pgTable(
   'connection',
   {
     id: varchar()
-      .default("concat('conn_', generate_ulid())")
+      .default(sql`concat('conn_', generate_ulid ())`)
       .primaryKey()
       // .$type<ZId('conn')>()
       .notNull(),
@@ -156,7 +156,7 @@ export const pipeline = pgTable(
   'pipeline',
   {
     id: varchar()
-      .default("concat('pipe_', generate_ulid())")
+      .default(sql`concat('pipe_', generate_ulid ())`)
       .primaryKey()
       .notNull(),
     source_id: varchar(),
@@ -297,7 +297,7 @@ export const integration = pgTable(
   'integration',
   {
     id: varchar()
-      .default("concat('int_', generate_ulid())")
+      .default(sql`concat('int_', generate_ulid ())`)
       .primaryKey()
       .notNull(),
     connector_name: varchar()
@@ -340,7 +340,7 @@ export const connector_config = pgTable(
   'connector_config',
   {
     id: varchar()
-      .default("concat('ccfg_', generate_ulid())")
+      .default(sql`concat('ccfg_', generate_ulid ())`)
       .primaryKey()
       .notNull(),
     connector_name: varchar()
@@ -410,7 +410,7 @@ export const event = pgTable(
   'event',
   {
     id: varchar()
-      .default("concat('evt_', generate_ulid())")
+      .default(sql`concat('evt_', generate_ulid ())`)
       .primaryKey()
       .notNull(),
     name: varchar().notNull().$type<EventName>(),
@@ -485,7 +485,7 @@ export const organization = pgTable(
   'organization',
   {
     id: varchar()
-      .default("concat('org_', generate_ulid())")
+      .default(sql`concat('org_', generate_ulid ())`)
       .primaryKey()
       .notNull(),
     api_key: varchar().unique(),
