@@ -48,6 +48,11 @@ export const connectRouter = router({
         token: z
           .string()
           .describe('The authentication token to use for API requests'),
+        magic_link_url: z
+          .string()
+          .describe(
+            'The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package.',
+          ),
       }),
     )
     .query(async ({ctx, input}) => {

@@ -2577,10 +2577,15 @@
                     "token": {
                       "type": "string",
                       "description": "The authentication token to use for API requests"
+                    },
+                    "magic_link_url": {
+                      "type": "string",
+                      "description": "The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package."
                     }
                   },
                   "required": [
-                    "token"
+                    "token",
+                    "magic_link_url"
                   ]
                 }
               }

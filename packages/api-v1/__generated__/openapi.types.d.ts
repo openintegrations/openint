@@ -3479,6 +3479,8 @@ export interface operations {
                     "application/json": {
                         /** @description The authentication token to use for API requests */
                         token: string;
+                        /** @description The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package. */
+                        magic_link_url: string;
                     };
                 };
             };
