@@ -1,12 +1,9 @@
 import {beforeAll, describe, expect, test} from '@jest/globals'
-import {CustomerId} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {envRequired} from '@openint/env'
 import Openint from '@openint/sdk'
 import {makeUlid} from '@openint/util/id-utils'
 import {createApp} from '../app'
-import {makeJwtClient} from '../lib/makeJwtClient'
 
 describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const app = createApp({db})
@@ -59,18 +56,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     })
 
     test('client should authenticate as customer with a customer token', async () => {
-      const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-
-      const token = await jwt.signToken(
-        {
-          role: 'customer',
-          customerId: customerId as CustomerId,
-          orgId,
-        },
-        {
-          validityInSeconds: 1000,
-        },
-      )
+      const {token} = await apiKeyClient.createToken(customerId, {})
 
       // console.log('tokenResponse', tokenResponse)
       const tokenClient = new Openint({
