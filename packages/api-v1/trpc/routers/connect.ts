@@ -23,7 +23,9 @@ import {
 import {asCustomerOfOrg, makeJwtClient} from '../../lib/makeJwtClient'
 import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {connection_select_base, core} from '../../models'
+import {onError} from '../error-handling'
 import {connectRouterModels} from './connect.models'
+import {customerRouter} from './customer'
 import {
   checkConnection,
   connectionCanBeChecked,
@@ -47,11 +49,19 @@ export const connectRouter = router({
       z.object({
         token: z
           .string()
-          .describe('The authentication token to use for API requests'),
+          .describe(
+            'A short-lived publishable authentication token to use for customer api requests from the frontend. This token by default expires in 30 days unless otherwise specified via the validity_in_seconds parameter.',
+          ),
         magic_link_url: z
           .string()
           .describe(
-            'The URL to use to open the @Connect modal in a new tab. This URL can be used to embed @Connect in your application via the `@openint/connect` npm package.',
+            'A link that can be shared with customers to use @Connect in any browser. This link will expire in 30 days by default unless otherwise specified via the validity_in_seconds parameter.',
+          ),
+        api_key: z
+          .string()
+          .nullable()
+          .describe(
+            'A long-lived customer API key to use for API requests. Not meant to be published to the frontend.',
           ),
       }),
     )
@@ -80,9 +90,15 @@ export const connectRouter = router({
         }
       })
 
+      const customerCaller = customerRouter.createCaller(ctx, {onError})
+      const customer = await customerCaller.upsertCustomer({
+        id: input.customer_id,
+      })
+
       return {
         token,
         magic_link_url: url.toString(),
+        api_key: customer.api_key,
       }
     }),
   preConnect: customerProcedure

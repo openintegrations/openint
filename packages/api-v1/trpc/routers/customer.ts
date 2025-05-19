@@ -1,3 +1,4 @@
+import {TRPCError} from '@trpc/server'
 import {dbUpsertOne, ilike, or, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
@@ -43,7 +44,10 @@ export const customerRouter = router({
       ).returning()
 
       if (!customer) {
-        throw new Error('Failed to upsert customer')
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to upsert customer',
+        })
       }
 
       return customer
