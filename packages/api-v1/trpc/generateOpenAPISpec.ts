@@ -12,18 +12,11 @@ export function generateOpenAPISpec({
     openApiVersion: '3.1.0',
     baseUrl: baseURL,
     securitySchemes: {
-      ApiKey: {
+      token: {
         type: 'http',
         scheme: 'bearer',
         description:
-          'Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`',
-      },
-      CustomerToken: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description:
-          'Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`',
+          'Organization API Key available in the settings page of the OpenInt Console or Customer API Key or Token Customer authentication token created using the create customer token API. It is passed in the `authorization` header with format: `Bearer {token}`',
       },
     },
   })
