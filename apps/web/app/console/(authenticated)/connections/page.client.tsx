@@ -50,10 +50,24 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     header: 'Created At',
     accessorKey: 'created_at',
+    cell: ({row}) => {
+      return (
+        <span className="text-sm">
+          {formatIsoDateString(row.original.created_at)}
+        </span>
+      )
+    },
   },
   {
     header: 'Updated At',
     accessorKey: 'updated_at',
+    cell: ({row}) => {
+      return (
+        <span className="text-sm">
+          {formatIsoDateString(row.original.updated_at)}
+        </span>
+      )
+    },
   },
 ]
 
