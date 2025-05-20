@@ -49,13 +49,77 @@ paths:
                   items:
                     type: array
                     items:
-                      allOf:
-                        - $ref: '#/components/schemas/core.connector'
+                      type: object
                       properties:
+                        name:
+                          type: string
+                        display_name:
+                          type: string
+                        logo_url:
+                          type: string
+                        stage:
+                          type: string
+                          enum:
+                            - alpha
+                            - beta
+                            - ga
+                            - hidden
+                        platforms:
+                          type: array
+                          items:
+                            type: string
+                            enum:
+                              - web
+                              - mobile
+                              - desktop
+                              - local
+                              - cloud
+                        schemas:
+                          type: object
+                          properties:
+                            connector_config: {}
+                            connection_settings: {}
+                            integration_data: {}
+                            webhook_input: {}
+                            pre_connect_input: {}
+                            connect_input: {}
+                            connect_output: {}
+                          additionalProperties: false
+                        auth_type:
+                          type: string
+                          enum:
+                            - BASIC
+                            - OAUTH1
+                            - OAUTH2
+                            - OAUTH2CC
+                            - API_KEY
+                            - CUSTOM
+                        openint_scopes:
+                          type: array
+                          items:
+                            type: string
+                        scopes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              scope:
+                                type: string
+                              display_name:
+                                type: string
+                              description:
+                                type: string
+                            required:
+                              - scope
+                        has_openint_credentials:
+                          type: boolean
                         integrations:
                           type: array
                           items:
                             $ref: '#/components/schemas/core.integration_select'
+                      required:
+                        - name
+                      title: Connector
                   total:
                     type: integer
                     minimum: 0
@@ -1954,8 +2018,7 @@ paths:
       summary: Get Message Template
       description: Get a message template for an AI agent
       security:
-        - ApiKey: []
-        - CustomerToken: []
+        - token: []
       parameters:
         - in: query
           name: language
@@ -1964,12 +2027,12 @@ paths:
             enum:
               - javascript
         - in: query
-          name: useEnvironmentVariables
+          name: use_environment_variables
           schema:
             type: boolean
             default: false
         - in: query
-          name: customerId
+          name: customer_id
           schema:
             type: string
           required: true
@@ -2023,10 +2086,12 @@ paths:
           source: |-
             import Openint from '@openint/sdk';
 
-            const client = new Openint();
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
 
             async function main() {
-              const response = await client.getMessageTemplate({ customerId: 'customerId' });
+              const response = await client.getMessageTemplate({ customer_id: 'customer_id' });
 
               console.log(response.language);
             }
@@ -2034,11 +2099,14 @@ paths:
             main();
         - lang: Python
           source: |-
+            import os
             from openint import Openint
 
-            client = Openint()
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
             response = client.get_message_template(
-                customer_id="customerId",
+                customer_id="customer_id",
             )
             print(response.language)
 components:
