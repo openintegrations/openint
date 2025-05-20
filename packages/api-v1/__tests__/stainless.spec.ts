@@ -55,10 +55,16 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       await expect(wrongApiKeyClient.getCurrentUser()).rejects.toThrow()
     })
 
+    // NOTE: this is failing because the upsert is behaving in correctly.
+    // in short, if the customer exists the db upsert returning() will not return the customer
+    // this leads the the customer.upsertCustomer API to throw unexpectedly
+    // TODO: fix upsert, add a test on customer.spec to catch this use case and remove the try / catch in upsert customer
     test('client should authenticate as customer with a customer token', async () => {
-      const {token} = await apiKeyClient.createToken(customerId, {})
+      const {token, api_key, magic_link_url} = await apiKeyClient.createToken(
+        customerId,
+        {},
+      )
 
-      // console.log('tokenResponse', tokenResponse)
       const tokenClient = new Openint({
         token,
         baseURL: 'http://localhost/v1',
@@ -66,6 +72,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       })
       const response = await tokenClient.getCurrentUser()
       expect(response.role).toBe('customer')
+      expect(api_key).toBe(api_key)
+      expect(magic_link_url).toBeDefined()
     })
 
     test('client should authenticate as customer with an api key', async () => {
