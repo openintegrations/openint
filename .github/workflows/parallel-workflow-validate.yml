@@ -94,6 +94,13 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - name: Download environment variables
+        run: |
+          npm install --global vercel@latest
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --project v1 --yes
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
+          cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
+
       - name: Check if apps/web build passes without failures
         run: |
           pnpm --dir apps/web build:next
@@ -101,11 +108,15 @@ jobs:
             echo "::error::Web build failed"
             exit 1
           fi
+      - name: Check if kits/connect build passes without failures
+        run: |
           pnpm --dir kits/connect build
           if [ $? -ne 0 ]; then
             echo "::error::Connect build failed"
             exit 1
           fi
+      - name: Check if packages/ui-v1 build passes without failures
+        run: |
           pnpm --dir packages/ui-v1 build-tailwind
           if [ $? -ne 0 ]; then
             echo "::error::CSS build failed"
