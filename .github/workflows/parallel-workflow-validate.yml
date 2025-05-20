@@ -96,7 +96,7 @@ jobs:
         run: pnpm install
       - name: Check if apps/web build passes without failures
         run: |
-          pnpm --dir apps/web build
+          pnpm --dir apps/web build:next
           if [ $? -ne 0 ]; then
             echo "::error::Web build failed"
             exit 1
