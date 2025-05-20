@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {dbUpsertOne, ilike, or, schema, sql} from '@openint/db'
+import {and, dbUpsertOne, eq, ilike, or, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
@@ -43,7 +43,21 @@ export const customerRouter = router({
         },
       ).returning()
 
+      // NOTE: customer may be undefined because the upsert is behaving incorrectly.
+      // in short, if the customer exists the db upsert returning() will not return the customer
+      // this leads the the customer.upsertCustomer API to throw unexpectedly
+      // TODO: fix upsert, add a test on customer.spec to catch this use case and remove the try / catch in upsert customer
+
       if (!customer) {
+        const customerIfExists = await ctx.db.query.customer.findFirst({
+          where: and(
+            eq(schema.customer.id, input.id ?? ''),
+            eq(schema.customer.org_id, ctx.viewer.orgId),
+          ),
+        })
+        if (customerIfExists) {
+          return customerIfExists
+        }
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to upsert customer',

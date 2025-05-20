@@ -2832,33 +2832,9 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: {
-                            name: string;
-                            display_name?: string;
-                            logo_url?: string;
-                            /** @enum {string} */
-                            stage?: "alpha" | "beta" | "ga" | "hidden";
-                            platforms?: ("web" | "mobile" | "desktop" | "local" | "cloud")[];
-                            schemas?: {
-                                connector_config?: unknown;
-                                connection_settings?: unknown;
-                                integration_data?: unknown;
-                                webhook_input?: unknown;
-                                pre_connect_input?: unknown;
-                                connect_input?: unknown;
-                                connect_output?: unknown;
-                            };
-                            /** @enum {string} */
-                            auth_type?: "BASIC" | "OAUTH1" | "OAUTH2" | "OAUTH2CC" | "API_KEY" | "CUSTOM";
-                            openint_scopes?: string[];
-                            scopes?: {
-                                scope: string;
-                                display_name?: string;
-                                description?: string;
-                            }[];
-                            has_openint_credentials?: boolean;
+                        items: ({
                             integrations?: components["schemas"]["core.integration_select"][];
-                        }[];
+                        } & components["schemas"]["core.connector"])[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
                         /** @description Limit the number of items returned */
