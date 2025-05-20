@@ -103,25 +103,15 @@ jobs:
 
       - name: Check if apps/web build passes without failures
         run: |
-          pnpm --dir apps/web build:next
-          if [ $? -ne 0 ]; then
-            echo "::error::Web build failed"
-            exit 1
-          fi
+          ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir apps/web build:next
+
       - name: Check if kits/connect build passes without failures
         run: |
           pnpm --dir kits/connect build
-          if [ $? -ne 0 ]; then
-            echo "::error::Connect build failed"
-            exit 1
-          fi
+
       - name: Check if packages/ui-v1 build passes without failures
         run: |
           pnpm --dir packages/ui-v1 build-tailwind
-          if [ $? -ne 0 ]; then
-            echo "::error::CSS build failed"
-            exit 1
-          fi
 
   typecheck:
     runs-on: ubuntu-latest
