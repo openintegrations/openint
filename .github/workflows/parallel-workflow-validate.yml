@@ -92,6 +92,8 @@ jobs:
         with:
           node-version-file: package.json
           cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Check if apps/web build passes without failures
         run: |
           pnpm --dir apps/web build
@@ -104,6 +106,12 @@ jobs:
             echo "::error::Connect build failed"
             exit 1
           fi
+          pnpm --dir packages/ui-v1 build-tailwind
+          if [ $? -ne 0 ]; then
+            echo "::error::CSS build failed"
+            exit 1
+          fi
+
   typecheck:
     runs-on: ubuntu-latest
     needs: install-dependencies
