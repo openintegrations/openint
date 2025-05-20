@@ -1,14 +1,26 @@
 'use client'
 
+import type {ConnectorName} from '@openint/all-connectors/name'
+import type {Event} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import React from 'react'
-import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CopyID, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
+import {ConnectorLogo} from '@openint/ui-v1/domain-components/ConnectorLogo'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils/dates'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
+
+// Utility function to extract connector name from connection ID
+const extractConnectorName = (connectionId: string): ConnectorName | null => {
+  if (!connectionId || !connectionId.startsWith('conn_')) return null
+
+  const parts = connectionId.split('_')
+  if (parts.length < 2) return null
+
+  return parts[1] as ConnectorName
+}
 
 const columns: Array<ColumnDef<Event>> = [
   {
@@ -168,6 +180,36 @@ export function EventsList() {
                         </h3>
                       </div>
                       <div className="divide-border/40 divide-y">
+                        {(selectedEvent.data as any)?.connection_id && (
+                          <>
+                            <div className="flex px-5 py-3">
+                              <h4 className="text-muted-foreground w-1/3 text-sm">
+                                Connector Name
+                              </h4>
+                              <div className="flex w-2/3 items-center gap-2">
+                                {extractConnectorName(
+                                  (selectedEvent.data as any).connection_id,
+                                ) && (
+                                  <ConnectorLogo
+                                    connectorName={
+                                      extractConnectorName(
+                                        (selectedEvent.data as any)
+                                          .connection_id,
+                                      )!
+                                    }
+                                    width={24}
+                                    height={24}
+                                  />
+                                )}
+                                <p className="text-sm font-medium">
+                                  {extractConnectorName(
+                                    (selectedEvent.data as any).connection_id,
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </>
+                        )}
                         {(selectedEvent.user as any)?.customer_id && (
                           <div className="flex px-5 py-3">
                             <h4 className="text-muted-foreground w-1/3 text-sm">
