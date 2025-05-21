@@ -43,6 +43,7 @@ export const envConfig = {
 
     SLACK_INCOMING_WEBHOOK_URL: z.string().optional(),
     VERCEL_BRANCH_URL: z.string().optional(),
+    AI_ROUTER_URL: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_VERCEL_ENV: z.string().optional(),
@@ -126,6 +127,7 @@ export const envConfig = {
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF:
       process.env['NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF'],
     NEXT_PUBLIC_NODE_ENV: process.env['NEXT_PUBLIC_NODE_ENV'],
+    AI_ROUTER_URL: process.env['AI_ROUTER_URL'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
