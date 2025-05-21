@@ -2,25 +2,17 @@
 
 import type {ConnectorName} from '@openint/all-connectors/name'
 import type {Event} from '@openint/api-v1/models'
+import type {Id} from '@openint/cdk'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
 import React from 'react'
+import {extractId} from '@openint/cdk'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CopyID, useStateFromSearchParams} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {ConnectorLogo} from '@openint/ui-v1/domain-components/ConnectorLogo'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils/dates'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
-
-// Utility function to extract connector name from connection ID
-const extractConnectorName = (connectionId: string): ConnectorName | null => {
-  if (!connectionId || !connectionId.startsWith('conn_')) return null
-
-  const parts = connectionId.split('_')
-  if (parts.length < 2) return null
-
-  return parts[1] as ConnectorName
-}
 
 const columns: Array<ColumnDef<Event>> = [
   {
@@ -187,24 +179,24 @@ export function EventsList() {
                                 Connector Name
                               </h4>
                               <div className="flex w-2/3 items-center gap-2">
-                                {extractConnectorName(
-                                  (selectedEvent.data as any).connection_id,
-                                ) && (
+                                {(selectedEvent.data as any).connection_id && (
                                   <ConnectorLogo
                                     connectorName={
-                                      extractConnectorName(
+                                      extractId(
                                         (selectedEvent.data as any)
-                                          .connection_id,
-                                      )!
+                                          .connection_id as Id['conn'],
+                                      )[1] as ConnectorName
                                     }
                                     width={24}
                                     height={24}
                                   />
                                 )}
                                 <p className="text-sm font-medium">
-                                  {extractConnectorName(
-                                    (selectedEvent.data as any).connection_id,
-                                  )}
+                                  {(selectedEvent.data as any).connection_id &&
+                                    extractId(
+                                      (selectedEvent.data as any)
+                                        .connection_id as Id['conn'],
+                                    )[1]}
                                 </p>
                               </div>
                             </div>
