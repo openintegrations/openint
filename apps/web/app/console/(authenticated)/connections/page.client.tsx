@@ -64,7 +64,9 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
     cell: ({row}) => {
       return (
         <span className="text-sm">
-          {formatIsoDateString(row.original.updated_at)}
+          {(row.original.updated_at &&
+            formatIsoDateString(row.original.updated_at)) ??
+            ''}
         </span>
       )
     },
