@@ -73,6 +73,7 @@ export function expandConnection(
     ...connection,
     connector: getConnectorModelByName(
       connection.connector_name as ConnectorName,
+      {includeSchemas: true},
     ),
   }
 }
