@@ -1,7 +1,7 @@
 'use client'
 
 import type {CustomerId} from '@openint/cdk'
-import type {PreviewView} from '@openint/ui-v1/components/PreviewWindow'
+import type {PreviewViewType} from '@openint/ui-v1/components/PreviewWindow'
 import type {Z} from '@openint/util/zod-utils'
 
 import {useQuery} from '@tanstack/react-query'
@@ -20,15 +20,16 @@ import {useTRPC} from '@/lib-client/TRPCApp'
 type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
 
 // Mapping for URL params
-const viewToParamMap: Record<PreviewView, string> = {
+const viewToParamMap: Record<PreviewViewType, string> = {
   'Magic Link': 'magic_link',
   Embedded: 'embedded',
   Mobile: 'mobile',
   Button: 'button',
 }
-const paramToViewMap: Record<string, PreviewView> = Object.fromEntries(
-  Object.entries(viewToParamMap).map(([k, v]) => [v, k as PreviewView]),
-)
+const paramToViewMap: Record<string, PreviewViewType | undefined> =
+  Object.fromEntries(
+    Object.entries(viewToParamMap).map(([k, v]) => [v, k as PreviewViewType]),
+  )
 
 export function ConfigureConnect() {
   // Initialize with default values from the schema
@@ -73,10 +74,10 @@ export function ConnectEmbedPreview(props: {
   const searchParams = useSearchParams()
 
   const currentViewParam = searchParams.get('view')
-  const currentView: PreviewView =
+  const currentView: PreviewViewType =
     (currentViewParam && paramToViewMap[currentViewParam]) || 'Magic Link'
 
-  const handleViewChange = (newView: PreviewView) => {
+  const handleViewChange = (newView: PreviewViewType) => {
     const newViewParam = viewToParamMap[newView]
     const newSearchParams = new URLSearchParams(searchParams.toString())
     newSearchParams.set('view', newViewParam)
