@@ -50,11 +50,12 @@ export function ConnectButton({
 
     // Cleanup function to close the modal if the component unmounts while modal is open
     return () => {
-      if (modalInstanceRef.current?.getIsOpen()) {
+      if (modalInstanceRef.current) {
         console.log(
-          '[ConnectButton Cleanup]: Component unmounting, ensuring modal is closed.',
+          '[ConnectButton Cleanup]: Component unmounting or props changed, destroying modal.',
         )
-        modalInstanceRef.current.close()
+        modalInstanceRef.current.destroy()
+        modalInstanceRef.current = null // Clear the ref
       }
     }
     // Re-create modal if connectProps change. A more granular dependency array might be needed
