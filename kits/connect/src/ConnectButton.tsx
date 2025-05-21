@@ -27,20 +27,59 @@ export function ConnectButton({
   const [isOpen, setIsOpen] = React.useState(false)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const modalRef = React.useRef<HTMLDivElement>(null)
-  const {token, baseURL, height, width, onEvent, className} = props
 
+  const {token, baseURL, height, width, onEvent, className} = props
+  const connectOptionsString = JSON.stringify(props.connectOptions)
+
+  // Single Effect for Iframe Lifecycle (Creation, Placement, Cleanup)
   React.useEffect(() => {
-    if (!containerRef.current || !isOpen) return
+    console.log(
+      '[ConnectButton IframeEffect]: Running - creating/recreating iframe.',
+    )
+
+    if (!containerRef.current) {
+      console.warn(
+        '[ConnectButton IframeEffect]: containerRef.current is not yet available. Iframe will be placed once it is.',
+      )
+      return
+    }
+
+    // Create the iframe wrapper (which includes the iframe with its src set)
     const iframeWrapper = createConnectIframe(props)
-    containerRef.current.innerHTML = ''
+
+    // Place it into the permanent container within the modal structure
+    console.log(
+      '[ConnectButton IframeEffect]: Clearing container and appending new iframeWrapper.',
+    )
+    containerRef.current.innerHTML = '' // Clear any old iframe
     containerRef.current.appendChild(iframeWrapper)
+    iframeWrapper.style.display = 'block' // Ensure it's visible within its container
+
+    // Cleanup: Remove the iframe from its container when effect re-runs or component unmounts
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+      console.log(
+        '[ConnectButton IframeEffect]: Cleaning up - removing iframeWrapper from container.',
+      )
+      if (
+        containerRef.current &&
+        iframeWrapper.parentNode === containerRef.current
+      ) {
+        containerRef.current.removeChild(iframeWrapper)
       }
     }
-  }, [token, baseURL, className, width, height, onEvent, props, isOpen])
+    // Dependencies: Re-run if these change, indicating the iframe itself needs to be different.
+  }, [
+    token,
+    baseURL,
+    className,
+    width,
+    height,
+    onEvent,
+    connectOptionsString,
+    containerRef,
+  ])
 
+  // Effect for closing modal on outside click or escape key (remains the same)
   React.useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -56,10 +95,18 @@ export function ConnectButton({
       }
     }
     if (isOpen) {
+      console.log('[ConnectButton ModalEffect]: Modal open, adding listeners.')
       document.addEventListener('mousedown', handleOutsideClick)
       document.addEventListener('keydown', handleEscapeKey)
+    } else {
+      console.log(
+        '[ConnectButton ModalEffect]: Modal closed, removing listeners.',
+      )
+      document.removeEventListener('mousedown', handleOutsideClick)
+      document.removeEventListener('keydown', handleEscapeKey)
     }
     return () => {
+      console.log('[ConnectButton ModalEffect]: Cleaning up modal listeners.')
       document.removeEventListener('mousedown', handleOutsideClick)
       document.removeEventListener('keydown', handleEscapeKey)
     }
@@ -179,28 +226,40 @@ export function ConnectButton({
   return (
     <>
       <button
-        onClick={() => setIsOpen(true)}
-        style={{
-          ...styles.button,
+        onClick={() => {
+          console.log(
+            '[ConnectButton Click]: Button clicked, setting isOpen to true.',
+          )
+          setIsOpen(true)
         }}
+        style={styles.button}
         className={className}>
         {text}
       </button>
 
-      {isOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.backdrop} />
-          <div ref={modalRef} style={styles.modalContent}>
-            <div
-              ref={containerRef}
-              style={{
-                ...styles.iframeContainer,
-                height: height || 500,
-              }}
-            />
-          </div>
+      {/* Modal Overlay: always in DOM, visibility controlled by `display` style */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 50,
+          display: isOpen ? 'flex' : 'none', // This is the key for showing/hiding
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <div style={styles.backdrop} />
+        <div ref={modalRef} style={styles.modalContent}>
+          {/* containerRef is where the iframe will be placed and live permanently */}
+          <div
+            ref={containerRef}
+            style={{
+              ...styles.iframeContainer, // Ensure these styles make it display: block or flex
+              height: height || 500,
+              width: width || '100%', // Example, ensure width is handled
+            }}
+          />
         </div>
-      )}
+      </div>
     </>
   )
 }

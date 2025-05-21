@@ -22,7 +22,7 @@ export interface ConnectProps {
   }
 }
 const DEFAULT_HOST = 'https://connect.openint.dev'
-const createMagicLinkUrl = ({
+export const createMagicLinkUrl = ({
   baseURL = DEFAULT_HOST,
   token,
   connectOptions = {},
