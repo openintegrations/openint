@@ -12,7 +12,12 @@ export default {
     token_request_url: 'https://api.linear.app/oauth/token',
     scope_separator: ',',
     params_config: {authorize: {prompt: 'consent'}},
-    openint_scopes: ['read'],
+    openint_default_scopes: ['read'],
+    openint_allowed_scopes: ['read', 'issues:create'],
+    /**
+     * https://linear.app/developers/oauth-2-0-authentication#redirect-user-access-requests-to-linear
+     * Review available scopes and add as necessary
+     */
     scopes: [
       {
         scope: 'read',

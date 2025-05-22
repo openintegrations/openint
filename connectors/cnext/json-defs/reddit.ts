@@ -12,7 +12,8 @@ export default {
     token_request_url: 'https://www.reddit.com/api/v1/access_token',
     scope_separator: ' ',
     params_config: {authorize: {duration: 'permanent'}},
-    openint_scopes: ['wikiread'],
+    openint_default_scopes: ['wikiread'],
+    openint_allowed_scopes: ['wikiread'],
     scopes: [
       {
         scope: 'identity',

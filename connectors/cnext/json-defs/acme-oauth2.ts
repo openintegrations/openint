@@ -15,7 +15,8 @@ export default {
     revocation_request_url: '{{baseURLs.api}}/acme-oauth2/token/revoke',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: ['read:profile'],
+    openint_default_scopes: ['read:profile'],
+    openint_allowed_scopes: ['read:profile'],
     scopes: [
       {
         scope: 'read:profile',

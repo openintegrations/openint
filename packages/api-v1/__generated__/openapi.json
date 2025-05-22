@@ -9754,7 +9754,13 @@
               "CUSTOM"
             ]
           },
-          "openint_scopes": {
+          "openint_default_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "openint_allowed_scopes": {
             "type": "array",
             "items": {
               "type": "string"

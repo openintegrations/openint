@@ -18,37 +18,41 @@ export default {
         prompt: 'consent',
       },
     },
-    openint_scopes: ['https://www.googleapis.com/auth/documents.currentonly'],
+    openint_default_scopes: [
+      'https://www.googleapis.com/auth/drive',
+      'https://www.googleapis.com/auth/drive.readonly',
+    ],
+    openint_allowed_scopes: [
+      'https://www.googleapis.com/auth/drive',
+      'https://www.googleapis.com/auth/drive.readonly',
+    ],
+    /**
+     * We can review the available scopes here:
+     * https://developers.google.com/identity/protocols/oauth2/scopes#docs
+     */
     scopes: [
       {
         scope: 'https://www.googleapis.com/auth/documents',
         description:
-          'Provides full read/write access to Google Docs documents. Allows viewing, creating, editing, and deleting documents.',
+          'See, edit, create, and delete all your Google Docs documents',
       },
       {
         scope: 'https://www.googleapis.com/auth/documents.readonly',
-        description:
-          'Provides read-only access to Google Docs documents. Allows viewing document content and metadata but no modifications.',
-      },
-      {
-        scope: 'https://www.googleapis.com/auth/drive.file',
-        description:
-          'Provides access to Google Docs files that the app has created or been explicitly granted access to. Limited to specific files rather than all documents.',
-      },
-      {
-        scope: 'https://www.googleapis.com/auth/drive.readonly',
-        description:
-          'Provides read-only access to all Google Drive files including Docs, but no modifications allowed. Wider access than drive.file but limited to viewing.',
+        description: 'See all your Google Docs documents',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive',
         description:
-          'Provides full read/write access to all Google Drive files including Docs. The broadest permission for Docs/Drive operations.',
+          'See, edit, create, and delete all of your Google Drive files',
       },
       {
-        scope: 'https://www.googleapis.com/auth/documents.currentonly',
+        scope: 'https://www.googleapis.com/auth/drive.file',
         description:
-          'Provides access only to the currently open Google Docs document (when used with Docs add-ons). Most limited scope for temporary access.',
+          'See, edit, create, and delete only the specific Google Drive files you use with this app',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive.readonly',
+        description: 'See and download all your Google Drive files',
       },
     ],
   },
