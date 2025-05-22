@@ -129,7 +129,7 @@ export const connectionRouter = router({
         include_secrets: zIncludeSecrets.optional().openapi({
           description: 'Include secret credentials in the response',
         }),
-        expand: z.array(zConnectionExpandOption).default([]).openapi({
+        expand: zCoerceArray(zConnectionExpandOption).default([]).openapi({
           description: 'Expand the response with additional optionals',
         }),
         search_query: z.string().optional().openapi({
