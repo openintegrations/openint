@@ -49,77 +49,13 @@ paths:
                   items:
                     type: array
                     items:
-                      type: object
+                      allOf:
+                        - $ref: '#/components/schemas/core.connector'
                       properties:
-                        name:
-                          type: string
-                        display_name:
-                          type: string
-                        logo_url:
-                          type: string
-                        stage:
-                          type: string
-                          enum:
-                            - alpha
-                            - beta
-                            - ga
-                            - hidden
-                        platforms:
-                          type: array
-                          items:
-                            type: string
-                            enum:
-                              - web
-                              - mobile
-                              - desktop
-                              - local
-                              - cloud
-                        schemas:
-                          type: object
-                          properties:
-                            connector_config: {}
-                            connection_settings: {}
-                            integration_data: {}
-                            webhook_input: {}
-                            pre_connect_input: {}
-                            connect_input: {}
-                            connect_output: {}
-                          additionalProperties: false
-                        auth_type:
-                          type: string
-                          enum:
-                            - BASIC
-                            - OAUTH1
-                            - OAUTH2
-                            - OAUTH2CC
-                            - API_KEY
-                            - CUSTOM
-                        openint_scopes:
-                          type: array
-                          items:
-                            type: string
-                        scopes:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              scope:
-                                type: string
-                              display_name:
-                                type: string
-                              description:
-                                type: string
-                            required:
-                              - scope
-                        has_openint_credentials:
-                          type: boolean
                         integrations:
                           type: array
                           items:
                             $ref: '#/components/schemas/core.integration_select'
-                      required:
-                        - name
-                      title: Connector
                   total:
                     type: integer
                     minimum: 0
