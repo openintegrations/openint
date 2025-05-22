@@ -183,7 +183,11 @@ export const zOAuthConfig = z.object({
     .array(z.string())
     .optional()
     .describe('Scopes required by the Connector for OAuth requests'),
-  openint_scopes: z
+  openint_default_scopes: z
+    .array(z.string())
+    .optional()
+    .describe('Base scopes for the OpenInt platform connector app'),
+  openint_allowed_scopes: z
     .array(z.string())
     .optional()
     .describe('Default scopes for the OpenInt platform connector app'),

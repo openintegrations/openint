@@ -12,7 +12,12 @@ export default {
     token_request_url: 'https://slack.com/api/oauth.v2.access',
     scope_separator: ',',
     params_config: {},
-    openint_scopes: ['users:read'],
+    openint_default_scopes: ['users:read'],
+    openint_allowed_scopes: ['users:read'],
+    /**
+     * Go to: https://api.slack.com/apps -> select openint
+     * Add the scopes as necessary
+     */
     scopes: [
       {
         scope: 'app_mentions:read',

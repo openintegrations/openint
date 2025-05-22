@@ -18,47 +18,62 @@ export default {
         prompt: 'consent',
       },
     },
-    openint_scopes: ['https://www.googleapis.com/auth/drive.metadata.readonly'],
+    openint_default_scopes: [
+      'https://www.googleapis.com/auth/drive.appdata',
+      'https://www.googleapis.com/auth/drive.file',
+    ],
+    openint_allowed_scopes: [
+      'https://www.googleapis.com/auth/drive.appdata',
+      'https://www.googleapis.com/auth/drive.file',
+    ],
+    /**
+     * We can review the available scopes here:
+     * https://developers.google.com/identity/protocols/oauth2/scopes#drive
+     */
     scopes: [
       {
         scope: 'https://www.googleapis.com/auth/drive',
         description:
-          "Full, permissive scope to access all of a user's Google Drive files including the ability to read, modify, create, and delete all files and file metadata, including shared files.",
-      },
-      {
-        scope: 'https://www.googleapis.com/auth/drive.file',
-        description:
-          'Provides access to only the files that the app has created or opened, and requires explicit user action to select files. Cannot access existing files unless the user selects them.',
+          'See, edit, create, and delete all of your Google Drive files',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.appdata',
         description:
-          'Provides access to application-specific data stored in Google Drive (in the appdata folder). Files created with this scope are hidden from the user and other apps by default.',
+          'See, create, and delete its own configuration data in your Google Drive',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive.apps.readonly',
+        description: 'View your Google Drive apps',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive.file',
+        description:
+          'See, edit, create, and delete only the specific Google Drive files you use with this app',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive.meet.readonly',
+        description:
+          'See and download your Google Drive files that were created or edited by Google Meet',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.metadata',
-        description:
-          'Provides read-only access to file metadata (such as titles, parents, and properties) but does not allow access to file content. Can view file information but cannot download or modify content.',
+        description: 'View and manage metadata of files in your Google Drive',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        description:
-          'Provides read-only access to file metadata (titles, parents, and properties) without the ability to view or download file content. The most restricted metadata-only access.',
+        description: 'See information about your Google Drive files',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.photos.readonly',
-        description:
-          "Provides read-only access to the user's Google Photos videos and photos stored in Google Drive (specialized for media files).",
+        description: 'View the photos, videos and albums in your Google Photos',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.readonly',
-        description:
-          "Provides read-only access to all of a user's Google Drive files, including file content and metadata, but no modification capabilities.",
+        description: 'See and download all your Google Drive files',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.scripts',
-        description:
-          'Provides access to Google Apps Script projects stored in Google Drive, allowing creation, modification, and execution of scripts.',
+        description: "Modify your Google Apps Script scripts' behavior",
       },
     ],
   },

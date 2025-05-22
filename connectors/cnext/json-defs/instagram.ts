@@ -12,7 +12,8 @@ export default {
     token_request_url: 'https://api.instagram.com/oauth/access_token',
     scope_separator: ',',
     params_config: {},
-    openint_scopes: ['instagram_basic'],
+    openint_default_scopes: ['instagram_basic'],
+    openint_allowed_scopes: ['instagram_basic', 'user_profile', 'user_media'],
     scopes: [
       {
         scope: 'user_profile',

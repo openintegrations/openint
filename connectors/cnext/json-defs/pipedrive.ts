@@ -14,7 +14,8 @@ export default {
     token_request_url: 'https://oauth.pipedrive.com/oauth/token',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: ['base'],
+    openint_default_scopes: ['base'],
+    openint_allowed_scopes: ['base'],
     scopes: [
       {
         scope: 'base',

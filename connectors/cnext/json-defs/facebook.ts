@@ -12,7 +12,8 @@ export default {
     token_request_url: 'https://graph.facebook.com/v15.0/oauth/access_token',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: ['email'],
+    openint_default_scopes: ['email'],
+    openint_allowed_scopes: ['email'],
     scopes: [
       {
         scope: 'email',

@@ -18,7 +18,8 @@ export default {
         audience: 'https://api.lever.co/v1',
       },
     },
-    openint_scopes: ['read:applications'],
+    openint_default_scopes: ['read:applications'],
+    openint_allowed_scopes: ['read:applications'],
     scopes: [
       {
         scope: 'read',

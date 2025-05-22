@@ -15,7 +15,8 @@ export default {
       authorize: {response_type: 'code'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_scopes: ['read:user'],
+    openint_default_scopes: ['read:user'],
+    openint_allowed_scopes: ['read:user'],
     scopes: [
       {
         scope: 'read:user',

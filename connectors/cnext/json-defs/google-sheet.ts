@@ -18,34 +18,41 @@ export default {
         prompt: 'consent',
       },
     },
-    openint_scopes: [
-      'https://www.googleapis.com/auth/spreadsheets.currentonly',
+    openint_default_scopes: [
+      'https://www.googleapis.com/auth/drive.appdata',
+      'https://www.googleapis.com/auth/drive.file',
     ],
+    openint_allowed_scopes: [
+      'https://www.googleapis.com/auth/drive.appdata',
+      'https://www.googleapis.com/auth/drive.file',
+    ],
+    /**
+     * We can review the available scopes here:
+     * https://developers.google.com/identity/protocols/oauth2/scopes#sheets
+     */
     scopes: [
       {
-        scope: 'https://www.googleapis.com/auth/spreadsheets',
+        scope: 'https://www.googleapis.com/auth/drive',
         description:
-          'Full access to read, write, and modify all Google Sheets and their properties. This includes creating, deleting, and sharing spreadsheets.',
-      },
-      {
-        scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
-        description:
-          'Read-only access to view Google Sheets and their properties, but cannot make any changes or access drive metadata.',
+          'See, edit, create, and delete all of your Google Drive files',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.file',
         description:
-          'Access to only Google Sheets files that the app has created or been explicitly opened by the user. Cannot access all user spreadsheets.',
+          'See, edit, create, and delete only the specific Google Drive files you use with this app',
       },
       {
         scope: 'https://www.googleapis.com/auth/drive.readonly',
-        description:
-          "Read-only access to all Google Sheets files in the user's Drive, but cannot make modifications.",
+        description: 'See and download all your Google Drive files',
       },
       {
-        scope: 'https://www.googleapis.com/auth/spreadsheets.currentonly',
+        scope: 'https://www.googleapis.com/auth/spreadsheets',
         description:
-          'Access limited to only the currently opened spreadsheet. Cannot access other spreadsheets or perform drive-level operations.',
+          'See, edit, create, and delete all your Google Sheets spreadsheets',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+        description: 'See all your Google Sheets spreadsheets',
       },
     ],
   },
