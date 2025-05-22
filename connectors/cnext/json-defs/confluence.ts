@@ -14,46 +14,83 @@ export default {
     params_config: {
       authorize: {audience: 'api.atlassian.com', prompt: 'consent'},
     },
-    openint_scopes: ['read:confluence-user'],
+    openint_default_scopes: ['read:confluence-user', 'read:confluence-groups'],
+    openint_allowed_scopes: [
+      'read:confluence-user',
+      'read:confluence-groups',
+      'write:confluence-content',
+    ],
+    /**
+     * Go to: https://developer.atlassian.com/console/myapps/
+     * Select OpenInt -> Permissions -> Click 'Config..' for Confluence
+     * Add the scopes as necessary
+     */
     scopes: [
-      {
-        scope: 'read:confluence-content',
-        description:
-          'Allows read-only access to Confluence content including pages, blog posts, and attachments',
-      },
       {
         scope: 'write:confluence-content',
         description:
-          'Provides read and write access to Confluence content including creating, updating, and deleting pages, blog posts, and attachments',
+          'Permits the creation of pages, blogs, comments and questions',
       },
       {
-        scope: 'read:confluence-space',
+        scope: 'read:confluence-space.summary',
+        description: 'Read a summary of space information without expansions',
+      },
+      {
+        scope: 'write:confluence-space',
+        description: 'Create, update and delete space information',
+      },
+      {
+        scope: 'write:confluence-file',
+        description: 'Upload attachments',
+      },
+      {
+        scope: 'read:confluence-props',
+        description: 'Read content properties',
+      },
+      {
+        scope: 'write:confluence-props',
+        description: 'Write content properties',
+      },
+      {
+        scope: 'manage:confluence-configuration',
+        description: 'Manage global settings',
+      },
+      {
+        scope: 'read:confluence-content.all',
         description:
-          'Grants read-only access to space information and metadata',
+          'Read all content, including content body (expansions permitted). Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary',
+      },
+      {
+        scope: 'read:confluence-content.summary',
+        description:
+          'Read a summary of the content, which is the content without expansions. Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary',
+      },
+      {
+        scope: 'search:confluence',
+        description:
+          'Search Confluence. Note, APIs using this scope may also return data allowed by read:confluence-space.summary and read:confluence-content.summary. However, this scope is not a substitute for read:confluence-space.summary or read:confluence-content.summary',
+      },
+      {
+        scope: 'read:confluence-content.permission',
+        description: 'View content permission in Confluence',
       },
       {
         scope: 'read:confluence-user',
         description:
-          'Provides read-only access to basic user profile information',
-      },
-      {
-        scope: 'read:confluence-props',
-        description: 'Allows reading content properties and metadata',
-      },
-      {
-        scope: 'write:confluence-props',
-        description:
-          'Allows reading and writing content properties and metadata',
+          'View user information in Confluence that you have access to, including usernames, email adresses and profile pictures',
       },
       {
         scope: 'read:confluence-groups',
-        description:
-          'Provides read-only access to group membership information',
+        description: 'Permits retrieval of user groups',
       },
       {
-        scope: 'manage:confluence-space',
+        scope: 'write:confluence-groups',
+        description: 'Permits creation, removal and update of user groups',
+      },
+      {
+        scope: 'readonly:content.attachment:confluence',
         description:
-          'Grants full control over spaces including permissions and settings',
+          'Download attachments of a Confluence page or blogpost that you have access to',
       },
     ],
   },

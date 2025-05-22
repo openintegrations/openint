@@ -15,7 +15,8 @@ export default {
       authorize: {response_type: 'code', scope: 'public_api'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_scopes: ['contacts.read'],
+    openint_default_scopes: ['contacts.read'],
+    openint_allowed_scopes: ['contacts.read'],
     scopes: [
       {
         scope: 'public_api',

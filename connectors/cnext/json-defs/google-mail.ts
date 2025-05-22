@@ -18,47 +18,78 @@ export default {
         prompt: 'consent',
       },
     },
-    openint_scopes: ['https://www.googleapis.com/auth/gmail.metadata'],
+    openint_default_scopes: ['https://www.googleapis.com/auth/gmail.metadata'],
+    openint_allowed_scopes: ['https://www.googleapis.com/auth/gmail.metadata'],
+    /**
+     * We can review the available scopes here:
+     * https://developers.google.com/identity/protocols/oauth2/scopes#gmail
+     */
     scopes: [
       {
-        scope: 'https://www.googleapis.com/auth/gmail.readonly',
+        scope: 'https://mail.google.com/',
         description:
-          "Allows read-only access to the user's Gmail data, including viewing messages and threads but not making any changes.",
+          'Read, compose, send, and permanently delete all your email from Gmail',
       },
       {
-        scope: 'https://www.googleapis.com/auth/gmail.send',
+        scope:
+          'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
         description:
-          'Allows sending messages only, without access to read, modify, or delete messages.',
+          'Manage drafts and send emails when you interact with the add-on',
+      },
+      {
+        scope:
+          'https://www.googleapis.com/auth/gmail.addons.current.message.action',
+        description:
+          'View your email messages when you interact with the add-on',
+      },
+      {
+        scope:
+          'https://www.googleapis.com/auth/gmail.addons.current.message.metadata',
+        description:
+          'View your email message metadata when the add-on is running',
+      },
+      {
+        scope:
+          'https://www.googleapis.com/auth/gmail.addons.current.message.readonly',
+        description: 'View your email messages when the add-on is running',
       },
       {
         scope: 'https://www.googleapis.com/auth/gmail.compose',
-        description:
-          "Allows creating, reading, and sending messages (including drafts), but doesn't allow access to existing messages in the inbox.",
+        description: 'Manage drafts and send emails',
       },
       {
         scope: 'https://www.googleapis.com/auth/gmail.insert',
-        description:
-          "Allows inserting messages into the user's mailbox (e.g., importing email) but doesn't allow reading or modifying existing messages.",
+        description: 'Add emails into your Gmail mailbox',
       },
       {
         scope: 'https://www.googleapis.com/auth/gmail.labels',
-        description:
-          'Allows creating, reading, and modifying labels only, without access to message content.',
+        description: 'See and edit your email labels',
       },
       {
         scope: 'https://www.googleapis.com/auth/gmail.metadata',
         description:
-          'Allows access to message metadata (headers, labels) but not the message body or attachments. This is the most limited read-only scope.',
+          'View your email message metadata such as labels and headers, but not the email body',
       },
       {
         scope: 'https://www.googleapis.com/auth/gmail.modify',
-        description:
-          'Allows reading, sending, deleting, and modifying messages and threads (includes all actions of readonly, send, and compose).',
+        description: 'Read, compose, and send emails from your Gmail account',
       },
       {
-        scope: 'https://mail.google.com/',
+        scope: 'https://www.googleapis.com/auth/gmail.readonly',
+        description: 'View your email messages and settings',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/gmail.send',
+        description: 'Send email on your behalf',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/gmail.settings.basic',
         description:
-          "Full access to the user's Gmail account, including all read and write operations. Equivalent to gmail.modify plus additional capabilities.",
+          'See, edit, create, or change your email settings and filters in Gmail',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/gmail.settings.sharing',
+        description: 'Manage Gmail sharing settings',
       },
     ],
   },

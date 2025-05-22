@@ -20,7 +20,7 @@ interface Scope {
 }
 
 interface OAuthFormContext {
-  openint_scopes: string[]
+  openint_allowed_scopes: string[]
   scopes: Scope[]
   initialData: ConnectorConfig
   connector: Core['connector']
@@ -28,7 +28,7 @@ interface OAuthFormContext {
 
 export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
   const {formData, onChange, formContext} = props
-  const {openint_scopes, scopes, initialData, connector} =
+  const {openint_allowed_scopes, scopes, initialData, connector} =
     formContext as OAuthFormContext
 
   const scopeLookup =
@@ -43,7 +43,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
   )
 
   const availableScopes: string[] = useOpenIntCredentials
-    ? openint_scopes
+    ? openint_allowed_scopes
     : scopes.map((s) => s.scope)
 
   const handleChange = (field: string, value?: string | string[]) => {
@@ -64,7 +64,9 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
         ? undefined
         : initialData?.config?.oauth?.redirect_uri,
       scopes: newValue
-        ? (formData?.scopes || []).filter((s) => openint_scopes.includes(s))
+        ? (formData?.scopes || []).filter((s) =>
+            openint_allowed_scopes.includes(s),
+          )
         : formData?.scopes,
     } as OAuthConnectorConfig)
 

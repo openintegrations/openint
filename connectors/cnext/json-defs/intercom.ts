@@ -12,7 +12,8 @@ export default {
     token_request_url: 'https://api.intercom.io/auth/eagle/token',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: ['users.read'],
+    openint_default_scopes: ['users.read'],
+    openint_allowed_scopes: ['users.read'],
     scopes: [
       {
         scope: 'read',

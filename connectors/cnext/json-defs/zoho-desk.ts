@@ -16,7 +16,8 @@ export default {
       'https://accounts.zoho.${connection_settings.extension}/oauth/v2/token',
     scope_separator: ' ',
     params_config: {authorize: {prompt: 'consent', access_type: 'offline'}},
-    openint_scopes: ['ZohoDesk.basic.READ'],
+    openint_default_scopes: ['ZohoDesk.basic.READ'],
+    openint_allowed_scopes: ['ZohoDesk.basic.READ'],
     scopes: [
       {
         scope: 'ZohoDesk.tickets.READ',

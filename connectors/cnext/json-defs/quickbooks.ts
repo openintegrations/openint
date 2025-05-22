@@ -13,7 +13,11 @@ export default {
       'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: [
+    openint_default_scopes: [
+      'openid',
+      'com.intuit.quickbooks.accounting.readonly',
+    ],
+    openint_allowed_scopes: [
       'openid',
       'com.intuit.quickbooks.accounting',
       'com.intuit.quickbooks.accounting.readonly',
