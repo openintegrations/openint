@@ -34,7 +34,7 @@ export function createOAuth2ConnectorDef<
       // Only use default_scopes if they exist, otherwise use an empty array
       const openintDefaultCredentialsScopes =
         def.auth.type === 'OAUTH2'
-          ? (def.auth.openint_allowed_scopes ?? [])
+          ? (def.auth.openint_allowed_scopes ?? def.auth.openint_default_scopes)
           : []
       const zOpenIntDefaultScopes = z.array(
         z.enum(openintDefaultCredentialsScopes as [string, ...string[]]),
