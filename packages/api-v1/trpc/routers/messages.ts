@@ -1,5 +1,6 @@
 import {TRPCError} from '@trpc/server'
 import {TRPC_ERROR_CODES_BY_NUMBER} from '@trpc/server/rpc'
+import {and, eq, schema} from '@openint/db'
 import {env} from '@openint/env'
 import {z} from '@openint/util/zod-utils'
 import {orgProcedure, router} from '../_base'
@@ -29,7 +30,7 @@ export const messagesRouter = router({
       }),
     )
     .output(zMessageTemplateResponse)
-    .query(async ({input}) => {
+    .query(async ({input, ctx}) => {
       if (!env.AI_ROUTER_URL) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
@@ -38,7 +39,7 @@ export const messagesRouter = router({
       }
       // Placeholder for the actual third-party API call
       const {language, use_environment_variables, customer_id} = input
-      const apiUrl = new URL(env.AI_ROUTER_URL)
+      const apiUrl = new URL(env.AI_ROUTER_URL + '/v1/message_template')
       if (language) {
         apiUrl.searchParams.append('language', language)
       }
@@ -46,11 +47,28 @@ export const messagesRouter = router({
         'use_environment_variables',
         String(use_environment_variables),
       )
-      apiUrl.searchParams.append('customer_id', customer_id)
 
-      const response = await fetch(apiUrl.toString())
+      const customer = await ctx.db.query.customer.findFirst({
+        where: and(
+          eq(schema.customer.id, customer_id),
+          eq(schema.customer.org_id, ctx.viewer.orgId),
+        ),
+      })
+      if (!customer) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Customer not found',
+        })
+      }
+      apiUrl.searchParams.append('customer_id', customer_id)
+      const response = await fetch(apiUrl.toString(), {
+        headers: {
+          Authorization: `Bearer ${customer?.api_key}`,
+          'Content-Type': 'application/json',
+        },
+      })
       if (!response.ok) {
-        // Consider more specific error handling based on status codes
+        // TODO: Consider more specific error handling based on status codes
         throw new TRPCError({
           code: TRPC_ERROR_CODES_BY_NUMBER[
             response.status as keyof typeof TRPC_ERROR_CODES_BY_NUMBER

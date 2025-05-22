@@ -2,8 +2,9 @@ import {ConnectProps, createConnectIframe} from './common'
 
 interface ModalInstance {
   open: () => void
-  close: () => void
+  close: (isDestroying?: boolean) => void
   getIsOpen: () => boolean
+  destroy: () => void
 }
 
 interface CreateModalOptions {
@@ -16,113 +17,113 @@ export function createModal(
 ): ModalInstance {
   let isOpen = false
   let modalOverlayElement: HTMLDivElement | null = null
-  let modalContentElement: HTMLDivElement | null = null
-  let iframeContainerElement: HTMLDivElement | null = null
-  let iframeWrapperElement: HTMLDivElement | null = null // To hold the output of createConnectIframe
 
-  const {width, height} = connectProps // Use these for modal sizing if provided
+  const {width, height} = connectProps
 
   // --- Private utility functions ---
-  const buildModalDOM = () => {
+  const buildAndAttachModalDOM = () => {
+    if (typeof document === 'undefined' || !document.body) {
+      console.warn(
+        '[createModal] Document or document.body not available for modal DOM creation.',
+      )
+      return // Cannot proceed without a document/body
+    }
+
     modalOverlayElement = document.createElement('div')
+    modalOverlayElement.id = 'openint-connect-embed-modal-overlay'
     Object.assign(modalOverlayElement.style, {
       position: 'fixed',
       inset: '0',
-      zIndex: '1000', // High z-index
-      display: 'flex',
+      zIndex: '1000',
+      display: 'none', // Initially hidden
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)', // Backdrop color
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
     })
 
-    modalContentElement = document.createElement('div')
+    const modalContentElement = document.createElement('div')
+    modalContentElement.id = 'openint-connect-embed-modal'
     Object.assign(modalContentElement.style, {
       position: 'relative',
       backgroundColor: 'white',
       borderRadius: '0.5rem',
       boxShadow:
         '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-      width: width ? `${width}px` : '28rem', // Use connectProps.width if available
-      height: height ? `${height}px` : '50vh',
+      width: width ? `${width}px` : '28rem',
+      height: height ? `${height}px` : '700px',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
     })
 
-    iframeContainerElement = document.createElement('div')
-    Object.assign(iframeContainerElement.style, {
-      width: '100%',
-      height: height ? `${height}px` : '100%', // If height is specified, use it, else take full content height
-      minHeight: '50vh',
-      overflow: 'auto',
-      flexGrow: '1',
-    })
+    const iframeWrapperElement = createConnectIframe(connectProps)
+    // Ensure iframe wrapper grows if modal content has auto height driven by min/max
+    iframeWrapperElement.style.flexGrow = '1'
+    iframeWrapperElement.style.minHeight = '0' // Prevent flexbox blowout issues with iframe
 
-    modalContentElement.appendChild(iframeContainerElement)
+    modalContentElement.appendChild(iframeWrapperElement)
     modalOverlayElement.appendChild(modalContentElement)
+    document.body.appendChild(modalOverlayElement)
 
     // Event listener for backdrop click
     modalOverlayElement.addEventListener('click', (event) => {
       if (event.target === modalOverlayElement) {
-        // Make sure click is on backdrop, not content
-        instance.close()
-        options?.onClosed?.()
+        instance.close() // This will trigger options.onClosed
       }
     })
   }
 
   const handleEscapeKey = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      instance.close()
-      options?.onClosed?.()
+      instance.close() // This will trigger options.onClosed
     }
   }
+
+  // --- Initialize modal DOM immediately upon creation ---
+  buildAndAttachModalDOM()
 
   // --- Public methods ---
   const instance: ModalInstance = {
     open: () => {
-      if (isOpen || !document.body) {
+      if (isOpen || !modalOverlayElement) {
+        // If modalOverlayElement is null, it means buildAndAttachModalDOM failed (e.g. no document.body)
+        if (!modalOverlayElement) {
+          console.error('[createModal] Cannot open modal: DOM not initialized.')
+        }
         return
       }
-      if (!modalOverlayElement) {
-        buildModalDOM() // Create DOM elements if they don't exist
-      }
-      if (modalOverlayElement && iframeContainerElement) {
-        // Clear previous iframe if any (e.g., if open() is called multiple times without close)
-        iframeContainerElement.innerHTML = ''
-        iframeWrapperElement = createConnectIframe(connectProps)
-        iframeContainerElement.appendChild(iframeWrapperElement)
-
-        document.body.appendChild(modalOverlayElement)
-        document.addEventListener('keydown', handleEscapeKey)
-        isOpen = true
-        // Style body to prevent scrolling when modal is open
-        document.body.style.overflow = 'hidden'
-      } else {
-        console.error('[createModal] Modal DOM elements not found.')
-      }
+      modalOverlayElement.style.display = 'flex'
+      document.addEventListener('keydown', handleEscapeKey)
+      isOpen = true
+      // Style body to prevent scrolling when modal is open
+      document.body.style.overflow = 'hidden'
     },
-    close: () => {
-      if (!isOpen || !modalOverlayElement || !document.body) {
+    close: (isDestroying = false) => {
+      if (!isOpen || !modalOverlayElement) {
         return
       }
-      if (modalOverlayElement.parentNode === document.body) {
-        document.body.removeChild(modalOverlayElement)
-      }
-      // Clean up iframe resources if necessary (createConnectIframe might add its own listeners)
-      // For now, simply removing it from DOM. If createConnectIframe adds global listeners,
-      // it would need its own cleanup function that could be called here.
-      if (iframeContainerElement) {
-        iframeContainerElement.innerHTML = '' // Clear iframe
-      }
-      iframeWrapperElement = null
-
+      modalOverlayElement.style.display = 'none'
       document.removeEventListener('keydown', handleEscapeKey)
       isOpen = false
       // Restore body scrolling
       document.body.style.overflow = 'auto'
+      if (!isDestroying && options?.onClosed) {
+        options.onClosed()
+      }
     },
     getIsOpen: () => isOpen,
+    destroy: () => {
+      if (modalOverlayElement) {
+        instance.close(true) // Pass true to suppress onClosed callback during destruction
+        if (modalOverlayElement.parentNode === document.body) {
+          document.body.removeChild(modalOverlayElement)
+        }
+        // createConnectIframe creates its own style tag and spinner, which are children of the wrapper.
+        // Removing the wrapper (modalOverlayElement -> modalContentElement -> iframeWrapperElement) is sufficient.
+      }
+      modalOverlayElement = null // Allow for GC and prevent reuse
+      // No need to clear iframeWrapperElement specifically as it's part of modalOverlayElement's children
+    },
   }
 
   return instance
