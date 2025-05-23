@@ -34,8 +34,8 @@ export function DataTileView<TData>({
     <div
       // In small devices we want to justify center but in larger ones at the start of the row
       className={cn(
-        'flex flex-wrap gap-4',
-        data.length === 1 ? 'justify-start' : 'justify-center md:justify-start',
+        'flex flex-wrap justify-start gap-4',
+        // data.length === 1 ? 'justify-start' : 'justify-center md:justify-start',
         className,
       )}>
       {table.getRowModel().rows.map((row) => (
@@ -60,7 +60,7 @@ export function DataTileView<TData>({
       ))}
 
       {/* Add placeholders to ensure number of items is a multiple of 4 and the content spreads evenly */}
-      {Array.from({
+      {/* {Array.from({
         length: data.length % 4 === 0 ? 0 : 4 - (data.length % 4),
       }).map((_, index) => (
         <div
@@ -69,7 +69,7 @@ export function DataTileView<TData>({
           className="invisible h-0 w-[150px]"
           aria-hidden="true"
         />
-      ))}
+      ))} */}
     </div>
   )
 }
