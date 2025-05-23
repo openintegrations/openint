@@ -53,6 +53,9 @@ export function createServerDispatcher({
           const webhookResult = await fetchWithRetry(org.metadata.webhook_url, {
             method: 'POST',
             body: JSON.stringify(evt),
+            headers: {
+              'Content-Type': 'application/json',
+            },
             retries: 5,
             retryDelay(attempt) {
               return Math.pow(2, attempt) * 1000 // 1000, 2000, 4000, 8000, 16000, 32000
