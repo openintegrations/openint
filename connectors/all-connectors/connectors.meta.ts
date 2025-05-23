@@ -12,6 +12,17 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  adobe: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Adobe',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-adobe.svg',
+      authType: 'OAUTH2',
+    },
+  },
   aircall: {
     hasClient: false,
     hasServer: false,
