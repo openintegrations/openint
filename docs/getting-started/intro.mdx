@@ -27,15 +27,25 @@ It all starts with OpentInt @Connect: a fully featured embeddable integrations p
 
 @Connect communicates directly with OpenInt who then ensures that by the time that you need to perform any operation on an external API you can get a fresh access tokens.
 
-```mermaid
-graph LR
-    YourFrontend[Embedded/shared @Connect] -- "1.authenticates user" --> OpenInt[OpenInt]
-    OpenInt <-- "2.Verify and keep Connection active" --> ExternalAPIs[External APIs]
-    YourBackend[Your Backend] --  "3.Get Access Tokens" --> OpenInt
-    YourBackend -- "4.Perform Native Operation" --> ExternalAPIs[External APIs]
+<div className="hidden dark:block">
+  <Frame>
+    <img
+      src="/images/docs-graphic-dark.png"
+      alt="OpenInt workflow diagram showing how your frontend and backend interact with OpenInt and external APIs"
+      width="599"
+    />
+  </Frame>
+</div>
 
-    style ExternalAPIs margin-left:100px
-```
+<div className="dark:hidden">
+  <Frame>
+    <img
+      src="/images/docs-graphic-light.png"
+      alt="OpenInt workflow diagram showing how your frontend and backend interact with OpenInt and external APIs"
+      width="599"
+    />
+  </Frame>
+</div>
 
 ## How is OpenInt different?
 
