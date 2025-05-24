@@ -17,7 +17,7 @@ export default {
     hasServer: false,
     metadata: {
       displayName: 'Adobe',
-      stage: 'ga',
+      stage: 'alpha',
       verticals: ['other'],
       logoUrl: '/_assets/logo-adobe.svg',
       authType: 'OAUTH2',
