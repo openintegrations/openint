@@ -42,6 +42,10 @@ export const acmeOauth2ConnectionSettings: Story = {
   args: {name: 'acme-oauth2'},
 }
 
+export const adobeConnectionSettings: Story = {
+  args: {name: 'adobe'},
+}
+
 export const aircallConnectionSettings: Story = {
   args: {name: 'aircall'},
 }
