@@ -74,9 +74,25 @@ export const oauth2Schemas = {
     oauth: zOauthConnectorConfig.nullish(),
   }),
 
-  connection_settings: z.object({
-    oauth: zOAuthConnectionSettings,
-  }),
+  connection_settings: z
+    .object({
+      oauth: zOAuthConnectionSettings,
+
+      access_token: z
+        .string()
+        .optional()
+        .describe(
+          'Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field',
+        ),
+    })
+    // Logic is duplicated in createOAuth2ConnectorDef.ts
+    .transform((settings) => {
+      if (!settings.access_token) {
+        settings.access_token = settings.oauth.credentials?.access_token
+      }
+      return settings
+    })
+    .openapi({effectType: 'input'}),
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
   pre_connect_input: z.object({
@@ -167,7 +183,11 @@ export const zOAuthConfig = z.object({
     .array(z.string())
     .optional()
     .describe('Scopes required by the Connector for OAuth requests'),
-  openint_scopes: z
+  openint_default_scopes: z
+    .array(z.string())
+    .optional()
+    .describe('Base scopes for the OpenInt platform connector app'),
+  openint_allowed_scopes: z
     .array(z.string())
     .optional()
     .describe('Default scopes for the OpenInt platform connector app'),

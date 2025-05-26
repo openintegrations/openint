@@ -34,6 +34,10 @@ export const acmeOauth2ConnectorDisplay: Story = {
   args: {name: 'acme-oauth2'},
 }
 
+export const adobeConnectorDisplay: Story = {
+  args: {name: 'adobe'},
+}
+
 export const aircallConnectorDisplay: Story = {
   args: {name: 'aircall'},
 }

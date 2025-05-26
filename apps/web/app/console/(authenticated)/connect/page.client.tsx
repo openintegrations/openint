@@ -1,12 +1,14 @@
 'use client'
 
+import type {CustomerId} from '@openint/cdk'
+import type {PreviewViewType} from '@openint/ui-v1/components/PreviewWindow'
 import type {Z} from '@openint/util/zod-utils'
 
 import {useQuery} from '@tanstack/react-query'
+import {useRouter, useSearchParams} from 'next/navigation'
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
-import {CustomerId} from '@openint/cdk'
-import {ConnectEmbed} from '@openint/connect'
+import {ConnectButton, ConnectEmbed} from '@openint/connect'
 import {getBaseURLs} from '@openint/env'
 import {LoadingSpinner} from '@openint/ui-v1'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
@@ -16,6 +18,18 @@ import {useTRPC} from '@/lib-client/TRPCApp'
 
 // Define the type for the form data based on the schema
 type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
+
+// Mapping for URL params
+const viewToParamMap: Record<PreviewViewType, string> = {
+  'Magic Link': 'magic_link',
+  Embedded: 'embedded',
+  Mobile: 'mobile',
+  Button: 'button',
+}
+const paramToViewMap: Record<string, PreviewViewType | undefined> =
+  Object.fromEntries(
+    Object.entries(viewToParamMap).map(([k, v]) => [v, k as PreviewViewType]),
+  )
 
 export function ConfigureConnect() {
   // Initialize with default values from the schema
@@ -33,7 +47,7 @@ export function ConfigureConnect() {
       <div className="w-sm flex min-h-0 flex-col p-4 pr-2">
         <h2 className="mb-4 text-xl font-semibold">Configure</h2>
         <ZodSchemaForm
-          schema={connectRouterModels.getMagicLinkInput}
+          schema={connectRouterModels.createTokenInput}
           formData={formData}
           onChange={(change) => {
             if (change.formData) {
@@ -56,6 +70,20 @@ export function ConnectEmbedPreview(props: {
   createTokenInput: CreateTokenInput
 }) {
   const trpc = useTRPC()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const currentViewParam = searchParams.get('view')
+  const currentView: PreviewViewType =
+    (currentViewParam && paramToViewMap[currentViewParam]) || 'Magic Link'
+
+  const handleViewChange = (newView: PreviewViewType) => {
+    const newViewParam = viewToParamMap[newView]
+    const newSearchParams = new URLSearchParams(searchParams.toString())
+    newSearchParams.set('view', newViewParam)
+    router.push(`?${newSearchParams.toString()}`, {scroll: false})
+  }
+
   // No reason to use useSuspenseQuery here because it's actually a bit more stragiht
   // forward to useQuery to manage the loading and error state more explicit
   const tokenRes = useQuery(
@@ -64,6 +92,8 @@ export function ConnectEmbedPreview(props: {
 
   return (
     <PreviewWindow
+      view={currentView}
+      onViewChange={handleViewChange}
       // TODO: Refactor connect to return the URL please
       shareUrl={createURL(
         getBaseURLs(null).connect,
@@ -71,7 +101,17 @@ export function ConnectEmbedPreview(props: {
           ? {searchParams: {token: tokenRes.data?.token ?? ''}}
           : {},
       )}
-      className="flex-1 overflow-scroll">
+      className="flex-1 overflow-scroll"
+      customContent={
+        tokenRes.data?.token && (
+          <div className="flex items-center justify-center p-4">
+            <ConnectButton
+              token={tokenRes.data.token}
+              baseURL={getBaseURLs(null).connect}
+            />
+          </div>
+        )
+      }>
       {tokenRes.status === 'pending' ? (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4">
           <LoadingSpinner />

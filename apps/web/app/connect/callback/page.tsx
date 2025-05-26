@@ -27,7 +27,7 @@ import {
   zOauthCallbackSearchParams,
   zOauthState,
 } from '@openint/cnext/auth-oauth2/schemas'
-import {isProduction, resolveRoute} from '@openint/env'
+import {resolveRoute} from '@openint/env'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {ConnectCallbackClient} from './page.client'
 
@@ -52,12 +52,9 @@ export default async function ConnectCallback(pageProps: PageProps) {
     }
     return redirect(url.toString())
   }
-  const isAcme = state.connection_id.startsWith('conn_acme')
-
-  return (
-    <ConnectCallbackClient
-      data={searchParams}
-      debug={!isProduction || isAcme}
-    />
-  )
+  // NOTE: bring back isAcme to debug= !isProduction || isAcme when stably fixes modal window
+  // and remove !isVercelMainEnvironment when stably fixes modal window
+  // const isAcme = state.connection_id.startsWith('conn_acme')
+  // !isProduction || !isVercelMainEnvironment
+  return <ConnectCallbackClient data={searchParams} debug={false} />
 }

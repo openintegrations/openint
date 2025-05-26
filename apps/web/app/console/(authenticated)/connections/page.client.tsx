@@ -1,5 +1,6 @@
 'use client'
 
+import type {ConnectorName} from '@openint/all-connectors/name'
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
@@ -15,6 +16,7 @@ import {
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {SecureInput} from '@openint/ui-v1/components/SecureInput'
+import {ConnectorLogo} from '@openint/ui-v1/domain-components/ConnectorLogo'
 import {formatIsoDateString, timeSince} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
 import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
@@ -50,10 +52,26 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     header: 'Created At',
     accessorKey: 'created_at',
+    cell: ({row}) => {
+      return (
+        <span className="text-sm">
+          {formatIsoDateString(row.original.created_at)}
+        </span>
+      )
+    },
   },
   {
     header: 'Updated At',
     accessorKey: 'updated_at',
+    cell: ({row}) => {
+      return (
+        <span className="text-sm">
+          {(row.original.updated_at &&
+            formatIsoDateString(row.original.updated_at)) ??
+            ''}
+        </span>
+      )
+    },
   },
 ]
 
@@ -180,7 +198,14 @@ export function ConnectionsPage() {
                         <h4 className="text-muted-foreground w-1/3 text-sm">
                           Connector Name
                         </h4>
-                        <div className="w-2/3">
+                        <div className="flex w-2/3 items-center gap-2">
+                          <ConnectorLogo
+                            connectorName={
+                              selectedConnection.connector_name as ConnectorName
+                            }
+                            width={24}
+                            height={24}
+                          />
                           <p className="text-sm font-medium">
                             {selectedConnection.connector_name}
                           </p>

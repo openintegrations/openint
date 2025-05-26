@@ -33,7 +33,9 @@ export function createOAuth2ConnectorDef<
     if (defaultCredentialsConfigured) {
       // Only use default_scopes if they exist, otherwise use an empty array
       const openintDefaultCredentialsScopes =
-        def.auth.type === 'OAUTH2' ? (def.auth.openint_scopes ?? []) : []
+        def.auth.type === 'OAUTH2'
+          ? (def.auth.openint_allowed_scopes ?? def.auth.openint_default_scopes)
+          : []
       const zOpenIntDefaultScopes = z.array(
         z.enum(openintDefaultCredentialsScopes as [string, ...string[]]),
       )
@@ -73,12 +75,26 @@ export function createOAuth2ConnectorDef<
   }
 
   const connectionSettings = () => {
-    let schema = oauth2Schemas.connection_settings
+    const schema = oauth2Schemas.connection_settings
     if (def.auth.connection_settings) {
-      schema = z.object({
-        ...schema.shape,
-        ...(def.auth.connection_settings.shape as Record<string, Z.ZodTypeAny>),
-      })
+      return (
+        z
+          .object({
+            ...schema.innerType().shape,
+            ...(def.auth.connection_settings.shape as Record<
+              string,
+              Z.ZodTypeAny
+            >),
+          })
+          // TODO: Figure out how to remove this duplication of logic from schemas.ts
+          .transform((settings) => {
+            if (!settings.access_token) {
+              settings.access_token = settings.oauth.credentials?.access_token
+            }
+            return settings
+          })
+          .openapi({effectType: 'input'})
+      )
     }
     return schema
   }

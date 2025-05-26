@@ -13,7 +13,8 @@ export default {
     token_request_url: 'https://identity.xero.com/connect/token',
     scope_separator: ' ',
     params_config: {authorize: {response_type: 'code'}},
-    openint_scopes: ['openid'],
+    openint_default_scopes: ['openid'],
+    openint_allowed_scopes: ['openid'],
     scopes: [
       {
         scope: 'offline_access',

@@ -31,7 +31,13 @@ export function DataTileView<TData>({
   } satisfies TableOptions<TData>)
 
   return (
-    <div className={cn('flex flex-wrap gap-4', className)}>
+    <div
+      // In small devices we want to justify center but in larger ones at the start of the row
+      className={cn(
+        'flex flex-wrap justify-start gap-4',
+        // data.length === 1 ? 'justify-start' : 'justify-center md:justify-start',
+        className,
+      )}>
       {table.getRowModel().rows.map((row) => (
         <div
           key={row.id}
@@ -52,6 +58,18 @@ export function DataTileView<TData>({
           )}
         </div>
       ))}
+
+      {/* Add placeholders to ensure number of items is a multiple of 4 and the content spreads evenly */}
+      {/* {Array.from({
+        length: data.length % 4 === 0 ? 0 : 4 - (data.length % 4),
+      }).map((_, index) => (
+        <div
+          key={`placeholder-${index}`}
+          // same width as connection card but 0 height so that it doesn't create new rows of space
+          className="invisible h-0 w-[150px]"
+          aria-hidden="true"
+        />
+      ))} */}
     </div>
   )
 }

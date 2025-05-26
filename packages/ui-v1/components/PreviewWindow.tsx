@@ -1,6 +1,7 @@
 import {
   ExternalLinkIcon,
   MonitorIcon,
+  PanelTopIcon,
   SmartphoneIcon,
   TabletIcon,
 } from 'lucide-react'
@@ -13,6 +14,8 @@ import {
   TabsList,
   TabsTrigger,
 } from '@openint/shadcn/ui'
+
+export type PreviewViewType = 'Magic Link' | 'Embedded' | 'Mobile' | 'Button'
 
 interface PreviewProps {
   children: React.ReactNode
@@ -142,7 +145,7 @@ export function MobileScreen({
     <div
       className={cn(
         'bg-background relative overflow-hidden rounded-[3rem] border-8 border-gray-900 shadow-lg',
-        'h-[852px] w-[393px]', // iPhone 14 Pro dimensions
+        'flex h-[852px] w-[393px] flex-col', // iPhone 14 Pro dimensions + flex container
         className,
       )}>
       {/* Status Bar */}
@@ -219,7 +222,7 @@ export function MobileScreen({
       </div>
 
       {/* Content */}
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="flex-1 overflow-auto">{children}</div>
 
       {/* Home Indicator */}
       <div className="absolute bottom-2 left-1/2 h-1.5 w-32 -translate-x-1/2 rounded-full bg-gray-900" />
@@ -343,8 +346,10 @@ export function TabletScreen({
 }
 
 interface PreviewWindowProps extends PreviewProps {
-  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile'
-  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile'>
+  view: PreviewViewType
+  onViewChange: (view: PreviewViewType) => void
+  supportedViews?: PreviewViewType[]
+  customContent?: React.ReactNode
 }
 
 export function PreviewWindow({
@@ -352,30 +357,25 @@ export function PreviewWindow({
   className,
   shareUrl,
   isLoading = false,
-  defaultView = 'Magic Link',
-  supportedViews = ['Magic Link', 'Embedded', 'Mobile'],
+  view,
+  onViewChange,
+  supportedViews = ['Magic Link', 'Embedded', 'Mobile', 'Button'],
+  customContent,
 }: PreviewWindowProps) {
-  const [view, setView] =
-    React.useState<(typeof supportedViews)[number]>(defaultView)
-
   return (
     <Tabs
       value={view}
       className={className}
-      onValueChange={(value) =>
-        setView(value as (typeof supportedViews)[number])
-      }>
+      onValueChange={(value) => onViewChange(value as PreviewViewType)}>
       <div className="relative flex items-center justify-center">
         <TabsList className="flex items-center gap-2">
-          {supportedViews.map((view) => (
-            <TabsTrigger
-              key={view}
-              value={view}
-              className="flex items-center gap-2">
-              {view === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
-              {view === 'Embedded' && <TabletIcon className="h-4 w-4" />}
-              {view === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
-              {view}
+          {supportedViews.map((v) => (
+            <TabsTrigger key={v} value={v} className="flex items-center gap-2">
+              {v === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
+              {v === 'Embedded' && <TabletIcon className="h-4 w-4" />}
+              {v === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
+              {v === 'Button' && <PanelTopIcon className="h-4 w-4" />}
+              {v}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -408,6 +408,11 @@ export function PreviewWindow({
         <MobileScreen shareUrl={shareUrl} isLoading={isLoading}>
           {children}
         </MobileScreen>
+      </TabsContent>
+      <TabsContent value="Button" className="mt-0 flex justify-center">
+        <BrowserWindow shareUrl={shareUrl} isLoading={isLoading}>
+          {customContent ?? children}
+        </BrowserWindow>
       </TabsContent>
     </Tabs>
   )

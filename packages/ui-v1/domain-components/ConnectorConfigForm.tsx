@@ -57,6 +57,10 @@ export function ConnectorConfigForm({
   onSubmit,
   formRef,
 }: ConnectorConfigFormProps) {
+  const defaultScopes =
+    connector?.openint_default_scopes ??
+    connectorConfig?.connector?.openint_default_scopes
+
   const initialValues = (
     connectorConfig
       ? {
@@ -66,7 +70,13 @@ export function ConnectorConfigForm({
           },
           disabled: connectorConfig.disabled ?? false,
         }
-      : {}
+      : connector?.auth_type === 'OAUTH2'
+        ? {
+            oauth: {
+              scopes: defaultScopes,
+            },
+          }
+        : {}
   ) as Core['connector_config_insert']
 
   const disabledField = zodToOas31Schema(disabledSchema)
@@ -95,15 +105,15 @@ export function ConnectorConfigForm({
     },
   }
 
-  const openint_scopes =
-    connector?.openint_scopes ??
-    connectorConfig?.connector?.openint_scopes ??
+  const openint_allowed_scopes =
+    connector?.openint_allowed_scopes ??
+    connectorConfig?.connector?.openint_allowed_scopes ??
     []
 
   const scopes = connector?.scopes ?? connectorConfig?.connector?.scopes ?? []
 
   const formContext = {
-    openint_scopes,
+    openint_allowed_scopes,
     scopes,
     initialData: connectorConfig,
     connector: connector ?? connectorConfig?.connector,

@@ -11,7 +11,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {getBaseURLs, resolveRoute} from '@openint/env'
+import {envRequired, getBaseURLs, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {
@@ -23,7 +23,9 @@ import {
 import {asCustomerOfOrg, makeJwtClient} from '../../lib/makeJwtClient'
 import {getAbsoluteApiV1URL} from '../../lib/typed-routes'
 import {connection_select_base, core} from '../../models'
+import {onError} from '../error-handling'
 import {connectRouterModels} from './connect.models'
+import {customerRouter} from './customer'
 import {
   checkConnection,
   connectionCanBeChecked,
@@ -32,57 +34,6 @@ import {md} from './utils/md'
 import {zConnectionId} from './utils/types'
 
 export const connectRouter = router({
-  // TODO: Should these all be scoped under `/connect` instead?
-  createMagicLink: orgProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/customer/{customer_id}/magic-link',
-        description:
-          'Create a @Connect magic link that is ready to be shared with customers who want to use @Connect',
-        summary: 'Create Magic Link',
-      },
-    })
-    .input(connectRouterModels.getMagicLinkInput.optional())
-    .output(
-      z.object({
-        magic_link_url: z
-          .string()
-          .describe('The Connect magic link url to share with the user.'),
-      }),
-    )
-    .query(async ({ctx, input}) => {
-      // TODO: replace with new signing and persisting mechanism
-      const jwt = makeJwtClient({
-        secretOrPublicKey: process.env['JWT_SECRET']!,
-      })
-      if (!input || !input.customer_id) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message:
-            'Missing customer_id in path /customer/{customer_id}/magic-link',
-        })
-      }
-      const token = await jwt.signToken(
-        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-          connectOptions: input.connect_options,
-        },
-      )
-
-      const url = new URL(...resolveRoute('/connect', null))
-      url.searchParams.set('token', token)
-      Object.entries(input.connect_options ?? {}).forEach(([key, value]) => {
-        if (value && typeof value === 'string') {
-          url.searchParams.set(key, value)
-        }
-      })
-
-      return {
-        magic_link_url: url.toString(),
-      }
-    }),
   createToken: orgProcedure
     .meta({
       openapi: {
@@ -98,15 +49,26 @@ export const connectRouter = router({
       z.object({
         token: z
           .string()
-          .describe('The authentication token to use for API requests'),
+          .describe(
+            'A short-lived publishable authentication token to use for customer api requests from the frontend. This token by default expires in 30 days unless otherwise specified via the validity_in_seconds parameter.',
+          ),
+        magic_link_url: z
+          .string()
+          .describe(
+            'A link that can be shared with customers to use @Connect in any browser. This link will expire in 30 days by default unless otherwise specified via the validity_in_seconds parameter.',
+          ),
+        api_key: z
+          .string()
+          .nullable()
+          .describe(
+            'A long-lived customer API key to use for API requests. Not meant to be published to the frontend.',
+          ),
       }),
     )
     .query(async ({ctx, input}) => {
-      const jwt = makeJwtClient({
-        secretOrPublicKey: process.env['JWT_SECRET']!,
-      })
+      const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
 
-      if (!input || !input.customer_id) {
+      if (!input.customer_id) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Missing customer_id in path /customer/{customer_id}/token',
@@ -114,14 +76,30 @@ export const connectRouter = router({
       }
 
       const token = await jwt.signToken(
-        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
+        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id}),
         {
           validityInSeconds: input.validity_in_seconds,
           connectOptions: input.connect_options,
         },
       )
+      const url = new URL(...resolveRoute('/connect', null))
+      url.searchParams.set('token', token)
+      Object.entries(input.connect_options ?? {}).forEach(([key, value]) => {
+        if (value && typeof value === 'string') {
+          url.searchParams.set(key, value)
+        }
+      })
 
-      return {token}
+      const customerCaller = customerRouter.createCaller(ctx, {onError})
+      const customer = await customerCaller.upsertCustomer({
+        id: input.customer_id,
+      })
+
+      return {
+        token,
+        magic_link_url: url.toString(),
+        api_key: customer.api_key,
+      }
     }),
   preConnect: customerProcedure
     .meta({
@@ -333,7 +311,10 @@ export const connectRouter = router({
 
       await ctx.dispatch({
         name: 'connect.connection-connected',
-        data: {connection_id: conn!.id as `conn_${string}`},
+        data: {
+          connection_id: conn!.id as `conn_${string}`,
+          customer_id: conn?.customer_id ?? '',
+        },
       })
 
       return {

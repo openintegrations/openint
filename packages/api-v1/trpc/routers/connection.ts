@@ -20,7 +20,6 @@ import {
 import {makeUlid} from '@openint/util/id-utils'
 import {z, zCoerceArray} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {notifySlackError} from '../../lib/notifySlackError'
 import {core} from '../../models/core'
 import {
   expandConnection,
@@ -33,6 +32,7 @@ import {zConnectorName} from './connector.models'
 import {
   checkConnection,
   connectionCanBeChecked,
+  connectionExpired,
 } from './utils/connectionChecker'
 import {
   formatListResponse,
@@ -85,13 +85,22 @@ export const connectionRouter = router({
         })
       }
 
-      if (
+      const shouldCheckConnection =
         (input.refresh_policy === 'force' || input.refresh_policy === 'auto') &&
         connectionCanBeChecked(connection)
-      ) {
-        const {status, status_message} = await checkConnection(connection, ctx)
-        connection.status = status
-        connection.status_message = status_message ?? null
+
+      const isAutoRefreshNotExpired =
+        input.refresh_policy === 'auto' && !connectionExpired(connection)
+
+      if (!shouldCheckConnection || isAutoRefreshNotExpired) {
+        return expandConnection(connection!, input.expand)
+      }
+
+      const res = await checkConnection(connection, ctx)
+      connection.status = res.status
+      connection.status_message = res.status_message ?? null
+      if ('settings' in res) {
+        connection.settings = res.settings
       }
 
       return expandConnection(connection!, input.expand)
@@ -120,12 +129,13 @@ export const connectionRouter = router({
         include_secrets: zIncludeSecrets.optional().openapi({
           description: 'Include secret credentials in the response',
         }),
-        expand: z.array(zConnectionExpandOption).default([]).openapi({
+        expand: zCoerceArray(zConnectionExpandOption).default([]).openapi({
           description: 'Expand the response with additional optionals',
         }),
         search_query: z.string().optional().openapi({
           description: 'Search query for the connection list',
         }),
+        refresh_policy: zRefreshPolicy.optional().default('none'),
       }),
     )
     .output(
@@ -169,20 +179,31 @@ export const connectionRouter = router({
         limit,
         offset,
       })
-      if (
-        ctx.viewer.orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' &&
-        res.length === 0
-      ) {
-        let msg = `Caught No Connections Query for DO. CustomerId: ${input.customer_id} viewer: ${ctx.viewer}`
-        const fullList = await ctx.db.query.connection.findMany()
-        await notifySlackError(msg, {
-          input,
-          connections: fullList.map((c) => c.id + ` (${c.connector_name})`),
-        })
-        msg += `\nInput: ${JSON.stringify(input)}`
-        msg += `\nFull List: ${JSON.stringify(fullList.map((c) => c.id + ` (${c.connector_name})`))}`
-        console.log(msg)
+
+      if (input.refresh_policy !== 'none') {
+        await Promise.all(
+          res.map(async (connection) => {
+            if (!connectionCanBeChecked(connection)) {
+              return
+            }
+
+            if (
+              input.refresh_policy === 'auto' &&
+              !connectionExpired(connection)
+            ) {
+              return
+            }
+
+            const res = await checkConnection(connection, ctx)
+            if ('settings' in res) {
+              connection.settings = res.settings
+            }
+            connection.status = res.status
+            connection.status_message = res.status_message ?? null
+          }),
+        )
       }
+
       return {
         ...formatListResponse(res, {limit, offset}),
         items: res.map((conn) => expandConnection(conn, input.expand)),
@@ -213,6 +234,13 @@ export const connectionRouter = router({
           message: 'Connection not found',
         })
       }
+      await ctx.dispatch({
+        name: 'connect.connection-deleted',
+        data: {
+          connection_id: deleted.id as `conn_${string}`,
+          customer_id: deleted.customer_id ?? '',
+        },
+      })
       return {id: deleted.id}
     }),
 

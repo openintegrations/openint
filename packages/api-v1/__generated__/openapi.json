@@ -17,10 +17,7 @@
         "description": "List all connectors to understand what integrations are available to configure",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -176,10 +173,7 @@
         "operationId": "getConnectorConfig",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -267,6 +261,9 @@
                       "oneOf": [
                         {
                           "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.adobe.discriminated_connector_config"
                         },
                         {
                           "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
@@ -441,6 +438,7 @@
                         "propertyName": "connector_name",
                         "mapping": {
                           "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
+                          "adobe": "#/components/schemas/connector.adobe.discriminated_connector_config",
                           "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
                           "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
                           "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
@@ -582,10 +580,7 @@
         "summary": "List Configured Connectors",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -710,6 +705,9 @@
                             "oneOf": [
                               {
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.adobe.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
@@ -884,6 +882,7 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
+                                "adobe": "#/components/schemas/connector.adobe.discriminated_connector_config",
                                 "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
                                 "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
                                 "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
@@ -1055,10 +1054,7 @@
         "description": "Get details of a specific connection, including credentials",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1204,6 +1200,9 @@
                       "oneOf": [
                         {
                           "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.adobe.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
@@ -1378,6 +1377,7 @@
                         "propertyName": "connector_name",
                         "mapping": {
                           "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                          "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                           "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
                           "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
                           "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
@@ -1513,10 +1513,7 @@
         "description": "Delete a connection",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1613,10 +1610,7 @@
         "description": "List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -1700,6 +1694,21 @@
             "name": "search_query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "refresh_policy",
+            "description": "Controls credential refresh: none (never), force (always), or auto (when expired, default)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "none",
+                "force",
+                "auto"
+              ],
+              "description": "Controls credential refresh: none (never), force (always), or auto (when expired, default)",
+              "default": "none"
             }
           }
         ],
@@ -1801,6 +1810,9 @@
                             "oneOf": [
                               {
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.adobe.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
@@ -1975,6 +1987,7 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                                "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                                 "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
                                 "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
                                 "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
@@ -2139,10 +2152,7 @@
         "description": "Import an existing connection after validation",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "requestBody": {
@@ -2169,6 +2179,9 @@
                     "oneOf": [
                       {
                         "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.adobe.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
@@ -2343,6 +2356,7 @@
                       "propertyName": "connector_name",
                       "mapping": {
                         "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                        "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                         "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
                         "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
                         "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
@@ -2472,149 +2486,6 @@
         }
       }
     },
-    "/customer/{customer_id}/magic-link": {
-      "post": {
-        "operationId": "createMagicLink",
-        "summary": "Create Magic Link",
-        "description": "Create a @Connect magic link that is ready to be shared with customers who want to use @Connect",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "customer_id",
-            "description": "The unique ID of the customer to create the magic link for",
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "description": "The unique ID of the customer to create the magic link for"
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "validity_in_seconds": {
-                    "type": "number",
-                    "default": 2592000,
-                    "description": "How long the magic link will be valid for (in seconds) before it expires"
-                  },
-                  "connect_options": {
-                    "type": "object",
-                    "properties": {
-                      "return_url": {
-                        "type": "string",
-                        "title": "Return URL",
-                        "description": "Optional URL to return customers after adding a connection or if they press the Return To Organization button"
-                      },
-                      "connector_names": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/core.connector.name"
-                        },
-                        "title": "Connector Names",
-                        "description": "The names of the connectors to show in the connect page. If not provided, all connectors will be shown"
-                      },
-                      "view": {
-                        "type": "string",
-                        "enum": [
-                          "add",
-                          "manage"
-                        ],
-                        "title": "Default View to load",
-                        "description": "The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not"
-                      },
-                      "debug": {
-                        "type": "boolean",
-                        "title": "Debug",
-                        "description": "Whether to enable debug mode"
-                      },
-                      "is_embedded": {
-                        "type": "boolean",
-                        "title": "Is Embedded",
-                        "description": "Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "magic_link_url": {
-                      "type": "string",
-                      "description": "The Connect magic link url to share with the user."
-                    }
-                  },
-                  "required": [
-                    "magic_link_url"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/customer/{customer_id}/token": {
       "post": {
         "operationId": "createToken",
@@ -2622,10 +2493,7 @@
         "description": "Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -2650,7 +2518,8 @@
                 "properties": {
                   "validity_in_seconds": {
                     "type": "number",
-                    "default": 2592000
+                    "default": 2592000,
+                    "description": "How long the publishable token and magic link url will be valid for (in seconds) before it expires. By default it will be valid for 30 days unless otherwise specified."
                   },
                   "connect_options": {
                     "type": "object",
@@ -2704,11 +2573,24 @@
                   "properties": {
                     "token": {
                       "type": "string",
-                      "description": "The authentication token to use for API requests"
+                      "description": "A short-lived publishable authentication token to use for customer api requests from the frontend. This token by default expires in 30 days unless otherwise specified via the validity_in_seconds parameter."
+                    },
+                    "magic_link_url": {
+                      "type": "string",
+                      "description": "A link that can be shared with customers to use @Connect in any browser. This link will expire in 30 days by default unless otherwise specified via the validity_in_seconds parameter."
+                    },
+                    "api_key": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "A long-lived customer API key to use for API requests. Not meant to be published to the frontend."
                     }
                   },
                   "required": [
-                    "token"
+                    "token",
+                    "magic_link_url",
+                    "api_key"
                   ]
                 }
               }
@@ -2764,10 +2646,7 @@
         "description": "Verify that a connection is healthy",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -2865,6 +2744,99 @@
         }
       }
     },
+    "/customers": {
+      "put": {
+        "operationId": "upsertCustomer",
+        "summary": "Upsert Customer",
+        "description": "Create or update a customer",
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/core.customer_select"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "operationId": "health",
@@ -2872,10 +2844,7 @@
         "description": "Check if the API is operational",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "responses": {
@@ -2933,10 +2902,7 @@
         "operationId": "healthEcho",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "requestBody": {
@@ -3012,10 +2978,7 @@
         "description": "Get information about the current authenticated user",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "responses": {
@@ -3084,10 +3047,7 @@
         "description": "Handle a webhook event",
         "security": [
           {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
+            "token": []
           }
         ],
         "parameters": [
@@ -3166,20 +3126,128 @@
           }
         }
       }
+    },
+    "/ai/message_template": {
+      "get": {
+        "operationId": "messageTemplate",
+        "summary": "Get Message Template",
+        "description": "Get a message template for an AI agent",
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "language",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "javascript"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_environment_variables",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "customer_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "language",
+                    "template"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "securitySchemes": {
-      "ApiKey": {
+      "token": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`"
-      },
-      "CustomerToken": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`"
+        "description": "Organization API Key available in the settings page of the OpenInt Console or Customer API Key or Token Customer authentication token created using the create customer token API. It is passed in the `authorization` header with format: `Bearer {token}`"
       }
     },
     "schemas": {
@@ -3248,6 +3316,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3317,6 +3389,144 @@
         ],
         "title": "acme-oauth2"
       },
+      "connector.adobe.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "adobe"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name"
+        ],
+        "title": "adobe"
+      },
+      "connector.adobe.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "adobe"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Custom redirect URI"
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            }
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "adobe"
+      },
       "connector.aircall.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -3382,6 +3592,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3718,6 +3932,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3852,6 +4070,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -3986,6 +4208,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4427,6 +4653,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4561,6 +4791,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               },
               "api_base_url_for_customer": {
                 "type": "string",
@@ -4701,6 +4935,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4835,6 +5073,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -4969,6 +5211,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5103,6 +5349,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5237,6 +5487,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5455,6 +5709,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5589,6 +5847,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5723,6 +5985,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5857,6 +6123,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -5991,6 +6261,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6125,6 +6399,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6259,6 +6537,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6592,6 +6874,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -6874,6 +7160,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7008,6 +7298,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               },
               "api_domain": {
                 "type": "string",
@@ -7359,15 +7653,13 @@
                   }
                 }
               },
-              "realmId": {
+              "access_token": {
                 "type": "string",
-                "pattern": "\\d{16}",
-                "description": "The realmId of your quickbooks company (e.g., 9341453474484455)"
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
-              "oauth",
-              "realmId"
+              "oauth"
             ]
           }
         },
@@ -7423,19 +7715,8 @@
                 },
                 "description": "Base oauth configuration for the connector",
                 "ui:field": "OAuthField"
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "production"
-                ],
-                "default": "sandbox"
               }
-            },
-            "required": [
-              "envName"
-            ]
+            }
           }
         },
         "required": [
@@ -7576,6 +7857,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7710,6 +7995,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -7893,6 +8182,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8027,6 +8320,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8574,6 +8871,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -8829,6 +9130,10 @@
                     "additionalProperties": {}
                   }
                 }
+              },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
               }
             },
             "required": [
@@ -9146,6 +9451,10 @@
                   }
                 }
               },
+              "access_token": {
+                "type": "string",
+                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
+              },
               "extension": {
                 "type": "string",
                 "pattern": "https:\\/\\/accounts\\.zoho\\.([a-z.]+)\\/",
@@ -9308,6 +9617,9 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.adobe.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
@@ -9482,6 +9794,7 @@
               "propertyName": "connector_name",
               "mapping": {
                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                 "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
                 "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
                 "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
@@ -9603,7 +9916,13 @@
               "CUSTOM"
             ]
           },
-          "openint_scopes": {
+          "openint_default_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "openint_allowed_scopes": {
             "type": "array",
             "items": {
               "type": "string"
@@ -9642,6 +9961,7 @@
         "type": "string",
         "enum": [
           "acme-oauth2",
+          "adobe",
           "aircall",
           "airtable",
           "apollo",
@@ -9700,6 +10020,69 @@
           "zoho-desk"
         ],
         "title": "connector"
+      },
+      "core.customer_select": {
+        "type": "object",
+        "properties": {
+          "org_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "api_key": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_id",
+          "id",
+          "api_key",
+          "metadata",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "customer_select"
       },
       "core.integration_select": {
         "type": "object",

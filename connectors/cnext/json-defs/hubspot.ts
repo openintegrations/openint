@@ -13,18 +13,9 @@ export default {
     scope_separator: ' ',
     params_config: {},
     required_scopes: [''],
-    openint_scopes: ['crm.objects.contacts.read'],
+    openint_default_scopes: ['oauth'],
+    openint_allowed_scopes: ['oauth', 'crm.objects.contacts.read'],
     scopes: [
-      {
-        scope: 'contacts',
-        description:
-          'Provides read and write access to all contacts and contact properties in HubSpot.',
-      },
-      {
-        scope: 'contacts-ro',
-        description:
-          'Provides read-only access to contacts and contact properties in HubSpot.',
-      },
       {
         scope: 'content',
         description:
@@ -95,21 +86,17 @@ export default {
         description: 'Provides read-only access to custom schemas in the CRM.',
       },
       {
-        scope: 'crm.schemas.custom.write',
-        description: 'Provides write access to custom schemas in the CRM.',
-      },
-      {
         scope: 'crm.schemas.deals.read',
         description: 'Provides read-only access to deal schemas in the CRM.',
+      },
+      {
+        scope: 'crm.schemas.deals.write',
+        description: 'Provides write access to deal schemas in the CRM.',
       },
       {
         scope: 'forms',
         description:
           'Provides read and write access to forms and form submissions.',
-      },
-      {
-        scope: 'forms-ro',
-        description: 'Provides read-only access to forms and form submissions.',
       },
       {
         scope: 'oauth',
@@ -146,10 +133,6 @@ export default {
         description: 'Provides read and write access to tickets in HubSpot.',
       },
       {
-        scope: 'tickets-ro',
-        description: 'Provides read-only access to tickets in HubSpot.',
-      },
-      {
         scope: 'e-commerce',
         description:
           'Provides read and write access to e-commerce data including products, line items, and orders.',
@@ -159,8 +142,8 @@ export default {
         description: 'Provides read and write access to files in HubSpot.',
       },
       {
-        scope: 'files-ro',
-        description: 'Provides read-only access to files in HubSpot.',
+        scope: 'files.ui_hidden.read',
+        description: 'Provides read access to hidden files in HubSpot.',
       },
       {
         scope: 'automation',

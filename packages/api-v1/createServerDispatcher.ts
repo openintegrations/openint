@@ -21,7 +21,7 @@ export function createServerDispatcher({
   const dispatcher = {
     async dispatch(event: Event, viewer: Viewer) {
       // TODO: Should we perhaps use a zFunction to be able to validate the event inp;ut?
-      const [evt] = await db
+      let [evt] = await db
         .insert(schema.event)
         .values({
           id: makeId('evt', makeUlid()),
@@ -32,7 +32,7 @@ export function createServerDispatcher({
           user: {
             org_id: viewer.orgId,
             user_id: viewer.userId,
-            customer_id: viewer.customerId,
+            customer_id: viewer.customerId ?? (event.data as any)?.customer_id,
           },
         })
         .returning()
@@ -47,12 +47,38 @@ export function createServerDispatcher({
         })
         if (org?.metadata?.webhook_url) {
           console.log('Sending webhook', org.metadata.webhook_url)
+
+          // this makes the webhook payload match our v0 one for DO
+          // TODO : Remove this after DO deploy
+          if (
+            process.env['DO_ORG_ID'] === org.id &&
+            evt?.name === 'connect.connection-connected'
+          ) {
+            evt = {
+              ...evt,
+              // @ts-ignore
+              ts: evt?.timestamp,
+              data: {
+                ...evt?.data,
+                connectionId: evt?.data.connection_id,
+                user: evt?.user,
+              },
+              user: {
+                ...evt?.user,
+                cus_id: evt?.user?.customer_id,
+              },
+            }
+          }
+
           // TODO: Use ofetch to add retry logic
           // TODO: Add webhook result to event for debugging purpose
           // thought perhaps we could have done this with a retryLink?!
           const webhookResult = await fetchWithRetry(org.metadata.webhook_url, {
             method: 'POST',
             body: JSON.stringify(evt),
+            headers: {
+              'Content-Type': 'application/json',
+            },
             retries: 5,
             retryDelay(attempt) {
               return Math.pow(2, attempt) * 1000 // 1000, 2000, 4000, 8000, 16000, 32000

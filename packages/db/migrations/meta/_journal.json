@@ -78,6 +78,13 @@
       "when": 1745189085229,
       "tag": "0010_event_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1747613118976,
+      "tag": "0011_customer_api_key_and_bug_fixes",
+      "breakpoints": true
     }
   ]
 }

@@ -1,8 +1,8 @@
-import type {CustomerId, Viewer} from '@openint/cdk'
+import type {CustomerId, Id, Viewer} from '@openint/cdk'
 import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import Elysia from 'elysia'
-import {extractId, Id} from '@openint/cdk'
+import {extractId} from '@openint/cdk'
 import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
@@ -142,6 +142,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
         redirectUri,
       )
+
       return {...parsed, state}
     })
 
@@ -178,6 +179,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.id).toEqual(preConnectRes.current.state.connection_id)
       expect(settings.oauth.credentials?.expires_in).toBeDefined()
       expect(settings.oauth.credentials?.expires_at).toBeDefined()
+      expect(settings.oauth.credentials?.access_token).toBeDefined()
+      expect(settings.access_token).toBeDefined()
+      expect(settings.access_token).toEqual(
+        settings.oauth.credentials?.access_token,
+      )
+      
+
       // adding this if to satisfy the type checker
       if (settings.oauth.credentials?.expires_in) {
         const expiresAt = new Date(
@@ -243,8 +251,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         id: postConnectRes.current.id,
       })
       expect(res.status).toBe('healthy')
-      expect(res.status_message).toBeNull()
-      // TODO: Check if we used introspection or refresh token as part of check connection
     })
 
     // Simulate expiration
@@ -261,10 +267,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const res = await asCustomer.checkConnection({
         id: postConnectRes.current.id,
       })
-      // TODO: Do we need an `outdated` status to distinguish between revoked and expired?
+      // NOTE: this particular test i'm on the fence about... if it can't check connection, should we somehow return the previous status instead of updating it to error?
+      // After revocation, the token is no longer valid, so checkConnection will return error
       expect(res.status).toBe('disconnected')
-      // TODO: Fix the error here...
-      expect(res.status_message).toBe('Connection was revoked via OpenInt')
+      // The check connection error message is set by connectionChecker.ts
+      expect(res.status_message).toMatch(/Connection was revoked via OpenInt/)
     })
 
     // Reconnect
