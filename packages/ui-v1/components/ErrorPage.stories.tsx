@@ -107,3 +107,21 @@ export const CustomFormatter: Story = {
     },
   },
 }
+
+/**
+ * Example with a very long error message to test text wrapping and layout.
+ */
+export const LongErrorMessage: Story = {
+  args: {
+    error: {
+      name: 'ValidationError',
+      message:
+        'An unknown error has occurred: Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error. This is a very long error message that should wrap properly and not break the layout of the error page component.',
+      environmentName: 'Server',
+      digest: '9876543210',
+    },
+    reset: () => {
+      alert('Reset clicked')
+    },
+  },
+}
