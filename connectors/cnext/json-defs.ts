@@ -1,6 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 
 import acme_oauth2 from './json-defs/acme-oauth2'
+import adobe from './json-defs/adobe'
 import aircall from './json-defs/aircall'
 import confluence from './json-defs/confluence'
 import discord from './json-defs/discord'
@@ -33,6 +34,7 @@ import zoho_desk from './json-defs/zoho-desk'
 
 const defs = {
   'acme-oauth2': acme_oauth2,
+  adobe,
   aircall,
   confluence,
   discord,
