@@ -85,61 +85,61 @@ export function ErrorPage<TError = unknown>({
 
   return (
     <FullScreenCenter className={cn('justify-start pt-12', className)}>
-      <div className="flex max-w-xl flex-col items-center gap-5 p-4 text-center">
-        <div className="mb-3">
-          <Icon
-            name="AlertCircle"
-            className="text-destructive h-[70px] w-[70px]"
-          />
+      <div className="flex max-w-md flex-col items-center gap-6 p-5 text-center">
+        <div className="bg-destructive/10 flex h-16 w-16 items-center justify-center rounded-full">
+          <Icon name="XCircle" className="text-destructive h-8 w-8" />
         </div>
 
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">
-            {formattedError}
+        <div className="space-y-2.5">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            An error occurred
           </h1>
+          <p className="text-muted-foreground mx-auto max-w-sm text-sm/relaxed">
+            {formattedError}
+          </p>
         </div>
 
         {reset && (
           <Button
-            size="lg"
+            size="default"
             variant="default"
-            className="mt-2 flex items-center gap-2 rounded-lg px-10 py-5 text-base font-medium shadow-sm"
+            className="mt-2 flex items-center gap-2"
             onClick={reset}>
-            <Icon name="RefreshCcw" className="h-4 w-4" />
+            <Icon name="RefreshCcw" className="h-3.5 w-3.5" />
             Retry
           </Button>
         )}
 
-        <div className="text-muted-foreground mt-3 text-base">
+        <div className="text-muted-foreground mt-2 max-w-sm text-xs">
           <p>
             If issue persists, please contact support with the following
             identifier:
           </p>
-          <div className="mt-2 flex justify-center">
-            <CopyID value={errorId} size="medium" className="mx-auto" />
+          <div className="mt-3 flex justify-center">
+            <CopyID value={errorId} size="compact" className="mx-auto" />
           </div>
         </div>
 
-        <Accordion type="single" collapsible className="mt-6 w-full max-w-md">
-          <AccordionItem
-            value="details"
-            className="border-border bg-card rounded-lg border shadow-sm">
-            <AccordionTrigger className="px-6 py-3 text-base font-medium hover:no-underline">
-              Details
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="px-6 pb-6 pt-2">
-                <div className="bg-secondary-foreground overflow-hidden rounded-md shadow-inner">
-                  <div className="p-4 text-sm">
-                    <div className="text-background whitespace-pre-wrap break-words font-mono">
-                      {JSON.stringify(error, null, 2)}
+        <div className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="details" className="border-0">
+              <AccordionTrigger className="text-muted-foreground px-4 py-2 text-xs font-medium hover:no-underline">
+                Technical details
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="px-4 pb-4 pt-1">
+                  <div className="rounded-md border border-gray-200 bg-white">
+                    <div className="p-3 text-xs">
+                      <div className="text-muted-foreground whitespace-pre-wrap break-words font-mono">
+                        {JSON.stringify(error, null, 2)}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </div>
     </FullScreenCenter>
   )
