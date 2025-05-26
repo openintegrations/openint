@@ -4,7 +4,7 @@ export default {
   audience: ['business'],
   verticals: ['other'],
   display_name: 'Adobe',
-  stage: 'ga',
+  stage: 'alpha',
   version: 1,
   auth: {
     type: 'OAUTH2',
@@ -16,8 +16,21 @@ export default {
       authorize: {response_type: 'code'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_default_scopes: ['openid'],
-    openint_allowed_scopes: ['openid', 'AdobeID'],
+    // scopes required for the oauth flow to work in the first place including refreshing
+    required_scopes: ['openid', 'offline_access'],
+    // the minimum ones required to meet the app's functionality.
+    openint_default_scopes: ['openid', 'offline_access', 'creative_sdk'],
+    // everything that is possible without requiring verification
+    // must match 121 the created app for the connector
+    openint_allowed_scopes: [
+      'openid',
+      'offline_access',
+      'creative_sdk',
+      'read_organizations',
+      'additional_info.projectedProductContext',
+      'additional_info.job_function',
+    ],
+    // scopes list: https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/ims#scopes
     scopes: [
       {
         scope: 'openid',
@@ -43,6 +56,21 @@ export default {
         scope: 'user_management',
         description:
           'Allows the application to manage user accounts, including creating, updating, and deleting users. This scope has a large surface area and should be used cautiously.',
+      },
+      {
+        scope: 'read_organizations',
+        description:
+          'Provides read-only access to organization information and structure.',
+      },
+      {
+        scope: 'additional_info.projectedProductContext',
+        description:
+          'Provides access to projected product context information for enhanced user experience.',
+      },
+      {
+        scope: 'additional_info.job_function',
+        description:
+          'Provides access to user job function information for role-based access control.',
       },
     ],
   },
