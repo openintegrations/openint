@@ -17,6 +17,7 @@ export function AddConnectorConfigWrapper({
   const connectorRes = useSuspenseQuery(
     trpc.listConnectors.queryOptions({
       expand: ['schemas'],
+      limit: 3000,
     }),
   )
 

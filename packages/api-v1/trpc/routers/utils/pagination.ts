@@ -10,7 +10,7 @@ export const zListParams = z.object({
     .number()
     .int()
     .min(0)
-    .max(500)
+    .max(3000)
     .optional()
     .default(50)
     .describe('Limit the number of items returned'),
