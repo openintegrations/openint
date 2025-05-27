@@ -96,7 +96,7 @@ export const generalRouter = router({
     )
     .query(async ({ctx}) => {
       const INTEGRATION_TEST_ORG_ID = 'org_2owpNzLGQbIKvcpHnyfNivjXcDu'
-      const db = ctx.db ?? initDbNeon(envRequired.DATABASE_URL)
+      const db = ctx.as({role: 'system'}).db
 
       const orgConnectorConfigs = await db
         .select({
