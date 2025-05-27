@@ -36,7 +36,7 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
-  const {borderColor} = getConnectionStatusStyles(connection.status)
+  const {borderColor, pillColor} = getConnectionStatusStyles(connection.status)
 
   const handleMouseEnter = () => {
     if (onPress) {
@@ -63,6 +63,13 @@ export function ConnectionCard({
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
+      {/* Status indicator in top-left corner */}
+      {connection.status && connection.status !== 'healthy' && (
+        <div className="absolute left-2 top-2 z-10">
+          <div className={cn('h-2 w-2 rounded-full', pillColor)} />
+        </div>
+      )}
+
       <CardContent
         className="flex h-full flex-col items-center justify-center p-4 py-2"
         onClick={onPress}>
@@ -92,11 +99,15 @@ export function ConnectionCard({
                   {connection.id}
                 </pre>
               )}
-              {connection.status && (
-                <ConnectionStatusPill
-                  status={connection.status}
-                  onClick={onReconnect}
-                />
+
+              {/* Reconnect button for disconnected status */}
+              {connection.status === 'disconnected' && (
+                <div className="mt-2">
+                  <ConnectionStatusPill
+                    status={connection.status}
+                    onClick={onReconnect}
+                  />
+                </div>
               )}
             </>
           )}
