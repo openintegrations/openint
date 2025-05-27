@@ -246,6 +246,60 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** accelo */
+        "connector.accelo.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "accelo";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Accelo account (e.g., https://domain.api.accelo.com) */
+                subdomain: string;
+            };
+        };
+        /** accelo */
+        "connector.accelo.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "accelo";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** acme-oauth2 */
         "connector.acme-oauth2.discriminated_connection_settings": {
             /**
@@ -350,6 +404,62 @@ export interface components {
                 } | null;
             };
         };
+        /** adyen */
+        "connector.adyen.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "adyen";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The environment to use (e.g., live|test) */
+                environment: string;
+                /** @description The resource to use for your various requests (e.g., https://kyc-(live|test).adyen.com) */
+                resource: string;
+            };
+        };
+        /** adyen */
+        "connector.adyen.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "adyen";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** aircall */
         "connector.aircall.discriminated_connection_settings": {
             /**
@@ -423,6 +533,112 @@ export interface components {
             connector_name: "airtable";
             config: Record<string, never>;
         };
+        /** amazon */
+        "connector.amazon.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "amazon";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain extension for your Amazon account (e.g., com) */
+                extension: string;
+            };
+        };
+        /** amazon */
+        "connector.amazon.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "amazon";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** apaleo */
+        "connector.apaleo.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "apaleo";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** apaleo */
+        "connector.apaleo.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "apaleo";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** apollo */
         "connector.apollo.discriminated_connection_settings": {
             /**
@@ -442,6 +658,808 @@ export interface components {
              */
             connector_name: "apollo";
             config: Record<string, never>;
+        };
+        /** asana */
+        "connector.asana.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "asana";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** asana */
+        "connector.asana.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "asana";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** attio */
+        "connector.attio.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "attio";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** attio */
+        "connector.attio.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "attio";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** auth0 */
+        "connector.auth0.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "auth0";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Auth0 account (e.g., https://domain.auth0.com) */
+                subdomain: string;
+            };
+        };
+        /** auth0 */
+        "connector.auth0.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "auth0";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** autodesk */
+        "connector.autodesk.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "autodesk";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** autodesk */
+        "connector.autodesk.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "autodesk";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** aws */
+        "connector.aws.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "aws";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your AWS account (e.g., https://domain.amazoncognito.com) */
+                subdomain: string;
+                /** @description The domain extension of your AWS account (e.g., com) */
+                extension: string;
+                /** @description The API subdomain to the API you want to connect to (e.g., https://cognito-idp.us-east-2.amazonaws.com) */
+                apiSubdomain: string;
+            };
+        };
+        /** aws */
+        "connector.aws.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "aws";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** bamboohr */
+        "connector.bamboohr.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bamboohr";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your BambooHR account (e.g., https://domain.bamboohr.com) */
+                subdomain: string;
+            };
+        };
+        /** bamboohr */
+        "connector.bamboohr.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bamboohr";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** basecamp */
+        "connector.basecamp.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "basecamp";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The details of your app (e.g., example-subdomain) */
+                appDetails: string;
+                /** @description Your Account ID (e.g., 5899981) */
+                accountId: string;
+            };
+        };
+        /** basecamp */
+        "connector.basecamp.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "basecamp";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** battlenet */
+        "connector.battlenet.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "battlenet";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain extension of your Battle.net account (e.g., com) */
+                extension: string;
+                /** @description The domain to where you will access your API (e.g., https://us.api.blizzard.com) */
+                apiDomain: string;
+            };
+        };
+        /** battlenet */
+        "connector.battlenet.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "battlenet";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** bigcommerce */
+        "connector.bigcommerce.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bigcommerce";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The store hash of your BigCommerce account (e.g., Example123) */
+                storeHash: string;
+                /** @description The account UUID of your BigCommerce account (e.g., 123e4567-e89b-12d3-a456-426614174000) */
+                accountUuid: string;
+            };
+        };
+        /** bigcommerce */
+        "connector.bigcommerce.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bigcommerce";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** bitbucket */
+        "connector.bitbucket.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bitbucket";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** bitbucket */
+        "connector.bitbucket.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bitbucket";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** bitly */
+        "connector.bitly.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bitly";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** bitly */
+        "connector.bitly.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "bitly";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** blackbaud */
+        "connector.blackbaud.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "blackbaud";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** blackbaud */
+        "connector.blackbaud.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "blackbaud";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** boldsign */
+        "connector.boldsign.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "boldsign";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** boldsign */
+        "connector.boldsign.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "boldsign";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** box */
+        "connector.box.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "box";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** box */
+        "connector.box.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "box";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** braintree */
+        "connector.braintree.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "braintree";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** braintree */
+        "connector.braintree.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "braintree";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** brex */
         "connector.brex.discriminated_connection_settings": {
@@ -469,6 +1487,162 @@ export interface components {
                 };
                 /** @description API key auth support */
                 apikeyAuth?: boolean;
+            };
+        };
+        /** calendly */
+        "connector.calendly.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "calendly";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** calendly */
+        "connector.calendly.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "calendly";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** clickup */
+        "connector.clickup.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "clickup";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** clickup */
+        "connector.clickup.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "clickup";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** close */
+        "connector.close.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "close";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** close */
+        "connector.close.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "close";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
             };
         };
         /** coda */
@@ -543,6 +1717,430 @@ export interface components {
                 } | null;
             };
         };
+        /** contentful */
+        "connector.contentful.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "contentful";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Contentful account (e.g., https://domain.contentful.com) */
+                subdomain: string;
+            };
+        };
+        /** contentful */
+        "connector.contentful.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "contentful";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** contentstack */
+        "connector.contentstack.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "contentstack";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Contentstack account (e.g., https://domain.contentstack.com) */
+                subdomain: string;
+                /** @description The app ID of your Contentstack account (e.g., example-subdomain) */
+                appId: string;
+                /** @description The domain to where you will access your API (e.g., https://eu-api.contentstack.com) */
+                apiDomain: string;
+            };
+        };
+        /** contentstack */
+        "connector.contentstack.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "contentstack";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** copper */
+        "connector.copper.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "copper";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** copper */
+        "connector.copper.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "copper";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** coros */
+        "connector.coros.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "coros";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** coros */
+        "connector.coros.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "coros";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** datev */
+        "connector.datev.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "datev";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** datev */
+        "connector.datev.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "datev";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** deel */
+        "connector.deel.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "deel";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** deel */
+        "connector.deel.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "deel";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** dialpad */
+        "connector.dialpad.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "dialpad";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** dialpad */
+        "connector.dialpad.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "dialpad";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** digitalocean */
+        "connector.digitalocean.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "digitalocean";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** digitalocean */
+        "connector.digitalocean.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "digitalocean";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** discord */
         "connector.discord.discriminated_connection_settings": {
             /**
@@ -595,6 +2193,372 @@ export interface components {
                 } | null;
             };
         };
+        /** docusign */
+        "connector.docusign.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "docusign";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** docusign */
+        "connector.docusign.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "docusign";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** dropbox */
+        "connector.dropbox.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "dropbox";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** dropbox */
+        "connector.dropbox.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "dropbox";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** ebay */
+        "connector.ebay.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ebay";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** ebay */
+        "connector.ebay.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ebay";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** egnyte */
+        "connector.egnyte.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "egnyte";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Egnyte account (e.g., https://domain.egnyte.com) */
+                subdomain: string;
+            };
+        };
+        /** egnyte */
+        "connector.egnyte.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "egnyte";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** envoy */
+        "connector.envoy.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "envoy";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** envoy */
+        "connector.envoy.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "envoy";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** eventbrite */
+        "connector.eventbrite.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "eventbrite";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** eventbrite */
+        "connector.eventbrite.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "eventbrite";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** exist */
+        "connector.exist.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "exist";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** exist */
+        "connector.exist.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "exist";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** facebook */
         "connector.facebook.discriminated_connection_settings": {
             /**
@@ -636,6 +2600,110 @@ export interface components {
              * @enum {string}
              */
             connector_name: "facebook";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** factorial */
+        "connector.factorial.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "factorial";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** factorial */
+        "connector.factorial.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "factorial";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** figma */
+        "connector.figma.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "figma";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** figma */
+        "connector.figma.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "figma";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -735,6 +2803,58 @@ export interface components {
             connector_name: "firebase";
             config: Record<string, never>;
         };
+        /** fitbit */
+        "connector.fitbit.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fitbit";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** fitbit */
+        "connector.fitbit.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fitbit";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** foreceipt */
         "connector.foreceipt.discriminated_connection_settings": {
             /**
@@ -757,6 +2877,162 @@ export interface components {
              */
             connector_name: "foreceipt";
             config: Record<string, never>;
+        };
+        /** fortnox */
+        "connector.fortnox.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fortnox";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** fortnox */
+        "connector.fortnox.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fortnox";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** freshbooks */
+        "connector.freshbooks.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "freshbooks";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** freshbooks */
+        "connector.freshbooks.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "freshbooks";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** front */
+        "connector.front.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "front";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** front */
+        "connector.front.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "front";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** github */
         "connector.github.discriminated_connection_settings": {
@@ -799,6 +3075,58 @@ export interface components {
              * @enum {string}
              */
             connector_name: "github";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** gitlab */
+        "connector.gitlab.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gitlab";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** gitlab */
+        "connector.gitlab.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gitlab";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -1124,6 +3452,112 @@ export interface components {
                 } | null;
             };
         };
+        /** gorgias */
+        "connector.gorgias.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gorgias";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Gorgias account (e.g., https://domain.gorgias.com) */
+                subdomain: string;
+            };
+        };
+        /** gorgias */
+        "connector.gorgias.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gorgias";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** grain */
+        "connector.grain.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "grain";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** grain */
+        "connector.grain.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "grain";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** greenhouse */
         "connector.greenhouse.discriminated_connection_settings": {
             /**
@@ -1144,6 +3578,164 @@ export interface components {
             connector_name: "greenhouse";
             config: Record<string, never>;
         };
+        /** gumroad */
+        "connector.gumroad.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gumroad";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** gumroad */
+        "connector.gumroad.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gumroad";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** gusto */
+        "connector.gusto.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gusto";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** gusto */
+        "connector.gusto.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gusto";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** harvest */
+        "connector.harvest.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "harvest";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The details of your app (e.g., example-subdomain) */
+                appDetails: string;
+            };
+        };
+        /** harvest */
+        "connector.harvest.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "harvest";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** heron */
         "connector.heron.discriminated_connection_settings": {
             /**
@@ -1162,6 +3754,58 @@ export interface components {
             connector_name: "heron";
             config: {
                 apiKey: string;
+            };
+        };
+        /** highlevel */
+        "connector.highlevel.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "highlevel";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** highlevel */
+        "connector.highlevel.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "highlevel";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
             };
         };
         /** hubspot */
@@ -1320,6 +3964,58 @@ export interface components {
                 } | null;
             };
         };
+        /** intuit */
+        "connector.intuit.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intuit";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** intuit */
+        "connector.intuit.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intuit";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** jira */
         "connector.jira.discriminated_connection_settings": {
             /**
@@ -1361,6 +4057,58 @@ export interface components {
              * @enum {string}
              */
             connector_name: "jira";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** keap */
+        "connector.keap.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "keap";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** keap */
+        "connector.keap.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "keap";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -1528,6 +4276,58 @@ export interface components {
                 } | null;
             };
         };
+        /** linkhut */
+        "connector.linkhut.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linkhut";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** linkhut */
+        "connector.linkhut.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linkhut";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** lunchmoney */
         "connector.lunchmoney.discriminated_connection_settings": {
             /**
@@ -1546,6 +4346,60 @@ export interface components {
             connector_name: "lunchmoney";
             config: {
                 accessToken: string;
+            };
+        };
+        /** mailchimp */
+        "connector.mailchimp.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mailchimp";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The data center for your account (e.g., us6) */
+                dc: string;
+            };
+        };
+        /** mailchimp */
+        "connector.mailchimp.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mailchimp";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
             };
         };
         /** mercury */
@@ -1597,6 +4451,110 @@ export interface components {
                 apiKey: string;
             };
         };
+        /** miro */
+        "connector.miro.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "miro";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** miro */
+        "connector.miro.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "miro";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** monday */
+        "connector.monday.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "monday";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** monday */
+        "connector.monday.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "monday";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** moota */
         "connector.moota.discriminated_connection_settings": {
             /**
@@ -1615,6 +4573,220 @@ export interface components {
             connector_name: "moota";
             config: {
                 token: string;
+            };
+        };
+        /** mural */
+        "connector.mural.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mural";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** mural */
+        "connector.mural.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mural";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** namely */
+        "connector.namely.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "namely";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The name of your Namely company (e.g., example) */
+                company: string;
+            };
+        };
+        /** namely */
+        "connector.namely.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "namely";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** nationbuilder */
+        "connector.nationbuilder.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "nationbuilder";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The account ID of your NationBuilder account (e.g., example-subdomain) */
+                accountId: string;
+            };
+        };
+        /** nationbuilder */
+        "connector.nationbuilder.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "nationbuilder";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** netsuite */
+        "connector.netsuite.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "netsuite";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The account ID of your NetSuite account (e.g., tstdrv231585) */
+                accountId: string;
+            };
+        };
+        /** netsuite */
+        "connector.netsuite.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "netsuite";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
             };
         };
         /** notion */
@@ -1658,6 +4830,114 @@ export interface components {
              * @enum {string}
              */
             connector_name: "notion";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** odoo */
+        "connector.odoo.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "odoo";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain of your Odoo account (e.g., https://example-subdomain) */
+                serverUrl: string;
+            };
+        };
+        /** odoo */
+        "connector.odoo.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "odoo";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** okta */
+        "connector.okta.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "okta";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Okta account (e.g., https://domain.okta.com) */
+                subdomain: string;
+            };
+        };
+        /** okta */
+        "connector.okta.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "okta";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -1733,6 +5013,110 @@ export interface components {
                 api_url: string;
             };
         };
+        /** osu */
+        "connector.osu.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "osu";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** osu */
+        "connector.osu.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "osu";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** oura */
+        "connector.oura.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "oura";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** oura */
+        "connector.oura.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "oura";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** outreach */
         "connector.outreach.discriminated_connection_settings": {
             /**
@@ -1774,6 +5158,318 @@ export interface components {
              * @enum {string}
              */
             connector_name: "outreach";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** pagerduty */
+        "connector.pagerduty.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pagerduty";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** pagerduty */
+        "connector.pagerduty.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pagerduty";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** pandadoc */
+        "connector.pandadoc.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pandadoc";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** pandadoc */
+        "connector.pandadoc.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pandadoc";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** payfit */
+        "connector.payfit.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "payfit";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** payfit */
+        "connector.payfit.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "payfit";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** paypal */
+        "connector.paypal.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "paypal";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** paypal */
+        "connector.paypal.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "paypal";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** pennylane */
+        "connector.pennylane.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pennylane";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** pennylane */
+        "connector.pennylane.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pennylane";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** pinterest */
+        "connector.pinterest.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pinterest";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** pinterest */
+        "connector.pinterest.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pinterest";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -1892,6 +5588,60 @@ export interface components {
                 language: "en" | "fr" | "es" | "nl" | "de";
             };
         };
+        /** podium */
+        "connector.podium.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "podium";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The API version of your Podium account (e.g., example-subdomain) */
+                apiVersion: string;
+            };
+        };
+        /** podium */
+        "connector.podium.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "podium";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** postgres */
         "connector.postgres.discriminated_connection_settings": {
             /**
@@ -1911,6 +5661,112 @@ export interface components {
              */
             connector_name: "postgres";
             config: Record<string, never>;
+        };
+        /** productboard */
+        "connector.productboard.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "productboard";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** productboard */
+        "connector.productboard.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "productboard";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** qualtrics */
+        "connector.qualtrics.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "qualtrics";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Qualtrics account (e.g., https://domain.qualtrics.com) */
+                subdomain: string;
+            };
+        };
+        /** qualtrics */
+        "connector.qualtrics.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "qualtrics";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** quickbooks */
         "connector.quickbooks.discriminated_connection_settings": {
@@ -2042,6 +5898,112 @@ export interface components {
                 } | null;
             };
         };
+        /** sage */
+        "connector.sage.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "sage";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** sage */
+        "connector.sage.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "sage";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** salesforce */
+        "connector.salesforce.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesforce";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The instance URL of your Salesforce account (e.g., example) */
+                instance_url: string;
+            };
+        };
+        /** salesforce */
+        "connector.salesforce.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesforce";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** salesloft */
         "connector.salesloft.discriminated_connection_settings": {
             /**
@@ -2116,6 +6078,164 @@ export interface components {
                 url?: string | null;
             };
         };
+        /** segment */
+        "connector.segment.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "segment";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** segment */
+        "connector.segment.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "segment";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** servicem8 */
+        "connector.servicem8.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "servicem8";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** servicem8 */
+        "connector.servicem8.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "servicem8";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** servicenow */
+        "connector.servicenow.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "servicenow";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your ServiceNow account (e.g., https://domain.service-now.com) */
+                subdomain: string;
+            };
+        };
+        /** servicenow */
+        "connector.servicenow.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "servicenow";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** sharepoint */
         "connector.sharepoint.discriminated_connection_settings": {
             /**
@@ -2168,6 +6288,112 @@ export interface components {
                 } | null;
             };
         };
+        /** shopify */
+        "connector.shopify.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "shopify";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Shopify account (e.g., https://domain.myshopify.com) */
+                subdomain: string;
+            };
+        };
+        /** shopify */
+        "connector.shopify.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "shopify";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** signnow */
+        "connector.signnow.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "signnow";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** signnow */
+        "connector.signnow.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "signnow";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** slack */
         "connector.slack.discriminated_connection_settings": {
             /**
@@ -2209,6 +6435,112 @@ export interface components {
              * @enum {string}
              */
             connector_name: "slack";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** smartsheet */
+        "connector.smartsheet.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "smartsheet";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** smartsheet */
+        "connector.smartsheet.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "smartsheet";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** snowflake */
+        "connector.snowflake.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "snowflake";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain of your Snowflake account (e.g., https://example-subdomain) */
+                snowflake_account_url: string;
+            };
+        };
+        /** snowflake */
+        "connector.snowflake.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "snowflake";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -2274,6 +6606,268 @@ export interface components {
             connector_name: "splitwise";
             config: Record<string, never>;
         };
+        /** spotify */
+        "connector.spotify.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "spotify";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** spotify */
+        "connector.spotify.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "spotify";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** squarespace */
+        "connector.squarespace.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "squarespace";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The user agent of your custom app (e.g., example-subdomain) */
+                customappDescription: string;
+            };
+        };
+        /** squarespace */
+        "connector.squarespace.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "squarespace";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** squareup */
+        "connector.squareup.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "squareup";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** squareup */
+        "connector.squareup.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "squareup";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** stackexchange */
+        "connector.stackexchange.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "stackexchange";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** stackexchange */
+        "connector.stackexchange.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "stackexchange";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** strava */
+        "connector.strava.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "strava";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** strava */
+        "connector.strava.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "strava";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** stripe */
         "connector.stripe.discriminated_connection_settings": {
             /**
@@ -2302,6 +6896,58 @@ export interface components {
                 apikeyAuth?: boolean;
             };
         };
+        /** teamwork */
+        "connector.teamwork.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "teamwork";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** teamwork */
+        "connector.teamwork.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "teamwork";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** teller */
         "connector.teller.discriminated_connection_settings": {
             /**
@@ -2323,6 +6969,162 @@ export interface components {
             config: {
                 applicationId: string;
                 token?: string | null;
+            };
+        };
+        /** ticktick */
+        "connector.ticktick.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ticktick";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** ticktick */
+        "connector.ticktick.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ticktick";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** timely */
+        "connector.timely.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "timely";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** timely */
+        "connector.timely.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "timely";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** todoist */
+        "connector.todoist.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "todoist";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** todoist */
+        "connector.todoist.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "todoist";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
             };
         };
         /** toggl */
@@ -2347,6 +7149,162 @@ export interface components {
             connector_name: "toggl";
             config: Record<string, never>;
         };
+        /** tremendous */
+        "connector.tremendous.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tremendous";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** tremendous */
+        "connector.tremendous.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tremendous";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** tsheetsteam */
+        "connector.tsheetsteam.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tsheetsteam";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** tsheetsteam */
+        "connector.tsheetsteam.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tsheetsteam";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** tumblr */
+        "connector.tumblr.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tumblr";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** tumblr */
+        "connector.tumblr.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "tumblr";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** twenty */
         "connector.twenty.discriminated_connection_settings": {
             /**
@@ -2366,6 +7324,112 @@ export interface components {
              */
             connector_name: "twenty";
             config: Record<string, never>;
+        };
+        /** twinfield */
+        "connector.twinfield.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twinfield";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The cluster to your Twinfield instance (e.g., https://accounting.twinfield.com) */
+                cluster: string;
+            };
+        };
+        /** twinfield */
+        "connector.twinfield.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twinfield";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** twitch */
+        "connector.twitch.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitch";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** twitch */
+        "connector.twitch.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitch";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** twitter */
         "connector.twitter.discriminated_connection_settings": {
@@ -2419,6 +7483,110 @@ export interface components {
                 } | null;
             };
         };
+        /** typeform */
+        "connector.typeform.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "typeform";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** typeform */
+        "connector.typeform.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "typeform";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** uber */
+        "connector.uber.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "uber";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** uber */
+        "connector.uber.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "uber";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** venmo */
         "connector.venmo.discriminated_connection_settings": {
             /**
@@ -2447,6 +7615,266 @@ export interface components {
                 } | null;
             };
         };
+        /** vimeo */
+        "connector.vimeo.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "vimeo";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** vimeo */
+        "connector.vimeo.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "vimeo";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** wakatime */
+        "connector.wakatime.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wakatime";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** wakatime */
+        "connector.wakatime.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wakatime";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** wealthbox */
+        "connector.wealthbox.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wealthbox";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** wealthbox */
+        "connector.wealthbox.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wealthbox";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** webflow */
+        "connector.webflow.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "webflow";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** webflow */
+        "connector.webflow.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "webflow";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** whoop */
+        "connector.whoop.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "whoop";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** whoop */
+        "connector.whoop.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "whoop";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** wise */
         "connector.wise.discriminated_connection_settings": {
             /**
@@ -2468,6 +7896,112 @@ export interface components {
              */
             connector_name: "wise";
             config: Record<string, never>;
+        };
+        /** wordpress */
+        "connector.wordpress.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wordpress";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** wordpress */
+        "connector.wordpress.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wordpress";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** wrike */
+        "connector.wrike.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wrike";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain of your Wrike account (e.g., https://example-subdomain) */
+                host: string;
+            };
+        };
+        /** wrike */
+        "connector.wrike.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wrike";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** xero */
         "connector.xero.discriminated_connection_settings": {
@@ -2510,6 +8044,112 @@ export interface components {
              * @enum {string}
              */
             connector_name: "xero";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** yahoo */
+        "connector.yahoo.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yahoo";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain to the API you want to connect to (e.g., https://fantasysports.yahooapis.com) */
+                apiDomain: string;
+            };
+        };
+        /** yahoo */
+        "connector.yahoo.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yahoo";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** yandex */
+        "connector.yandex.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yandex";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** yandex */
+        "connector.yandex.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yandex";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth?: {
@@ -2571,6 +8211,164 @@ export interface components {
                 } | null;
             };
         };
+        /** zapier */
+        "connector.zapier.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zapier";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** zapier */
+        "connector.zapier.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zapier";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** zendesk */
+        "connector.zendesk.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zendesk";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The subdomain of your Zendesk account (e.g., https://domain.zendesk.com) */
+                subdomain: string;
+            };
+        };
+        /** zendesk */
+        "connector.zendesk.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zendesk";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** zenefits */
+        "connector.zenefits.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zenefits";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** zenefits */
+        "connector.zenefits.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zenefits";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** zoho-desk */
         "connector.zoho-desk.discriminated_connection_settings": {
             /**
@@ -2625,6 +8423,112 @@ export interface components {
                 } | null;
             };
         };
+        /** zoho */
+        "connector.zoho.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoho";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+                /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
+                extension: string;
+            };
+        };
+        /** zoho */
+        "connector.zoho.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoho";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** zoom */
+        "connector.zoom.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoom";
+            settings?: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope?: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
+                access_token?: string;
+            };
+        };
+        /** zoom */
+        "connector.zoom.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoom";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth?: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    /** @description Custom redirect URI */
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** connection_select */
         "core.connection_select": {
             connector_name: "core.connection_select";
@@ -2648,7 +8552,7 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
-        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name">);
+        } & Omit<components["schemas"]["connector.accelo.discriminated_connection_settings"] | components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.adyen.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.amazon.discriminated_connection_settings"] | components["schemas"]["connector.apaleo.discriminated_connection_settings"] | components["schemas"]["connector.asana.discriminated_connection_settings"] | components["schemas"]["connector.attio.discriminated_connection_settings"] | components["schemas"]["connector.auth0.discriminated_connection_settings"] | components["schemas"]["connector.autodesk.discriminated_connection_settings"] | components["schemas"]["connector.aws.discriminated_connection_settings"] | components["schemas"]["connector.bamboohr.discriminated_connection_settings"] | components["schemas"]["connector.basecamp.discriminated_connection_settings"] | components["schemas"]["connector.battlenet.discriminated_connection_settings"] | components["schemas"]["connector.bigcommerce.discriminated_connection_settings"] | components["schemas"]["connector.bitbucket.discriminated_connection_settings"] | components["schemas"]["connector.bitly.discriminated_connection_settings"] | components["schemas"]["connector.blackbaud.discriminated_connection_settings"] | components["schemas"]["connector.boldsign.discriminated_connection_settings"] | components["schemas"]["connector.box.discriminated_connection_settings"] | components["schemas"]["connector.braintree.discriminated_connection_settings"] | components["schemas"]["connector.calendly.discriminated_connection_settings"] | components["schemas"]["connector.clickup.discriminated_connection_settings"] | components["schemas"]["connector.close.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.contentful.discriminated_connection_settings"] | components["schemas"]["connector.contentstack.discriminated_connection_settings"] | components["schemas"]["connector.copper.discriminated_connection_settings"] | components["schemas"]["connector.coros.discriminated_connection_settings"] | components["schemas"]["connector.datev.discriminated_connection_settings"] | components["schemas"]["connector.deel.discriminated_connection_settings"] | components["schemas"]["connector.dialpad.discriminated_connection_settings"] | components["schemas"]["connector.digitalocean.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.docusign.discriminated_connection_settings"] | components["schemas"]["connector.dropbox.discriminated_connection_settings"] | components["schemas"]["connector.ebay.discriminated_connection_settings"] | components["schemas"]["connector.egnyte.discriminated_connection_settings"] | components["schemas"]["connector.envoy.discriminated_connection_settings"] | components["schemas"]["connector.eventbrite.discriminated_connection_settings"] | components["schemas"]["connector.exist.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.factorial.discriminated_connection_settings"] | components["schemas"]["connector.figma.discriminated_connection_settings"] | components["schemas"]["connector.fitbit.discriminated_connection_settings"] | components["schemas"]["connector.fortnox.discriminated_connection_settings"] | components["schemas"]["connector.freshbooks.discriminated_connection_settings"] | components["schemas"]["connector.front.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gitlab.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.gorgias.discriminated_connection_settings"] | components["schemas"]["connector.grain.discriminated_connection_settings"] | components["schemas"]["connector.gumroad.discriminated_connection_settings"] | components["schemas"]["connector.gusto.discriminated_connection_settings"] | components["schemas"]["connector.harvest.discriminated_connection_settings"] | components["schemas"]["connector.highlevel.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.intuit.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.keap.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.linkhut.discriminated_connection_settings"] | components["schemas"]["connector.mailchimp.discriminated_connection_settings"] | components["schemas"]["connector.miro.discriminated_connection_settings"] | components["schemas"]["connector.monday.discriminated_connection_settings"] | components["schemas"]["connector.mural.discriminated_connection_settings"] | components["schemas"]["connector.namely.discriminated_connection_settings"] | components["schemas"]["connector.nationbuilder.discriminated_connection_settings"] | components["schemas"]["connector.netsuite.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.odoo.discriminated_connection_settings"] | components["schemas"]["connector.okta.discriminated_connection_settings"] | components["schemas"]["connector.osu.discriminated_connection_settings"] | components["schemas"]["connector.oura.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pagerduty.discriminated_connection_settings"] | components["schemas"]["connector.pandadoc.discriminated_connection_settings"] | components["schemas"]["connector.payfit.discriminated_connection_settings"] | components["schemas"]["connector.paypal.discriminated_connection_settings"] | components["schemas"]["connector.pennylane.discriminated_connection_settings"] | components["schemas"]["connector.pinterest.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.podium.discriminated_connection_settings"] | components["schemas"]["connector.productboard.discriminated_connection_settings"] | components["schemas"]["connector.qualtrics.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.sage.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.segment.discriminated_connection_settings"] | components["schemas"]["connector.servicem8.discriminated_connection_settings"] | components["schemas"]["connector.servicenow.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.shopify.discriminated_connection_settings"] | components["schemas"]["connector.signnow.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.smartsheet.discriminated_connection_settings"] | components["schemas"]["connector.snowflake.discriminated_connection_settings"] | components["schemas"]["connector.spotify.discriminated_connection_settings"] | components["schemas"]["connector.squarespace.discriminated_connection_settings"] | components["schemas"]["connector.squareup.discriminated_connection_settings"] | components["schemas"]["connector.stackexchange.discriminated_connection_settings"] | components["schemas"]["connector.strava.discriminated_connection_settings"] | components["schemas"]["connector.teamwork.discriminated_connection_settings"] | components["schemas"]["connector.ticktick.discriminated_connection_settings"] | components["schemas"]["connector.timely.discriminated_connection_settings"] | components["schemas"]["connector.todoist.discriminated_connection_settings"] | components["schemas"]["connector.tremendous.discriminated_connection_settings"] | components["schemas"]["connector.tsheetsteam.discriminated_connection_settings"] | components["schemas"]["connector.tumblr.discriminated_connection_settings"] | components["schemas"]["connector.twinfield.discriminated_connection_settings"] | components["schemas"]["connector.twitch.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.typeform.discriminated_connection_settings"] | components["schemas"]["connector.uber.discriminated_connection_settings"] | components["schemas"]["connector.vimeo.discriminated_connection_settings"] | components["schemas"]["connector.wakatime.discriminated_connection_settings"] | components["schemas"]["connector.wealthbox.discriminated_connection_settings"] | components["schemas"]["connector.webflow.discriminated_connection_settings"] | components["schemas"]["connector.whoop.discriminated_connection_settings"] | components["schemas"]["connector.wordpress.discriminated_connection_settings"] | components["schemas"]["connector.wrike.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.yahoo.discriminated_connection_settings"] | components["schemas"]["connector.yandex.discriminated_connection_settings"] | components["schemas"]["connector.zapier.discriminated_connection_settings"] | components["schemas"]["connector.zendesk.discriminated_connection_settings"] | components["schemas"]["connector.zenefits.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.zoho.discriminated_connection_settings"] | components["schemas"]["connector.zoom.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name">);
         /** Connector */
         "core.connector": {
             name: string;
@@ -2681,7 +8585,7 @@ export interface components {
          * connector
          * @enum {string}
          */
-        "core.connector.name": "acme-oauth2" | "adobe" | "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "moota" | "notion" | "onebrick" | "openledger" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesloft" | "saltedge" | "sharepoint" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zoho-desk";
+        "core.connector.name": "accelo" | "acme-oauth2" | "adobe" | "adyen" | "aircall" | "airtable" | "amazon" | "apaleo" | "apollo" | "asana" | "attio" | "auth0" | "autodesk" | "aws" | "bamboohr" | "basecamp" | "battlenet" | "bigcommerce" | "bitbucket" | "bitly" | "blackbaud" | "boldsign" | "box" | "braintree" | "brex" | "calendly" | "clickup" | "close" | "coda" | "confluence" | "contentful" | "contentstack" | "copper" | "coros" | "datev" | "deel" | "dialpad" | "digitalocean" | "discord" | "docusign" | "dropbox" | "ebay" | "egnyte" | "envoy" | "eventbrite" | "exist" | "facebook" | "factorial" | "figma" | "finch" | "firebase" | "fitbit" | "foreceipt" | "fortnox" | "freshbooks" | "front" | "github" | "gitlab" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "gorgias" | "grain" | "greenhouse" | "gumroad" | "gusto" | "harvest" | "heron" | "highlevel" | "hubspot" | "instagram" | "intercom" | "intuit" | "jira" | "keap" | "lever" | "linear" | "linkedin" | "linkhut" | "lunchmoney" | "mailchimp" | "mercury" | "merge" | "miro" | "monday" | "moota" | "mural" | "namely" | "nationbuilder" | "netsuite" | "notion" | "odoo" | "okta" | "onebrick" | "openledger" | "osu" | "oura" | "outreach" | "pagerduty" | "pandadoc" | "payfit" | "paypal" | "pennylane" | "pinterest" | "pipedrive" | "plaid" | "podium" | "postgres" | "productboard" | "qualtrics" | "quickbooks" | "ramp" | "reddit" | "sage" | "salesforce" | "salesloft" | "saltedge" | "segment" | "servicem8" | "servicenow" | "sharepoint" | "shopify" | "signnow" | "slack" | "smartsheet" | "snowflake" | "splitwise" | "spotify" | "squarespace" | "squareup" | "stackexchange" | "strava" | "stripe" | "teamwork" | "teller" | "ticktick" | "timely" | "todoist" | "toggl" | "tremendous" | "tsheetsteam" | "tumblr" | "twenty" | "twinfield" | "twitch" | "twitter" | "typeform" | "uber" | "venmo" | "vimeo" | "wakatime" | "wealthbox" | "webflow" | "whoop" | "wise" | "wordpress" | "wrike" | "xero" | "yahoo" | "yandex" | "yodlee" | "zapier" | "zendesk" | "zenefits" | "zoho" | "zoho-desk" | "zoom";
         /** customer_select */
         "core.customer_select": {
             org_id: string;
@@ -2981,7 +8885,7 @@ export interface operations {
                         metadata?: {
                             [key: string]: unknown;
                         } | null;
-                    } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.adobe.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.openledger.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
+                    } & Omit<components["schemas"]["connector.accelo.discriminated_connector_config"] | components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.adobe.discriminated_connector_config"] | components["schemas"]["connector.adyen.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.amazon.discriminated_connector_config"] | components["schemas"]["connector.apaleo.discriminated_connector_config"] | components["schemas"]["connector.asana.discriminated_connector_config"] | components["schemas"]["connector.attio.discriminated_connector_config"] | components["schemas"]["connector.auth0.discriminated_connector_config"] | components["schemas"]["connector.autodesk.discriminated_connector_config"] | components["schemas"]["connector.aws.discriminated_connector_config"] | components["schemas"]["connector.bamboohr.discriminated_connector_config"] | components["schemas"]["connector.basecamp.discriminated_connector_config"] | components["schemas"]["connector.battlenet.discriminated_connector_config"] | components["schemas"]["connector.bigcommerce.discriminated_connector_config"] | components["schemas"]["connector.bitbucket.discriminated_connector_config"] | components["schemas"]["connector.bitly.discriminated_connector_config"] | components["schemas"]["connector.blackbaud.discriminated_connector_config"] | components["schemas"]["connector.boldsign.discriminated_connector_config"] | components["schemas"]["connector.box.discriminated_connector_config"] | components["schemas"]["connector.braintree.discriminated_connector_config"] | components["schemas"]["connector.calendly.discriminated_connector_config"] | components["schemas"]["connector.clickup.discriminated_connector_config"] | components["schemas"]["connector.close.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.contentful.discriminated_connector_config"] | components["schemas"]["connector.contentstack.discriminated_connector_config"] | components["schemas"]["connector.copper.discriminated_connector_config"] | components["schemas"]["connector.coros.discriminated_connector_config"] | components["schemas"]["connector.datev.discriminated_connector_config"] | components["schemas"]["connector.deel.discriminated_connector_config"] | components["schemas"]["connector.dialpad.discriminated_connector_config"] | components["schemas"]["connector.digitalocean.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.docusign.discriminated_connector_config"] | components["schemas"]["connector.dropbox.discriminated_connector_config"] | components["schemas"]["connector.ebay.discriminated_connector_config"] | components["schemas"]["connector.egnyte.discriminated_connector_config"] | components["schemas"]["connector.envoy.discriminated_connector_config"] | components["schemas"]["connector.eventbrite.discriminated_connector_config"] | components["schemas"]["connector.exist.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.factorial.discriminated_connector_config"] | components["schemas"]["connector.figma.discriminated_connector_config"] | components["schemas"]["connector.fitbit.discriminated_connector_config"] | components["schemas"]["connector.fortnox.discriminated_connector_config"] | components["schemas"]["connector.freshbooks.discriminated_connector_config"] | components["schemas"]["connector.front.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gitlab.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.gorgias.discriminated_connector_config"] | components["schemas"]["connector.grain.discriminated_connector_config"] | components["schemas"]["connector.gumroad.discriminated_connector_config"] | components["schemas"]["connector.gusto.discriminated_connector_config"] | components["schemas"]["connector.harvest.discriminated_connector_config"] | components["schemas"]["connector.highlevel.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.intuit.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.keap.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.linkhut.discriminated_connector_config"] | components["schemas"]["connector.mailchimp.discriminated_connector_config"] | components["schemas"]["connector.miro.discriminated_connector_config"] | components["schemas"]["connector.monday.discriminated_connector_config"] | components["schemas"]["connector.mural.discriminated_connector_config"] | components["schemas"]["connector.namely.discriminated_connector_config"] | components["schemas"]["connector.nationbuilder.discriminated_connector_config"] | components["schemas"]["connector.netsuite.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.odoo.discriminated_connector_config"] | components["schemas"]["connector.okta.discriminated_connector_config"] | components["schemas"]["connector.osu.discriminated_connector_config"] | components["schemas"]["connector.oura.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pagerduty.discriminated_connector_config"] | components["schemas"]["connector.pandadoc.discriminated_connector_config"] | components["schemas"]["connector.payfit.discriminated_connector_config"] | components["schemas"]["connector.paypal.discriminated_connector_config"] | components["schemas"]["connector.pennylane.discriminated_connector_config"] | components["schemas"]["connector.pinterest.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.podium.discriminated_connector_config"] | components["schemas"]["connector.productboard.discriminated_connector_config"] | components["schemas"]["connector.qualtrics.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.sage.discriminated_connector_config"] | components["schemas"]["connector.salesforce.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.segment.discriminated_connector_config"] | components["schemas"]["connector.servicem8.discriminated_connector_config"] | components["schemas"]["connector.servicenow.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.shopify.discriminated_connector_config"] | components["schemas"]["connector.signnow.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.smartsheet.discriminated_connector_config"] | components["schemas"]["connector.snowflake.discriminated_connector_config"] | components["schemas"]["connector.spotify.discriminated_connector_config"] | components["schemas"]["connector.squarespace.discriminated_connector_config"] | components["schemas"]["connector.squareup.discriminated_connector_config"] | components["schemas"]["connector.stackexchange.discriminated_connector_config"] | components["schemas"]["connector.strava.discriminated_connector_config"] | components["schemas"]["connector.teamwork.discriminated_connector_config"] | components["schemas"]["connector.ticktick.discriminated_connector_config"] | components["schemas"]["connector.timely.discriminated_connector_config"] | components["schemas"]["connector.todoist.discriminated_connector_config"] | components["schemas"]["connector.tremendous.discriminated_connector_config"] | components["schemas"]["connector.tsheetsteam.discriminated_connector_config"] | components["schemas"]["connector.tumblr.discriminated_connector_config"] | components["schemas"]["connector.twinfield.discriminated_connector_config"] | components["schemas"]["connector.twitch.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.typeform.discriminated_connector_config"] | components["schemas"]["connector.uber.discriminated_connector_config"] | components["schemas"]["connector.vimeo.discriminated_connector_config"] | components["schemas"]["connector.wakatime.discriminated_connector_config"] | components["schemas"]["connector.wealthbox.discriminated_connector_config"] | components["schemas"]["connector.webflow.discriminated_connector_config"] | components["schemas"]["connector.whoop.discriminated_connector_config"] | components["schemas"]["connector.wordpress.discriminated_connector_config"] | components["schemas"]["connector.wrike.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.yahoo.discriminated_connector_config"] | components["schemas"]["connector.yandex.discriminated_connector_config"] | components["schemas"]["connector.zapier.discriminated_connector_config"] | components["schemas"]["connector.zendesk.discriminated_connector_config"] | components["schemas"]["connector.zenefits.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.zoho.discriminated_connector_config"] | components["schemas"]["connector.zoom.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.openledger.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
                         connector?: components["schemas"]["core.connector"];
                         integrations?: {
                             [key: string]: components["schemas"]["core.integration_select"];
@@ -3076,7 +8980,7 @@ export interface operations {
                             metadata?: {
                                 [key: string]: unknown;
                             } | null;
-                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.adobe.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.openledger.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
+                        } & Omit<components["schemas"]["connector.accelo.discriminated_connector_config"] | components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.adobe.discriminated_connector_config"] | components["schemas"]["connector.adyen.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.amazon.discriminated_connector_config"] | components["schemas"]["connector.apaleo.discriminated_connector_config"] | components["schemas"]["connector.asana.discriminated_connector_config"] | components["schemas"]["connector.attio.discriminated_connector_config"] | components["schemas"]["connector.auth0.discriminated_connector_config"] | components["schemas"]["connector.autodesk.discriminated_connector_config"] | components["schemas"]["connector.aws.discriminated_connector_config"] | components["schemas"]["connector.bamboohr.discriminated_connector_config"] | components["schemas"]["connector.basecamp.discriminated_connector_config"] | components["schemas"]["connector.battlenet.discriminated_connector_config"] | components["schemas"]["connector.bigcommerce.discriminated_connector_config"] | components["schemas"]["connector.bitbucket.discriminated_connector_config"] | components["schemas"]["connector.bitly.discriminated_connector_config"] | components["schemas"]["connector.blackbaud.discriminated_connector_config"] | components["schemas"]["connector.boldsign.discriminated_connector_config"] | components["schemas"]["connector.box.discriminated_connector_config"] | components["schemas"]["connector.braintree.discriminated_connector_config"] | components["schemas"]["connector.calendly.discriminated_connector_config"] | components["schemas"]["connector.clickup.discriminated_connector_config"] | components["schemas"]["connector.close.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.contentful.discriminated_connector_config"] | components["schemas"]["connector.contentstack.discriminated_connector_config"] | components["schemas"]["connector.copper.discriminated_connector_config"] | components["schemas"]["connector.coros.discriminated_connector_config"] | components["schemas"]["connector.datev.discriminated_connector_config"] | components["schemas"]["connector.deel.discriminated_connector_config"] | components["schemas"]["connector.dialpad.discriminated_connector_config"] | components["schemas"]["connector.digitalocean.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.docusign.discriminated_connector_config"] | components["schemas"]["connector.dropbox.discriminated_connector_config"] | components["schemas"]["connector.ebay.discriminated_connector_config"] | components["schemas"]["connector.egnyte.discriminated_connector_config"] | components["schemas"]["connector.envoy.discriminated_connector_config"] | components["schemas"]["connector.eventbrite.discriminated_connector_config"] | components["schemas"]["connector.exist.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.factorial.discriminated_connector_config"] | components["schemas"]["connector.figma.discriminated_connector_config"] | components["schemas"]["connector.fitbit.discriminated_connector_config"] | components["schemas"]["connector.fortnox.discriminated_connector_config"] | components["schemas"]["connector.freshbooks.discriminated_connector_config"] | components["schemas"]["connector.front.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gitlab.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.gorgias.discriminated_connector_config"] | components["schemas"]["connector.grain.discriminated_connector_config"] | components["schemas"]["connector.gumroad.discriminated_connector_config"] | components["schemas"]["connector.gusto.discriminated_connector_config"] | components["schemas"]["connector.harvest.discriminated_connector_config"] | components["schemas"]["connector.highlevel.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.intuit.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.keap.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.linkhut.discriminated_connector_config"] | components["schemas"]["connector.mailchimp.discriminated_connector_config"] | components["schemas"]["connector.miro.discriminated_connector_config"] | components["schemas"]["connector.monday.discriminated_connector_config"] | components["schemas"]["connector.mural.discriminated_connector_config"] | components["schemas"]["connector.namely.discriminated_connector_config"] | components["schemas"]["connector.nationbuilder.discriminated_connector_config"] | components["schemas"]["connector.netsuite.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.odoo.discriminated_connector_config"] | components["schemas"]["connector.okta.discriminated_connector_config"] | components["schemas"]["connector.osu.discriminated_connector_config"] | components["schemas"]["connector.oura.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pagerduty.discriminated_connector_config"] | components["schemas"]["connector.pandadoc.discriminated_connector_config"] | components["schemas"]["connector.payfit.discriminated_connector_config"] | components["schemas"]["connector.paypal.discriminated_connector_config"] | components["schemas"]["connector.pennylane.discriminated_connector_config"] | components["schemas"]["connector.pinterest.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.podium.discriminated_connector_config"] | components["schemas"]["connector.productboard.discriminated_connector_config"] | components["schemas"]["connector.qualtrics.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.sage.discriminated_connector_config"] | components["schemas"]["connector.salesforce.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.segment.discriminated_connector_config"] | components["schemas"]["connector.servicem8.discriminated_connector_config"] | components["schemas"]["connector.servicenow.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.shopify.discriminated_connector_config"] | components["schemas"]["connector.signnow.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.smartsheet.discriminated_connector_config"] | components["schemas"]["connector.snowflake.discriminated_connector_config"] | components["schemas"]["connector.spotify.discriminated_connector_config"] | components["schemas"]["connector.squarespace.discriminated_connector_config"] | components["schemas"]["connector.squareup.discriminated_connector_config"] | components["schemas"]["connector.stackexchange.discriminated_connector_config"] | components["schemas"]["connector.strava.discriminated_connector_config"] | components["schemas"]["connector.teamwork.discriminated_connector_config"] | components["schemas"]["connector.ticktick.discriminated_connector_config"] | components["schemas"]["connector.timely.discriminated_connector_config"] | components["schemas"]["connector.todoist.discriminated_connector_config"] | components["schemas"]["connector.tremendous.discriminated_connector_config"] | components["schemas"]["connector.tsheetsteam.discriminated_connector_config"] | components["schemas"]["connector.tumblr.discriminated_connector_config"] | components["schemas"]["connector.twinfield.discriminated_connector_config"] | components["schemas"]["connector.twitch.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.typeform.discriminated_connector_config"] | components["schemas"]["connector.uber.discriminated_connector_config"] | components["schemas"]["connector.vimeo.discriminated_connector_config"] | components["schemas"]["connector.wakatime.discriminated_connector_config"] | components["schemas"]["connector.wealthbox.discriminated_connector_config"] | components["schemas"]["connector.webflow.discriminated_connector_config"] | components["schemas"]["connector.whoop.discriminated_connector_config"] | components["schemas"]["connector.wordpress.discriminated_connector_config"] | components["schemas"]["connector.wrike.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.yahoo.discriminated_connector_config"] | components["schemas"]["connector.yandex.discriminated_connector_config"] | components["schemas"]["connector.zapier.discriminated_connector_config"] | components["schemas"]["connector.zendesk.discriminated_connector_config"] | components["schemas"]["connector.zenefits.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.zoho.discriminated_connector_config"] | components["schemas"]["connector.zoom.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.openledger.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
                             connector?: components["schemas"]["core.connector"];
                             integrations?: {
                                 [key: string]: components["schemas"]["core.integration_select"];
@@ -3184,7 +9088,7 @@ export interface operations {
                         metadata?: {
                             [key: string]: unknown;
                         } | null;
-                    } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
+                    } & Omit<components["schemas"]["connector.accelo.discriminated_connection_settings"] | components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.adyen.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.amazon.discriminated_connection_settings"] | components["schemas"]["connector.apaleo.discriminated_connection_settings"] | components["schemas"]["connector.asana.discriminated_connection_settings"] | components["schemas"]["connector.attio.discriminated_connection_settings"] | components["schemas"]["connector.auth0.discriminated_connection_settings"] | components["schemas"]["connector.autodesk.discriminated_connection_settings"] | components["schemas"]["connector.aws.discriminated_connection_settings"] | components["schemas"]["connector.bamboohr.discriminated_connection_settings"] | components["schemas"]["connector.basecamp.discriminated_connection_settings"] | components["schemas"]["connector.battlenet.discriminated_connection_settings"] | components["schemas"]["connector.bigcommerce.discriminated_connection_settings"] | components["schemas"]["connector.bitbucket.discriminated_connection_settings"] | components["schemas"]["connector.bitly.discriminated_connection_settings"] | components["schemas"]["connector.blackbaud.discriminated_connection_settings"] | components["schemas"]["connector.boldsign.discriminated_connection_settings"] | components["schemas"]["connector.box.discriminated_connection_settings"] | components["schemas"]["connector.braintree.discriminated_connection_settings"] | components["schemas"]["connector.calendly.discriminated_connection_settings"] | components["schemas"]["connector.clickup.discriminated_connection_settings"] | components["schemas"]["connector.close.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.contentful.discriminated_connection_settings"] | components["schemas"]["connector.contentstack.discriminated_connection_settings"] | components["schemas"]["connector.copper.discriminated_connection_settings"] | components["schemas"]["connector.coros.discriminated_connection_settings"] | components["schemas"]["connector.datev.discriminated_connection_settings"] | components["schemas"]["connector.deel.discriminated_connection_settings"] | components["schemas"]["connector.dialpad.discriminated_connection_settings"] | components["schemas"]["connector.digitalocean.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.docusign.discriminated_connection_settings"] | components["schemas"]["connector.dropbox.discriminated_connection_settings"] | components["schemas"]["connector.ebay.discriminated_connection_settings"] | components["schemas"]["connector.egnyte.discriminated_connection_settings"] | components["schemas"]["connector.envoy.discriminated_connection_settings"] | components["schemas"]["connector.eventbrite.discriminated_connection_settings"] | components["schemas"]["connector.exist.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.factorial.discriminated_connection_settings"] | components["schemas"]["connector.figma.discriminated_connection_settings"] | components["schemas"]["connector.fitbit.discriminated_connection_settings"] | components["schemas"]["connector.fortnox.discriminated_connection_settings"] | components["schemas"]["connector.freshbooks.discriminated_connection_settings"] | components["schemas"]["connector.front.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gitlab.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.gorgias.discriminated_connection_settings"] | components["schemas"]["connector.grain.discriminated_connection_settings"] | components["schemas"]["connector.gumroad.discriminated_connection_settings"] | components["schemas"]["connector.gusto.discriminated_connection_settings"] | components["schemas"]["connector.harvest.discriminated_connection_settings"] | components["schemas"]["connector.highlevel.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.intuit.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.keap.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.linkhut.discriminated_connection_settings"] | components["schemas"]["connector.mailchimp.discriminated_connection_settings"] | components["schemas"]["connector.miro.discriminated_connection_settings"] | components["schemas"]["connector.monday.discriminated_connection_settings"] | components["schemas"]["connector.mural.discriminated_connection_settings"] | components["schemas"]["connector.namely.discriminated_connection_settings"] | components["schemas"]["connector.nationbuilder.discriminated_connection_settings"] | components["schemas"]["connector.netsuite.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.odoo.discriminated_connection_settings"] | components["schemas"]["connector.okta.discriminated_connection_settings"] | components["schemas"]["connector.osu.discriminated_connection_settings"] | components["schemas"]["connector.oura.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pagerduty.discriminated_connection_settings"] | components["schemas"]["connector.pandadoc.discriminated_connection_settings"] | components["schemas"]["connector.payfit.discriminated_connection_settings"] | components["schemas"]["connector.paypal.discriminated_connection_settings"] | components["schemas"]["connector.pennylane.discriminated_connection_settings"] | components["schemas"]["connector.pinterest.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.podium.discriminated_connection_settings"] | components["schemas"]["connector.productboard.discriminated_connection_settings"] | components["schemas"]["connector.qualtrics.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.sage.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.segment.discriminated_connection_settings"] | components["schemas"]["connector.servicem8.discriminated_connection_settings"] | components["schemas"]["connector.servicenow.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.shopify.discriminated_connection_settings"] | components["schemas"]["connector.signnow.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.smartsheet.discriminated_connection_settings"] | components["schemas"]["connector.snowflake.discriminated_connection_settings"] | components["schemas"]["connector.spotify.discriminated_connection_settings"] | components["schemas"]["connector.squarespace.discriminated_connection_settings"] | components["schemas"]["connector.squareup.discriminated_connection_settings"] | components["schemas"]["connector.stackexchange.discriminated_connection_settings"] | components["schemas"]["connector.strava.discriminated_connection_settings"] | components["schemas"]["connector.teamwork.discriminated_connection_settings"] | components["schemas"]["connector.ticktick.discriminated_connection_settings"] | components["schemas"]["connector.timely.discriminated_connection_settings"] | components["schemas"]["connector.todoist.discriminated_connection_settings"] | components["schemas"]["connector.tremendous.discriminated_connection_settings"] | components["schemas"]["connector.tsheetsteam.discriminated_connection_settings"] | components["schemas"]["connector.tumblr.discriminated_connection_settings"] | components["schemas"]["connector.twinfield.discriminated_connection_settings"] | components["schemas"]["connector.twitch.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.typeform.discriminated_connection_settings"] | components["schemas"]["connector.uber.discriminated_connection_settings"] | components["schemas"]["connector.vimeo.discriminated_connection_settings"] | components["schemas"]["connector.wakatime.discriminated_connection_settings"] | components["schemas"]["connector.wealthbox.discriminated_connection_settings"] | components["schemas"]["connector.webflow.discriminated_connection_settings"] | components["schemas"]["connector.whoop.discriminated_connection_settings"] | components["schemas"]["connector.wordpress.discriminated_connection_settings"] | components["schemas"]["connector.wrike.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.yahoo.discriminated_connection_settings"] | components["schemas"]["connector.yandex.discriminated_connection_settings"] | components["schemas"]["connector.zapier.discriminated_connection_settings"] | components["schemas"]["connector.zendesk.discriminated_connection_settings"] | components["schemas"]["connector.zenefits.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.zoho.discriminated_connection_settings"] | components["schemas"]["connector.zoom.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
                         connector?: components["schemas"]["core.connector"];
                         integration?: components["schemas"]["core.integration_select"];
                     };
@@ -3359,7 +9263,7 @@ export interface operations {
                             metadata?: {
                                 [key: string]: unknown;
                             } | null;
-                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
+                        } & Omit<components["schemas"]["connector.accelo.discriminated_connection_settings"] | components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.adyen.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.amazon.discriminated_connection_settings"] | components["schemas"]["connector.apaleo.discriminated_connection_settings"] | components["schemas"]["connector.asana.discriminated_connection_settings"] | components["schemas"]["connector.attio.discriminated_connection_settings"] | components["schemas"]["connector.auth0.discriminated_connection_settings"] | components["schemas"]["connector.autodesk.discriminated_connection_settings"] | components["schemas"]["connector.aws.discriminated_connection_settings"] | components["schemas"]["connector.bamboohr.discriminated_connection_settings"] | components["schemas"]["connector.basecamp.discriminated_connection_settings"] | components["schemas"]["connector.battlenet.discriminated_connection_settings"] | components["schemas"]["connector.bigcommerce.discriminated_connection_settings"] | components["schemas"]["connector.bitbucket.discriminated_connection_settings"] | components["schemas"]["connector.bitly.discriminated_connection_settings"] | components["schemas"]["connector.blackbaud.discriminated_connection_settings"] | components["schemas"]["connector.boldsign.discriminated_connection_settings"] | components["schemas"]["connector.box.discriminated_connection_settings"] | components["schemas"]["connector.braintree.discriminated_connection_settings"] | components["schemas"]["connector.calendly.discriminated_connection_settings"] | components["schemas"]["connector.clickup.discriminated_connection_settings"] | components["schemas"]["connector.close.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.contentful.discriminated_connection_settings"] | components["schemas"]["connector.contentstack.discriminated_connection_settings"] | components["schemas"]["connector.copper.discriminated_connection_settings"] | components["schemas"]["connector.coros.discriminated_connection_settings"] | components["schemas"]["connector.datev.discriminated_connection_settings"] | components["schemas"]["connector.deel.discriminated_connection_settings"] | components["schemas"]["connector.dialpad.discriminated_connection_settings"] | components["schemas"]["connector.digitalocean.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.docusign.discriminated_connection_settings"] | components["schemas"]["connector.dropbox.discriminated_connection_settings"] | components["schemas"]["connector.ebay.discriminated_connection_settings"] | components["schemas"]["connector.egnyte.discriminated_connection_settings"] | components["schemas"]["connector.envoy.discriminated_connection_settings"] | components["schemas"]["connector.eventbrite.discriminated_connection_settings"] | components["schemas"]["connector.exist.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.factorial.discriminated_connection_settings"] | components["schemas"]["connector.figma.discriminated_connection_settings"] | components["schemas"]["connector.fitbit.discriminated_connection_settings"] | components["schemas"]["connector.fortnox.discriminated_connection_settings"] | components["schemas"]["connector.freshbooks.discriminated_connection_settings"] | components["schemas"]["connector.front.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gitlab.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.gorgias.discriminated_connection_settings"] | components["schemas"]["connector.grain.discriminated_connection_settings"] | components["schemas"]["connector.gumroad.discriminated_connection_settings"] | components["schemas"]["connector.gusto.discriminated_connection_settings"] | components["schemas"]["connector.harvest.discriminated_connection_settings"] | components["schemas"]["connector.highlevel.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.intuit.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.keap.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.linkhut.discriminated_connection_settings"] | components["schemas"]["connector.mailchimp.discriminated_connection_settings"] | components["schemas"]["connector.miro.discriminated_connection_settings"] | components["schemas"]["connector.monday.discriminated_connection_settings"] | components["schemas"]["connector.mural.discriminated_connection_settings"] | components["schemas"]["connector.namely.discriminated_connection_settings"] | components["schemas"]["connector.nationbuilder.discriminated_connection_settings"] | components["schemas"]["connector.netsuite.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.odoo.discriminated_connection_settings"] | components["schemas"]["connector.okta.discriminated_connection_settings"] | components["schemas"]["connector.osu.discriminated_connection_settings"] | components["schemas"]["connector.oura.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pagerduty.discriminated_connection_settings"] | components["schemas"]["connector.pandadoc.discriminated_connection_settings"] | components["schemas"]["connector.payfit.discriminated_connection_settings"] | components["schemas"]["connector.paypal.discriminated_connection_settings"] | components["schemas"]["connector.pennylane.discriminated_connection_settings"] | components["schemas"]["connector.pinterest.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.podium.discriminated_connection_settings"] | components["schemas"]["connector.productboard.discriminated_connection_settings"] | components["schemas"]["connector.qualtrics.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.sage.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.segment.discriminated_connection_settings"] | components["schemas"]["connector.servicem8.discriminated_connection_settings"] | components["schemas"]["connector.servicenow.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.shopify.discriminated_connection_settings"] | components["schemas"]["connector.signnow.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.smartsheet.discriminated_connection_settings"] | components["schemas"]["connector.snowflake.discriminated_connection_settings"] | components["schemas"]["connector.spotify.discriminated_connection_settings"] | components["schemas"]["connector.squarespace.discriminated_connection_settings"] | components["schemas"]["connector.squareup.discriminated_connection_settings"] | components["schemas"]["connector.stackexchange.discriminated_connection_settings"] | components["schemas"]["connector.strava.discriminated_connection_settings"] | components["schemas"]["connector.teamwork.discriminated_connection_settings"] | components["schemas"]["connector.ticktick.discriminated_connection_settings"] | components["schemas"]["connector.timely.discriminated_connection_settings"] | components["schemas"]["connector.todoist.discriminated_connection_settings"] | components["schemas"]["connector.tremendous.discriminated_connection_settings"] | components["schemas"]["connector.tsheetsteam.discriminated_connection_settings"] | components["schemas"]["connector.tumblr.discriminated_connection_settings"] | components["schemas"]["connector.twinfield.discriminated_connection_settings"] | components["schemas"]["connector.twitch.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.typeform.discriminated_connection_settings"] | components["schemas"]["connector.uber.discriminated_connection_settings"] | components["schemas"]["connector.vimeo.discriminated_connection_settings"] | components["schemas"]["connector.wakatime.discriminated_connection_settings"] | components["schemas"]["connector.wealthbox.discriminated_connection_settings"] | components["schemas"]["connector.webflow.discriminated_connection_settings"] | components["schemas"]["connector.whoop.discriminated_connection_settings"] | components["schemas"]["connector.wordpress.discriminated_connection_settings"] | components["schemas"]["connector.wrike.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.yahoo.discriminated_connection_settings"] | components["schemas"]["connector.yandex.discriminated_connection_settings"] | components["schemas"]["connector.zapier.discriminated_connection_settings"] | components["schemas"]["connector.zendesk.discriminated_connection_settings"] | components["schemas"]["connector.zenefits.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.zoho.discriminated_connection_settings"] | components["schemas"]["connector.zoom.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
                             connector?: components["schemas"]["core.connector"];
                             integration?: components["schemas"]["core.integration_select"];
                         })[];
@@ -3439,7 +9343,7 @@ export interface operations {
                     /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                     customer_id: string;
                     /** @description Connector specific data */
-                    data: components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"];
+                    data: components["schemas"]["connector.accelo.discriminated_connection_settings"] | components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.adobe.discriminated_connection_settings"] | components["schemas"]["connector.adyen.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.amazon.discriminated_connection_settings"] | components["schemas"]["connector.apaleo.discriminated_connection_settings"] | components["schemas"]["connector.asana.discriminated_connection_settings"] | components["schemas"]["connector.attio.discriminated_connection_settings"] | components["schemas"]["connector.auth0.discriminated_connection_settings"] | components["schemas"]["connector.autodesk.discriminated_connection_settings"] | components["schemas"]["connector.aws.discriminated_connection_settings"] | components["schemas"]["connector.bamboohr.discriminated_connection_settings"] | components["schemas"]["connector.basecamp.discriminated_connection_settings"] | components["schemas"]["connector.battlenet.discriminated_connection_settings"] | components["schemas"]["connector.bigcommerce.discriminated_connection_settings"] | components["schemas"]["connector.bitbucket.discriminated_connection_settings"] | components["schemas"]["connector.bitly.discriminated_connection_settings"] | components["schemas"]["connector.blackbaud.discriminated_connection_settings"] | components["schemas"]["connector.boldsign.discriminated_connection_settings"] | components["schemas"]["connector.box.discriminated_connection_settings"] | components["schemas"]["connector.braintree.discriminated_connection_settings"] | components["schemas"]["connector.calendly.discriminated_connection_settings"] | components["schemas"]["connector.clickup.discriminated_connection_settings"] | components["schemas"]["connector.close.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.contentful.discriminated_connection_settings"] | components["schemas"]["connector.contentstack.discriminated_connection_settings"] | components["schemas"]["connector.copper.discriminated_connection_settings"] | components["schemas"]["connector.coros.discriminated_connection_settings"] | components["schemas"]["connector.datev.discriminated_connection_settings"] | components["schemas"]["connector.deel.discriminated_connection_settings"] | components["schemas"]["connector.dialpad.discriminated_connection_settings"] | components["schemas"]["connector.digitalocean.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.docusign.discriminated_connection_settings"] | components["schemas"]["connector.dropbox.discriminated_connection_settings"] | components["schemas"]["connector.ebay.discriminated_connection_settings"] | components["schemas"]["connector.egnyte.discriminated_connection_settings"] | components["schemas"]["connector.envoy.discriminated_connection_settings"] | components["schemas"]["connector.eventbrite.discriminated_connection_settings"] | components["schemas"]["connector.exist.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.factorial.discriminated_connection_settings"] | components["schemas"]["connector.figma.discriminated_connection_settings"] | components["schemas"]["connector.fitbit.discriminated_connection_settings"] | components["schemas"]["connector.fortnox.discriminated_connection_settings"] | components["schemas"]["connector.freshbooks.discriminated_connection_settings"] | components["schemas"]["connector.front.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gitlab.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.gorgias.discriminated_connection_settings"] | components["schemas"]["connector.grain.discriminated_connection_settings"] | components["schemas"]["connector.gumroad.discriminated_connection_settings"] | components["schemas"]["connector.gusto.discriminated_connection_settings"] | components["schemas"]["connector.harvest.discriminated_connection_settings"] | components["schemas"]["connector.highlevel.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.intuit.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.keap.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.linkhut.discriminated_connection_settings"] | components["schemas"]["connector.mailchimp.discriminated_connection_settings"] | components["schemas"]["connector.miro.discriminated_connection_settings"] | components["schemas"]["connector.monday.discriminated_connection_settings"] | components["schemas"]["connector.mural.discriminated_connection_settings"] | components["schemas"]["connector.namely.discriminated_connection_settings"] | components["schemas"]["connector.nationbuilder.discriminated_connection_settings"] | components["schemas"]["connector.netsuite.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.odoo.discriminated_connection_settings"] | components["schemas"]["connector.okta.discriminated_connection_settings"] | components["schemas"]["connector.osu.discriminated_connection_settings"] | components["schemas"]["connector.oura.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pagerduty.discriminated_connection_settings"] | components["schemas"]["connector.pandadoc.discriminated_connection_settings"] | components["schemas"]["connector.payfit.discriminated_connection_settings"] | components["schemas"]["connector.paypal.discriminated_connection_settings"] | components["schemas"]["connector.pennylane.discriminated_connection_settings"] | components["schemas"]["connector.pinterest.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.podium.discriminated_connection_settings"] | components["schemas"]["connector.productboard.discriminated_connection_settings"] | components["schemas"]["connector.qualtrics.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.sage.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.segment.discriminated_connection_settings"] | components["schemas"]["connector.servicem8.discriminated_connection_settings"] | components["schemas"]["connector.servicenow.discriminated_connection_settings"] | components["schemas"]["connector.sharepoint.discriminated_connection_settings"] | components["schemas"]["connector.shopify.discriminated_connection_settings"] | components["schemas"]["connector.signnow.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.smartsheet.discriminated_connection_settings"] | components["schemas"]["connector.snowflake.discriminated_connection_settings"] | components["schemas"]["connector.spotify.discriminated_connection_settings"] | components["schemas"]["connector.squarespace.discriminated_connection_settings"] | components["schemas"]["connector.squareup.discriminated_connection_settings"] | components["schemas"]["connector.stackexchange.discriminated_connection_settings"] | components["schemas"]["connector.strava.discriminated_connection_settings"] | components["schemas"]["connector.teamwork.discriminated_connection_settings"] | components["schemas"]["connector.ticktick.discriminated_connection_settings"] | components["schemas"]["connector.timely.discriminated_connection_settings"] | components["schemas"]["connector.todoist.discriminated_connection_settings"] | components["schemas"]["connector.tremendous.discriminated_connection_settings"] | components["schemas"]["connector.tsheetsteam.discriminated_connection_settings"] | components["schemas"]["connector.tumblr.discriminated_connection_settings"] | components["schemas"]["connector.twinfield.discriminated_connection_settings"] | components["schemas"]["connector.twitch.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.typeform.discriminated_connection_settings"] | components["schemas"]["connector.uber.discriminated_connection_settings"] | components["schemas"]["connector.vimeo.discriminated_connection_settings"] | components["schemas"]["connector.wakatime.discriminated_connection_settings"] | components["schemas"]["connector.wealthbox.discriminated_connection_settings"] | components["schemas"]["connector.webflow.discriminated_connection_settings"] | components["schemas"]["connector.whoop.discriminated_connection_settings"] | components["schemas"]["connector.wordpress.discriminated_connection_settings"] | components["schemas"]["connector.wrike.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.yahoo.discriminated_connection_settings"] | components["schemas"]["connector.yandex.discriminated_connection_settings"] | components["schemas"]["connector.zapier.discriminated_connection_settings"] | components["schemas"]["connector.zendesk.discriminated_connection_settings"] | components["schemas"]["connector.zenefits.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.zoho.discriminated_connection_settings"] | components["schemas"]["connector.zoom.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.openledger.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"];
                     /**
                      * @description Perform a synchronous connection check before creating it.
                      * @default false
