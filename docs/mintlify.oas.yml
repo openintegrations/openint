@@ -110,7 +110,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -204,6 +204,7 @@ paths:
                       - disabled
                   - oneOf:
                       - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connector_config'
+                      - $ref: '#/components/schemas/connector.adobe.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.aircall.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.confluence.discriminated_connector_config'
                       - $ref: '#/components/schemas/connector.discord.discriminated_connector_config'
@@ -264,6 +265,7 @@ paths:
                       propertyName: connector_name
                       mapping:
                         acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connector_config'
+                        adobe: '#/components/schemas/connector.adobe.discriminated_connector_config'
                         aircall: '#/components/schemas/connector.aircall.discriminated_connector_config'
                         confluence: '#/components/schemas/connector.confluence.discriminated_connector_config'
                         discord: '#/components/schemas/connector.discord.discriminated_connector_config'
@@ -457,6 +459,7 @@ paths:
                             - disabled
                         - oneOf:
                             - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.adobe.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.aircall.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.confluence.discriminated_connector_config'
                             - $ref: '#/components/schemas/connector.discord.discriminated_connector_config'
@@ -517,6 +520,7 @@ paths:
                             propertyName: connector_name
                             mapping:
                               acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connector_config'
+                              adobe: '#/components/schemas/connector.adobe.discriminated_connector_config'
                               aircall: '#/components/schemas/connector.aircall.discriminated_connector_config'
                               confluence: '#/components/schemas/connector.confluence.discriminated_connector_config'
                               discord: '#/components/schemas/connector.discord.discriminated_connector_config'
@@ -638,7 +642,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -775,6 +779,7 @@ paths:
                       - disabled
                   - oneOf:
                       - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                       - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -835,6 +840,7 @@ paths:
                       propertyName: connector_name
                       mapping:
                         acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                        adobe: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                         aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                         confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                         discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -932,7 +938,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1019,7 +1025,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1194,6 +1200,7 @@ paths:
                             - disabled
                         - oneOf:
                             - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                             - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -1254,6 +1261,7 @@ paths:
                             propertyName: connector_name
                             mapping:
                               acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                              adobe: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                               aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                               confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                               discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -1372,7 +1380,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1423,6 +1431,7 @@ paths:
                 data:
                   oneOf:
                     - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                     - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -1483,6 +1492,7 @@ paths:
                     propertyName: connector_name
                     mapping:
                       acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+                      adobe: '#/components/schemas/connector.adobe.discriminated_connection_settings'
                       aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
                       confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
                       discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -1582,7 +1592,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1720,7 +1730,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1815,7 +1825,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2020,7 +2030,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/sdk';
+            import Openint from '@openint/backend-sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2146,6 +2156,100 @@ components:
         - connector_name
         - config
       title: acme-oauth2
+    connector.adobe.discriminated_connection_settings:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: adobe
+        settings:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                credentials:
+                  type: object
+                  properties:
+                    access_token:
+                      type: string
+                    client_id:
+                      type: string
+                      description: Client ID used for the connection
+                    scope:
+                      type: string
+                    refresh_token:
+                      type: string
+                    expires_in:
+                      type: number
+                    expires_at:
+                      type: string
+                    token_type:
+                      type: string
+                    raw:
+                      type: object
+                      additionalProperties: {}
+                  required:
+                    - access_token
+                  description: Output of the postConnect hook for oauth2 connectors
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                last_fetched_at:
+                  type: string
+                metadata:
+                  type:
+                    - object
+                    - 'null'
+                  additionalProperties: {}
+            access_token:
+              type: string
+              description: Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field
+          required:
+            - oauth
+      required:
+        - connector_name
+      title: adobe
+    connector.adobe.discriminated_connector_config:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: adobe
+        config:
+          type: object
+          properties:
+            oauth:
+              type:
+                - object
+                - 'null'
+              properties:
+                client_id:
+                  type:
+                    - string
+                    - 'null'
+                client_secret:
+                  type:
+                    - string
+                    - 'null'
+                scopes:
+                  type:
+                    - array
+                    - 'null'
+                  items:
+                    type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
+                  description: Custom redirect URI
+              description: Base oauth configuration for the connector
+              ui:field: OAuthField
+      required:
+        - connector_name
+        - config
+      title: adobe
     connector.aircall.discriminated_connection_settings:
       type: object
       properties:
@@ -6328,6 +6432,7 @@ components:
             - disabled
         - oneOf:
             - $ref: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.adobe.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
             - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -6388,6 +6493,7 @@ components:
             propertyName: connector_name
             mapping:
               acme-oauth2: '#/components/schemas/connector.acme-oauth2.discriminated_connection_settings'
+              adobe: '#/components/schemas/connector.adobe.discriminated_connection_settings'
               aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
               confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
               discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
@@ -6492,7 +6598,11 @@ components:
             - OAUTH2CC
             - API_KEY
             - CUSTOM
-        openint_scopes:
+        openint_default_scopes:
+          type: array
+          items:
+            type: string
+        openint_allowed_scopes:
           type: array
           items:
             type: string
@@ -6518,6 +6628,7 @@ components:
       type: string
       enum:
         - acme-oauth2
+        - adobe
         - aircall
         - airtable
         - apollo
