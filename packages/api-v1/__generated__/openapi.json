@@ -458,9 +458,6 @@
                           "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.intuit.discriminated_connector_config"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
                         },
                         {
@@ -839,7 +836,6 @@
                           "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
                           "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
                           "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
-                          "intuit": "#/components/schemas/connector.intuit.discriminated_connector_config",
                           "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
                           "keap": "#/components/schemas/connector.keap.discriminated_connector_config",
                           "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
@@ -1350,9 +1346,6 @@
                                 "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.intuit.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
                               },
                               {
@@ -1731,7 +1724,6 @@
                                 "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
                                 "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
                                 "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
-                                "intuit": "#/components/schemas/connector.intuit.discriminated_connector_config",
                                 "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
                                 "keap": "#/components/schemas/connector.keap.discriminated_connector_config",
                                 "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
@@ -2293,9 +2285,6 @@
                           "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.intuit.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
                         },
                         {
@@ -2674,7 +2663,6 @@
                           "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
                           "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
                           "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                          "intuit": "#/components/schemas/connector.intuit.discriminated_connection_settings",
                           "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                           "keap": "#/components/schemas/connector.keap.discriminated_connection_settings",
                           "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
@@ -3351,9 +3339,6 @@
                                 "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.intuit.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
                               },
                               {
@@ -3732,7 +3717,6 @@
                                 "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
                                 "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
                                 "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                                "intuit": "#/components/schemas/connector.intuit.discriminated_connection_settings",
                                 "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                                 "keap": "#/components/schemas/connector.keap.discriminated_connection_settings",
                                 "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
@@ -4168,9 +4152,6 @@
                         "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.intuit.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
                       },
                       {
@@ -4549,7 +4530,6 @@
                         "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
                         "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
                         "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                        "intuit": "#/components/schemas/connector.intuit.discriminated_connection_settings",
                         "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                         "keap": "#/components/schemas/connector.keap.discriminated_connection_settings",
                         "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
@@ -15325,144 +15305,6 @@
           "config"
         ],
         "title": "intercom"
-      },
-      "connector.intuit.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intuit"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "client_id": {
-                        "type": "string",
-                        "description": "Client ID used for the connection"
-                      },
-                      "scope": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_in": {
-                        "type": "number"
-                      },
-                      "expires_at": {
-                        "type": "string"
-                      },
-                      "token_type": {
-                        "type": "string"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "required": [
-                      "access_token"
-                    ],
-                    "description": "Output of the postConnect hook for oauth2 connectors"
-                  },
-                  "created_at": {
-                    "type": "string"
-                  },
-                  "updated_at": {
-                    "type": "string"
-                  },
-                  "last_fetched_at": {
-                    "type": "string"
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                }
-              },
-              "access_token": {
-                "type": "string",
-                "description": "Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field"
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name"
-        ],
-        "title": "intuit"
-      },
-      "connector.intuit.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intuit"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "scopes": {
-                    "type": [
-                      "array",
-                      "null"
-                    ],
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "redirect_uri": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
-                    "description": "Custom redirect URI"
-                  }
-                },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
-              }
-            }
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "intuit"
       },
       "connector.jira.discriminated_connection_settings": {
         "type": "object",
@@ -27742,9 +27584,6 @@
                 "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.intuit.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
               },
               {
@@ -28123,7 +27962,6 @@
                 "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
                 "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
                 "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                "intuit": "#/components/schemas/connector.intuit.discriminated_connection_settings",
                 "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
                 "keap": "#/components/schemas/connector.keap.discriminated_connection_settings",
                 "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
@@ -28417,7 +28255,6 @@
           "hubspot",
           "instagram",
           "intercom",
-          "intuit",
           "jira",
           "keap",
           "lever",

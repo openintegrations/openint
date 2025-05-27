@@ -66,7 +66,6 @@ import highlevel from './json-defs/highlevel'
 import hubspot from './json-defs/hubspot'
 import instagram from './json-defs/instagram'
 import intercom from './json-defs/intercom'
-import intuit from './json-defs/intuit'
 import jira from './json-defs/jira'
 import keap from './json-defs/keap'
 import lever from './json-defs/lever'
@@ -211,7 +210,6 @@ const defs = {
   hubspot,
   instagram,
   intercom,
-  intuit,
   jira,
   keap,
   lever,

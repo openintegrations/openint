@@ -294,10 +294,6 @@ export const intercomConnectorDisplay: Story = {
   args: {name: 'intercom'},
 }
 
-export const intuitConnectorDisplay: Story = {
-  args: {name: 'intuit'},
-}
-
 export const jiraConnectorDisplay: Story = {
   args: {name: 'jira'},
 }

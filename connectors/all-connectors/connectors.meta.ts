@@ -808,17 +808,6 @@ export default {
       authType: 'OAUTH2',
     },
   },
-  intuit: {
-    hasClient: false,
-    hasServer: false,
-    metadata: {
-      displayName: 'Intuit',
-      stage: 'alpha',
-      verticals: ['accounting'],
-      logoUrl: '/_assets/logo-intuit.svg',
-      authType: 'OAUTH2',
-    },
-  },
   jira: {
     hasClient: false,
     hasServer: false,

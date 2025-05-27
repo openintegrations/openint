@@ -302,10 +302,6 @@ export const intercomConnectionSettings: Story = {
   args: {name: 'intercom'},
 }
 
-export const intuitConnectionSettings: Story = {
-  args: {name: 'intuit'},
-}
-
 export const jiraConnectionSettings: Story = {
   args: {name: 'jira'},
 }
