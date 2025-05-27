@@ -61,7 +61,12 @@ async function main() {
   const oas = await getOasSpec()
 
   // no longer in use
-  const pathsToFilterOut = ['/health', '/viewer', '/webhook']
+  const pathsToFilterOut = [
+    '/health',
+    '/viewer',
+    '/webhook',
+    '/connector-status',
+  ]
 
   const filteredPaths = Object.keys(oas.paths)
     .filter((path) => !pathsToFilterOut.includes(path))

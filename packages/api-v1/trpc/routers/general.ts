@@ -1,11 +1,14 @@
 import {TRPCError} from '@trpc/server'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zViewerRole} from '@openint/cdk'
 import {eq, schema} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
+import {R} from '@openint/util/remeda'
 import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../_base'
 import {routerContextFromViewer} from '../context'
+import {getConnectorModel} from './connector.models'
 
 export const generalRouter = router({
   debug: publicProcedure
@@ -67,6 +70,105 @@ export const generalRouter = router({
 
       return {
         ok: true,
+      }
+    }),
+
+  connectorStatus: publicProcedure
+    .meta({openapi: {method: 'GET', path: '/connector-status', enabled: true}})
+    .input(z.void())
+    .output(
+      z.object({
+        list: z.array(
+          z.object({
+            name: z.string(),
+            hasConnectionForOrg: z.boolean(),
+            isHealthyForOrg: z.boolean(),
+            hasDefaultCredentials: z.boolean(),
+            complete: z.boolean(),
+          }),
+        ),
+        numTotalConnectors: z.number(),
+        numWithConnectionForOrg: z.number(),
+        numHealthyForOrg: z.number(),
+        numWithDefaultCredentials: z.number(),
+        numComplete: z.number(),
+      }),
+    )
+    .query(async ({ctx}) => {
+      const INTEGRATION_TEST_ORG_ID = 'org_2owpNzLGQbIKvcpHnyfNivjXcDu'
+      const db = ctx.db ?? initDbNeon(envRequired.DATABASE_URL)
+
+      const orgConnectorConfigs = await db
+        .select({
+          id: schema.connector_config.id,
+          connectorName: schema.connector_config.connector_name,
+          orgId: schema.connector_config.org_id,
+          connectionId: schema.connection.id,
+          connectionStatus: schema.connection.status,
+        })
+        .from(schema.connector_config)
+        .leftJoin(
+          schema.connection,
+          eq(schema.connection.connector_config_id, schema.connector_config.id),
+        )
+
+      const individualStatuses = Object.values(defConnectors).map((def) => {
+        const model = getConnectorModel(def)
+        const connectorName = model.name
+        const configsForThisConnector = orgConnectorConfigs.filter(
+          (c) => c.connectorName === connectorName,
+        )
+
+        const orgSpecificConfigs = configsForThisConnector.filter(
+          (c) => c.orgId === INTEGRATION_TEST_ORG_ID,
+        )
+
+        const hasConnectionForOrg = orgSpecificConfigs.length > 0
+        const isHealthyForOrg =
+          hasConnectionForOrg &&
+          orgSpecificConfigs.some((c) => c.connectionStatus === 'healthy')
+
+        const hasDefaultCredentials = model.has_openint_credentials ?? false
+        const complete =
+          hasConnectionForOrg && isHealthyForOrg && hasDefaultCredentials
+
+        return {
+          name: connectorName,
+          hasConnectionForOrg,
+          isHealthyForOrg,
+          hasDefaultCredentials,
+          complete,
+        }
+      })
+
+      const sortedList = R.sortBy(
+        individualStatuses,
+        [
+          (r: (typeof individualStatuses)[0]) => r.hasDefaultCredentials,
+          'desc',
+        ],
+        (r: (typeof individualStatuses)[0]) => r.name,
+      )
+
+      const numTotalConnectors = sortedList.length
+      const numWithConnectionForOrg = sortedList.filter(
+        (item) => item.hasConnectionForOrg,
+      ).length
+      const numHealthyForOrg = sortedList.filter(
+        (item) => item.isHealthyForOrg,
+      ).length
+      const numWithDefaultCredentials = sortedList.filter(
+        (item) => item.hasDefaultCredentials,
+      ).length
+      const numComplete = sortedList.filter((item) => item.complete).length
+
+      return {
+        numTotalConnectors,
+        numWithConnectionForOrg,
+        numHealthyForOrg,
+        numWithDefaultCredentials,
+        numComplete,
+        list: sortedList,
       }
     }),
 
