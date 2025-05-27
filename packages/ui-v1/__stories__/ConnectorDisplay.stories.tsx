@@ -30,6 +30,10 @@ const meta: Meta<typeof StoryWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+export const acceloConnectorDisplay: Story = {
+  args: {name: 'accelo'},
+}
+
 export const acmeOauth2ConnectorDisplay: Story = {
   args: {name: 'acme-oauth2'},
 }
@@ -38,24 +42,196 @@ export const adobeConnectorDisplay: Story = {
   args: {name: 'adobe'},
 }
 
+export const adyenConnectorDisplay: Story = {
+  args: {name: 'adyen'},
+}
+
 export const aircallConnectorDisplay: Story = {
   args: {name: 'aircall'},
+}
+
+export const amazonConnectorDisplay: Story = {
+  args: {name: 'amazon'},
+}
+
+export const apaleoConnectorDisplay: Story = {
+  args: {name: 'apaleo'},
+}
+
+export const asanaConnectorDisplay: Story = {
+  args: {name: 'asana'},
+}
+
+export const attioConnectorDisplay: Story = {
+  args: {name: 'attio'},
+}
+
+export const auth0ConnectorDisplay: Story = {
+  args: {name: 'auth0'},
+}
+
+export const autodeskConnectorDisplay: Story = {
+  args: {name: 'autodesk'},
+}
+
+export const awsConnectorDisplay: Story = {
+  args: {name: 'aws'},
+}
+
+export const bamboohrConnectorDisplay: Story = {
+  args: {name: 'bamboohr'},
+}
+
+export const basecampConnectorDisplay: Story = {
+  args: {name: 'basecamp'},
+}
+
+export const battlenetConnectorDisplay: Story = {
+  args: {name: 'battlenet'},
+}
+
+export const bigcommerceConnectorDisplay: Story = {
+  args: {name: 'bigcommerce'},
+}
+
+export const bitbucketConnectorDisplay: Story = {
+  args: {name: 'bitbucket'},
+}
+
+export const bitlyConnectorDisplay: Story = {
+  args: {name: 'bitly'},
+}
+
+export const blackbaudConnectorDisplay: Story = {
+  args: {name: 'blackbaud'},
+}
+
+export const boldsignConnectorDisplay: Story = {
+  args: {name: 'boldsign'},
+}
+
+export const boxConnectorDisplay: Story = {
+  args: {name: 'box'},
+}
+
+export const braintreeConnectorDisplay: Story = {
+  args: {name: 'braintree'},
+}
+
+export const calendlyConnectorDisplay: Story = {
+  args: {name: 'calendly'},
+}
+
+export const clickupConnectorDisplay: Story = {
+  args: {name: 'clickup'},
+}
+
+export const closeConnectorDisplay: Story = {
+  args: {name: 'close'},
 }
 
 export const confluenceConnectorDisplay: Story = {
   args: {name: 'confluence'},
 }
 
+export const contentfulConnectorDisplay: Story = {
+  args: {name: 'contentful'},
+}
+
+export const contentstackConnectorDisplay: Story = {
+  args: {name: 'contentstack'},
+}
+
+export const copperConnectorDisplay: Story = {
+  args: {name: 'copper'},
+}
+
+export const corosConnectorDisplay: Story = {
+  args: {name: 'coros'},
+}
+
+export const datevConnectorDisplay: Story = {
+  args: {name: 'datev'},
+}
+
+export const deelConnectorDisplay: Story = {
+  args: {name: 'deel'},
+}
+
+export const dialpadConnectorDisplay: Story = {
+  args: {name: 'dialpad'},
+}
+
+export const digitaloceanConnectorDisplay: Story = {
+  args: {name: 'digitalocean'},
+}
+
 export const discordConnectorDisplay: Story = {
   args: {name: 'discord'},
+}
+
+export const docusignConnectorDisplay: Story = {
+  args: {name: 'docusign'},
+}
+
+export const dropboxConnectorDisplay: Story = {
+  args: {name: 'dropbox'},
+}
+
+export const ebayConnectorDisplay: Story = {
+  args: {name: 'ebay'},
+}
+
+export const egnyteConnectorDisplay: Story = {
+  args: {name: 'egnyte'},
+}
+
+export const envoyConnectorDisplay: Story = {
+  args: {name: 'envoy'},
+}
+
+export const eventbriteConnectorDisplay: Story = {
+  args: {name: 'eventbrite'},
+}
+
+export const existConnectorDisplay: Story = {
+  args: {name: 'exist'},
 }
 
 export const facebookConnectorDisplay: Story = {
   args: {name: 'facebook'},
 }
 
+export const factorialConnectorDisplay: Story = {
+  args: {name: 'factorial'},
+}
+
+export const figmaConnectorDisplay: Story = {
+  args: {name: 'figma'},
+}
+
+export const fitbitConnectorDisplay: Story = {
+  args: {name: 'fitbit'},
+}
+
+export const fortnoxConnectorDisplay: Story = {
+  args: {name: 'fortnox'},
+}
+
+export const freshbooksConnectorDisplay: Story = {
+  args: {name: 'freshbooks'},
+}
+
+export const frontConnectorDisplay: Story = {
+  args: {name: 'front'},
+}
+
 export const githubConnectorDisplay: Story = {
   args: {name: 'github'},
+}
+
+export const gitlabConnectorDisplay: Story = {
+  args: {name: 'gitlab'},
 }
 
 export const gongConnectorDisplay: Story = {
@@ -82,6 +258,30 @@ export const googleSheetConnectorDisplay: Story = {
   args: {name: 'google-sheet'},
 }
 
+export const gorgiasConnectorDisplay: Story = {
+  args: {name: 'gorgias'},
+}
+
+export const grainConnectorDisplay: Story = {
+  args: {name: 'grain'},
+}
+
+export const gumroadConnectorDisplay: Story = {
+  args: {name: 'gumroad'},
+}
+
+export const gustoConnectorDisplay: Story = {
+  args: {name: 'gusto'},
+}
+
+export const harvestConnectorDisplay: Story = {
+  args: {name: 'harvest'},
+}
+
+export const highlevelConnectorDisplay: Story = {
+  args: {name: 'highlevel'},
+}
+
 export const hubspotConnectorDisplay: Story = {
   args: {name: 'hubspot'},
 }
@@ -98,6 +298,10 @@ export const jiraConnectorDisplay: Story = {
   args: {name: 'jira'},
 }
 
+export const keapConnectorDisplay: Story = {
+  args: {name: 'keap'},
+}
+
 export const leverConnectorDisplay: Story = {
   args: {name: 'lever'},
 }
@@ -110,16 +314,100 @@ export const linkedinConnectorDisplay: Story = {
   args: {name: 'linkedin'},
 }
 
+export const linkhutConnectorDisplay: Story = {
+  args: {name: 'linkhut'},
+}
+
+export const mailchimpConnectorDisplay: Story = {
+  args: {name: 'mailchimp'},
+}
+
+export const miroConnectorDisplay: Story = {
+  args: {name: 'miro'},
+}
+
+export const mondayConnectorDisplay: Story = {
+  args: {name: 'monday'},
+}
+
+export const muralConnectorDisplay: Story = {
+  args: {name: 'mural'},
+}
+
+export const namelyConnectorDisplay: Story = {
+  args: {name: 'namely'},
+}
+
+export const nationbuilderConnectorDisplay: Story = {
+  args: {name: 'nationbuilder'},
+}
+
+export const netsuiteConnectorDisplay: Story = {
+  args: {name: 'netsuite'},
+}
+
 export const notionConnectorDisplay: Story = {
   args: {name: 'notion'},
+}
+
+export const odooConnectorDisplay: Story = {
+  args: {name: 'odoo'},
+}
+
+export const oktaConnectorDisplay: Story = {
+  args: {name: 'okta'},
+}
+
+export const osuConnectorDisplay: Story = {
+  args: {name: 'osu'},
+}
+
+export const ouraConnectorDisplay: Story = {
+  args: {name: 'oura'},
 }
 
 export const outreachConnectorDisplay: Story = {
   args: {name: 'outreach'},
 }
 
+export const pagerdutyConnectorDisplay: Story = {
+  args: {name: 'pagerduty'},
+}
+
+export const pandadocConnectorDisplay: Story = {
+  args: {name: 'pandadoc'},
+}
+
+export const payfitConnectorDisplay: Story = {
+  args: {name: 'payfit'},
+}
+
+export const paypalConnectorDisplay: Story = {
+  args: {name: 'paypal'},
+}
+
+export const pennylaneConnectorDisplay: Story = {
+  args: {name: 'pennylane'},
+}
+
+export const pinterestConnectorDisplay: Story = {
+  args: {name: 'pinterest'},
+}
+
 export const pipedriveConnectorDisplay: Story = {
   args: {name: 'pipedrive'},
+}
+
+export const podiumConnectorDisplay: Story = {
+  args: {name: 'podium'},
+}
+
+export const productboardConnectorDisplay: Story = {
+  args: {name: 'productboard'},
+}
+
+export const qualtricsConnectorDisplay: Story = {
+  args: {name: 'qualtrics'},
 }
 
 export const quickbooksConnectorDisplay: Story = {
@@ -130,28 +418,184 @@ export const redditConnectorDisplay: Story = {
   args: {name: 'reddit'},
 }
 
+export const sageConnectorDisplay: Story = {
+  args: {name: 'sage'},
+}
+
+export const salesforceConnectorDisplay: Story = {
+  args: {name: 'salesforce'},
+}
+
 export const salesloftConnectorDisplay: Story = {
   args: {name: 'salesloft'},
+}
+
+export const segmentConnectorDisplay: Story = {
+  args: {name: 'segment'},
+}
+
+export const servicem8ConnectorDisplay: Story = {
+  args: {name: 'servicem8'},
+}
+
+export const servicenowConnectorDisplay: Story = {
+  args: {name: 'servicenow'},
 }
 
 export const sharepointConnectorDisplay: Story = {
   args: {name: 'sharepoint'},
 }
 
+export const shopifyConnectorDisplay: Story = {
+  args: {name: 'shopify'},
+}
+
+export const signnowConnectorDisplay: Story = {
+  args: {name: 'signnow'},
+}
+
 export const slackConnectorDisplay: Story = {
   args: {name: 'slack'},
+}
+
+export const smartsheetConnectorDisplay: Story = {
+  args: {name: 'smartsheet'},
+}
+
+export const snowflakeConnectorDisplay: Story = {
+  args: {name: 'snowflake'},
+}
+
+export const spotifyConnectorDisplay: Story = {
+  args: {name: 'spotify'},
+}
+
+export const squarespaceConnectorDisplay: Story = {
+  args: {name: 'squarespace'},
+}
+
+export const squareupConnectorDisplay: Story = {
+  args: {name: 'squareup'},
+}
+
+export const stackexchangeConnectorDisplay: Story = {
+  args: {name: 'stackexchange'},
+}
+
+export const stravaConnectorDisplay: Story = {
+  args: {name: 'strava'},
+}
+
+export const teamworkConnectorDisplay: Story = {
+  args: {name: 'teamwork'},
+}
+
+export const ticktickConnectorDisplay: Story = {
+  args: {name: 'ticktick'},
+}
+
+export const timelyConnectorDisplay: Story = {
+  args: {name: 'timely'},
+}
+
+export const todoistConnectorDisplay: Story = {
+  args: {name: 'todoist'},
+}
+
+export const tremendousConnectorDisplay: Story = {
+  args: {name: 'tremendous'},
+}
+
+export const tsheetsteamConnectorDisplay: Story = {
+  args: {name: 'tsheetsteam'},
+}
+
+export const tumblrConnectorDisplay: Story = {
+  args: {name: 'tumblr'},
+}
+
+export const twinfieldConnectorDisplay: Story = {
+  args: {name: 'twinfield'},
+}
+
+export const twitchConnectorDisplay: Story = {
+  args: {name: 'twitch'},
 }
 
 export const twitterConnectorDisplay: Story = {
   args: {name: 'twitter'},
 }
 
+export const typeformConnectorDisplay: Story = {
+  args: {name: 'typeform'},
+}
+
+export const uberConnectorDisplay: Story = {
+  args: {name: 'uber'},
+}
+
+export const vimeoConnectorDisplay: Story = {
+  args: {name: 'vimeo'},
+}
+
+export const wakatimeConnectorDisplay: Story = {
+  args: {name: 'wakatime'},
+}
+
+export const wealthboxConnectorDisplay: Story = {
+  args: {name: 'wealthbox'},
+}
+
+export const webflowConnectorDisplay: Story = {
+  args: {name: 'webflow'},
+}
+
+export const whoopConnectorDisplay: Story = {
+  args: {name: 'whoop'},
+}
+
+export const wordpressConnectorDisplay: Story = {
+  args: {name: 'wordpress'},
+}
+
+export const wrikeConnectorDisplay: Story = {
+  args: {name: 'wrike'},
+}
+
 export const xeroConnectorDisplay: Story = {
   args: {name: 'xero'},
 }
 
+export const yahooConnectorDisplay: Story = {
+  args: {name: 'yahoo'},
+}
+
+export const yandexConnectorDisplay: Story = {
+  args: {name: 'yandex'},
+}
+
+export const zapierConnectorDisplay: Story = {
+  args: {name: 'zapier'},
+}
+
+export const zendeskConnectorDisplay: Story = {
+  args: {name: 'zendesk'},
+}
+
+export const zenefitsConnectorDisplay: Story = {
+  args: {name: 'zenefits'},
+}
+
 export const zohoDeskConnectorDisplay: Story = {
   args: {name: 'zoho-desk'},
+}
+
+export const zohoConnectorDisplay: Story = {
+  args: {name: 'zoho'},
+}
+
+export const zoomConnectorDisplay: Story = {
+  args: {name: 'zoom'},
 }
 
 export const airtableConnectorDisplay: Story = {

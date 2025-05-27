@@ -1,6 +1,17 @@
 // generated file. Do not modify by hand
 
 export default {
+  accelo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Accelo',
+      stage: 'alpha',
+      verticals: ['accounting', 'ticketing'],
+      logoUrl: '/_assets/logo-accelo.svg',
+      authType: 'OAUTH2',
+    },
+  },
   'acme-oauth2': {
     hasClient: false,
     hasServer: false,
@@ -23,6 +34,17 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  adyen: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Adyen',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-adyen.svg',
+      authType: 'OAUTH2',
+    },
+  },
   aircall: {
     hasClient: false,
     hasServer: false,
@@ -42,6 +64,28 @@ export default {
       logoUrl: '/_assets/logo-airtable.svg',
     },
   },
+  amazon: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Amazon',
+      stage: 'alpha',
+      verticals: ['developer-tools', 'commerce'],
+      logoUrl: '/_assets/logo-amazon.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  apaleo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Apaleo',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-apaleo.svg',
+      authType: 'OAUTH2',
+    },
+  },
   apollo: {
     hasClient: false,
     hasServer: true,
@@ -52,6 +96,171 @@ export default {
       logoUrl: '/_assets/logo-apollo.svg',
     },
   },
+  asana: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Asana',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-asana.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  attio: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Attio',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-attio.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  auth0: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Auth0',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-auth0.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  autodesk: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Autodesk',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-autodesk.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  aws: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'AWS',
+      stage: 'alpha',
+      verticals: ['developer-tools', 'commerce'],
+      logoUrl: '/_assets/logo-aws.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  bamboohr: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'BambooHR (OAuth)',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-bamboohr.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  basecamp: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Basecamp',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-basecamp.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  battlenet: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Battle.net',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-battlenet.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  bigcommerce: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'BigCommerce',
+      stage: 'alpha',
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-bigcommerce.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  bitbucket: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Bitbucket',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-bitbucket.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  bitly: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Bitly',
+      stage: 'alpha',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-bitly.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  blackbaud: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Blackbaud',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-blackbaud.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  boldsign: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'BoldSign',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-boldsign.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  box: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Box',
+      stage: 'alpha',
+      verticals: ['wiki', 'file-storage'],
+      logoUrl: '/_assets/logo-box.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  braintree: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Braintree',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-braintree.svg',
+      authType: 'OAUTH2',
+    },
+  },
   brex: {
     hasClient: false,
     hasServer: true,
@@ -59,6 +268,39 @@ export default {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-brex.svg',
       stage: 'beta',
+    },
+  },
+  calendly: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Calendly',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-calendly.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  clickup: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'ClickUp',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-clickup.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  close: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Close',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-close.svg',
+      authType: 'OAUTH2',
     },
   },
   coda: {
@@ -81,6 +323,94 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  contentful: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Contentful',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-contentful.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  contentstack: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Contentstack',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-contentstack.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  copper: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Copper (OAuth)',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-copper.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  coros: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Coros',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-coros.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  datev: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Datev',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-datev.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  deel: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Deel',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-deel.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  dialpad: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Dialpad',
+      stage: 'alpha',
+      verticals: ['communication'],
+      logoUrl: '/_assets/logo-dialpad.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  digitalocean: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'DigitalOcean',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-digitalocean.svg',
+      authType: 'OAUTH2',
+    },
+  },
   discord: {
     hasClient: false,
     hasServer: false,
@@ -92,6 +422,83 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  docusign: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'DocuSign',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-docusign.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  dropbox: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Dropbox',
+      stage: 'alpha',
+      verticals: ['wiki', 'file-storage'],
+      logoUrl: '/_assets/logo-dropbox.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  ebay: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'eBay',
+      stage: 'alpha',
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-ebay.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  egnyte: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Egnyte',
+      stage: 'alpha',
+      verticals: ['file-storage'],
+      logoUrl: '/_assets/logo-egnyte.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  envoy: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Envoy',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-envoy.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  eventbrite: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Eventbrite',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-eventbrite.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  exist: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Exist',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-exist.svg',
+      authType: 'OAUTH2',
+    },
+  },
   facebook: {
     hasClient: false,
     hasServer: false,
@@ -100,6 +507,28 @@ export default {
       stage: 'ga',
       verticals: ['social-media'],
       logoUrl: '/_assets/logo-facebook.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  factorial: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Factorial',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-factorial.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  figma: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Figma',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-figma.svg',
       authType: 'OAUTH2',
     },
   },
@@ -120,12 +549,56 @@ export default {
       logoUrl: '/_assets/logo-firebase.svg',
     },
   },
+  fitbit: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Fitbit',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-fitbit.svg',
+      authType: 'OAUTH2',
+    },
+  },
   foreceipt: {
     hasClient: false,
     hasServer: true,
     metadata: {
       verticals: ['expense-management'],
       logoUrl: '/_assets/logo-foreceipt.svg',
+    },
+  },
+  fortnox: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Fortnox',
+      stage: 'alpha',
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-fortnox.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  freshbooks: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'FreshBooks',
+      stage: 'alpha',
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-freshbooks.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  front: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Front',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-front.svg',
+      authType: 'OAUTH2',
     },
   },
   github: {
@@ -136,6 +609,17 @@ export default {
       stage: 'ga',
       verticals: ['developer-tools', 'ticketing'],
       logoUrl: '/_assets/logo-github.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  gitlab: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'GitLab',
+      stage: 'alpha',
+      verticals: ['developer-tools', 'ticketing'],
+      logoUrl: '/_assets/logo-gitlab.svg',
       authType: 'OAUTH2',
     },
   },
@@ -205,6 +689,28 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  gorgias: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Gorgias',
+      stage: 'alpha',
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-gorgias.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  grain: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Grain (OAuth)',
+      stage: 'alpha',
+      verticals: ['streaming', 'communication'],
+      logoUrl: '/_assets/logo-grain.svg',
+      authType: 'OAUTH2',
+    },
+  },
   greenhouse: {
     hasClient: false,
     hasServer: true,
@@ -215,6 +721,39 @@ export default {
       logoUrl: '/_assets/logo-greenhouse.svg',
     },
   },
+  gumroad: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Gumroad',
+      stage: 'alpha',
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-gumroad.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  gusto: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Gusto',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-gusto.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  harvest: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Harvest',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-harvest.svg',
+      authType: 'OAUTH2',
+    },
+  },
   heron: {
     hasClient: false,
     hasServer: true,
@@ -223,6 +762,17 @@ export default {
       stage: 'beta',
       verticals: ['enrichment'],
       logoUrl: '/_assets/logo-heron.svg',
+    },
+  },
+  highlevel: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'HighLevel',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-highlevel.svg',
+      authType: 'OAUTH2',
     },
   },
   hubspot: {
@@ -269,6 +819,17 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  keap: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Keap',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-keap.svg',
+      authType: 'OAUTH2',
+    },
+  },
   lever: {
     hasClient: false,
     hasServer: false,
@@ -302,12 +863,34 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  linkhut: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'LinkHut',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-linkhut.svg',
+      authType: 'OAUTH2',
+    },
+  },
   lunchmoney: {
     hasClient: false,
     hasServer: true,
     metadata: {
       verticals: ['personal-finance'],
       logoUrl: '/_assets/logo-lunchmoney.svg',
+    },
+  },
+  mailchimp: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Mailchimp',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-mailchimp.svg',
+      authType: 'OAUTH2',
     },
   },
   mercury: {
@@ -329,12 +912,78 @@ export default {
       verticals: ['accounting', 'commerce', 'crm', 'ats'],
     },
   },
+  miro: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Miro',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-miro.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  monday: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Monday',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-monday.svg',
+      authType: 'OAUTH2',
+    },
+  },
   moota: {
     hasClient: false,
     hasServer: true,
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-moota.svg',
+    },
+  },
+  mural: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Mural',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-mural.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  namely: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Namely',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-namely.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  nationbuilder: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'NationBuilder',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-nationbuilder.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  netsuite: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'NetSuite (OAuth)',
+      stage: 'alpha',
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-netsuite.svg',
+      authType: 'OAUTH2',
     },
   },
   notion: {
@@ -345,6 +994,28 @@ export default {
       stage: 'ga',
       verticals: ['wiki'],
       logoUrl: '/_assets/logo-notion.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  odoo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Odoo (OAuth)',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-odoo.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  okta: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Okta',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-okta.svg',
       authType: 'OAUTH2',
     },
   },
@@ -366,6 +1037,28 @@ export default {
       logoUrl: '/_assets/logo-openledger.svg',
     },
   },
+  osu: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Osu',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-osu.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  oura: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Oura',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-oura.svg',
+      authType: 'OAUTH2',
+    },
+  },
   outreach: {
     hasClient: false,
     hasServer: false,
@@ -374,6 +1067,72 @@ export default {
       stage: 'ga',
       verticals: ['other'],
       logoUrl: '/_assets/logo-outreach.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  pagerduty: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'PagerDuty',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-pagerduty.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  pandadoc: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Pandadoc',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-pandadoc.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  payfit: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Payfit',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-payfit.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  paypal: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Paypal',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-paypal.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  pennylane: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Pennylane',
+      stage: 'alpha',
+      verticals: ['accounting', 'banking'],
+      logoUrl: '/_assets/logo-pennylane.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  pinterest: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Pinterest',
+      stage: 'alpha',
+      verticals: ['social-media', 'streaming'],
+      logoUrl: '/_assets/logo-pinterest.svg',
       authType: 'OAUTH2',
     },
   },
@@ -398,6 +1157,17 @@ export default {
       logoUrl: '/_assets/logo-plaid.svg',
     },
   },
+  podium: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Podium',
+      stage: 'alpha',
+      verticals: ['communication'],
+      logoUrl: '/_assets/logo-podium.svg',
+      authType: 'OAUTH2',
+    },
+  },
   postgres: {
     hasClient: false,
     hasServer: true,
@@ -405,6 +1175,28 @@ export default {
       verticals: ['database'],
       logoUrl: '/_assets/logo-postgres.svg',
       stage: 'ga',
+    },
+  },
+  productboard: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Productboard',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-productboard.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  qualtrics: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Qualtrics',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-qualtrics.svg',
+      authType: 'OAUTH2',
     },
   },
   quickbooks: {
@@ -438,6 +1230,28 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  sage: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Sage',
+      stage: 'alpha',
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-sage.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  salesforce: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Salesforce',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-salesforce.svg',
+      authType: 'OAUTH2',
+    },
+  },
   salesloft: {
     hasClient: false,
     hasServer: false,
@@ -457,6 +1271,39 @@ export default {
       logoUrl: '/_assets/logo-saltedge.svg',
     },
   },
+  segment: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Segment',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-segment.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  servicem8: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'ServiceM8',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-servicem8.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  servicenow: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'ServiceNow',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-servicenow.svg',
+      authType: 'OAUTH2',
+    },
+  },
   sharepoint: {
     hasClient: false,
     hasServer: false,
@@ -465,6 +1312,28 @@ export default {
       stage: 'ga',
       verticals: ['file-storage', 'communication'],
       logoUrl: '/_assets/logo-sharepoint.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  shopify: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Shopify (OAuth)',
+      stage: 'alpha',
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-shopify.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  signnow: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'SignNow',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-signnow.svg',
       authType: 'OAUTH2',
     },
   },
@@ -479,12 +1348,89 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  smartsheet: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Smartsheet',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-smartsheet.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  snowflake: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Snowflake',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-snowflake.svg',
+      authType: 'OAUTH2',
+    },
+  },
   splitwise: {
     hasClient: false,
     hasServer: true,
     metadata: {
       verticals: ['personal-finance'],
       logoUrl: '/_assets/logo-splitwise.svg',
+    },
+  },
+  spotify: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Spotify (OAuth)',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-spotify.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  squarespace: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Squarespace',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-squarespace.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  squareup: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Squareup',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-squareup.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  stackexchange: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Stack Exchange',
+      stage: 'alpha',
+      verticals: ['wiki', 'ticketing'],
+      logoUrl: '/_assets/logo-stackexchange.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  strava: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Strava (Mobile)',
+      stage: 'alpha',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-strava.svg',
+      authType: 'OAUTH2',
     },
   },
   stripe: {
@@ -496,6 +1442,17 @@ export default {
       stage: 'beta',
     },
   },
+  teamwork: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Teamwork',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-teamwork.svg',
+      authType: 'OAUTH2',
+    },
+  },
   teller: {
     hasClient: true,
     hasServer: true,
@@ -505,11 +1462,77 @@ export default {
       stage: 'beta',
     },
   },
+  ticktick: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'TickTick',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-ticktick.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  timely: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Timely',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-timely.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  todoist: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Todoist',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-todoist.svg',
+      authType: 'OAUTH2',
+    },
+  },
   toggl: {
     hasClient: false,
     hasServer: true,
     metadata: {
       logoUrl: '/_assets/logo-toggl.svg',
+    },
+  },
+  tremendous: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Tremendous',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-tremendous.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  tsheetsteam: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'TSheets',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-tsheetsteam.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  tumblr: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Tumblr',
+      stage: 'alpha',
+      verticals: ['social-media', 'communication'],
+      logoUrl: '/_assets/logo-tumblr.svg',
+      authType: 'OAUTH2',
     },
   },
   twenty: {
@@ -519,6 +1542,28 @@ export default {
       verticals: ['crm'],
       logoUrl: '/_assets/logo-twenty.svg',
       stage: 'beta',
+    },
+  },
+  twinfield: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Twinfield',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-twinfield.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  twitch: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Twitch',
+      stage: 'alpha',
+      verticals: ['social-media', 'streaming'],
+      logoUrl: '/_assets/logo-twitch.svg',
+      authType: 'OAUTH2',
     },
   },
   twitter: {
@@ -532,6 +1577,28 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  typeform: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Typeform',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-typeform.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  uber: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Uber',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-uber.svg',
+      authType: 'OAUTH2',
+    },
+  },
   venmo: {
     hasClient: false,
     hasServer: false,
@@ -540,12 +1607,89 @@ export default {
       logoUrl: '/_assets/logo-venmo.svg',
     },
   },
+  vimeo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Vimeo (OAuth)',
+      stage: 'alpha',
+      verticals: ['streaming'],
+      logoUrl: '/_assets/logo-vimeo.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  wakatime: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Wakatime',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-wakatime.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  wealthbox: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Wealthbox',
+      stage: 'alpha',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-wealthbox.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  webflow: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Webflow',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-webflow.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  whoop: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Whoop',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-whoop.svg',
+      authType: 'OAUTH2',
+    },
+  },
   wise: {
     hasClient: false,
     hasServer: true,
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-wise.svg',
+    },
+  },
+  wordpress: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'WordPress',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-wordpress.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  wrike: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Wrike',
+      stage: 'alpha',
+      verticals: ['other'],
+      logoUrl: '/_assets/logo-wrike.svg',
+      authType: 'OAUTH2',
     },
   },
   xero: {
@@ -559,12 +1703,78 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  yahoo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Yahoo',
+      stage: 'alpha',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-yahoo.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  yandex: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Yandex',
+      stage: 'alpha',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-yandex.svg',
+      authType: 'OAUTH2',
+    },
+  },
   yodlee: {
     hasClient: true,
     hasServer: true,
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-yodlee.svg',
+    },
+  },
+  zapier: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zapier',
+      stage: 'alpha',
+      verticals: ['developer-tools'],
+      logoUrl: '/_assets/logo-zapier.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  zendesk: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zendesk',
+      stage: 'alpha',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-zendesk.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  zenefits: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zenefits',
+      stage: 'alpha',
+      verticals: ['hris'],
+      logoUrl: '/_assets/logo-zenefits.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  zoho: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zoho',
+      stage: 'alpha',
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-zoho.svg',
+      authType: 'OAUTH2',
     },
   },
   'zoho-desk': {
@@ -575,6 +1785,17 @@ export default {
       stage: 'ga',
       verticals: ['ticketing'],
       logoUrl: '/_assets/logo-zoho-desk.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  zoom: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zoom',
+      stage: 'alpha',
+      verticals: ['streaming'],
+      logoUrl: '/_assets/logo-zoom.svg',
       authType: 'OAUTH2',
     },
   },
