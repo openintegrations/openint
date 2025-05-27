@@ -25,6 +25,7 @@ export const zConnector = z.object({
     .enum(['BASIC', 'OAUTH1', 'OAUTH2', 'OAUTH2CC', 'API_KEY', 'CUSTOM'])
     .optional(),
   // FIX ME: This should be nested under auth
+  required_scopes: z.array(z.string()).optional(),
   openint_default_scopes: z.array(z.string()).optional(),
   openint_allowed_scopes: z.array(z.string()).optional(),
   scopes: z
@@ -76,6 +77,10 @@ export const getConnectorModel = (
     schemas: opts.includeSchemas
       ? jsonSchemasByConnectorName[def.name as ConnectorName]
       : undefined,
+    required_scopes:
+      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth.required_scopes
+        : undefined,
     openint_default_scopes:
       def.metadata?.jsonDef?.auth.type === 'OAUTH2'
         ? def.metadata?.jsonDef?.auth.openint_default_scopes

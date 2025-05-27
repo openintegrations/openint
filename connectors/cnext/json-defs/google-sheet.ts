@@ -37,6 +37,11 @@ export default {
           'See, edit, create, and delete all of your Google Drive files',
       },
       {
+        scope: 'https://www.googleapis.com/auth/drive.appdata',
+        description:
+          'See, create, and delete its own configuration data in your Google Drive',
+      },
+      {
         scope: 'https://www.googleapis.com/auth/drive.file',
         description:
           'See, edit, create, and delete only the specific Google Drive files you use with this app',
