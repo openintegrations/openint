@@ -19,7 +19,7 @@ paths:
           schema:
             type: integer
             minimum: 0
-            maximum: 500
+            maximum: 3000
             default: 50
             description: Limit the number of items returned
         - in: query
@@ -376,7 +376,7 @@ paths:
           schema:
             type: integer
             minimum: 0
-            maximum: 500
+            maximum: 3000
             default: 50
             description: Limit the number of items returned
         - in: query
@@ -1064,7 +1064,7 @@ paths:
           schema:
             type: integer
             minimum: 0
-            maximum: 500
+            maximum: 3000
             default: 50
             description: Limit the number of items returned
         - in: query

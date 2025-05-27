@@ -28292,6 +28292,12 @@
               "CUSTOM"
             ]
           },
+          "required_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "openint_default_scopes": {
             "type": "array",
             "items": {

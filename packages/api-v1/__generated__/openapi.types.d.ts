@@ -8572,6 +8572,7 @@ export interface components {
             };
             /** @enum {string} */
             auth_type?: "BASIC" | "OAUTH1" | "OAUTH2" | "OAUTH2CC" | "API_KEY" | "CUSTOM";
+            required_scopes?: string[];
             openint_default_scopes?: string[];
             openint_allowed_scopes?: string[];
             scopes?: {
