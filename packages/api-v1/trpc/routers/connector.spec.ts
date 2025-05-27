@@ -56,4 +56,37 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       },
     })
   })
+
+  test('oauth2 connectors have valid scope structure', async () => {
+    const res = await asOrg.listConnectors()
+    const oauth2Connectors = res.items.filter(
+      (connector) => connector.auth_type === 'OAUTH2',
+    )
+
+    expect(oauth2Connectors.length).toBeGreaterThan(0)
+
+    oauth2Connectors.forEach((connector) => {
+      // Check that they are arrays
+      expect(Array.isArray(connector.openint_default_scopes)).toBe(true)
+      expect(Array.isArray(connector.openint_allowed_scopes)).toBe(true)
+      expect(Array.isArray(connector.scopes)).toBe(true)
+      
+      // Check that default scopes are subset of allowed scopes
+      connector.openint_default_scopes?.forEach((scope) => {
+        expect(connector.openint_allowed_scopes).toContain(scope)
+      })
+
+      // Check that allowed scopes are subset of available scopes
+      const availableScopes = connector.scopes?.map((s) => s.scope)
+      connector.openint_allowed_scopes?.forEach((scope) => {
+        expect(availableScopes).toContain(scope)
+      })
+
+      // Check that scopes have required properties
+      connector.scopes?.forEach((scope) => {
+        expect(scope).toHaveProperty('scope')
+        expect(scope).toHaveProperty('description')
+      })
+    })
+  })
 })
