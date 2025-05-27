@@ -185,6 +185,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/connector-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["connectorStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/viewer": {
         parameters: {
             query?: never;
@@ -9673,6 +9689,66 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    connectorStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        list: {
+                            name: string;
+                            hasConnectionForOrg: boolean;
+                            isHealthyForOrg: boolean;
+                            hasDefaultCredentials: boolean;
+                            complete: boolean;
+                        }[];
+                        numTotalConnectors: number;
+                        numWithConnectionForOrg: number;
+                        numHealthyForOrg: number;
+                        numWithDefaultCredentials: number;
+                        numComplete: number;
+                    };
                 };
             };
             /** @description Authorization not provided */
