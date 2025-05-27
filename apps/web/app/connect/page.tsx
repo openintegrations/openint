@@ -75,6 +75,10 @@ export default async function ConnectPage(
     )
   }
 
+  // NOTE: remove when we have proper theme support
+  const bgColor =
+    viewer?.orgId === process.env['DO_ORG_ID'] ? 'bg-[#fefcf8]' : 'bg-white'
+
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: zConnectOptions,
   })
@@ -138,7 +142,7 @@ export default async function ConnectPage(
                 )}
               </pre>
             )}
-            <ConnectOpWrapper>
+            <ConnectOpWrapper className={bgColor}>
               <div className="flex min-h-screen w-full">
                 {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
                 {!searchParams.is_embedded && (
