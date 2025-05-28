@@ -145,6 +145,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/event": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Organization Events
+         * @description List all events for an organization
+         */
+        get: operations["listEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/customers": {
         parameters: {
             query?: never;
@@ -8562,6 +8582,145 @@ export interface components {
             created_at: string;
             updated_at: string;
         };
+        /** event */
+        "core.event": {
+            id: string;
+            timestamp: string;
+            user: (string | number | boolean | null) | {
+                [key: string]: unknown;
+            } | unknown[] | null;
+            v: string | null;
+            org_id: string | null;
+            user_id: string | null;
+            customer_id: string | null;
+            prompt?: string | null;
+        } & ({
+            /** @constant */
+            name: "debug.debug";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "webhook.received";
+            data: {
+                traceId: string;
+                method: string;
+                path: string;
+                query: {
+                    [key: string]: unknown;
+                };
+                headers: {
+                    [key: string]: unknown;
+                };
+                body?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "db.user-created";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "db.user-deleted";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "db.connection-created";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "db.connection-deleted";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "user.signin";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "user.signout";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "connect.session-started";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-cancelled";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-succeeded";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.session-errored";
+            data: {
+                connector_name: string;
+                meta?: unknown;
+            };
+        } | {
+            /** @constant */
+            name: "connect.loaded";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "connect.connection-connected";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+                customer_id: string | null;
+            };
+        } | {
+            /** @constant */
+            name: "connect.connection-deleted";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+                customer_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "connect.connection-checked";
+            data: {
+                /** @description Must start with 'conn_' */
+                connection_id: string;
+                status: string | null;
+                status_message: string | null;
+                customer_id: string;
+            };
+        } | {
+            /** @constant */
+            name: "api.token-copied";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "api.graphql-request";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "api.rest-request";
+            data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "pageview";
+            data: {
+                current_url: string;
+                path: string;
+            };
+        });
         /** integration_select */
         "core.integration_select": {
             id: string;
@@ -9520,6 +9679,87 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    listEvents: {
+        parameters: {
+            query?: {
+                /** @description Limit the number of items returned */
+                limit?: number;
+                /** @description Offset the items returned */
+                offset?: number;
+                search_query?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["core.event"][];
+                        /** @description Total number of items in the database for the organization */
+                        total: number;
+                        /** @description Limit the number of items returned */
+                        limit: number;
+                        /** @description Offset the items returned */
+                        offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
