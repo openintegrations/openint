@@ -20,7 +20,9 @@ const zMetadata = z.record(z.string(), z.unknown()).describe(`
 
 const event_select = z
   .intersection(
-    createSelectSchema(schema.event).omit({name: true, data: true}),
+    createSelectSchema(schema.event)
+      .omit({name: true, data: true})
+      .extend({prompt: z.string().nullish()}),
     zEvent,
   )
   .openapi({
