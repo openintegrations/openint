@@ -31,7 +31,10 @@ export type EventName = keyof typeof eventMap
 export const zEvent = z.discriminatedUnion(
   'name',
   Object.entries(eventMap).map(([name, props]) =>
-    z.object({name: z.literal(name), data: z.object(props)}),
+    z.object({
+      name: z.literal(name),
+      data: z.object(props),
+    }),
   ) as unknown as NonEmptyArray<
     {
       [k in keyof typeof eventMap]: Z.ZodObject<{
