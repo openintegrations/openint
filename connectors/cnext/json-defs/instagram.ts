@@ -12,13 +12,26 @@ export default {
     token_request_url: 'https://api.instagram.com/oauth/access_token',
     scope_separator: ',',
     params_config: {},
-    openint_default_scopes: ['instagram_basic'],
-    openint_allowed_scopes: ['instagram_basic', 'user_profile', 'user_media'],
+    required_scopes: ['user_profile'],
+    openint_default_scopes: ['user_profile'],
+    openint_allowed_scopes: [
+      'user_profile',
+      'user_media',
+      'instagram_basic',
+      'pages_show_list',
+      'instagram_content_publish',
+      'instagram_manage_comments',
+      'instagram_manage_insights',
+      'ads_management',
+    ],
+    // official instagram scopes docs shows only 2 scopes (user_profile(mandatory) and user_media(optional))
+    // https://developers.facebook.com/docs/instagram-platform/overview
+    // https://developers.facebook.com/docs/instagram-platform/reference/oauth-authorize/
     scopes: [
       {
         scope: 'user_profile',
         description:
-          "Provides access to the user's profile information including username, profile picture, and account type (Business or Personal).",
+          "Provides access to the user's profile information including username, profile picture, and account type (Business or Personal). This scope is mandatory for Instagram OAuth.",
       },
       {
         scope: 'user_media',

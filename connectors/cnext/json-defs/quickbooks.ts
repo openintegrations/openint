@@ -13,70 +13,32 @@ export default {
       'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
     scope_separator: ' ',
     params_config: {},
-    openint_default_scopes: [
-      'openid',
-      'com.intuit.quickbooks.accounting.readonly',
-    ],
+    required_scopes: ['openid'],
+    openint_default_scopes: ['openid', 'com.intuit.quickbooks.accounting'],
     openint_allowed_scopes: [
       'openid',
       'com.intuit.quickbooks.accounting',
-      'com.intuit.quickbooks.accounting.readonly',
+      'com.intuit.quickbooks.payment',
     ],
+    /**
+     * Official QuickBooks Online scopes documentation:
+     * https://developer.intuit.com/app/developer/qbo/docs/learn/scopes
+     */
     scopes: [
       {
         scope: 'com.intuit.quickbooks.accounting',
         description:
-          'Full access to accounting data including customers, vendors, invoices, payments, expenses, and all other accounting entities. Allows read and write operations.',
-      },
-      {
-        scope: 'com.intuit.quickbooks.accounting.readonly',
-        description:
-          'Read-only access to accounting data including customers, vendors, invoices, payments, expenses, and other accounting entities. No write operations allowed.',
+          'Grants access to the QuickBooks Online Accounting API, which focuses on accounting data.',
       },
       {
         scope: 'com.intuit.quickbooks.payment',
         description:
-          'Access to payment operations including processing payments and viewing payment information. Required for integrating with QuickBooks Payments.',
-      },
-      {
-        scope: 'com.intuit.quickbooks.payroll',
-        description:
-          'Access to payroll data including employee information, pay runs, and payroll items. Allows read and write operations.',
-      },
-      {
-        scope: 'com.intuit.quickbooks.payroll.readonly',
-        description:
-          'Read-only access to payroll data including employee information, pay runs, and payroll items. No write operations allowed.',
-      },
-      {
-        scope: 'com.intuit.quickbooks.salesreceipt',
-        description:
-          'Access to sales receipt operations including creating, updating, and viewing sales receipts.',
+          'Grants access to the QuickBooks Payments API, which focuses on payments processing.',
       },
       {
         scope: 'openid',
         description:
-          'Basic authentication and user profile information (name, email). Does not provide access to any QuickBooks company data.',
-      },
-      {
-        scope: 'email',
-        description:
-          "Access to the user's email address only. Minimal scope that doesn't provide access to any QuickBooks company data.",
-      },
-      {
-        scope: 'profile',
-        description:
-          "Access to basic user profile information (name, address, phone). Doesn't provide access to any QuickBooks company data.",
-      },
-      {
-        scope: 'phone',
-        description:
-          "Access to the user's phone number only. Minimal scope that doesn't provide access to any QuickBooks company data.",
-      },
-      {
-        scope: 'address',
-        description:
-          "Access to the user's address information only. Doesn't provide access to any QuickBooks company data.",
+          "Grants access to OpenID Connect features. Include one or more of the following capabilities: profile – User's given and family names info, email – User's email address info, phone – User's phone number info, address – User's physical address info",
       },
     ],
     // These are not currently working... We need to add custom postConnect script and then fix it
