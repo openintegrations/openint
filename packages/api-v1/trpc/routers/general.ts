@@ -16,7 +16,7 @@ import {getConnectorModel} from './connector.models'
 
 export const generalRouter = router({
   debug: publicProcedure
-    .meta({openapi: {method: 'GET', path: '/debug', enabled: false}})
+    .meta({openapi: {method: 'GET', path: '/debug', enabled: true}})
     .input(
       z.object({
         crash: z.string().optional(),
@@ -29,11 +29,13 @@ export const generalRouter = router({
         throw new Error(input.crash)
       }
 
-      const templatePath = join(__dirname, '../templates/test.moustache')
+      const templatePath = join(
+        process.cwd(),
+        '../../packages/api-v1/templates/test.mustache',
+      )
       const template = readFileSync(templatePath, 'utf-8')
-      const rendered = input.task
-        ? Mustache.render(template, {task: input.task || 'Unknown task'})
-        : undefined
+      const task = input.task || 'Unknown task'
+      const rendered = Mustache.render(template, {task})
 
       return {
         ok: true,
