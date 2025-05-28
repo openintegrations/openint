@@ -49,6 +49,7 @@ export const eventMap = {
   'connect.session-cancelled': {connector_name: z.string(), meta: z.unknown()},
   'connect.session-succeeded': {connector_name: z.string(), meta: z.unknown()},
   'connect.session-errored': {connector_name: z.string(), meta: z.unknown()},
+  'connect.loaded': {}, // this is only sent from the client side manually
   'connect.connection-connected': {
     connection_id: zId('conn'),
     customer_id: z.string().nullable(), // added after the fact so nullable
