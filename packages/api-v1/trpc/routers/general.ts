@@ -1,4 +1,8 @@
+import {readFileSync} from 'node:fs'
+import {join} from 'node:path'
+
 import {TRPCError} from '@trpc/server'
+import Mustache from 'mustache'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zViewerRole} from '@openint/cdk'
 import {eq, schema} from '@openint/db'
@@ -13,13 +17,28 @@ import {getConnectorModel} from './connector.models'
 export const generalRouter = router({
   debug: publicProcedure
     .meta({openapi: {method: 'GET', path: '/debug', enabled: false}})
-    .input(z.object({crash: z.string().optional()}))
-    .output(z.object({ok: z.boolean()}))
+    .input(
+      z.object({
+        crash: z.string().optional(),
+        task: z.string().optional(),
+      }),
+    )
+    .output(z.object({ok: z.boolean(), rendered: z.string().optional()}))
     .query(({input}) => {
       if (input.crash) {
         throw new Error(input.crash)
       }
-      return {ok: true}
+
+      const templatePath = join(__dirname, '../templates/test.moustache')
+      const template = readFileSync(templatePath, 'utf-8')
+      const rendered = input.task
+        ? Mustache.render(template, {task: input.task || 'Unknown task'})
+        : undefined
+
+      return {
+        ok: true,
+        rendered,
+      }
     }),
 
   health: publicProcedure
@@ -210,4 +229,37 @@ export const generalRouter = router({
     // note: not returning zViewer as it seems to be tripping up the stainless sdk generation
     .output(z.object({role: zViewerRole}).passthrough())
     .query(({ctx}) => ctx.viewer),
+
+  renderTestTemplate: publicProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/render-test-template',
+        description: 'Render the test template with additional text',
+        summary: 'Render Test Template',
+      },
+    })
+    .input(
+      z.object({
+        task: z.string().optional(),
+      }),
+    )
+    .output(
+      z.object({
+        rendered: z.string(),
+        text: z.string(),
+      }),
+    )
+    .query(({input}) => {
+      const templatePath = join(__dirname, '../templates/test.moustache')
+      const template = readFileSync(templatePath, 'utf-8')
+      const rendered = Mustache.render(template, {
+        task: input.task || 'default task',
+      })
+
+      return {
+        rendered,
+        text: 'Additional text from the server',
+      }
+    }),
 })
