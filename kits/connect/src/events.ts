@@ -18,6 +18,8 @@ export interface OpenIntEvent {
     connection_id?: string
     [key: string]: any
   }
+  /** Optional prompt that can be used to help the AI understand the context / action to take from the event */
+  prompt?: string
   id: string // Should start with 'evt_'
   ts: number
 }
