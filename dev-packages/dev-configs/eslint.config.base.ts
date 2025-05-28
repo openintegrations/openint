@@ -91,8 +91,6 @@ export const configs = keyAsName({
 
       // for kits dist files
       '**/dist/**',
-      // For examples
-      'examples/**',
     ],
   },
   defaultFiles: {
