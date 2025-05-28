@@ -58,7 +58,6 @@ export const eventRouter = router({
         path: '/event',
         description: 'List all events for an organization',
         summary: 'List Organization Events',
-        enabled: false,
       },
     })
     .input(
