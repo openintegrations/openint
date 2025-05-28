@@ -110,7 +110,7 @@ export const messagesRouter = router({
         rendered: z.string(),
       }),
     )
-    .mutation(async () => {
+    .query(async () => {
       // Read the GitHub example file
       const githubExamplePath = join(process.cwd(), '../../examples/github.ts')
       const githubExampleContent = readFileSync(githubExamplePath, 'utf-8')
