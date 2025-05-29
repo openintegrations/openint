@@ -47,6 +47,7 @@ export const listenToEvents = (
       const {items: sdkEvents} = await client.listEvents({
         limit: EVENT_LIMIT_PER_POLL,
         since: lastEventTimestamp.toISOString(),
+        expand: ['prompt'],
       })
 
       errorCount = 0
