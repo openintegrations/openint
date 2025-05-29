@@ -38,7 +38,7 @@ cd ~/.ssh
 mkcert local.openint.dev
 # Local ssl terminiation
 npm install -g local-ssl-proxy
-local-ssl-proxy --source 443 --target 3000 --cert ~/.ssh/local.openint.dev.pem --key ~/.ssh/local.openint.dev-key.pem
+local-ssl-proxy --source 443 --target 4000 --cert ~/.ssh/local.openint.dev.pem --key ~/.ssh/local.openint.dev-key.pem
 ```
 
 ## Contributors
