@@ -9,7 +9,6 @@ import {useRouter, useSearchParams} from 'next/navigation'
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
 import {ConnectButton, ConnectEmbed} from '@openint/connect'
-import {OpenIntEvent} from '@openint/connect/dist/events'
 import {getBaseURLs} from '@openint/env'
 import {toast} from '@openint/shadcn/ui'
 import {Spinner} from '@openint/ui-v1'
@@ -101,7 +100,7 @@ export function ConnectEmbedPreview(props: {
       .join(' ')
   }
 
-  const onEvent = (event: OpenIntEvent) => {
+  const onEvent = (event: any) => {
     if (event.name) {
       toast.success(`${prettyPrintEventName(event.name)}`)
     }
