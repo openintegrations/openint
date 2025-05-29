@@ -28,39 +28,44 @@ export type OAuthConnectorConfig = Z.infer<typeof _zOauthConnectorConfig>
 /** To avoid the circular type reference */
 export const zOauthConnectorConfig = _zOauthConnectorConfig.openapi({
   'ui:field': 'OAuthField',
+  ref: 'oauthConnectorConfig',
 })
 
-const zOAuthConnectionSettings = z.object({
-  credentials: z
-    .object({
-      access_token: z.string(),
-      // TODO: once we migrate to only cnext connections we can remove the optional on client_id
-      client_id: z
-        .string()
-        .describe('Client ID used for the connection')
-        .optional(),
-      // This should be really a string or array of strings, probably should be turned into
-      // an array
-      scope: z.string().optional(),
-      refresh_token: z.string().optional(),
-      expires_in: z.number().optional(),
-      expires_at: z.string().optional(),
-      token_type: z.string().optional(),
-      // the data returned by the oauth provider in its raw form, currently used to parse the credentials object
-      // useful to access domain specific fields such as authed_user in slack https://api.slack.com/methods/oauth.v2.access#examples
-      raw: z.record(z.unknown()).optional(),
-    })
-    .optional()
-    .describe('Output of the postConnect hook for oauth2 connectors'),
-  /** @deprecated */
-  created_at: z.string().optional(),
-  /** @deprecated */
-  updated_at: z.string().optional(),
-  /** @deprecated */
-  last_fetched_at: z.string().optional(),
-  /** @deprecated */
-  metadata: z.record(z.unknown()).nullable().optional(),
-})
+const zOAuthConnectionSettings = z
+  .object({
+    credentials: z
+      .object({
+        access_token: z.string(),
+        // TODO: once we migrate to only cnext connections we can remove the optional on client_id
+        client_id: z
+          .string()
+          .describe('Client ID used for the connection')
+          .optional(),
+        // This should be really a string or array of strings, probably should be turned into
+        // an array
+        scope: z.string().optional(),
+        refresh_token: z.string().optional(),
+        expires_in: z.number().optional(),
+        expires_at: z.string().optional(),
+        token_type: z.string().optional(),
+        // the data returned by the oauth provider in its raw form, currently used to parse the credentials object
+        // useful to access domain specific fields such as authed_user in slack https://api.slack.com/methods/oauth.v2.access#examples
+        raw: z.record(z.unknown()).optional(),
+      })
+      .optional()
+      .describe('Output of the postConnect hook for oauth2 connectors'),
+    /** @deprecated */
+    created_at: z.string().optional(),
+    /** @deprecated */
+    updated_at: z.string().optional(),
+    /** @deprecated */
+    last_fetched_at: z.string().optional(),
+    /** @deprecated */
+    metadata: z.record(z.unknown()).nullable().optional(),
+  })
+  .openapi({
+    ref: 'oauthConnectionSettings',
+  })
 
 export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 
