@@ -5004,6 +5004,19 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "prompt"
+                ]
+              }
+            }
           }
         ],
         "responses": {

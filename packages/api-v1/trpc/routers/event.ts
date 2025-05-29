@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {extractId} from '@openint/cdk'
 import {and, any, asc, desc, eq, ilike, schema, sql} from '@openint/db'
-import {env, envRequired} from '@openint/env'
+import { envRequired} from '@openint/env'
 import {Event, zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
@@ -158,7 +158,8 @@ export const eventRouter = router({
       //     code: 'INTERNAL_SERVER_ERROR',
       //     message: `Failed to parse ${parseErrors.length} events`,
       //   })
-      // }
+      // }\
+      // @ts-expect-error TODO: fix this
       return formatListResponse(events, {limit, offset})
     }),
 })

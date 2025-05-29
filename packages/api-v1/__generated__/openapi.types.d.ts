@@ -9700,6 +9700,7 @@ export interface operations {
                 /** @description Offset the items returned */
                 offset?: number;
                 search_query?: string;
+                expand?: "prompt"[];
             };
             header?: never;
             path?: never;
