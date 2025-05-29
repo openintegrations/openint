@@ -46,29 +46,12 @@ export function createServerDispatcher({
           where: eq(schema.organization.id, viewer.orgId),
         })
         if (org?.metadata?.webhook_url) {
-          console.log('Sending webhook', org.metadata.webhook_url)
-
-          // this makes the webhook payload match our v0 one for DO
-          // TODO : Remove this after DO deploy
-          if (
-            process.env['DO_ORG_ID'] === org.id &&
-            evt?.name === 'connect.connection-connected'
-          ) {
-            evt = {
-              ...evt,
-              // @ts-ignore
-              ts: evt?.timestamp,
-              data: {
-                ...evt?.data,
-                connectionId: evt?.data.connection_id,
-                user: evt?.user,
-              },
-              user: {
-                ...evt?.user,
-                cus_id: evt?.user?.customer_id,
-              },
-            }
-          }
+          console.log(
+            'Sending webhook for orgId',
+            org.id,
+            'to',
+            org.metadata.webhook_url,
+          )
 
           // TODO: Use ofetch to add retry logic
           // TODO: Add webhook result to event for debugging purpose
