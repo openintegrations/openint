@@ -9,7 +9,9 @@ import {useRouter, useSearchParams} from 'next/navigation'
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
 import {ConnectButton, ConnectEmbed} from '@openint/connect'
+import {OpenIntEvent} from '@openint/connect/dist/events'
 import {getBaseURLs} from '@openint/env'
+import {toast} from '@openint/shadcn/ui'
 import {Spinner} from '@openint/ui-v1'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
@@ -90,6 +92,21 @@ export function ConnectEmbedPreview(props: {
     trpc.createToken.queryOptions(props.createTokenInput),
   )
 
+  const prettyPrintEventName = (name: string) => {
+    return name
+      .replace('.', ' ')
+      .replace('-', ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  const onEvent = (event: OpenIntEvent) => {
+    if (event.name) {
+      toast.success(`${prettyPrintEventName(event.name)}`)
+    }
+  }
+
   return (
     <PreviewWindow
       view={currentView}
@@ -108,6 +125,7 @@ export function ConnectEmbedPreview(props: {
             <ConnectButton
               token={tokenRes.data.token}
               baseURL={getBaseURLs(null).connect}
+              onEvent={onEvent}
             />
           </div>
         )
@@ -127,6 +145,7 @@ export function ConnectEmbedPreview(props: {
           className="h-full w-full"
           token={tokenRes.data.token}
           baseURL={getBaseURLs(null).connect}
+          onEvent={onEvent}
         />
       )}
       {/* <iframe src={mutation.data?.token} className="h-full w-full" /> */}
