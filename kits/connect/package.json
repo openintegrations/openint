@@ -1,6 +1,6 @@
 {
   "name": "@openint/connect",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "watch": "tsc -p ./tsconfig.json --watch"
   },
   "dependencies": {
-    "@openint/sdk": "~2.5.0"
+    "@openint/sdk": "~2.6.0"
   },
   "devDependencies": {
     "@types/react": "19.1.0",
