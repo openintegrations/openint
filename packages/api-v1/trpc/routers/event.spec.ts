@@ -1,6 +1,6 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 
-import {eq, schema} from '@openint/db'
+import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {trpc} from '../_base'
