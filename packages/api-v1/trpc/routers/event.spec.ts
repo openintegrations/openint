@@ -60,11 +60,40 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.items).toHaveLength(0)
     })
 
+    test('list events with since parameter', async () => {
+      const now = new Date().toISOString()
+      const noSinceList = await caller.listEvents()
+
+      expect(noSinceList.items).toHaveLength(1)
+
+      const initialList = await caller.listEvents({
+        since: now,
+      })
+
+      expect(initialList.items).toHaveLength(0)
+
+      // Wait a bit to ensure the timestamps are different
+      await new Promise((resolve) => setTimeout(resolve, 10))
+
+      // Create a third event after the 'now' timestamp
+      const newEvent = await caller.createEvent({
+        event: {
+          name: 'debug.debug',
+          data: {message: 'new event after since'},
+        },
+      })
+
+      const res = await caller.listEvents({
+        since: now,
+      })
+
+      expect(res.items).toHaveLength(1)
+      expect(res.items[0]?.id).toBe(newEvent.id)
+    })
+
     afterAll(async () => {
       if (eventRes.current?.id) {
-        await db
-          .delete(schema.event)
-          .where(eq(schema.event.id, eventRes.current?.id))
+        await db.delete(schema.event)
       }
     })
   })

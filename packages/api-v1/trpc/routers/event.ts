@@ -61,15 +61,17 @@ export const eventRouter = router({
       },
     })
     .input(
-      zListParams.extend({
-        search_query: z.string().optional().openapi({
-          description: 'Search query for the event list',
-        }),
-        since: z.string().optional().openapi({
-          description:
-            'Only return events since this timestamp (ISO 8601 timestamp formatted string)',
-        }),
-      }),
+      zListParams
+        .extend({
+          search_query: z.string().optional().openapi({
+            description: 'Search query for the event list',
+          }),
+          since: z.string().optional().openapi({
+            description:
+              'Only return events since this timestamp (ISO 8601 timestamp formatted string)',
+          }),
+        })
+        .default({}),
     )
     .output(zListResponse(core.event_select))
     .query(async ({ctx, input: {limit, offset, search_query, since}}) => {
