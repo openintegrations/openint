@@ -1,10 +1,13 @@
 import {TRPCError} from '@trpc/server'
+import {extractId} from '@openint/cdk'
 import {and, any, asc, desc, eq, ilike, schema, sql} from '@openint/db'
-import {zEvent} from '@openint/events/events'
+import {env, envRequired} from '@openint/env'
+import {Event, zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
+import {getConnectorModelByName} from './connector.models'
 import {
   formatListResponse,
   zListParams,
@@ -66,11 +69,12 @@ export const eventRouter = router({
           search_query: z.string().optional().openapi({
             description: 'Search query for the event list',
           }),
+          expand: z.array(z.enum(['prompt'])).optional(),
         })
         .default({}),
     )
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input: {limit, offset, search_query}}) => {
+    .query(async ({ctx, input: {limit, offset, search_query, expand}}) => {
       // Lowercased query for case insensitive search
       const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db.query.event.findMany({
@@ -87,6 +91,59 @@ export const eventRouter = router({
         limit,
       })
 
+      const events = expand?.includes('prompt')
+        ? await Promise.all(
+            res.map(async (_event) => {
+              const event = _event as Event
+
+              if (event.name === 'connect.connection-connected') {
+                const connectionId = event.data.connection_id
+                const connectorName = extractId(connectionId)[1]
+                const meta = getConnectorModelByName(connectorName)
+                if (!meta) {
+                  console.error(
+                    `Connector with name "${connectorName}" not found`,
+                  )
+                  return event
+                }
+                const apiUrl = new URL(
+                  '/v1/message_template',
+                  envRequired.AI_ROUTER_URL,
+                )
+                apiUrl.searchParams.append('language', 'javascript')
+                apiUrl.searchParams.append('use_environment_variables', 'true')
+                apiUrl.searchParams.append('connector_name', connectorName)
+                apiUrl.searchParams.append(
+                  'connector_auth_type',
+                  meta.auth_type ?? '',
+                )
+                // TODO: add connector documentation url
+                // apiUrl.searchParams.append(
+                //   'connector_documentation_url',
+                //   meta.documentation_url ?? '',
+                // )
+
+                const response = await fetch(apiUrl.toString(), {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })
+                const data: unknown = await response.json()
+                const zMessageTemplateResponse = z.object({
+                  template: z.string(),
+                })
+                const prompt =
+                  zMessageTemplateResponse.safeParse(data).data?.template
+                return {
+                  ...event,
+                  prompt,
+                }
+              }
+              return event
+            }),
+          )
+        : res
+
       // const parseErrors: string[] = []
       // items.forEach((item) => {
       //   try {
@@ -102,6 +159,6 @@ export const eventRouter = router({
       //     message: `Failed to parse ${parseErrors.length} events`,
       //   })
       // }
-      return formatListResponse(res, {limit, offset})
+      return formatListResponse(events, {limit, offset})
     }),
 })
