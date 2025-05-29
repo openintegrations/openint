@@ -5008,12 +5008,9 @@
           {
             "in": "query",
             "name": "since",
-            "description": "Only return events since this timestamp (ISO 8601 timestamp formatted string)",
             "schema": {
-              "type": "string",
-              "description": "Only return events since this timestamp (ISO 8601 timestamp formatted string)"
-            },
-            "required": true
+              "type": "string"
+            }
           }
         ],
         "responses": {

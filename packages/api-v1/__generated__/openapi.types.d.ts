@@ -5759,14 +5759,13 @@ export interface operations {
     };
     listEvents: {
         parameters: {
-            query: {
+            query?: {
                 /** @description Limit the number of items returned */
                 limit?: number;
                 /** @description Offset the items returned */
                 offset?: number;
                 search_query?: string;
-                /** @description Only return events since this timestamp (ISO 8601 timestamp formatted string) */
-                since: string;
+                since?: string;
             };
             header?: never;
             path?: never;
