@@ -18,11 +18,14 @@ interface ButtonStyleProps {
 interface ConnectButtonProps extends ConnectProps {
   text?: string
   buttonStyle?: ButtonStyleProps
+  dismissOnConnectionConnected?: boolean
 }
 
 export function ConnectButton({
   text = 'Manage Integrations',
+  dismissOnConnectionConnected = true,
   buttonStyle = {},
+
   ...connectProps
 }: ConnectButtonProps) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -38,14 +41,29 @@ export function ConnectButton({
     // For now, we assume connectProps are stable or change when iframe needs to be different.
     if (typeof document !== 'undefined') {
       // Ensure this only runs client-side
-      modalInstanceRef.current = createModal(connectProps, {
-        onClosed: () => {
-          console.log(
-            '[ConnectButton ModalEffect]: Modal closed by user action (ESC/backdrop).',
-          )
-          setIsOpen(false) // Sync React state if modal closed internally
+      modalInstanceRef.current = createModal(
+        {
+          ...connectProps,
+          onEvent: (event, unsubscribe) => {
+            connectProps.onEvent?.(event, unsubscribe)
+            if (
+              dismissOnConnectionConnected &&
+              event.name === 'connect.connection-connected'
+            ) {
+              modalInstanceRef.current?.close()
+              setIsOpen(false)
+            }
+          },
         },
-      })
+        {
+          onClosed: () => {
+            console.log(
+              '[ConnectButton ModalEffect]: Modal closed by user action (ESC/backdrop).',
+            )
+            setIsOpen(false)
+          },
+        },
+      )
     }
 
     // Cleanup function to close the modal if the component unmounts while modal is open
