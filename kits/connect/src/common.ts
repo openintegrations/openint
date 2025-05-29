@@ -138,7 +138,6 @@ export function createConnectIframe(props: ConnectProps) {
 
     if (onEvent) {
       const unsubscribe = listenToEvents(props, (event) => {
-        console.log('onEvent', event)
         onEvent(event, unsubscribe)
       })
       onEvent(
