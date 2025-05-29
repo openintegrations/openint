@@ -2990,6 +2990,14 @@ paths:
           schema:
             type: string
         - in: query
+          name: expand
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - prompt
+        - in: query
           name: since
           schema:
             type: string
@@ -10929,7 +10937,9 @@ components:
                         - string
                         - 'null'
                     error_details:
-                      type: 'null'
+                      type:
+                        - string
+                        - 'null'
               required:
                 - name
                 - data
