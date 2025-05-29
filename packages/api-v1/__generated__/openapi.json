@@ -5017,6 +5017,13 @@
                 ]
               }
             }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -29041,6 +29048,36 @@
                   },
                   "data": {
                     "type": "object"
+                  }
+                },
+                "required": [
+                  "name",
+                  "data"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "const": "connect.loading-error"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "error_message": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "error_details": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
                   }
                 },
                 "required": [

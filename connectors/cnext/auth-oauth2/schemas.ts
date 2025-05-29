@@ -28,6 +28,8 @@ export type OAuthConnectorConfig = Z.infer<typeof _zOauthConnectorConfig>
 /** To avoid the circular type reference */
 export const zOauthConnectorConfig = _zOauthConnectorConfig.openapi({
   'ui:field': 'OAuthField',
+  // TODO: reenable when we investigate ref issue in ConnectorConfigForm.tsx
+  // ref: 'oauthConnectorConfig',
 })
 
 const zOAuthConnectionSettings = z.object({
@@ -61,6 +63,10 @@ const zOAuthConnectionSettings = z.object({
   /** @deprecated */
   metadata: z.record(z.unknown()).nullable().optional(),
 })
+// TODO: reenable when we investigate ref issue in ConnectorConfigForm.tsx
+// .openapi({
+//   ref: 'oauthConnectionSettings',
+// })
 
 export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 

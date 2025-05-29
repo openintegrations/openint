@@ -1,6 +1,6 @@
 import {TRPCError} from '@trpc/server'
 import {extractId} from '@openint/cdk'
-import {and, any, asc, desc, eq, ilike, schema, sql} from '@openint/db'
+import {and, any, asc, desc, eq, gte, ilike, schema, sql} from '@openint/db'
 import { envRequired} from '@openint/env'
 import {Event, zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
@@ -70,11 +70,15 @@ export const eventRouter = router({
             description: 'Search query for the event list',
           }),
           expand: z.array(z.enum(['prompt'])).optional(),
+          since: z.string().optional().openapi({
+            description:
+              'Only return events since this timestamp (ISO 8601 timestamp formatted string)',
+          }),
         })
         .default({}),
     )
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input: {limit, offset, search_query, expand}}) => {
+    .query(async ({ctx, input: {limit, offset, search_query, since, expand}}) => {
       // Lowercased query for case insensitive search
       const lowerQuery = search_query?.toLowerCase()
       const res = await ctx.db.query.event.findMany({
@@ -85,6 +89,7 @@ export const eventRouter = router({
         where: and(
           eq(schema.event.name, any(Object.keys(eventMap))),
           lowerQuery ? ilike(schema.event.id, `%${lowerQuery}%`) : undefined,
+          since ? gte(schema.event.timestamp, since) : undefined,
         ),
         orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
         offset,

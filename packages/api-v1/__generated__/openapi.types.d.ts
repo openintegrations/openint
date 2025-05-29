@@ -8677,6 +8677,13 @@ export interface components {
             data: Record<string, never>;
         } | {
             /** @constant */
+            name: "connect.loading-error";
+            data: {
+                error_message?: string | null;
+                error_details?: string | null;
+            };
+        } | {
+            /** @constant */
             name: "connect.connection-connected";
             data: {
                 /** @description Must start with 'conn_' */
@@ -9701,6 +9708,7 @@ export interface operations {
                 offset?: number;
                 search_query?: string;
                 expand?: "prompt"[];
+                since?: string;
             };
             header?: never;
             path?: never;
