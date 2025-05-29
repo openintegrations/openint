@@ -290,28 +290,7 @@ export interface components {
              */
             connector_name: "accelo";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Accelo account (e.g., https://domain.api.accelo.com) */
@@ -326,14 +305,7 @@ export interface components {
              */
             connector_name: "accelo";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** acme-oauth2 */
@@ -344,28 +316,7 @@ export interface components {
              */
             connector_name: "acme-oauth2";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -378,14 +329,7 @@ export interface components {
              */
             connector_name: "acme-oauth2";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** adobe */
@@ -396,28 +340,7 @@ export interface components {
              */
             connector_name: "adobe";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -430,14 +353,7 @@ export interface components {
              */
             connector_name: "adobe";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** adyen */
@@ -448,28 +364,7 @@ export interface components {
              */
             connector_name: "adyen";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The environment to use (e.g., live|test) */
@@ -486,14 +381,7 @@ export interface components {
              */
             connector_name: "adyen";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** aircall */
@@ -504,28 +392,7 @@ export interface components {
              */
             connector_name: "aircall";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -538,14 +405,7 @@ export interface components {
              */
             connector_name: "aircall";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** airtable */
@@ -577,28 +437,7 @@ export interface components {
              */
             connector_name: "amazon";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain extension for your Amazon account (e.g., com) */
@@ -613,14 +452,7 @@ export interface components {
              */
             connector_name: "amazon";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** apaleo */
@@ -631,28 +463,7 @@ export interface components {
              */
             connector_name: "apaleo";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -665,14 +476,7 @@ export interface components {
              */
             connector_name: "apaleo";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** apollo */
@@ -703,28 +507,7 @@ export interface components {
              */
             connector_name: "asana";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -737,14 +520,7 @@ export interface components {
              */
             connector_name: "asana";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** attio */
@@ -755,28 +531,7 @@ export interface components {
              */
             connector_name: "attio";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -789,14 +544,7 @@ export interface components {
              */
             connector_name: "attio";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** auth0 */
@@ -807,28 +555,7 @@ export interface components {
              */
             connector_name: "auth0";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Auth0 account (e.g., https://domain.auth0.com) */
@@ -843,14 +570,7 @@ export interface components {
              */
             connector_name: "auth0";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** autodesk */
@@ -861,28 +581,7 @@ export interface components {
              */
             connector_name: "autodesk";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -895,14 +594,7 @@ export interface components {
              */
             connector_name: "autodesk";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** aws */
@@ -913,28 +605,7 @@ export interface components {
              */
             connector_name: "aws";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your AWS account (e.g., https://domain.amazoncognito.com) */
@@ -953,14 +624,7 @@ export interface components {
              */
             connector_name: "aws";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** bamboohr */
@@ -971,28 +635,7 @@ export interface components {
              */
             connector_name: "bamboohr";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your BambooHR account (e.g., https://domain.bamboohr.com) */
@@ -1007,14 +650,7 @@ export interface components {
              */
             connector_name: "bamboohr";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** basecamp */
@@ -1025,28 +661,7 @@ export interface components {
              */
             connector_name: "basecamp";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The details of your app (e.g., example-subdomain) */
@@ -1063,14 +678,7 @@ export interface components {
              */
             connector_name: "basecamp";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** battlenet */
@@ -1081,28 +689,7 @@ export interface components {
              */
             connector_name: "battlenet";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain extension of your Battle.net account (e.g., com) */
@@ -1119,14 +706,7 @@ export interface components {
              */
             connector_name: "battlenet";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** bigcommerce */
@@ -1137,28 +717,7 @@ export interface components {
              */
             connector_name: "bigcommerce";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The store hash of your BigCommerce account (e.g., Example123) */
@@ -1175,14 +734,7 @@ export interface components {
              */
             connector_name: "bigcommerce";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** bitbucket */
@@ -1193,28 +745,7 @@ export interface components {
              */
             connector_name: "bitbucket";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1227,14 +758,7 @@ export interface components {
              */
             connector_name: "bitbucket";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** bitly */
@@ -1245,28 +769,7 @@ export interface components {
              */
             connector_name: "bitly";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1279,14 +782,7 @@ export interface components {
              */
             connector_name: "bitly";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** blackbaud */
@@ -1297,28 +793,7 @@ export interface components {
              */
             connector_name: "blackbaud";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1331,14 +806,7 @@ export interface components {
              */
             connector_name: "blackbaud";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** boldsign */
@@ -1349,28 +817,7 @@ export interface components {
              */
             connector_name: "boldsign";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1383,14 +830,7 @@ export interface components {
              */
             connector_name: "boldsign";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** box */
@@ -1401,28 +841,7 @@ export interface components {
              */
             connector_name: "box";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1435,14 +854,7 @@ export interface components {
              */
             connector_name: "box";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** braintree */
@@ -1453,28 +865,7 @@ export interface components {
              */
             connector_name: "braintree";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1487,14 +878,7 @@ export interface components {
              */
             connector_name: "braintree";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** brex */
@@ -1533,28 +917,7 @@ export interface components {
              */
             connector_name: "calendly";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1567,14 +930,7 @@ export interface components {
              */
             connector_name: "calendly";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** clickup */
@@ -1585,28 +941,7 @@ export interface components {
              */
             connector_name: "clickup";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1619,14 +954,7 @@ export interface components {
              */
             connector_name: "clickup";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** close */
@@ -1637,28 +965,7 @@ export interface components {
              */
             connector_name: "close";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1671,14 +978,7 @@ export interface components {
              */
             connector_name: "close";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** coda */
@@ -1709,28 +1009,7 @@ export interface components {
              */
             connector_name: "confluence";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1743,14 +1022,7 @@ export interface components {
              */
             connector_name: "confluence";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** contentful */
@@ -1761,28 +1033,7 @@ export interface components {
              */
             connector_name: "contentful";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Contentful account (e.g., https://domain.contentful.com) */
@@ -1797,14 +1048,7 @@ export interface components {
              */
             connector_name: "contentful";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** contentstack */
@@ -1815,28 +1059,7 @@ export interface components {
              */
             connector_name: "contentstack";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Contentstack account (e.g., https://domain.contentstack.com) */
@@ -1855,14 +1078,7 @@ export interface components {
              */
             connector_name: "contentstack";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** copper */
@@ -1873,28 +1089,7 @@ export interface components {
              */
             connector_name: "copper";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1907,14 +1102,7 @@ export interface components {
              */
             connector_name: "copper";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** coros */
@@ -1925,28 +1113,7 @@ export interface components {
              */
             connector_name: "coros";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -1959,14 +1126,7 @@ export interface components {
              */
             connector_name: "coros";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** datev */
@@ -1977,28 +1137,7 @@ export interface components {
              */
             connector_name: "datev";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2011,14 +1150,7 @@ export interface components {
              */
             connector_name: "datev";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** deel */
@@ -2029,28 +1161,7 @@ export interface components {
              */
             connector_name: "deel";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2063,14 +1174,7 @@ export interface components {
              */
             connector_name: "deel";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** dialpad */
@@ -2081,28 +1185,7 @@ export interface components {
              */
             connector_name: "dialpad";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2115,14 +1198,7 @@ export interface components {
              */
             connector_name: "dialpad";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** digitalocean */
@@ -2133,28 +1209,7 @@ export interface components {
              */
             connector_name: "digitalocean";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2167,14 +1222,7 @@ export interface components {
              */
             connector_name: "digitalocean";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** discord */
@@ -2185,28 +1233,7 @@ export interface components {
              */
             connector_name: "discord";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2219,14 +1246,7 @@ export interface components {
              */
             connector_name: "discord";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** docusign */
@@ -2237,28 +1257,7 @@ export interface components {
              */
             connector_name: "docusign";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2271,14 +1270,7 @@ export interface components {
              */
             connector_name: "docusign";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** dropbox */
@@ -2289,28 +1281,7 @@ export interface components {
              */
             connector_name: "dropbox";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2323,14 +1294,7 @@ export interface components {
              */
             connector_name: "dropbox";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** ebay */
@@ -2341,28 +1305,7 @@ export interface components {
              */
             connector_name: "ebay";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2375,14 +1318,7 @@ export interface components {
              */
             connector_name: "ebay";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** egnyte */
@@ -2393,28 +1329,7 @@ export interface components {
              */
             connector_name: "egnyte";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Egnyte account (e.g., https://domain.egnyte.com) */
@@ -2429,14 +1344,7 @@ export interface components {
              */
             connector_name: "egnyte";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** envoy */
@@ -2447,28 +1355,7 @@ export interface components {
              */
             connector_name: "envoy";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2481,14 +1368,7 @@ export interface components {
              */
             connector_name: "envoy";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** eventbrite */
@@ -2499,28 +1379,7 @@ export interface components {
              */
             connector_name: "eventbrite";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2533,14 +1392,7 @@ export interface components {
              */
             connector_name: "eventbrite";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** exist */
@@ -2551,28 +1403,7 @@ export interface components {
              */
             connector_name: "exist";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2585,14 +1416,7 @@ export interface components {
              */
             connector_name: "exist";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** facebook */
@@ -2603,28 +1427,7 @@ export interface components {
              */
             connector_name: "facebook";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2637,14 +1440,7 @@ export interface components {
              */
             connector_name: "facebook";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** factorial */
@@ -2655,28 +1451,7 @@ export interface components {
              */
             connector_name: "factorial";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2689,14 +1464,7 @@ export interface components {
              */
             connector_name: "factorial";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** figma */
@@ -2707,28 +1475,7 @@ export interface components {
              */
             connector_name: "figma";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2741,14 +1488,7 @@ export interface components {
              */
             connector_name: "figma";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** finch */
@@ -2847,28 +1587,7 @@ export interface components {
              */
             connector_name: "fitbit";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2881,14 +1600,7 @@ export interface components {
              */
             connector_name: "fitbit";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** foreceipt */
@@ -2922,28 +1634,7 @@ export interface components {
              */
             connector_name: "fortnox";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -2956,14 +1647,7 @@ export interface components {
              */
             connector_name: "fortnox";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** freshbooks */
@@ -2974,28 +1658,7 @@ export interface components {
              */
             connector_name: "freshbooks";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3008,14 +1671,7 @@ export interface components {
              */
             connector_name: "freshbooks";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** front */
@@ -3026,28 +1682,7 @@ export interface components {
              */
             connector_name: "front";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3060,14 +1695,7 @@ export interface components {
              */
             connector_name: "front";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** github */
@@ -3078,28 +1706,7 @@ export interface components {
              */
             connector_name: "github";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3112,14 +1719,7 @@ export interface components {
              */
             connector_name: "github";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** gitlab */
@@ -3130,28 +1730,7 @@ export interface components {
              */
             connector_name: "gitlab";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3164,14 +1743,7 @@ export interface components {
              */
             connector_name: "gitlab";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** gong */
@@ -3182,28 +1754,7 @@ export interface components {
              */
             connector_name: "gong";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The base URL of your Gong account (e.g., example) */
@@ -3218,14 +1769,7 @@ export interface components {
              */
             connector_name: "gong";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** google-calendar */
@@ -3236,28 +1780,7 @@ export interface components {
              */
             connector_name: "google-calendar";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3270,14 +1793,7 @@ export interface components {
              */
             connector_name: "google-calendar";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** google-docs */
@@ -3288,28 +1804,7 @@ export interface components {
              */
             connector_name: "google-docs";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3322,14 +1817,7 @@ export interface components {
              */
             connector_name: "google-docs";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** google-drive */
@@ -3340,28 +1828,7 @@ export interface components {
              */
             connector_name: "google-drive";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3374,14 +1841,7 @@ export interface components {
              */
             connector_name: "google-drive";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** google-mail */
@@ -3392,28 +1852,7 @@ export interface components {
              */
             connector_name: "google-mail";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3426,14 +1865,7 @@ export interface components {
              */
             connector_name: "google-mail";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** google-sheet */
@@ -3444,28 +1876,7 @@ export interface components {
              */
             connector_name: "google-sheet";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3478,14 +1889,7 @@ export interface components {
              */
             connector_name: "google-sheet";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** gorgias */
@@ -3496,28 +1900,7 @@ export interface components {
              */
             connector_name: "gorgias";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Gorgias account (e.g., https://domain.gorgias.com) */
@@ -3532,14 +1915,7 @@ export interface components {
              */
             connector_name: "gorgias";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** grain */
@@ -3550,28 +1926,7 @@ export interface components {
              */
             connector_name: "grain";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3584,14 +1939,7 @@ export interface components {
              */
             connector_name: "grain";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** greenhouse */
@@ -3622,28 +1970,7 @@ export interface components {
              */
             connector_name: "gumroad";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3656,14 +1983,7 @@ export interface components {
              */
             connector_name: "gumroad";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** gusto */
@@ -3674,28 +1994,7 @@ export interface components {
              */
             connector_name: "gusto";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3708,14 +2007,7 @@ export interface components {
              */
             connector_name: "gusto";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** harvest */
@@ -3726,28 +2018,7 @@ export interface components {
              */
             connector_name: "harvest";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The details of your app (e.g., example-subdomain) */
@@ -3762,14 +2033,7 @@ export interface components {
              */
             connector_name: "harvest";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** heron */
@@ -3800,28 +2064,7 @@ export interface components {
              */
             connector_name: "highlevel";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3834,14 +2077,7 @@ export interface components {
              */
             connector_name: "highlevel";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** hubspot */
@@ -3852,28 +2088,7 @@ export interface components {
              */
             connector_name: "hubspot";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3886,14 +2101,7 @@ export interface components {
              */
             connector_name: "hubspot";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** instagram */
@@ -3904,28 +2112,7 @@ export interface components {
              */
             connector_name: "instagram";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3938,14 +2125,7 @@ export interface components {
              */
             connector_name: "instagram";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** intercom */
@@ -3956,28 +2136,7 @@ export interface components {
              */
             connector_name: "intercom";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -3990,14 +2149,7 @@ export interface components {
              */
             connector_name: "intercom";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** jira */
@@ -4008,28 +2160,7 @@ export interface components {
              */
             connector_name: "jira";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4042,14 +2173,7 @@ export interface components {
              */
             connector_name: "jira";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** keap */
@@ -4060,28 +2184,7 @@ export interface components {
              */
             connector_name: "keap";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4094,14 +2197,7 @@ export interface components {
              */
             connector_name: "keap";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** lever */
@@ -4112,28 +2208,7 @@ export interface components {
              */
             connector_name: "lever";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4146,14 +2221,7 @@ export interface components {
              */
             connector_name: "lever";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** linear */
@@ -4164,28 +2232,7 @@ export interface components {
              */
             connector_name: "linear";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4198,14 +2245,7 @@ export interface components {
              */
             connector_name: "linear";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** linkedin */
@@ -4216,28 +2256,7 @@ export interface components {
              */
             connector_name: "linkedin";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4250,14 +2269,7 @@ export interface components {
              */
             connector_name: "linkedin";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** linkhut */
@@ -4268,28 +2280,7 @@ export interface components {
              */
             connector_name: "linkhut";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4302,14 +2293,7 @@ export interface components {
              */
             connector_name: "linkhut";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** lunchmoney */
@@ -4340,28 +2324,7 @@ export interface components {
              */
             connector_name: "mailchimp";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The data center for your account (e.g., us6) */
@@ -4376,14 +2339,7 @@ export interface components {
              */
             connector_name: "mailchimp";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** mercury */
@@ -4443,28 +2399,7 @@ export interface components {
              */
             connector_name: "miro";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4477,14 +2412,7 @@ export interface components {
              */
             connector_name: "miro";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** monday */
@@ -4495,28 +2423,7 @@ export interface components {
              */
             connector_name: "monday";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4529,14 +2436,7 @@ export interface components {
              */
             connector_name: "monday";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** moota */
@@ -4567,28 +2467,7 @@ export interface components {
              */
             connector_name: "mural";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4601,14 +2480,7 @@ export interface components {
              */
             connector_name: "mural";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** namely */
@@ -4619,28 +2491,7 @@ export interface components {
              */
             connector_name: "namely";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The name of your Namely company (e.g., example) */
@@ -4655,14 +2506,7 @@ export interface components {
              */
             connector_name: "namely";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** nationbuilder */
@@ -4673,28 +2517,7 @@ export interface components {
              */
             connector_name: "nationbuilder";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The account ID of your NationBuilder account (e.g., example-subdomain) */
@@ -4709,14 +2532,7 @@ export interface components {
              */
             connector_name: "nationbuilder";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** netsuite */
@@ -4727,28 +2543,7 @@ export interface components {
              */
             connector_name: "netsuite";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The account ID of your NetSuite account (e.g., tstdrv231585) */
@@ -4763,14 +2558,7 @@ export interface components {
              */
             connector_name: "netsuite";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** notion */
@@ -4781,28 +2569,7 @@ export interface components {
              */
             connector_name: "notion";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -4815,14 +2582,7 @@ export interface components {
              */
             connector_name: "notion";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** odoo */
@@ -4833,28 +2593,7 @@ export interface components {
              */
             connector_name: "odoo";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain of your Odoo account (e.g., https://example-subdomain) */
@@ -4869,14 +2608,7 @@ export interface components {
              */
             connector_name: "odoo";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** okta */
@@ -4887,28 +2619,7 @@ export interface components {
              */
             connector_name: "okta";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Okta account (e.g., https://domain.okta.com) */
@@ -4923,14 +2634,7 @@ export interface components {
              */
             connector_name: "okta";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** onebrick */
@@ -5005,28 +2709,7 @@ export interface components {
              */
             connector_name: "osu";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5039,14 +2722,7 @@ export interface components {
              */
             connector_name: "osu";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** oura */
@@ -5057,28 +2733,7 @@ export interface components {
              */
             connector_name: "oura";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5091,14 +2746,7 @@ export interface components {
              */
             connector_name: "oura";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** outreach */
@@ -5109,28 +2757,7 @@ export interface components {
              */
             connector_name: "outreach";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5143,14 +2770,7 @@ export interface components {
              */
             connector_name: "outreach";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** pagerduty */
@@ -5161,28 +2781,7 @@ export interface components {
              */
             connector_name: "pagerduty";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5195,14 +2794,7 @@ export interface components {
              */
             connector_name: "pagerduty";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** pandadoc */
@@ -5213,28 +2805,7 @@ export interface components {
              */
             connector_name: "pandadoc";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5247,14 +2818,7 @@ export interface components {
              */
             connector_name: "pandadoc";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** payfit */
@@ -5265,28 +2829,7 @@ export interface components {
              */
             connector_name: "payfit";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5299,14 +2842,7 @@ export interface components {
              */
             connector_name: "payfit";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** paypal */
@@ -5317,28 +2853,7 @@ export interface components {
              */
             connector_name: "paypal";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5351,14 +2866,7 @@ export interface components {
              */
             connector_name: "paypal";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** pennylane */
@@ -5369,28 +2877,7 @@ export interface components {
              */
             connector_name: "pennylane";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5403,14 +2890,7 @@ export interface components {
              */
             connector_name: "pennylane";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** pinterest */
@@ -5421,28 +2901,7 @@ export interface components {
              */
             connector_name: "pinterest";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5455,14 +2914,7 @@ export interface components {
              */
             connector_name: "pinterest";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** pipedrive */
@@ -5473,28 +2925,7 @@ export interface components {
              */
             connector_name: "pipedrive";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The API URL of your Pipedrive account (e.g., example) */
@@ -5509,14 +2940,7 @@ export interface components {
              */
             connector_name: "pipedrive";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** plaid */
@@ -5580,28 +3004,7 @@ export interface components {
              */
             connector_name: "podium";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The API version of your Podium account (e.g., example-subdomain) */
@@ -5616,14 +3019,7 @@ export interface components {
              */
             connector_name: "podium";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** postgres */
@@ -5654,28 +3050,7 @@ export interface components {
              */
             connector_name: "productboard";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5688,14 +3063,7 @@ export interface components {
              */
             connector_name: "productboard";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** qualtrics */
@@ -5706,28 +3074,7 @@ export interface components {
              */
             connector_name: "qualtrics";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Qualtrics account (e.g., https://domain.qualtrics.com) */
@@ -5742,14 +3089,7 @@ export interface components {
              */
             connector_name: "qualtrics";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** quickbooks */
@@ -5760,28 +3100,7 @@ export interface components {
              */
             connector_name: "quickbooks";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5794,14 +3113,7 @@ export interface components {
              */
             connector_name: "quickbooks";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** ramp */
@@ -5838,28 +3150,7 @@ export interface components {
              */
             connector_name: "reddit";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5872,14 +3163,7 @@ export interface components {
              */
             connector_name: "reddit";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** sage */
@@ -5890,28 +3174,7 @@ export interface components {
              */
             connector_name: "sage";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -5924,14 +3187,7 @@ export interface components {
              */
             connector_name: "sage";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** salesforce */
@@ -5942,28 +3198,7 @@ export interface components {
              */
             connector_name: "salesforce";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The instance URL of your Salesforce account (e.g., example) */
@@ -5978,14 +3213,7 @@ export interface components {
              */
             connector_name: "salesforce";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** salesloft */
@@ -5996,28 +3224,7 @@ export interface components {
              */
             connector_name: "salesloft";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6030,14 +3237,7 @@ export interface components {
              */
             connector_name: "salesloft";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** saltedge */
@@ -6070,28 +3270,7 @@ export interface components {
              */
             connector_name: "segment";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6104,14 +3283,7 @@ export interface components {
              */
             connector_name: "segment";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** servicem8 */
@@ -6122,28 +3294,7 @@ export interface components {
              */
             connector_name: "servicem8";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6156,14 +3307,7 @@ export interface components {
              */
             connector_name: "servicem8";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** servicenow */
@@ -6174,28 +3318,7 @@ export interface components {
              */
             connector_name: "servicenow";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your ServiceNow account (e.g., https://domain.service-now.com) */
@@ -6210,14 +3333,7 @@ export interface components {
              */
             connector_name: "servicenow";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** sharepoint */
@@ -6228,28 +3344,7 @@ export interface components {
              */
             connector_name: "sharepoint";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6262,14 +3357,7 @@ export interface components {
              */
             connector_name: "sharepoint";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** shopify */
@@ -6280,28 +3368,7 @@ export interface components {
              */
             connector_name: "shopify";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Shopify account (e.g., https://domain.myshopify.com) */
@@ -6316,14 +3383,7 @@ export interface components {
              */
             connector_name: "shopify";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** signnow */
@@ -6334,28 +3394,7 @@ export interface components {
              */
             connector_name: "signnow";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6368,14 +3407,7 @@ export interface components {
              */
             connector_name: "signnow";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** slack */
@@ -6386,28 +3418,7 @@ export interface components {
              */
             connector_name: "slack";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6420,14 +3431,7 @@ export interface components {
              */
             connector_name: "slack";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** smartsheet */
@@ -6438,28 +3442,7 @@ export interface components {
              */
             connector_name: "smartsheet";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6472,14 +3455,7 @@ export interface components {
              */
             connector_name: "smartsheet";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** snowflake */
@@ -6490,28 +3466,7 @@ export interface components {
              */
             connector_name: "snowflake";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain of your Snowflake account (e.g., https://example-subdomain) */
@@ -6526,14 +3481,7 @@ export interface components {
              */
             connector_name: "snowflake";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** splitwise */
@@ -6598,28 +3546,7 @@ export interface components {
              */
             connector_name: "spotify";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6632,14 +3559,7 @@ export interface components {
              */
             connector_name: "spotify";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** squarespace */
@@ -6650,28 +3570,7 @@ export interface components {
              */
             connector_name: "squarespace";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The user agent of your custom app (e.g., example-subdomain) */
@@ -6686,14 +3585,7 @@ export interface components {
              */
             connector_name: "squarespace";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** squareup */
@@ -6704,28 +3596,7 @@ export interface components {
              */
             connector_name: "squareup";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6738,14 +3609,7 @@ export interface components {
              */
             connector_name: "squareup";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** stackexchange */
@@ -6756,28 +3620,7 @@ export interface components {
              */
             connector_name: "stackexchange";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6790,14 +3633,7 @@ export interface components {
              */
             connector_name: "stackexchange";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** strava */
@@ -6808,28 +3644,7 @@ export interface components {
              */
             connector_name: "strava";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6842,14 +3657,7 @@ export interface components {
              */
             connector_name: "strava";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** stripe */
@@ -6888,28 +3696,7 @@ export interface components {
              */
             connector_name: "teamwork";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6922,14 +3709,7 @@ export interface components {
              */
             connector_name: "teamwork";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** teller */
@@ -6963,28 +3743,7 @@ export interface components {
              */
             connector_name: "ticktick";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -6997,14 +3756,7 @@ export interface components {
              */
             connector_name: "ticktick";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** timely */
@@ -7015,28 +3767,7 @@ export interface components {
              */
             connector_name: "timely";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7049,14 +3780,7 @@ export interface components {
              */
             connector_name: "timely";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** todoist */
@@ -7067,28 +3791,7 @@ export interface components {
              */
             connector_name: "todoist";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7101,14 +3804,7 @@ export interface components {
              */
             connector_name: "todoist";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** toggl */
@@ -7141,28 +3837,7 @@ export interface components {
              */
             connector_name: "tremendous";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7175,14 +3850,7 @@ export interface components {
              */
             connector_name: "tremendous";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** tsheetsteam */
@@ -7193,28 +3861,7 @@ export interface components {
              */
             connector_name: "tsheetsteam";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7227,14 +3874,7 @@ export interface components {
              */
             connector_name: "tsheetsteam";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** tumblr */
@@ -7245,28 +3885,7 @@ export interface components {
              */
             connector_name: "tumblr";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7279,14 +3898,7 @@ export interface components {
              */
             connector_name: "tumblr";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** twenty */
@@ -7317,28 +3929,7 @@ export interface components {
              */
             connector_name: "twinfield";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The cluster to your Twinfield instance (e.g., https://accounting.twinfield.com) */
@@ -7353,14 +3944,7 @@ export interface components {
              */
             connector_name: "twinfield";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** twitch */
@@ -7371,28 +3955,7 @@ export interface components {
              */
             connector_name: "twitch";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7405,14 +3968,7 @@ export interface components {
              */
             connector_name: "twitch";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** twitter */
@@ -7423,28 +3979,7 @@ export interface components {
              */
             connector_name: "twitter";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7457,14 +3992,7 @@ export interface components {
              */
             connector_name: "twitter";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** typeform */
@@ -7475,28 +4003,7 @@ export interface components {
              */
             connector_name: "typeform";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7509,14 +4016,7 @@ export interface components {
              */
             connector_name: "typeform";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** uber */
@@ -7527,28 +4027,7 @@ export interface components {
              */
             connector_name: "uber";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7561,14 +4040,7 @@ export interface components {
              */
             connector_name: "uber";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** venmo */
@@ -7607,28 +4079,7 @@ export interface components {
              */
             connector_name: "vimeo";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7641,14 +4092,7 @@ export interface components {
              */
             connector_name: "vimeo";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** wakatime */
@@ -7659,28 +4103,7 @@ export interface components {
              */
             connector_name: "wakatime";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7693,14 +4116,7 @@ export interface components {
              */
             connector_name: "wakatime";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** wealthbox */
@@ -7711,28 +4127,7 @@ export interface components {
              */
             connector_name: "wealthbox";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7745,14 +4140,7 @@ export interface components {
              */
             connector_name: "wealthbox";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** webflow */
@@ -7763,28 +4151,7 @@ export interface components {
              */
             connector_name: "webflow";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7797,14 +4164,7 @@ export interface components {
              */
             connector_name: "webflow";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** whoop */
@@ -7815,28 +4175,7 @@ export interface components {
              */
             connector_name: "whoop";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7849,14 +4188,7 @@ export interface components {
              */
             connector_name: "whoop";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** wise */
@@ -7889,28 +4221,7 @@ export interface components {
              */
             connector_name: "wordpress";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -7923,14 +4234,7 @@ export interface components {
              */
             connector_name: "wordpress";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** wrike */
@@ -7941,28 +4245,7 @@ export interface components {
              */
             connector_name: "wrike";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain of your Wrike account (e.g., https://example-subdomain) */
@@ -7977,14 +4260,7 @@ export interface components {
              */
             connector_name: "wrike";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** xero */
@@ -7995,28 +4271,7 @@ export interface components {
              */
             connector_name: "xero";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -8029,14 +4284,7 @@ export interface components {
              */
             connector_name: "xero";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** yahoo */
@@ -8047,28 +4295,7 @@ export interface components {
              */
             connector_name: "yahoo";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain to the API you want to connect to (e.g., https://fantasysports.yahooapis.com) */
@@ -8083,14 +4310,7 @@ export interface components {
              */
             connector_name: "yahoo";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** yandex */
@@ -8101,28 +4321,7 @@ export interface components {
              */
             connector_name: "yandex";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -8135,14 +4334,7 @@ export interface components {
              */
             connector_name: "yandex";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** yodlee */
@@ -8203,28 +4395,7 @@ export interface components {
              */
             connector_name: "zapier";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -8237,14 +4408,7 @@ export interface components {
              */
             connector_name: "zapier";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** zendesk */
@@ -8255,28 +4419,7 @@ export interface components {
              */
             connector_name: "zendesk";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The subdomain of your Zendesk account (e.g., https://domain.zendesk.com) */
@@ -8291,14 +4434,7 @@ export interface components {
              */
             connector_name: "zendesk";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** zenefits */
@@ -8309,28 +4445,7 @@ export interface components {
              */
             connector_name: "zenefits";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -8343,14 +4458,7 @@ export interface components {
              */
             connector_name: "zenefits";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** zoho-desk */
@@ -8361,28 +4469,7 @@ export interface components {
              */
             connector_name: "zoho-desk";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
@@ -8397,14 +4484,7 @@ export interface components {
              */
             connector_name: "zoho-desk";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** zoho */
@@ -8415,28 +4495,7 @@ export interface components {
              */
             connector_name: "zoho";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
                 /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
@@ -8451,14 +4510,7 @@ export interface components {
              */
             connector_name: "zoho";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** zoom */
@@ -8469,28 +4521,7 @@ export interface components {
              */
             connector_name: "zoom";
             settings?: {
-                oauth: {
-                    /** @description Output of the postConnect hook for oauth2 connectors */
-                    credentials?: {
-                        access_token: string;
-                        /** @description Client ID used for the connection */
-                        client_id?: string;
-                        scope?: string;
-                        refresh_token?: string;
-                        expires_in?: number;
-                        expires_at?: string;
-                        token_type?: string;
-                        raw?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    created_at?: string;
-                    updated_at?: string;
-                    last_fetched_at?: string;
-                    metadata?: {
-                        [key: string]: unknown;
-                    } | null;
-                };
+                oauth: components["schemas"]["oauthConnectionSettings"];
                 /** @description Same as oauth.credentials.access_token, but more convenient to access. Optional for backward compatibility until we remove the oauth field */
                 access_token?: string;
             };
@@ -8503,14 +4534,7 @@ export interface components {
              */
             connector_name: "zoom";
             config: {
-                /** @description Base oauth configuration for the connector */
-                oauth?: {
-                    client_id?: string | null;
-                    client_secret?: string | null;
-                    scopes?: string[] | null;
-                    /** @description Custom redirect URI */
-                    redirect_uri?: string | null;
-                } | null;
+                oauth?: components["schemas"]["oauthConnectorConfig"] | null;
             };
         };
         /** connection_select */
@@ -8675,6 +4699,13 @@ export interface components {
             /** @constant */
             name: "connect.loaded";
             data: Record<string, never>;
+        } | {
+            /** @constant */
+            name: "connect.loading-error";
+            data: {
+                error_message?: string | null;
+                error_details?: null;
+            };
         } | {
             /** @constant */
             name: "connect.connection-connected";
@@ -8881,6 +4912,40 @@ export interface components {
             issues?: {
                 message: string;
             }[];
+        };
+        /** oauthConnectionSettings */
+        oauthConnectionSettings: {
+            /** @description Output of the postConnect hook for oauth2 connectors */
+            credentials?: {
+                access_token: string;
+                /** @description Client ID used for the connection */
+                client_id?: string;
+                scope?: string;
+                refresh_token?: string;
+                expires_in?: number;
+                expires_at?: string;
+                token_type?: string;
+                raw?: {
+                    [key: string]: unknown;
+                };
+            };
+            created_at?: string;
+            updated_at?: string;
+            last_fetched_at?: string;
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * oauthConnectorConfig
+         * @description Base oauth configuration for the connector
+         */
+        oauthConnectorConfig: {
+            client_id?: string | null;
+            client_secret?: string | null;
+            scopes?: string[] | null;
+            /** @description Custom redirect URI */
+            redirect_uri?: string | null;
         };
     };
     responses: never;

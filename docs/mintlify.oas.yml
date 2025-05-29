@@ -110,7 +110,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1086,7 +1086,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1604,7 +1604,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -1691,7 +1691,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2268,7 +2268,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2702,7 +2702,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2840,7 +2840,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2935,7 +2935,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -2960,6 +2960,125 @@ paths:
                 "conn_",
             )
             print(response.id)
+  /event:
+    get:
+      operationId: listEvents
+      summary: List Organization Events
+      description: List all events for an organization
+      security:
+        - token: []
+      parameters:
+        - in: query
+          name: limit
+          description: Limit the number of items returned
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 3000
+            default: 50
+            description: Limit the number of items returned
+        - in: query
+          name: offset
+          description: Offset the items returned
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            description: Offset the items returned
+        - in: query
+          name: search_query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/core.event'
+                  total:
+                    type: integer
+                    minimum: 0
+                    description: Total number of items in the database for the organization
+                  limit:
+                    type: integer
+                    minimum: 0
+                    description: Limit the number of items returned
+                  offset:
+                    type: integer
+                    minimum: 0
+                    description: Offset the items returned
+                  has_next_page:
+                    type: boolean
+                    description: Convenience flag = offset + limit >= total
+                required:
+                  - items
+                  - total
+                  - limit
+                  - offset
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              // Automatically fetches more pages as needed.
+              for await (const listEventsResponse of client.listEvents()) {
+                console.log(listEventsResponse);
+              }
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+            )
+            page = client.list_events()
+            page = page.items[0]
+            print(page)
   /customers:
     put:
       operationId: upsertCustomer
@@ -3140,7 +3259,7 @@ paths:
       x-codeSamples:
         - lang: JavaScript
           source: |-
-            import Openint from '@openint/backend-sdk';
+            import Openint from '@openint/sdk';
 
             const client = new Openint({
               token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
@@ -3242,31 +3361,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3336,31 +3433,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3430,31 +3505,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3534,31 +3587,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3628,31 +3659,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3759,31 +3768,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3853,31 +3840,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -3976,31 +3941,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4070,31 +4013,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4169,31 +4090,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4263,31 +4162,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4372,31 +4249,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4471,31 +4326,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4574,31 +4407,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4678,31 +4489,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4781,31 +4570,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4875,31 +4642,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -4969,31 +4714,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5063,31 +4786,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5157,31 +4858,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5251,31 +4930,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5345,31 +5002,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5486,31 +5121,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5580,31 +5193,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5674,31 +5265,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5797,31 +5366,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -5896,31 +5443,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6004,31 +5529,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6098,31 +5601,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6192,31 +5673,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6286,31 +5745,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6380,31 +5817,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6474,31 +5889,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6568,31 +5961,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6662,31 +6033,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6756,31 +6105,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6850,31 +6177,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -6944,31 +6249,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7043,31 +6326,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7137,31 +6398,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7231,31 +6470,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7325,31 +6542,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7419,31 +6614,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7513,31 +6686,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7607,31 +6758,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -7877,31 +7006,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8005,31 +7112,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8099,31 +7184,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8193,31 +7256,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8287,31 +7328,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8381,31 +7400,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8480,31 +7477,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8574,31 +7549,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8668,31 +7621,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8762,31 +7693,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8856,31 +7765,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -8950,31 +7837,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9049,31 +7914,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9143,31 +7986,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9266,31 +8087,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9360,31 +8159,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9458,31 +8235,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9581,31 +8336,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9675,31 +8408,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9769,31 +8480,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9863,31 +8552,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -9957,31 +8624,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10051,31 +8696,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10145,31 +8768,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10239,31 +8840,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10333,31 +8912,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10427,31 +8984,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10555,31 +9090,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10726,31 +9239,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10820,31 +9311,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -10943,31 +9412,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11041,31 +9488,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11139,31 +9564,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11238,31 +9641,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11332,31 +9713,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11431,31 +9790,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11530,31 +9867,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11728,31 +10043,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11822,31 +10115,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -11916,31 +10187,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12010,31 +10259,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12104,31 +10331,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12198,31 +10403,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12292,31 +10475,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12386,31 +10547,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12480,31 +10619,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12579,31 +10696,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12810,31 +10905,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -12931,31 +11004,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13030,31 +11081,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13124,31 +11153,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13263,31 +11270,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13357,31 +11342,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13456,31 +11419,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13550,31 +11491,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13678,31 +11597,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13772,31 +11669,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13871,31 +11746,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -13965,31 +11818,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14064,31 +11895,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14158,31 +11967,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14252,31 +12039,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14346,31 +12111,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14445,31 +12188,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14673,31 +12394,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14771,31 +12470,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14865,31 +12542,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -14959,31 +12614,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15053,31 +12686,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15194,31 +12805,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15325,31 +12914,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15419,31 +12986,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15513,31 +13058,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15644,31 +13167,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15738,31 +13239,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15832,31 +13311,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -15960,31 +13417,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16054,31 +13489,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16148,31 +13561,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16242,31 +13633,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16336,31 +13705,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16477,31 +13824,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16571,31 +13896,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16665,31 +13968,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16759,31 +14040,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16853,31 +14112,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -16983,31 +14220,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17082,31 +14297,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17176,31 +14369,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17275,31 +14446,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17369,31 +14518,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17588,31 +14715,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17687,31 +14792,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17781,31 +14864,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17880,31 +14941,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -17979,31 +15018,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -18073,31 +15090,9 @@ components:
           type: object
           properties:
             oauth:
-              type:
-                - object
-                - 'null'
-              properties:
-                client_id:
-                  type:
-                    - string
-                    - 'null'
-                client_secret:
-                  type:
-                    - string
-                    - 'null'
-                scopes:
-                  type:
-                    - array
-                    - 'null'
-                  items:
-                    type: string
-                redirect_uri:
-                  type:
-                    - string
-                    - 'null'
-                  description: Custom redirect URI
-              description: Base oauth configuration for the connector
-              ui:field: OAuthField
+              oneOf:
+                - $ref: '#/components/schemas/oauthConnectorConfig'
+                - type: 'null'
       required:
         - connector_name
         - config
@@ -18794,6 +15789,376 @@ components:
         - created_at
         - updated_at
       title: customer_select
+    core.event:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: string
+            user:
+              anyOf:
+                - anyOf:
+                    - type: string
+                    - type: number
+                    - type: boolean
+                    - type: 'null'
+                - type: object
+                  additionalProperties: {}
+                - type: array
+                  items: {}
+                - type: 'null'
+            v:
+              type:
+                - string
+                - 'null'
+            org_id:
+              type:
+                - string
+                - 'null'
+            user_id:
+              type:
+                - string
+                - 'null'
+            customer_id:
+              type:
+                - string
+                - 'null'
+            prompt:
+              type:
+                - string
+                - 'null'
+          required:
+            - id
+            - timestamp
+            - user
+            - v
+            - org_id
+            - user_id
+            - customer_id
+        - oneOf:
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: debug.debug
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: webhook.received
+                data:
+                  type: object
+                  properties:
+                    traceId:
+                      type: string
+                    method:
+                      type: string
+                    path:
+                      type: string
+                    query:
+                      type: object
+                      additionalProperties: {}
+                    headers:
+                      type: object
+                      additionalProperties: {}
+                    body: {}
+                  required:
+                    - traceId
+                    - method
+                    - path
+                    - query
+                    - headers
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.user-created
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.user-deleted
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.connection-created
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                  required:
+                    - connection_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: db.connection-deleted
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                  required:
+                    - connection_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: user.signin
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: user.signout
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-started
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-cancelled
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-succeeded
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.session-errored
+                data:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                    meta: {}
+                  required:
+                    - connector_name
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.loaded
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.loading-error
+                data:
+                  type: object
+                  properties:
+                    error_message:
+                      type:
+                        - string
+                        - 'null'
+                    error_details:
+                      type: 'null'
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.connection-connected
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                    customer_id:
+                      type:
+                        - string
+                        - 'null'
+                  required:
+                    - connection_id
+                    - customer_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.connection-deleted
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                    customer_id:
+                      type: string
+                  required:
+                    - connection_id
+                    - customer_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: connect.connection-checked
+                data:
+                  type: object
+                  properties:
+                    connection_id:
+                      type: string
+                      description: Must start with 'conn_'
+                    status:
+                      type:
+                        - string
+                        - 'null'
+                    status_message:
+                      type:
+                        - string
+                        - 'null'
+                    customer_id:
+                      type: string
+                  required:
+                    - connection_id
+                    - status
+                    - status_message
+                    - customer_id
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.token-copied
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.graphql-request
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: api.rest-request
+                data:
+                  type: object
+              required:
+                - name
+                - data
+            - type: object
+              properties:
+                name:
+                  type: string
+                  const: pageview
+                data:
+                  type: object
+                  properties:
+                    current_url:
+                      type: string
+                    path:
+                      type: string
+                  required:
+                    - current_url
+                    - path
+              required:
+                - name
+                - data
+      title: event
     core.integration_select:
       type: object
       properties:
@@ -19028,3 +16393,28 @@ components:
         code: UNAUTHORIZED
         message: Authorization not provided
         issues: []
+    oauthConnectorConfig:
+      type: object
+      properties:
+        client_id:
+          type:
+            - string
+            - 'null'
+        client_secret:
+          type:
+            - string
+            - 'null'
+        scopes:
+          type:
+            - array
+            - 'null'
+          items:
+            type: string
+        redirect_uri:
+          type:
+            - string
+            - 'null'
+          description: Custom redirect URI
+      description: Base oauth configuration for the connector
+      ui:field: OAuthField
+      title: oauthConnectorConfig
