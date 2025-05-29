@@ -53,7 +53,7 @@ export const eventMap = {
   'connect.loading-error': {
     // this is only sent from the client side manually
     error_message: z.string().nullish(),
-    error_details: z.unknown().nullish(),
+    error_details: z.string().nullish(),
   },
   'connect.connection-connected': {
     connection_id: zId('conn'),

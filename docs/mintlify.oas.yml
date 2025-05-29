@@ -113,13 +113,13 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
               // Automatically fetches more pages as needed.
               for await (const listConnectorsResponse of client.listConnectors()) {
-                console.log(listConnectorsResponse.name);
+                console.log(listConnectorsResponse);
               }
             }
 
@@ -130,11 +130,11 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             page = client.list_connectors()
             page = page.items[0]
-            print(page.name)
+            print(page)
   /connector-config/{id}:
     get:
       operationId: getConnectorConfig
@@ -1089,7 +1089,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1106,7 +1106,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             page = client.list_connection_configs()
             page = page.items[0]
@@ -1607,7 +1607,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1623,7 +1623,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.get_connection(
                 id="conn_",
@@ -1694,7 +1694,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -1710,7 +1710,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.delete_connection(
                 "conn_",
@@ -2271,7 +2271,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -2288,7 +2288,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             page = client.list_connections()
             page = page.items[0]
@@ -2705,7 +2705,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -2725,7 +2725,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.create_connection(
                 connector_config_id="ccfg_",
@@ -2843,7 +2843,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -2859,7 +2859,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.create_token(
                 customer_id="x",
@@ -2938,7 +2938,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -2954,7 +2954,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.check_connection(
                 "conn_",
@@ -2987,6 +2987,10 @@ paths:
             description: Offset the items returned
         - in: query
           name: search_query
+          schema:
+            type: string
+        - in: query
+          name: since
           schema:
             type: string
       responses:
@@ -3057,7 +3061,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -3074,7 +3078,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             page = client.list_events()
             page = page.items[0]
@@ -3262,7 +3266,7 @@ paths:
             import Openint from '@openint/sdk';
 
             const client = new Openint({
-              token: process.env['OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY'], // This is the default and can be omitted
+              token: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
             });
 
             async function main() {
@@ -3278,7 +3282,7 @@ paths:
             from openint import Openint
 
             client = Openint(
-                token=os.environ.get("OPENINT_API_KEY_OR_CUSTOMER_TOKEN_OR_CUSTOMER_API_KEY"),  # This is the default and can be omitted
+                token=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.get_message_template(
                 customer_id="customer_id",
