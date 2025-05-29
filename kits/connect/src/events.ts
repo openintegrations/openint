@@ -69,7 +69,7 @@ export const listenToEvents = (
         )
         let maxTsInBatch = lastEventTimestamp
         for (const eventToCallback of newEvents) {
-          console.log('eventToCallback', eventToCallback)
+          // console.log('eventToCallback', eventToCallback)
           callback(eventToCallback) // Successful SDK event
           if (
             eventToCallback.timestamp &&
