@@ -721,6 +721,19 @@ export default {
       logoUrl: '/_assets/logo-greenhouse.svg',
     },
   },
+  greenhouse2: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Greenhouse 2',
+      stage: 'alpha',
+      verticals: ['ats'],
+      // TODO: Review why this is not working, asset exists in _assets folder
+      // Is this used? connector is trying to get _assets/logo-greenhouse2.svg
+      logoUrl: '/_assets/logo-greenhouse.svg',
+      authType: 'API_KEY',
+    },
+  },
   gumroad: {
     hasClient: false,
     hasServer: false,

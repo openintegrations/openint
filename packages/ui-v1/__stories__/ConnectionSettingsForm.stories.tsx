@@ -274,6 +274,10 @@ export const grainConnectionSettings: Story = {
   args: {name: 'grain'},
 }
 
+export const greenhouse2ConnectionSettings: Story = {
+  args: {name: 'greenhouse2'},
+}
+
 export const gumroadConnectionSettings: Story = {
   args: {name: 'gumroad'},
 }

@@ -266,6 +266,10 @@ export const grainConnectorDisplay: Story = {
   args: {name: 'grain'},
 }
 
+export const greenhouse2ConnectorDisplay: Story = {
+  args: {name: 'greenhouse2'},
+}
+
 export const gumroadConnectorDisplay: Story = {
   args: {name: 'gumroad'},
 }
