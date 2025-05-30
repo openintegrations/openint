@@ -437,6 +437,9 @@
                           "$ref": "#/components/schemas/connector.grain.discriminated_connector_config"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connector_config"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.gumroad.discriminated_connector_config"
                         },
                         {
@@ -829,6 +832,7 @@
                           "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
                           "gorgias": "#/components/schemas/connector.gorgias.discriminated_connector_config",
                           "grain": "#/components/schemas/connector.grain.discriminated_connector_config",
+                          "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connector_config",
                           "gumroad": "#/components/schemas/connector.gumroad.discriminated_connector_config",
                           "gusto": "#/components/schemas/connector.gusto.discriminated_connector_config",
                           "harvest": "#/components/schemas/connector.harvest.discriminated_connector_config",
@@ -1325,6 +1329,9 @@
                                 "$ref": "#/components/schemas/connector.grain.discriminated_connector_config"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connector_config"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connector_config"
                               },
                               {
@@ -1717,6 +1724,7 @@
                                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
                                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connector_config",
                                 "grain": "#/components/schemas/connector.grain.discriminated_connector_config",
+                                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connector_config",
                                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connector_config",
                                 "gusto": "#/components/schemas/connector.gusto.discriminated_connector_config",
                                 "harvest": "#/components/schemas/connector.harvest.discriminated_connector_config",
@@ -2264,6 +2272,9 @@
                           "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
                         },
                         {
@@ -2656,6 +2667,7 @@
                           "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                           "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                           "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
+                          "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
                           "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                           "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                           "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -3318,6 +3330,9 @@
                                 "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
                               },
                               {
@@ -3710,6 +3725,7 @@
                                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                                 "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
+                                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
                                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                                 "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                                 "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -4131,6 +4147,9 @@
                         "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                       },
                       {
+                        "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                      },
+                      {
                         "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
                       },
                       {
@@ -4523,6 +4542,7 @@
                         "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                         "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                         "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
+                        "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
                         "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                         "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                         "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -14292,6 +14312,47 @@
           "config"
         ],
         "title": "greenhouse"
+      },
+      "connector.greenhouse2.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "greenhouse2"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "api_key": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "api_key"
+            ]
+          }
+        },
+        "required": [
+          "connector_name"
+        ],
+        "title": "greenhouse2"
+      },
+      "connector.greenhouse2.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "greenhouse2"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "greenhouse2"
       },
       "connector.gumroad.discriminated_connection_settings": {
         "type": "object",
@@ -27563,6 +27624,9 @@
                 "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
               },
               {
+                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+              },
+              {
                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
               },
               {
@@ -27955,6 +28019,7 @@
                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                 "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
+                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                 "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                 "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -28247,6 +28312,7 @@
           "gorgias",
           "grain",
           "greenhouse",
+          "greenhouse2",
           "gumroad",
           "gusto",
           "harvest",
