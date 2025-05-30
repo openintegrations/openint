@@ -91,6 +91,15 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.items[0]?.id).toBe(newEvent.id)
     })
 
+    // NOTE: we're skipping this as our test environment doesn't boot up an AI router with it
+    test.skip('list events with expand prompt parameter', async () => {
+      const res = await caller.listEvents({
+        expand: ['prompt'],
+      })
+      expect(res.items).toHaveLength(1)
+      expect(res.items[0]?.prompt).toBeDefined()
+    })
+
     afterAll(async () => {
       if (eventRes.current?.id) {
         await db.delete(schema.event)
