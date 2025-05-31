@@ -12,11 +12,13 @@ export default {
     token_request_url: 'https://github.com/login/oauth/access_token',
     scope_separator: ' ',
     params_config: {},
+    required_scopes: ['read:user', 'user:email', 'repo', 'offline_access'],
     openint_default_scopes: [
       'read:user',
       'read:org',
       'read:project',
       'user:email',
+      'offline_access',
     ],
     openint_allowed_scopes: [
       'user',
@@ -24,6 +26,7 @@ export default {
       'read:org',
       'read:project',
       'user:email',
+      'offline_access',
     ],
     /**
      * We can review the available scopes here:
@@ -186,6 +189,11 @@ export default {
       {
         scope: 'read:audit_log',
         description: 'Read audit log data.',
+      },
+      {
+        scope: 'offline_access',
+        description:
+          'Allows the app to obtain refresh tokens, enabling long-term access to GitHub services even when the user is not actively using the application.',
       },
     ],
   },
