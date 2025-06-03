@@ -120,42 +120,6 @@ describeEachDatabase(
         expect(res.items[0]?.id).toBe(newEvent.id)
       })
 
-      // NOTE: we're skipping this as our test environment doesn't boot up an AI router with it
-      test('list events with expand prompt parameter', async () => {
-        const mockConnectorName = 'github'
-        const mockPromptContent = 'mocked prompt content from test'
-
-        // override global fetch
-        jest.spyOn(global, 'fetch').mockResolvedValue({
-          ok: true,
-          json: async () => ({template: mockPromptContent}),
-        } as Response)
-
-        // Create a 'connect.connection-connected' event to trigger the prompt logic
-        const connectionEvent = await caller.createEvent({
-          event: {
-            name: 'connect.connection-connected',
-            data: {
-              // Ensure connectorName extracted is mockConnectorName
-              connection_id: `conn_${mockConnectorName}_abcdef12345`,
-              customer_id: null,
-            },
-          },
-        })
-
-        const res = await caller.listEvents({
-          expand: ['prompt'],
-        })
-
-        // Find the event we just created, which should now have a prompt
-        const eventWithPrompt = res.items.find(
-          (item) => item.id === connectionEvent.id,
-        )
-
-        expect(eventWithPrompt).toBeDefined()
-        expect(eventWithPrompt!.prompt).toBe(mockPromptContent)
-      })
-
       afterAll(async () => {
         // This existing afterAll deletes all events from the 'event' table if eventRes.current was set.
         // It's broad enough to clean up the connectionEvent created in the prompt test.
