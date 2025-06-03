@@ -12,12 +12,32 @@ export default {
     token_request_url: 'https://graph.facebook.com/v15.0/oauth/access_token',
     scope_separator: ' ',
     params_config: {},
-    openint_default_scopes: ['email'],
-    openint_allowed_scopes: ['email'],
+    required_scopes: ['offline_access'],
+    openint_default_scopes: ['email', 'offline_access', 'public_profile'],
+    openint_allowed_scopes: [
+      'email',
+      'offline_access',
+      'public_profile',
+      'user_friends',
+      'user_posts',
+      'user_photos',
+      'user_likes',
+      'user_status',
+      'user_events',
+      'manage_pages',
+      'publish_to_groups',
+    ],
+    // https://developers.facebook.com/docs/permissions/
+    // App Review is required for all permissions except for email and public_profile if your app needs access to data that you do not own or manage
     scopes: [
       {
         scope: 'email',
         description: "Provides access to the user's primary email address.",
+      },
+      {
+        scope: 'offline_access',
+        description:
+          'Allows the application to obtain refresh tokens, enabling long-term access to Facebook services even when the user is not actively using the application.',
       },
       {
         scope: 'public_profile',

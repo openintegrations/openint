@@ -12,8 +12,23 @@ export default {
     token_request_url: 'https://zoom.us/oauth/token',
     scope_separator: ',',
     params_config: {authorize: {response_type: 'code'}},
-    openint_default_scopes: ['openid'],
-    openint_allowed_scopes: ['openid', 'user:read', 'meeting:read'],
+    required_scopes: ['openid', 'offline_access'],
+    openint_default_scopes: [
+      'user:read:user:admin',
+      'offline_access',
+      'meeting:read:list_meetings:admin',
+      'meeting:read:summary:admin',
+      'offline_access',
+    ],
+    openint_allowed_scopes: [
+      'user:read:user:admin',
+      'user:read:settings:admin',
+      'meeting:read:list_meetings:admin',
+      'meeting:read:summary:admin',
+      'meeting:read:participant:admin',
+      'webinar:read:webinar:admin',
+      'offline_access',
+    ],
     scopes: [
       {
         scope: 'user:read',

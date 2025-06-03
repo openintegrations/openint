@@ -19,8 +19,19 @@ export default {
       authorize: {response_type: 'code'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_default_scopes: ['openid', 'profile'],
-    openint_allowed_scopes: ['openid', 'profile', 'sc2.profile'],
+    required_scopes: ['openid', 'profile', 'offline_access'],
+    openint_default_scopes: [
+      'openid',
+      'profile',
+      'sc2.profile',
+      'offline_access',
+    ],
+    openint_allowed_scopes: [
+      'openid',
+      'profile',
+      'sc2.profile',
+      'offline_access',
+    ],
     scopes: [
       {
         scope: 'openid',
@@ -46,6 +57,11 @@ export default {
         scope: 'profile',
         description:
           "Provides access to the user's Battle.net account profile information including BattleTag and account ID.",
+      },
+      {
+        scope: 'offline_access',
+        description:
+          'Allows the app to obtain refresh tokens, enabling long-term access to Battle.net services even when the user is not actively using the application.',
       },
     ],
     connection_settings: z.object({
