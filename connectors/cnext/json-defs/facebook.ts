@@ -12,7 +12,7 @@ export default {
     token_request_url: 'https://graph.facebook.com/v15.0/oauth/access_token',
     scope_separator: ' ',
     params_config: {},
-    required_scopes: ['offline_access'],
+    required_scopes: ['offline_access', 'email'],
     openint_default_scopes: ['email', 'offline_access', 'public_profile'],
     openint_allowed_scopes: [
       'email',

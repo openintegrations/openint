@@ -18,7 +18,6 @@ export default {
       'offline_access',
       'meeting:read:list_meetings:admin',
       'meeting:read:summary:admin',
-      'offline_access',
     ],
     openint_allowed_scopes: [
       'user:read:user:admin',

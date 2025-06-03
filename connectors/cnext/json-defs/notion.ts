@@ -12,8 +12,8 @@ export default {
     token_request_url: 'https://api.notion.com/v1/oauth/token',
     scope_separator: ' ',
     params_config: {authorize: {response_type: 'code', owner: 'user'}},
-    required_scopes: ['user:read', 'offline_access'],
-    openint_default_scopes: ['user:read', 'offline_access'],
+    required_scopes: ['user:read'],
+    openint_default_scopes: ['user:read'],
     openint_allowed_scopes: [
       'user:read',
       'user:write',
@@ -21,7 +21,6 @@ export default {
       'content:write',
       'workspace:read',
       'workspace:write',
-      'offline_access',
     ],
     /**
      * https://www.notion.so/profile/integrations select openint and update permissions
@@ -32,11 +31,6 @@ export default {
         scope: 'user:read',
         description:
           "Allows the application to read user information, such as the user's name, email, and profile picture. This is a read-only scope with no write permissions.",
-      },
-      {
-        scope: 'offline_access',
-        description:
-          'Allows the application to obtain refresh tokens, enabling long-term access to Notion services even when the user is not actively using the application.',
       },
       {
         scope: 'user:write',
