@@ -6,13 +6,17 @@ export default {
   audience: ['business'],
   verticals: ['ats'],
   display_name: 'Greenhouse 2',
-  stage: 'ga',
+  stage: 'alpha',
   version: 1,
   auth: {
     type: 'API_KEY',
     connector_config: {},
-    api_key_field: 'api_key',
-    api_key_location: 'header',
-    connection_settings: z.object({api_key: z.string()}),
+    connection_settings: z.object({}),
+    base_url: 'https://harvest.greenhouse.io',
+    verification: {
+      method: 'GET',
+      header_mode: 'Basic',
+      endpoint: '/v1/jobs',
+    },
   },
 } satisfies JsonConnectorDef

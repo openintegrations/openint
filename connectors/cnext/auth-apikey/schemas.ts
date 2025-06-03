@@ -5,28 +5,17 @@ import {z} from '@openint/util/zod-utils'
 
 const zApiKeyConnectorConfig = z
   .object({})
-  .describe('Base oauth configuration for api key connector')
+  .describe('Base api key configuration for api key connector')
 
 const zApiKeyConnectionSettings = z.object({
-  credentials: z
-    .object({
-      api_key: z.string(),
-    })
-    .optional()
-    .describe('Output of the postConnect hook for oauth2 connectors'),
+  api_key: z.string(),
 })
 
 export type ApiKeyConnectorConfig = Z.infer<typeof zApiKeyConnectorConfig>
 
 export const apiKeySchemas = {
-  connector_config: z.object({
-    oauth: zApiKeyConnectorConfig.nullish(),
-  }),
-  connection_settings: z
-    .object({
-      oauth: zApiKeyConnectionSettings,
-    })
-    .openapi({effectType: 'input'}),
+  connector_config: zApiKeyConnectorConfig.nullish(),
+  connection_settings: zApiKeyConnectionSettings.openapi({effectType: 'input'}),
   pre_connect_input: z.object({}),
   connect_input: z.object({}),
   connect_output: z.object({

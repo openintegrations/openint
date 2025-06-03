@@ -1,51 +1,68 @@
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
-import type {apiKeySchemas, zApiKeyConfig} from './schemas'
-
-import {getClient} from './utils'
+import type {apiKeySchemas} from './schemas'
 
 export function createAPIKeyConnectorServer<
   TName extends string,
   T extends typeof apiKeySchemas & {name: Z.ZodLiteral<TName>},
->(
-  connectorDef: ConnectorDef<T>,
-  oauthConfigTemplate: Z.infer<typeof zApiKeyConfig>,
-): ConnectorServer<T, ReturnType<typeof getClient>> {
+>(connectorDef: ConnectorDef<T>): ConnectorServer<T> {
   if (connectorDef.metadata?.authType !== 'API_KEY') {
     throw new Error('This server can only be used with API Key connectors')
   }
 
   const baseServer = {
-    newInstance: ({config, settings, context}) => {
-      return getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
-    },
+    async checkConnection({settings}) {
+      const auth = connectorDef.metadata?.jsonDef?.auth
 
-    // TODO: Review why we get a type error here but this param works fine
-    //  in the oauth2 connector
-    async checkConnection({instance}) {
-      const {client} = instance
+      if (!auth || auth.type !== 'API_KEY') {
+        throw new Error('Invalid connector definition')
+      }
+
+      const url = `${auth?.base_url}${auth?.verification.endpoint}`
+
+      const apiKey = settings?.api_key
+      if (!apiKey) {
+        throw new Error('Credentials are not configured')
+      }
+
+      // Handle Basic auth by base64 encoding the API key
+      const authHeader =
+        auth?.verification.header_mode === 'Basic'
+          ? `Basic ${Buffer.from(`${apiKey}:`).toString('base64').trim()}`
+          : `${auth?.verification.header_mode} ${apiKey}`
+
       try {
-        await client.GET('/v1/jobs')
-        return {status: 'healthy'}
-      } catch (err) {
-        console.warn('Greenhouse checkConnection error', err)
+        const response = await fetch(url, {
+          method: auth?.verification.method,
+          headers: {
+            Authorization: authHeader,
+          },
+        })
+
+        if (!response.ok) {
+          const errorText = await response
+            .text()
+            .catch(() => 'No error details available')
+          throw new Error(
+            `Connection check failed with status ${response.status} (${response.statusText}): ${errorText}`,
+          )
+        }
+
+        return {
+          status: 'healthy',
+          status_message: null,
+          settings,
+        }
+      } catch (error) {
         return {
           status: 'disconnected',
-          status_message: `Failed to connect to Greenhouse: ${err}`,
+          status_message:
+            error instanceof Error ? error.message : String(error),
+          settings,
         }
       }
     },
-  } satisfies ConnectorServer<T, ReturnType<typeof getClient>>
+  } satisfies ConnectorServer<typeof apiKeySchemas & {name: T['name']}>
 
-  return baseServer as unknown as ConnectorServer<
-    ConnectorDef<T>['schemas'],
-    ReturnType<typeof getClient>
-  >
+  return baseServer as unknown as ConnectorServer<ConnectorDef<T>['schemas']>
 }
