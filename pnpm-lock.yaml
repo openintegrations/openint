@@ -952,8 +952,8 @@ importers:
   kits/connect:
     dependencies:
       '@openint/sdk':
-        specifier: ~2.6.0
-        version: 2.6.0
+        specifier: ~2.7.0
+        version: 2.7.0
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -3450,8 +3450,8 @@ packages:
   '@openint/sdk@2.1.0':
     resolution: {integrity: sha512-RAiaoCdff68sEAv0EDvw6uuH6v6cAUTvl0wSkiiG88fPeG/w4LmpeHZpbLfJxLXG9YuRfPU7vSnn3paZu0q38Q==}
 
-  '@openint/sdk@2.6.0':
-    resolution: {integrity: sha512-F6hc59fmPdoKtxlEaIbmZHrwWblMzwZpGNNid5e/xtx2rLc44yjZ5GIFE896JWnQ+++x9yPQ6ZxgdP0Z5FRp+g==}
+  '@openint/sdk@2.7.0':
+    resolution: {integrity: sha512-LGWvaimZBQ/dNJ6i2ajdKdX4QlnDmlTU5UaElaG+SRlzZVzr9hVZ5WLq7uTehNib2GJ7atPjlR4+F62LRf18ng==}
 
   '@opensdks/fetch-links@0.0.18':
     resolution: {integrity: sha512-EhBj92wLXoj3pF4ERxzoEhAlwlefIzQ31At0zaksSbA9zqMlod9DyfypQRX/6J8w4iZzraV33BtFEk7l98nsLA==}
@@ -17334,7 +17334,7 @@ snapshots:
 
   '@openint/sdk@2.1.0': {}
 
-  '@openint/sdk@2.6.0': {}
+  '@openint/sdk@2.7.0': {}
 
   '@opensdks/fetch-links@0.0.18': {}
 
