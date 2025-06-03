@@ -1,4 +1,4 @@
-import Openint from '@openint/sdk'
+// import Openint from '@openint/sdk'
 import {ListEventsResponse} from '@openint/sdk/resources/top-level'
 import {ConnectProps} from './common'
 
@@ -23,11 +23,11 @@ export const listenToEvents = (
   // the connect domain and API. listEvents needs the API URL, not the connect domain.
   // for now this is a temporary fix that works for our local development as per the default .env but we should move to a better solution
   // potentially with an apiBaseURL and connectBaseURL as separate props
-  let baseURL = props.baseURL
+  let baseURL = props.baseURL || 'https://api.openint.dev/v1'
   if (baseURL && baseURL.endsWith('/connect')) {
     baseURL = baseURL.slice(0, -8) + '/api/v1'
   }
-  const client = new Openint({token: props.token, baseURL})
+  // const client = new Openint({token: props.token, baseURL})
 
   let lastEventTimestamp = new Date()
   let pollingIntervalId: number | undefined = undefined
@@ -44,11 +44,24 @@ export const listenToEvents = (
     }
 
     try {
-      const {items: sdkEvents} = await client.listEvents({
-        limit: EVENT_LIMIT_PER_POLL,
-        since: lastEventTimestamp.toISOString(),
-        expand: ['prompt'],
-      })
+      const sdkEvents = await fetch(
+        `${baseURL}/event?limit=${EVENT_LIMIT_PER_POLL}&since=${lastEventTimestamp.toISOString()}&include_prompt=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          return data.items
+        })
+
+      // const {items: sdkEvents} = await client.listEvents({
+      //   limit: EVENT_LIMIT_PER_POLL,
+      //   since: lastEventTimestamp.toISOString(),
+      //   expand: ['prompt'],
+      // })
 
       errorCount = 0
 
