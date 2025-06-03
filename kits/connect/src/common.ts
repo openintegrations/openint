@@ -1,6 +1,6 @@
 import type {OpenIntEvent} from './events'
 
-import {createClientOnlyEventId, frameEventsListener} from './events'
+import {createClientOnlyEventId, listenToEvents} from './events'
 
 export interface ConnectProps {
   token: string
@@ -137,14 +137,15 @@ export function createConnectIframe(props: ConnectProps) {
     spinnerContainer.classList.add('loaded')
 
     if (onEvent) {
-      const unsubscribe = frameEventsListener((event) => {
+      const unsubscribe = listenToEvents(props, (event) => {
         onEvent(event, unsubscribe)
       })
       onEvent(
         {
           name: 'connect.loaded',
           id: createClientOnlyEventId(),
-          ts: Date.now(),
+          timestamp: new Date().toISOString(),
+          data: {},
         },
         unsubscribe,
       )
