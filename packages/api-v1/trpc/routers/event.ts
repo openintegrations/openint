@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {extractId} from '@openint/cdk'
 import {and, any, asc, desc, eq, gte, ilike, schema, sql} from '@openint/db'
-import { envRequired} from '@openint/env'
+import {envRequired} from '@openint/env'
 import {Event, zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
@@ -69,7 +69,10 @@ export const eventRouter = router({
           search_query: z.string().optional().openapi({
             description: 'Search query for the event list',
           }),
-          expand: z.array(z.enum(['prompt'])).optional(),
+          include_prompt: z.boolean().optional().openapi({
+            description:
+              'Expand the event payload with optional fields. Currently only supports "prompt" for connect.connection-connected events.',
+          }),
           since: z.string().optional().openapi({
             description:
               'Only return events since this timestamp (ISO 8601 timestamp formatted string)',
@@ -78,93 +81,130 @@ export const eventRouter = router({
         .default({}),
     )
     .output(zListResponse(core.event_select))
-    .query(async ({ctx, input: {limit, offset, search_query, since, expand}}) => {
-      // Lowercased query for case insensitive search
-      const lowerQuery = search_query?.toLowerCase()
-      const res = await ctx.db.query.event.findMany({
-        extras: {
-          total: sql<number>`count(*) OVER ()`.as('total'),
-        },
-        // filter out deprecated events, preventing parse errors
-        where: and(
-          eq(schema.event.name, any(Object.keys(eventMap))),
-          lowerQuery ? ilike(schema.event.id, `%${lowerQuery}%`) : undefined,
-          since ? gte(schema.event.timestamp, since) : undefined,
-        ),
-        orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
-        offset,
-        limit,
-      })
+    .query(
+      async ({
+        ctx,
+        input: {limit, offset, search_query, since, include_prompt},
+      }) => {
+        // Lowercased query for case insensitive search
+        const lowerQuery = search_query?.toLowerCase()
+        const res = await ctx.db.query.event.findMany({
+          extras: {
+            total: sql<number>`count(*) OVER ()`.as('total'),
+          },
+          // filter out deprecated events, preventing parse errors
+          where: and(
+            eq(schema.event.name, any(Object.keys(eventMap))),
+            lowerQuery ? ilike(schema.event.id, `%${lowerQuery}%`) : undefined,
+            since ? gte(schema.event.timestamp, since) : undefined,
+          ),
+          orderBy: [desc(schema.event.timestamp), asc(schema.event.id)],
+          offset,
+          limit,
+        })
 
-      const events = expand?.includes('prompt')
-        ? await Promise.all(
-            res.map(async (_event) => {
-              const event = _event as Event
+        const events = new Boolean(include_prompt)
+          ? await Promise.all(
+              res.map(async (_event) => {
+                const event = _event
 
-              if (event.name === 'connect.connection-connected') {
-                const connectionId = event.data.connection_id
-                const connectorName = extractId(connectionId)[1]
-                const meta = getConnectorModelByName(connectorName)
-                if (!meta) {
-                  console.error(
-                    `Connector with name "${connectorName}" not found`,
+                if (event.name === 'connect.connection-connected') {
+                  const connectionId = event.data.connection_id
+                  const connectorName = extractId(connectionId)[1]
+                  const meta = getConnectorModelByName(connectorName)
+                  const customer = await ctx.db.query.customer.findFirst({
+                    where: and(
+                      eq(schema.customer.id, event.customer_id ?? ''),
+                      eq(schema.customer.org_id, event.org_id ?? ''),
+                    ),
+                  })
+                  if (!customer) {
+                    throw new TRPCError({
+                      code: 'NOT_FOUND',
+                      message: 'Customer not found',
+                    })
+                  }
+                  if (!meta) {
+                    console.error(
+                      `Connector with name "${connectorName}" not found`,
+                    )
+                    return event
+                  }
+
+                  const connection = await ctx.db.query.connection.findFirst({
+                    where: and(
+                      eq(schema.connection.id, event.data.connection_id ?? ''),
+                    ),
+                  })
+                  if (!connection) {
+                    throw new TRPCError({
+                      code: 'NOT_FOUND',
+                      message: 'Connection not found',
+                    })
+                  }
+                  const apiUrl = new URL(
+                    '/v1/message_template',
+                    envRequired.AI_ROUTER_URL,
                   )
-                  return event
-                }
-                const apiUrl = new URL(
-                  '/v1/message_template',
-                  envRequired.AI_ROUTER_URL,
-                )
-                apiUrl.searchParams.append('language', 'javascript')
-                apiUrl.searchParams.append('use_environment_variables', 'true')
-                apiUrl.searchParams.append('connector_name', connectorName)
-                apiUrl.searchParams.append(
-                  'connector_auth_type',
-                  meta.auth_type ?? '',
-                )
-                // TODO: add connector documentation url
-                // apiUrl.searchParams.append(
-                //   'connector_documentation_url',
-                //   meta.documentation_url ?? '',
-                // )
+                  apiUrl.searchParams.append('language', 'javascript')
+                  apiUrl.searchParams.append('connector_name', connectorName)
+                  apiUrl.searchParams.append(
+                    'connector_auth_type',
+                    meta.auth_type ?? '',
+                  )
+                  apiUrl.searchParams.append('event_name', event.name)
 
-                const response = await fetch(apiUrl.toString(), {
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                })
-                const data: unknown = await response.json()
-                const zMessageTemplateResponse = z.object({
-                  template: z.string(),
-                })
-                const prompt =
-                  zMessageTemplateResponse.safeParse(data).data?.template
-                return {
-                  ...event,
-                  prompt,
-                }
-              }
-              return event
-            }),
-          )
-        : res
+                  // TODO: do equivalent for API key scopes
+                  if (connection.settings.scope) {
+                    apiUrl.searchParams.append(
+                      'scopes',
+                      connection.settings.scope,
+                    )
+                  }
+                  // TODO: add connector documentation url
+                  // apiUrl.searchParams.append(
+                  //   'connector_documentation_url',
+                  //   meta.documentation_url ?? '',
+                  // )
 
-      // const parseErrors: string[] = []
-      // items.forEach((item) => {
-      //   try {
-      //     core.event_select.parse(item)
-      //   } catch (err) {
-      //     parseErrors.push(item.id)
-      //     console.error('Failed to parse event:', item.id, item.name)
-      //   }
-      // })
-      // if (parseErrors.length > 0) {
-      //   throw new TRPCError({
-      //     code: 'INTERNAL_SERVER_ERROR',
-      //     message: `Failed to parse ${parseErrors.length} events`,
-      //   })
-      // }\
-      // @ts-expect-error TODO: fix this
-      return formatListResponse(events, {limit, offset})
-    }),
+                  const response = await fetch(apiUrl.toString(), {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${customer.api_key ?? ''}`,
+                    },
+                  })
+                  const data: unknown = await response.json()
+                  const zMessageTemplateResponse = z.object({
+                    template: z.string(),
+                  })
+                  const prompt =
+                    zMessageTemplateResponse.safeParse(data).data?.template
+                  return {
+                    ...event,
+                    prompt,
+                  }
+                }
+                return event
+              }),
+            )
+          : res
+
+        // const parseErrors: string[] = []
+        // items.forEach((item) => {
+        //   try {
+        //     core.event_select.parse(item)
+        //   } catch (err) {
+        //     parseErrors.push(item.id)
+        //     console.error('Failed to parse event:', item.id, item.name)
+        //   }
+        // })
+        // if (parseErrors.length > 0) {
+        //   throw new TRPCError({
+        //     code: 'INTERNAL_SERVER_ERROR',
+        //     message: `Failed to parse ${parseErrors.length} events`,
+        //   })
+        // }\
+        return formatListResponse(events, {limit, offset})
+      },
+    ),
 })
