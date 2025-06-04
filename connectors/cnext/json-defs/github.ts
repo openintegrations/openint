@@ -26,6 +26,7 @@ export default {
       'read:org',
       'read:project',
       'user:email',
+      'repo',
     ],
     /**
      * We can review the available scopes here:

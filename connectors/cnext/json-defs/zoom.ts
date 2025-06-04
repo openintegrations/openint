@@ -12,10 +12,10 @@ export default {
     token_request_url: 'https://zoom.us/oauth/token',
     scope_separator: ',',
     params_config: {authorize: {response_type: 'code'}},
-    required_scopes: ['openid', 'offline_access'],
+    required_scopes: ['openid'],
     openint_default_scopes: [
+      'openid',
       'user:read:user:admin',
-      'offline_access',
       'meeting:read:list_meetings:admin',
       'meeting:read:summary:admin',
     ],
@@ -26,7 +26,6 @@ export default {
       'meeting:read:summary:admin',
       'meeting:read:participant:admin',
       'webinar:read:webinar:admin',
-      'offline_access',
     ],
     scopes: [
       {
@@ -38,6 +37,36 @@ export default {
         scope: 'openid',
         description:
           'Required for OAuth 2.0 authorization flows. Enables basic user authentication and ID token issuance.',
+      },
+      {
+        scope: 'user:read:user:admin',
+        description:
+          'Allows admin-level read access to user account information and settings.',
+      },
+      {
+        scope: 'user:read:settings:admin',
+        description:
+          'Allows admin-level read access to user settings and configurations.',
+      },
+      {
+        scope: 'meeting:read:list_meetings:admin',
+        description:
+          'Allows admin-level read access to list and view meeting details.',
+      },
+      {
+        scope: 'meeting:read:summary:admin',
+        description:
+          'Allows admin-level read access to meeting summaries and reports.',
+      },
+      {
+        scope: 'meeting:read:participant:admin',
+        description:
+          'Allows admin-level read access to meeting participant information.',
+      },
+      {
+        scope: 'webinar:read:webinar:admin',
+        description:
+          'Allows admin-level read access to webinar details and information.',
       },
       {
         scope: 'meeting:read',
