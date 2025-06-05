@@ -15,7 +15,7 @@ export default {
     base_url: 'https://harvest.greenhouse.io',
     verification: {
       method: 'GET',
-      header_mode: 'Basic',
+      api_key_location: 'header_basic_password',
       endpoint: '/v1/jobs',
     },
   },

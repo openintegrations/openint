@@ -27,9 +27,9 @@ export function createAPIKeyConnectorServer<
 
       // Handle Basic auth by base64 encoding the API key
       const authHeader =
-        auth?.verification.header_mode === 'Basic'
+        auth?.verification.api_key_location === 'header_basic_password'
           ? `Basic ${Buffer.from(`${apiKey}:`).toString('base64').trim()}`
-          : `${auth?.verification.header_mode} ${apiKey}`
+          : `${auth?.verification.api_key_location} ${apiKey}`
 
       try {
         const response = await fetch(url, {

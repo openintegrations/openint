@@ -9,8 +9,8 @@ export const zAPIKeyConnectorDef = z.object({
     method: z
       .enum(['GET', 'POST'])
       .describe('The method to verify the API key'),
-    header_mode: z
-      .enum(['Basic', 'Bearer'])
+    api_key_location: z
+      .enum(['header_bearer', 'header_basic_password'])
       .describe('The header to verify the API key'),
     endpoint: z.string().describe('The endpoint to verify the API key'),
   }),
