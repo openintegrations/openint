@@ -12,9 +12,8 @@ export default {
     token_request_url: 'https://zoom.us/oauth/token',
     scope_separator: ',',
     params_config: {authorize: {response_type: 'code'}},
-    required_scopes: ['openid'],
+    required_scopes: ['user:read:user:admin'],
     openint_default_scopes: [
-      'openid',
       'user:read:user:admin',
       'meeting:read:list_meetings:admin',
       'meeting:read:summary:admin',
@@ -32,11 +31,6 @@ export default {
         scope: 'user:read',
         description:
           "Allows read-only access to user's basic information (e.g., name, email, profile picture).",
-      },
-      {
-        scope: 'openid',
-        description:
-          'Required for OAuth 2.0 authorization flows. Enables basic user authentication and ID token issuance.',
       },
       {
         scope: 'user:read:user:admin',
