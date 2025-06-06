@@ -12,8 +12,16 @@ export default {
     token_request_url: 'https://api.notion.com/v1/oauth/token',
     scope_separator: ' ',
     params_config: {authorize: {response_type: 'code', owner: 'user'}},
+    required_scopes: ['user:read'],
     openint_default_scopes: ['user:read'],
-    openint_allowed_scopes: ['user:read', 'workspace:read'],
+    openint_allowed_scopes: [
+      'user:read',
+      'user:write',
+      'content:read',
+      'content:write',
+      'workspace:read',
+      'workspace:write',
+    ],
     /**
      * https://www.notion.so/profile/integrations select openint and update permissions
      * https://developers.notion.com/reference/capabilities for reference

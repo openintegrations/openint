@@ -12,11 +12,13 @@ export default {
     token_request_url: 'https://github.com/login/oauth/access_token',
     scope_separator: ' ',
     params_config: {},
+    required_scopes: ['read:user', 'user:email', 'repo'],
     openint_default_scopes: [
       'read:user',
       'read:org',
       'read:project',
       'user:email',
+      'repo',
     ],
     openint_allowed_scopes: [
       'user',
@@ -24,6 +26,7 @@ export default {
       'read:org',
       'read:project',
       'user:email',
+      'repo',
     ],
     /**
      * We can review the available scopes here:

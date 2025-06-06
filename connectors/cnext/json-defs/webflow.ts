@@ -15,8 +15,15 @@ export default {
       authorize: {response_type: 'code'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_default_scopes: ['openid'],
-    openint_allowed_scopes: ['openid', 'sites:read', 'cms:read'],
+    required_scopes: ['cms:read', 'sites:read'],
+    openint_default_scopes: ['cms:read', 'sites:read'],
+    openint_allowed_scopes: [
+      'cms:read',
+      'cms:write',
+      'sites:read',
+      'users:read',
+      'forms:read',
+    ],
     scopes: [
       {
         scope: 'openid',
@@ -61,6 +68,15 @@ export default {
       {
         scope: 'forms:write',
         description: 'Read and write access to form submissions.',
+      },
+      {
+        scope: 'users:read',
+        description: 'Read-only access to user information.',
+      },
+      {
+        scope: 'offline_access',
+        description:
+          'Allows the application to refresh access tokens when the user is not present.',
       },
     ],
   },
