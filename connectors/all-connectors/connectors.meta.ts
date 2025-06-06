@@ -12,6 +12,17 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  'acme-apikey': {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Acme API Key',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-acme-apikey.svg',
+      authType: 'API_KEY',
+    },
+  },
   'acme-oauth2': {
     hasClient: false,
     hasServer: false,
@@ -723,7 +734,7 @@ export default {
   },
   greenhouse2: {
     hasClient: false,
-    hasServer: true,
+    hasServer: false,
     metadata: {
       displayName: 'Greenhouse 2',
       stage: 'alpha',

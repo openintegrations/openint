@@ -34,6 +34,10 @@ export const acceloConnectorDisplay: Story = {
   args: {name: 'accelo'},
 }
 
+export const acmeApikeyConnectorDisplay: Story = {
+  args: {name: 'acme-apikey'},
+}
+
 export const acmeOauth2ConnectorDisplay: Story = {
   args: {name: 'acme-oauth2'},
 }

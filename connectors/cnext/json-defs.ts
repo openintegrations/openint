@@ -1,6 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 
 import accelo from './json-defs/accelo'
+import acme_apikey from './json-defs/acme-apikey'
 import acme_oauth2 from './json-defs/acme-oauth2'
 import adobe from './json-defs/adobe'
 import adyen from './json-defs/adyen'
@@ -146,6 +147,7 @@ import zoom from './json-defs/zoom'
 
 const defs = {
   accelo,
+  'acme-apikey': acme_apikey,
   'acme-oauth2': acme_oauth2,
   adobe,
   adyen,

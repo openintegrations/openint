@@ -263,6 +263,9 @@
                           "$ref": "#/components/schemas/connector.accelo.discriminated_connector_config"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connector_config"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
                         },
                         {
@@ -774,6 +777,7 @@
                         "propertyName": "connector_name",
                         "mapping": {
                           "accelo": "#/components/schemas/connector.accelo.discriminated_connector_config",
+                          "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connector_config",
                           "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
                           "adobe": "#/components/schemas/connector.adobe.discriminated_connector_config",
                           "adyen": "#/components/schemas/connector.adyen.discriminated_connector_config",
@@ -1153,6 +1157,9 @@
                             "oneOf": [
                               {
                                 "$ref": "#/components/schemas/connector.accelo.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
@@ -1666,6 +1673,7 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "accelo": "#/components/schemas/connector.accelo.discriminated_connector_config",
+                                "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connector_config",
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
                                 "adobe": "#/components/schemas/connector.adobe.discriminated_connector_config",
                                 "adyen": "#/components/schemas/connector.adyen.discriminated_connector_config",
@@ -2096,6 +2104,9 @@
                       "oneOf": [
                         {
                           "$ref": "#/components/schemas/connector.accelo.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
@@ -2609,6 +2620,7 @@
                         "propertyName": "connector_name",
                         "mapping": {
                           "accelo": "#/components/schemas/connector.accelo.discriminated_connection_settings",
+                          "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings",
                           "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                           "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                           "adyen": "#/components/schemas/connector.adyen.discriminated_connection_settings",
@@ -3156,6 +3168,9 @@
                                 "$ref": "#/components/schemas/connector.accelo.discriminated_connection_settings"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                               },
                               {
@@ -3667,6 +3682,7 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "accelo": "#/components/schemas/connector.accelo.discriminated_connection_settings",
+                                "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings",
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                                 "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                                 "adyen": "#/components/schemas/connector.adyen.discriminated_connection_settings",
@@ -3971,6 +3987,9 @@
                     "oneOf": [
                       {
                         "$ref": "#/components/schemas/connector.accelo.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
@@ -4484,6 +4503,7 @@
                       "propertyName": "connector_name",
                       "mapping": {
                         "accelo": "#/components/schemas/connector.accelo.discriminated_connection_settings",
+                        "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings",
                         "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                         "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                         "adyen": "#/components/schemas/connector.adyen.discriminated_connection_settings",
@@ -5634,6 +5654,47 @@
           "config"
         ],
         "title": "accelo"
+      },
+      "connector.acme-apikey.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "acme-apikey"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "api_key": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "api_key"
+            ]
+          }
+        },
+        "required": [
+          "connector_name"
+        ],
+        "title": "acme-apikey"
+      },
+      "connector.acme-apikey.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "acme-apikey"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "acme-apikey"
       },
       "connector.acme-oauth2.discriminated_connection_settings": {
         "type": "object",
@@ -27450,6 +27511,9 @@
                 "$ref": "#/components/schemas/connector.accelo.discriminated_connection_settings"
               },
               {
+                "$ref": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings"
+              },
+              {
                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
               },
               {
@@ -27961,6 +28025,7 @@
               "propertyName": "connector_name",
               "mapping": {
                 "accelo": "#/components/schemas/connector.accelo.discriminated_connection_settings",
+                "acme-apikey": "#/components/schemas/connector.acme-apikey.discriminated_connection_settings",
                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                 "adobe": "#/components/schemas/connector.adobe.discriminated_connection_settings",
                 "adyen": "#/components/schemas/connector.adyen.discriminated_connection_settings",
@@ -28246,6 +28311,7 @@
         "type": "string",
         "enum": [
           "accelo",
+          "acme-apikey",
           "acme-oauth2",
           "adobe",
           "adyen",
