@@ -34,6 +34,10 @@ export const acceloConnectorDisplay: Story = {
   args: {name: 'accelo'},
 }
 
+export const acmeApikeyConnectorDisplay: Story = {
+  args: {name: 'acme-apikey'},
+}
+
 export const acmeOauth2ConnectorDisplay: Story = {
   args: {name: 'acme-oauth2'},
 }
@@ -264,6 +268,10 @@ export const gorgiasConnectorDisplay: Story = {
 
 export const grainConnectorDisplay: Story = {
   args: {name: 'grain'},
+}
+
+export const greenhouse2ConnectorDisplay: Story = {
+  args: {name: 'greenhouse2'},
 }
 
 export const gumroadConnectorDisplay: Story = {

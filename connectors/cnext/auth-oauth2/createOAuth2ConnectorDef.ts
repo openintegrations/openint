@@ -22,7 +22,7 @@ export function createOAuth2ConnectorDef<
       // TODO: does this need to do a deep merge of connectorConfig.oauth keys?
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connector_config.shape as Record<string, Z.ZodTypeAny>),
+        ...(def.auth?.connector_config?.shape as Record<string, Z.ZodTypeAny>),
       })
     }
 
@@ -33,8 +33,9 @@ export function createOAuth2ConnectorDef<
     if (defaultCredentialsConfigured) {
       // Only use default_scopes if they exist, otherwise use an empty array
       const openintDefaultCredentialsScopes =
-        def.auth.type === 'OAUTH2'
-          ? (def.auth.openint_allowed_scopes ?? def.auth.openint_default_scopes)
+        def.auth?.type === 'OAUTH2'
+          ? (def.auth?.openint_allowed_scopes ??
+            def.auth?.openint_default_scopes)
           : []
       const zOpenIntDefaultScopes = z.array(
         z.enum(openintDefaultCredentialsScopes as [string, ...string[]]),
@@ -70,18 +71,18 @@ export function createOAuth2ConnectorDef<
     return z.object({
       oauth: schema.shape.oauth,
       // make sure to merge in any additional connector config fields
-      ...(def.auth.connector_config?.shape as Record<string, Z.ZodTypeAny>),
+      ...(def.auth?.connector_config?.shape as Record<string, Z.ZodTypeAny>),
     })
   }
 
   const connectionSettings = () => {
     const schema = oauth2Schemas.connection_settings
-    if (def.auth.connection_settings) {
+    if (def.auth?.connection_settings) {
       return (
         z
           .object({
             ...schema.innerType().shape,
-            ...(def.auth.connection_settings.shape as Record<
+            ...(def.auth?.connection_settings?.shape as Record<
               string,
               Z.ZodTypeAny
             >),
@@ -112,7 +113,7 @@ export function createOAuth2ConnectorDef<
       stage: def.stage,
       verticals: def.verticals,
       logoUrl: `/_assets/logo-${name}.svg`,
-      authType: def.auth.type,
+      authType: def.auth?.type,
       jsonDef: def,
     },
   } satisfies ConnectorDef<typeof oauth2Schemas & {name: Z.ZodLiteral<N>}>
