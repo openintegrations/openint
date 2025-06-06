@@ -12,16 +12,12 @@ export function createApiKeyConnectorDef<
   const connectorConfig = () => {
     let schema = apiKeySchemas.connector_config.unwrap().unwrap()
     if (Object.keys(def.auth?.connector_config ?? {}).length > 0) {
-      // TODO: test this merge with other api key connectors
       schema = z.object({
         ...schema.shape,
         ...(def?.auth?.connector_config?.shape as Record<string, Z.ZodTypeAny>),
       })
     }
-
-    return z.object({
-      ...(def?.auth?.connector_config?.shape as Record<string, Z.ZodTypeAny>),
-    })
+    return schema
   }
 
   const connectionSettings = () => {

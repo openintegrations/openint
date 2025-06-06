@@ -26,6 +26,6 @@ export const serverConnectors = R.mapValues(jsonDefs, (jsonDef, key) => {
       jsonDef.auth,
     )
   } else {
-    throw new Error(`Unsupported auth type: ${jsonDef.auth}`)
+    throw new Error(`Unsupported auth type: ${JSON.stringify(jsonDef.auth)}`)
   }
 })

@@ -26,7 +26,7 @@ export const apiKeySchemas = {
 export const zApiKeyConfig = z.object({
   type: z
     .enum(['API_KEY'])
-    .describe('The authentication type for OAuth-based providers'),
+    .describe('The authentication type for API Key-based providers'),
   connector_config: zApiKeyConnectorConfig.optional(),
   connection_settings: zApiKeyConnectionSettings.optional(),
 })

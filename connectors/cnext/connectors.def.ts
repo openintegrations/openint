@@ -14,7 +14,7 @@ const getConnectorDefFnByAuthMode = (
     case 'API_KEY':
       return createApiKeyConnectorDef
     default:
-      throw new Error('Unsupported connector auth type')
+      throw new Error(`Unsupported connector auth type: ${authType}`)
   }
 }
 
