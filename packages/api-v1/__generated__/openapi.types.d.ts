@@ -318,6 +318,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "acme-apikey";
+            /** @description Base configuration for api key connector */
             config: Record<string, never>;
         };
         /** acme-oauth2 */
@@ -3616,6 +3617,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "greenhouse2";
+            /** @description Base configuration for api key connector */
             config: Record<string, never>;
         };
         /** gumroad */

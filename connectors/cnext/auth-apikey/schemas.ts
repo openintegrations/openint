@@ -5,7 +5,7 @@ import {z} from '@openint/util/zod-utils'
 
 const zApiKeyConnectorConfig = z
   .object({})
-  .describe('Base api key configuration for api key connector')
+  .describe('Base configuration for api key connector')
 
 const zApiKeyConnectionSettings = z.object({
   api_key: z.string(),
