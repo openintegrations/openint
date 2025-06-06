@@ -1,7 +1,5 @@
 import type {JsonConnectorDef} from '../schema'
 
-import {z} from '@openint/util/zod-utils'
-
 export default {
   audience: ['business'],
   verticals: ['ats'],
@@ -10,8 +8,6 @@ export default {
   version: 1,
   auth: {
     type: 'API_KEY',
-    connector_config: {},
-    connection_settings: z.object({}),
     base_url: 'https://harvest.greenhouse.io',
     verification: {
       method: 'GET',

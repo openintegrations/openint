@@ -17,7 +17,6 @@ export const zAPIKeyConnectorDef = z.object({
   connector_config: z
     .object({})
     .optional()
-    .default({})
     .describe('Additional configuration for the api key connector config'),
   connection_settings: z
     .object({})
