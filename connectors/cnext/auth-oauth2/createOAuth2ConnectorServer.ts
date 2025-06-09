@@ -143,8 +143,16 @@ export function createOAuth2ConnectorServer<
               scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
               raw: res,
               token_type: undefined, // What should this be?
+              instance_url:
+                connectorDef.name === 'salesforce'
+                  ? (res['instance_url'] ?? undefined)
+                  : undefined,
             },
           },
+          instance_url:
+            connectorDef.name === 'salesforce'
+              ? (res['instance_url'] ?? undefined)
+              : undefined,
         },
         integration: undefined, // TODO: add integration
         status: 'healthy',
