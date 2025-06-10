@@ -45,6 +45,14 @@ const integrations = [
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-teams.svg',
   },
+  {
+    id: 'dynamics',
+    name: 'Dynamics',
+    raw_data: {} as any,
+    verticals: ['crm'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-dynamics.svg',
+  },
 ]
 
 export const microsoftServer = {

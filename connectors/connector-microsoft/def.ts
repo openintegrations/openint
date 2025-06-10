@@ -52,6 +52,12 @@ export const microsoftSchemas = {
             .describe('teams specific space separated scopes'),
         })
         .optional(),
+      dynamics: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('dynamics specific space separated scopes'),
+        })
+        .optional(),
     }),
   }),
   connectionSettings: zSettings,
