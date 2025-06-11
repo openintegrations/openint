@@ -19,7 +19,8 @@ export default {
       authorize: {response_type: 'code'},
       token: {grant_type: 'authorization_code'},
     },
-    openint_default_scopes: ['openid', 'profile'],
+    required_scopes: ['openid', 'profile'],
+    openint_default_scopes: ['openid', 'profile', 'sc2.profile'],
     openint_allowed_scopes: ['openid', 'profile', 'sc2.profile'],
     scopes: [
       {
