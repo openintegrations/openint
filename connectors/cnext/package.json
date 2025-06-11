@@ -11,6 +11,7 @@
     "@openint/env": "workspace:*",
     "@openint/oauth2": "workspace:*",
     "@openint/util": "workspace:*",
+    "@opensdks/sdk-greenhouse": "^0.0.8",
     "mustache": "^4.2.0"
   },
   "devDependencies": {

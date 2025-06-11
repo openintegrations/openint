@@ -1,6 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 
 import accelo from './json-defs/accelo'
+import acme_apikey from './json-defs/acme-apikey'
 import acme_oauth2 from './json-defs/acme-oauth2'
 import adobe from './json-defs/adobe'
 import adyen from './json-defs/adyen'
@@ -59,6 +60,7 @@ import google_mail from './json-defs/google-mail'
 import google_sheet from './json-defs/google-sheet'
 import gorgias from './json-defs/gorgias'
 import grain from './json-defs/grain'
+import greenhouse2 from './json-defs/greenhouse2'
 import gumroad from './json-defs/gumroad'
 import gusto from './json-defs/gusto'
 import harvest from './json-defs/harvest'
@@ -145,6 +147,7 @@ import zoom from './json-defs/zoom'
 
 const defs = {
   accelo,
+  'acme-apikey': acme_apikey,
   'acme-oauth2': acme_oauth2,
   adobe,
   adyen,
@@ -203,6 +206,7 @@ const defs = {
   'google-sheet': google_sheet,
   gorgias,
   grain,
+  greenhouse2,
   gumroad,
   gusto,
   harvest,

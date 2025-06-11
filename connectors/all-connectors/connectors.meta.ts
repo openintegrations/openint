@@ -12,6 +12,17 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  'acme-apikey': {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Acme API Key',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-acme-apikey.svg',
+      authType: 'API_KEY',
+    },
+  },
   'acme-oauth2': {
     hasClient: false,
     hasServer: false,
@@ -719,6 +730,17 @@ export default {
       stage: 'beta',
       verticals: ['ats'],
       logoUrl: '/_assets/logo-greenhouse.svg',
+    },
+  },
+  greenhouse2: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Greenhouse 2',
+      stage: 'alpha',
+      verticals: ['ats'],
+      logoUrl: '/_assets/logo-greenhouse2.svg',
+      authType: 'API_KEY',
     },
   },
   gumroad: {
