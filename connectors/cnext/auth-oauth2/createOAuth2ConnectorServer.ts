@@ -208,7 +208,13 @@ export function createOAuth2ConnectorServer<
                 token_type: undefined, // What should this be?
               },
             },
-          } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
+            instance_url:
+              connectorDef.name === 'salesforce'
+                ? (res['instance_url'] ?? undefined)
+                : undefined,
+          } satisfies Z.infer<typeof oauth2Schemas.connection_settings> & {
+            instance_url: unknown
+          }
           // Attempt to refresh the token
           return {settings, status: 'healthy', status_message: null}
         } catch (error: unknown) {

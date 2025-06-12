@@ -44,6 +44,9 @@ async function main() {
     } else if (resource === 'connection') {
       const res = await caller.getConnection({
         id: process.argv[4] as string,
+        include_secrets: true,
+        refresh_policy: 'force',
+        expand: ['connector'],
       })
       console.log(res)
     } else if (resource === 'event') {
