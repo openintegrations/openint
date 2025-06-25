@@ -348,9 +348,9 @@ export const connectionRouter = trpc.router({
             conn?.settings?.['oauth']?.credentials?.raw?.expires_at
 
           if (
-            (expiresAt &&
-              (input.forceRefresh ||
-                new Date(expiresAt).getTime() <= Date.now())) ||
+            input.forceRefresh ||
+            !expiresAt ||
+            (expiresAt && new Date(expiresAt).getTime() <= Date.now()) ||
             input.expand
           ) {
             console.log(
@@ -424,9 +424,9 @@ export const connectionRouter = trpc.router({
       const expiresAt = conn?.settings?.['oauth']?.credentials?.raw?.expires_at
 
       if (
-        (expiresAt &&
-          (input.forceRefresh ||
-            new Date(expiresAt).getTime() <= Date.now())) ||
+        input.forceRefresh ||
+        !expiresAt ||
+        (expiresAt && new Date(expiresAt).getTime() <= Date.now()) ||
         input.expand
       ) {
         console.log('[getConnection] Refreshing token')
