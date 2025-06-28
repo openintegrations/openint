@@ -3,8 +3,8 @@ import type {JsonConnectorDef} from '../schema'
 export default {
   audience: ['business'],
   verticals: ['ats'],
-  display_name: 'Greenhouse 2',
-  stage: 'alpha',
+  display_name: 'Greenhouse',
+  stage: 'ga',
   version: 1,
   auth: {
     type: 'API_KEY',

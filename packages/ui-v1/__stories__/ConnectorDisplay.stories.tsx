@@ -270,8 +270,8 @@ export const grainConnectorDisplay: Story = {
   args: {name: 'grain'},
 }
 
-export const greenhouse2ConnectorDisplay: Story = {
-  args: {name: 'greenhouse2'},
+export const greenhouseConnectorDisplay: Story = {
+  args: {name: 'greenhouse'},
 }
 
 export const gumroadConnectorDisplay: Story = {
@@ -634,10 +634,6 @@ export const foreceiptConnectorDisplay: Story = {
   args: {name: 'foreceipt'},
 }
 
-export const greenhouseConnectorDisplay: Story = {
-  args: {name: 'greenhouse'},
-}
-
 export const heronConnectorDisplay: Story = {
   args: {name: 'heron'},
 }
@@ -680,6 +676,10 @@ export const rampConnectorDisplay: Story = {
 
 export const saltedgeConnectorDisplay: Story = {
   args: {name: 'saltedge'},
+}
+
+export const sharepointOnpremConnectorDisplay: Story = {
+  args: {name: 'sharepoint-onprem'},
 }
 
 export const splitwiseConnectorDisplay: Story = {

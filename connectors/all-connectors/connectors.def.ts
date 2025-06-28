@@ -10,7 +10,6 @@ import {default as connectorCoda} from '@openint/connector-coda/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
 import {default as connectorFirebase} from '@openint/connector-firebase/def'
 import {default as connectorForeceipt} from '@openint/connector-foreceipt/def'
-import {default as connectorGreenhouse} from '@openint/connector-greenhouse/def'
 import {default as connectorHeron} from '@openint/connector-heron/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
 import {default as connectorMercury} from '@openint/connector-mercury/def'
@@ -22,6 +21,7 @@ import {default as connectorPlaid} from '@openint/connector-plaid/def'
 import {default as connectorPostgres} from '@openint/connector-postgres/def'
 import {default as connectorRamp} from '@openint/connector-ramp/def'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/def'
+import {default as connectorSharepointOnprem} from '@openint/connector-sharepoint-onprem/def'
 import {default as connectorSplitwise} from '@openint/connector-splitwise/def'
 import {default as connectorStripe} from '@openint/connector-stripe/def'
 import {default as connectorTeller} from '@openint/connector-teller/def'
@@ -39,7 +39,6 @@ export const customConnectors = {
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
-  greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
@@ -51,6 +50,7 @@ export const customConnectors = {
   postgres: connectorPostgres,
   ramp: connectorRamp,
   saltedge: connectorSaltedge,
+  'sharepoint-onprem': connectorSharepointOnprem,
   splitwise: connectorSplitwise,
   stripe: connectorStripe,
   teller: connectorTeller,

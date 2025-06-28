@@ -60,7 +60,7 @@ import google_mail from './json-defs/google-mail'
 import google_sheet from './json-defs/google-sheet'
 import gorgias from './json-defs/gorgias'
 import grain from './json-defs/grain'
-import greenhouse2 from './json-defs/greenhouse2'
+import greenhouse from './json-defs/greenhouse'
 import gumroad from './json-defs/gumroad'
 import gusto from './json-defs/gusto'
 import harvest from './json-defs/harvest'
@@ -206,7 +206,7 @@ const defs = {
   'google-sheet': google_sheet,
   gorgias,
   grain,
-  greenhouse2,
+  greenhouse,
   gumroad,
   gusto,
   harvest,

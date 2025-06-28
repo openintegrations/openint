@@ -724,22 +724,12 @@ export default {
   },
   greenhouse: {
     hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Greenhouse',
-      stage: 'beta',
-      verticals: ['ats'],
-      logoUrl: '/_assets/logo-greenhouse.svg',
-    },
-  },
-  greenhouse2: {
-    hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Greenhouse 2',
-      stage: 'alpha',
+      displayName: 'Greenhouse',
+      stage: 'ga',
       verticals: ['ats'],
-      logoUrl: '/_assets/logo-greenhouse2.svg',
+      logoUrl: '/_assets/logo-greenhouse.svg',
       authType: 'API_KEY',
     },
   },
@@ -1335,6 +1325,16 @@ export default {
       verticals: ['file-storage', 'communication'],
       logoUrl: '/_assets/logo-sharepoint.svg',
       authType: 'OAUTH2',
+    },
+  },
+  'sharepoint-onprem': {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'SharePoint On-Premise',
+      stage: 'alpha',
+      verticals: ['ats'],
+      logoUrl: '/_assets/logo-sharepoint.svg',
     },
   },
   shopify: {

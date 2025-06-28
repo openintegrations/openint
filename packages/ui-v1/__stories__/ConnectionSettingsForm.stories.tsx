@@ -278,8 +278,8 @@ export const grainConnectionSettings: Story = {
   args: {name: 'grain'},
 }
 
-export const greenhouse2ConnectionSettings: Story = {
-  args: {name: 'greenhouse2'},
+export const greenhouseConnectionSettings: Story = {
+  args: {name: 'greenhouse'},
 }
 
 export const gumroadConnectionSettings: Story = {
@@ -642,10 +642,6 @@ export const foreceiptConnectionSettings: Story = {
   args: {name: 'foreceipt'},
 }
 
-export const greenhouseConnectionSettings: Story = {
-  args: {name: 'greenhouse'},
-}
-
 export const mergeConnectionSettings: Story = {
   args: {name: 'merge'},
 }
@@ -672,6 +668,10 @@ export const rampConnectionSettings: Story = {
 
 export const saltedgeConnectionSettings: Story = {
   args: {name: 'saltedge'},
+}
+
+export const sharepointOnpremConnectionSettings: Story = {
+  args: {name: 'sharepoint-onprem'},
 }
 
 export const splitwiseConnectionSettings: Story = {

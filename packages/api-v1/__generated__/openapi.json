@@ -440,7 +440,7 @@
                           "$ref": "#/components/schemas/connector.grain.discriminated_connector_config"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connector_config"
+                          "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
                         },
                         {
                           "$ref": "#/components/schemas/connector.gumroad.discriminated_connector_config"
@@ -713,9 +713,6 @@
                           "$ref": "#/components/schemas/connector.foreceipt.discriminated_connector_config"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.heron.discriminated_connector_config"
                         },
                         {
@@ -747,6 +744,9 @@
                         },
                         {
                           "$ref": "#/components/schemas/connector.saltedge.discriminated_connector_config"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connector_config"
                         },
                         {
                           "$ref": "#/components/schemas/connector.splitwise.discriminated_connector_config"
@@ -836,7 +836,7 @@
                           "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
                           "gorgias": "#/components/schemas/connector.gorgias.discriminated_connector_config",
                           "grain": "#/components/schemas/connector.grain.discriminated_connector_config",
-                          "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connector_config",
+                          "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
                           "gumroad": "#/components/schemas/connector.gumroad.discriminated_connector_config",
                           "gusto": "#/components/schemas/connector.gusto.discriminated_connector_config",
                           "harvest": "#/components/schemas/connector.harvest.discriminated_connector_config",
@@ -927,7 +927,6 @@
                           "finch": "#/components/schemas/connector.finch.discriminated_connector_config",
                           "firebase": "#/components/schemas/connector.firebase.discriminated_connector_config",
                           "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connector_config",
-                          "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
                           "heron": "#/components/schemas/connector.heron.discriminated_connector_config",
                           "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connector_config",
                           "mercury": "#/components/schemas/connector.mercury.discriminated_connector_config",
@@ -939,6 +938,7 @@
                           "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
                           "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
                           "saltedge": "#/components/schemas/connector.saltedge.discriminated_connector_config",
+                          "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connector_config",
                           "splitwise": "#/components/schemas/connector.splitwise.discriminated_connector_config",
                           "stripe": "#/components/schemas/connector.stripe.discriminated_connector_config",
                           "teller": "#/components/schemas/connector.teller.discriminated_connector_config",
@@ -1336,7 +1336,7 @@
                                 "$ref": "#/components/schemas/connector.grain.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connector_config"
@@ -1609,9 +1609,6 @@
                                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.heron.discriminated_connector_config"
                               },
                               {
@@ -1643,6 +1640,9 @@
                               },
                               {
                                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.splitwise.discriminated_connector_config"
@@ -1732,7 +1732,7 @@
                                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
                                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connector_config",
                                 "grain": "#/components/schemas/connector.grain.discriminated_connector_config",
-                                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connector_config",
+                                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
                                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connector_config",
                                 "gusto": "#/components/schemas/connector.gusto.discriminated_connector_config",
                                 "harvest": "#/components/schemas/connector.harvest.discriminated_connector_config",
@@ -1823,7 +1823,6 @@
                                 "finch": "#/components/schemas/connector.finch.discriminated_connector_config",
                                 "firebase": "#/components/schemas/connector.firebase.discriminated_connector_config",
                                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connector_config",
-                                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
                                 "heron": "#/components/schemas/connector.heron.discriminated_connector_config",
                                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connector_config",
                                 "mercury": "#/components/schemas/connector.mercury.discriminated_connector_config",
@@ -1835,6 +1834,7 @@
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
                                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connector_config",
+                                "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connector_config",
                                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connector_config",
                                 "stripe": "#/components/schemas/connector.stripe.discriminated_connector_config",
                                 "teller": "#/components/schemas/connector.teller.discriminated_connector_config",
@@ -2283,7 +2283,7 @@
                           "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
@@ -2556,9 +2556,6 @@
                           "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
                         },
                         {
@@ -2590,6 +2587,9 @@
                         },
                         {
                           "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.splitwise.discriminated_connection_settings"
@@ -2679,7 +2679,7 @@
                           "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                           "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                           "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
-                          "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
+                          "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                           "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                           "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                           "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -2770,7 +2770,6 @@
                           "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                           "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                           "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                          "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                           "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
                           "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                           "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
@@ -2782,6 +2781,7 @@
                           "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                           "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
                           "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
+                          "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings",
                           "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                           "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                           "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
@@ -3345,7 +3345,7 @@
                                 "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
@@ -3618,9 +3618,6 @@
                                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
                               },
                               {
@@ -3652,6 +3649,9 @@
                               },
                               {
                                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.splitwise.discriminated_connection_settings"
@@ -3741,7 +3741,7 @@
                                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                                 "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
-                                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
+                                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                                 "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                                 "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -3832,7 +3832,6 @@
                                 "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                                 "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                                 "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
                                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                                 "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
@@ -3844,6 +3843,7 @@
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
                                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
+                                "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings",
                                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                                 "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                                 "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
@@ -4166,7 +4166,7 @@
                         "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
@@ -4439,9 +4439,6 @@
                         "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
                       },
                       {
@@ -4473,6 +4470,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.splitwise.discriminated_connection_settings"
@@ -4562,7 +4562,7 @@
                         "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                         "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                         "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
-                        "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
+                        "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                         "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                         "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                         "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -4653,7 +4653,6 @@
                         "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                         "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                         "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                        "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                         "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
                         "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                         "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
@@ -4665,6 +4664,7 @@
                         "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                         "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
                         "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
+                        "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings",
                         "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                         "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                         "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
@@ -14609,12 +14609,12 @@
           "settings": {
             "type": "object",
             "properties": {
-              "apiKey": {
+              "api_key": {
                 "type": "string"
               }
             },
             "required": [
-              "apiKey"
+              "api_key"
             ]
           }
         },
@@ -14632,48 +14632,6 @@
           },
           "config": {
             "type": "object",
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "greenhouse"
-      },
-      "connector.greenhouse2.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse2"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "api_key": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "api_key"
-            ]
-          }
-        },
-        "required": [
-          "connector_name"
-        ],
-        "title": "greenhouse2"
-      },
-      "connector.greenhouse2.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse2"
-          },
-          "config": {
-            "type": "object",
             "description": "Base configuration for api key connector"
           }
         },
@@ -14681,7 +14639,7 @@
           "connector_name",
           "config"
         ],
-        "title": "greenhouse2"
+        "title": "greenhouse"
       },
       "connector.gumroad.discriminated_connection_settings": {
         "type": "object",
@@ -21538,6 +21496,56 @@
         ],
         "title": "servicenow"
       },
+      "connector.sharepoint-onprem.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "sharepoint-onprem"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "site_url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "password",
+              "site_url"
+            ]
+          }
+        },
+        "required": [
+          "connector_name"
+        ],
+        "title": "sharepoint-onprem"
+      },
+      "connector.sharepoint-onprem.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "sharepoint-onprem"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "sharepoint-onprem"
+      },
       "connector.sharepoint.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -27956,7 +27964,7 @@
                 "$ref": "#/components/schemas/connector.grain.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.gumroad.discriminated_connection_settings"
@@ -28229,9 +28237,6 @@
                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
               },
               {
@@ -28263,6 +28268,9 @@
               },
               {
                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.splitwise.discriminated_connection_settings"
@@ -28352,7 +28360,7 @@
                 "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
                 "gorgias": "#/components/schemas/connector.gorgias.discriminated_connection_settings",
                 "grain": "#/components/schemas/connector.grain.discriminated_connection_settings",
-                "greenhouse2": "#/components/schemas/connector.greenhouse2.discriminated_connection_settings",
+                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                 "gumroad": "#/components/schemas/connector.gumroad.discriminated_connection_settings",
                 "gusto": "#/components/schemas/connector.gusto.discriminated_connection_settings",
                 "harvest": "#/components/schemas/connector.harvest.discriminated_connection_settings",
@@ -28443,7 +28451,6 @@
                 "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                 "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                 "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                 "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
@@ -28455,6 +28462,7 @@
                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
+                "sharepoint-onprem": "#/components/schemas/connector.sharepoint-onprem.discriminated_connection_settings",
                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                 "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                 "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
@@ -28646,7 +28654,6 @@
           "gorgias",
           "grain",
           "greenhouse",
-          "greenhouse2",
           "gumroad",
           "gusto",
           "harvest",
@@ -28703,6 +28710,7 @@
           "servicem8",
           "servicenow",
           "sharepoint",
+          "sharepoint-onprem",
           "shopify",
           "signnow",
           "slack",
