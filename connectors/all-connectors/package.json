@@ -31,6 +31,7 @@
     "@openint/connector-postgres": "workspace:*",
     "@openint/connector-ramp": "workspace:*",
     "@openint/connector-saltedge": "workspace:*",
+    "@openint/connector-sharepoint-onprem": "workspace:*",
     "@openint/connector-splitwise": "workspace:*",
     "@openint/connector-stripe": "workspace:*",
     "@openint/connector-teller": "workspace:*",

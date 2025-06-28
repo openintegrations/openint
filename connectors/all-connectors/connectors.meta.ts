@@ -732,17 +732,6 @@ export default {
       logoUrl: '/_assets/logo-greenhouse.svg',
     },
   },
-  greenhouse2: {
-    hasClient: false,
-    hasServer: false,
-    metadata: {
-      displayName: 'Greenhouse 2',
-      stage: 'alpha',
-      verticals: ['ats'],
-      logoUrl: '/_assets/logo-greenhouse2.svg',
-      authType: 'API_KEY',
-    },
-  },
   gumroad: {
     hasClient: false,
     hasServer: false,
@@ -1330,11 +1319,21 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'SharePoint',
+      displayName: 'SharePoint Online',
       stage: 'ga',
       verticals: ['file-storage', 'communication'],
       logoUrl: '/_assets/logo-sharepoint.svg',
       authType: 'OAUTH2',
+    },
+  },
+  'sharepoint-onprem': {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'SharePoint On-Premise',
+      stage: 'alpha',
+      verticals: ['ats'],
+      logoUrl: '/_assets/logo-sharepoint.svg',
     },
   },
   shopify: {
