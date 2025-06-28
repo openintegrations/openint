@@ -270,10 +270,6 @@ export const grainConnectorDisplay: Story = {
   args: {name: 'grain'},
 }
 
-export const greenhouseConnectorDisplay: Story = {
-  args: {name: 'greenhouse'},
-}
-
 export const gumroadConnectorDisplay: Story = {
   args: {name: 'gumroad'},
 }
@@ -632,6 +628,10 @@ export const firebaseConnectorDisplay: Story = {
 
 export const foreceiptConnectorDisplay: Story = {
   args: {name: 'foreceipt'},
+}
+
+export const greenhouseConnectorDisplay: Story = {
+  args: {name: 'greenhouse'},
 }
 
 export const heronConnectorDisplay: Story = {

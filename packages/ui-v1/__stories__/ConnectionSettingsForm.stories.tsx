@@ -278,10 +278,6 @@ export const grainConnectionSettings: Story = {
   args: {name: 'grain'},
 }
 
-export const greenhouseConnectionSettings: Story = {
-  args: {name: 'greenhouse'},
-}
-
 export const gumroadConnectionSettings: Story = {
   args: {name: 'gumroad'},
 }
@@ -640,6 +636,10 @@ export const firebaseConnectionSettings: Story = {
 
 export const foreceiptConnectionSettings: Story = {
   args: {name: 'foreceipt'},
+}
+
+export const greenhouseConnectionSettings: Story = {
+  args: {name: 'greenhouse'},
 }
 
 export const mergeConnectionSettings: Story = {

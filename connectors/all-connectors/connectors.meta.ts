@@ -724,13 +724,12 @@ export default {
   },
   greenhouse: {
     hasClient: false,
-    hasServer: false,
+    hasServer: true,
     metadata: {
       displayName: 'Greenhouse',
-      stage: 'ga',
+      stage: 'beta',
       verticals: ['ats'],
       logoUrl: '/_assets/logo-greenhouse.svg',
-      authType: 'API_KEY',
     },
   },
   gumroad: {
@@ -1320,7 +1319,7 @@ export default {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'SharePoint',
+      displayName: 'SharePoint Online',
       stage: 'ga',
       verticals: ['file-storage', 'communication'],
       logoUrl: '/_assets/logo-sharepoint.svg',

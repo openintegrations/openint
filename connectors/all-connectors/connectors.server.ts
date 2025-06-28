@@ -10,6 +10,7 @@ import {default as connectorCoda} from '@openint/connector-coda/server'
 import {default as connectorFinch} from '@openint/connector-finch/server'
 import {default as connectorFirebase} from '@openint/connector-firebase/server'
 import {default as connectorForeceipt} from '@openint/connector-foreceipt/server'
+import {default as connectorGreenhouse} from '@openint/connector-greenhouse/server'
 import {default as connectorHeron} from '@openint/connector-heron/server'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/server'
 import {default as connectorMerge} from '@openint/connector-merge/server'
@@ -37,6 +38,7 @@ export const customConnectors = {
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
+  greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
