@@ -78,20 +78,20 @@ export const getConnectorModel = (
       ? jsonSchemasByConnectorName[def.name as ConnectorName]
       : undefined,
     required_scopes:
-      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-        ? def.metadata?.jsonDef?.auth.required_scopes
+      def.metadata?.jsonDef?.auth?.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth?.required_scopes
         : undefined,
     openint_default_scopes:
-      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-        ? def.metadata?.jsonDef?.auth.openint_default_scopes
+      def.metadata?.jsonDef?.auth?.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth?.openint_default_scopes
         : undefined,
     openint_allowed_scopes:
-      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-        ? def.metadata?.jsonDef?.auth.openint_allowed_scopes
+      def.metadata?.jsonDef?.auth?.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth?.openint_allowed_scopes
         : undefined,
     scopes:
-      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-        ? def.metadata?.jsonDef?.auth.scopes
+      def.metadata?.jsonDef?.auth?.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth?.scopes
         : undefined,
     has_openint_credentials:
       getConnectorDefaultCredentials(def.name) !== undefined,
