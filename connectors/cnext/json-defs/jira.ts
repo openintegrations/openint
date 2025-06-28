@@ -14,12 +14,17 @@ export default {
     params_config: {
       authorize: {audience: 'api.atlassian.com', prompt: 'consent'},
     },
-    openint_default_scopes: ['read:jira-user', 'read:jira-work'],
+    // scopes required for the oauth flow to work in the first place including refreshing
+    required_scopes: ['offline_access', 'read:jira-user'],
+    // the minimum ones required to meet the app's functionality
+    openint_default_scopes: ['read:jira-user', 'offline_access'],
+    // everything that is possible without requiring verification
     openint_allowed_scopes: [
       'read:jira-user',
       'read:jira-work',
-      'write:jira-work',
+      'offline_access',
     ],
+    // https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/
     /**
      * Go to: https://developer.atlassian.com/console/myapps/
      * Select OpenInt -> Permissions -> Click 'Config..' for Jira

@@ -12,8 +12,20 @@ export default {
     token_request_url: 'https://zoom.us/oauth/token',
     scope_separator: ',',
     params_config: {authorize: {response_type: 'code'}},
-    openint_default_scopes: ['openid'],
-    openint_allowed_scopes: ['openid', 'user:read', 'meeting:read'],
+    required_scopes: ['user:read:user:admin'],
+    openint_default_scopes: [
+      'user:read:user:admin',
+      'meeting:read:list_meetings:admin',
+      'meeting:read:summary:admin',
+    ],
+    openint_allowed_scopes: [
+      'user:read:user:admin',
+      'user:read:settings:admin',
+      'meeting:read:list_meetings:admin',
+      'meeting:read:summary:admin',
+      'meeting:read:participant:admin',
+      'webinar:read:webinar:admin',
+    ],
     scopes: [
       {
         scope: 'user:read',
@@ -21,9 +33,34 @@ export default {
           "Allows read-only access to user's basic information (e.g., name, email, profile picture).",
       },
       {
-        scope: 'openid',
+        scope: 'user:read:user:admin',
         description:
-          'Required for OAuth 2.0 authorization flows. Enables basic user authentication and ID token issuance.',
+          'Allows admin-level read access to user account information and settings.',
+      },
+      {
+        scope: 'user:read:settings:admin',
+        description:
+          'Allows admin-level read access to user settings and configurations.',
+      },
+      {
+        scope: 'meeting:read:list_meetings:admin',
+        description:
+          'Allows admin-level read access to list and view meeting details.',
+      },
+      {
+        scope: 'meeting:read:summary:admin',
+        description:
+          'Allows admin-level read access to meeting summaries and reports.',
+      },
+      {
+        scope: 'meeting:read:participant:admin',
+        description:
+          'Allows admin-level read access to meeting participant information.',
+      },
+      {
+        scope: 'webinar:read:webinar:admin',
+        description:
+          'Allows admin-level read access to webinar details and information.',
       },
       {
         scope: 'meeting:read',
