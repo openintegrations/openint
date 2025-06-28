@@ -4,23 +4,23 @@ export const zAPIKeyConnectorDef = z.object({
   type: z
     .literal('API_KEY')
     .describe('The authentication type for API Key-based providers'),
-  api_key_field: z
-    .string()
-    .describe('Field name where the API key should be passed'),
-  api_key_location: z
-    .enum(['header', 'query'])
-    .describe(
-      'Specifies whether the API key is passed in headers or query parameters',
-    ),
+  base_url: z.string().url().describe('The base URL of the API'),
+  verification: z.object({
+    method: z
+      .enum(['GET', 'POST'])
+      .describe('The method to verify the API key'),
+    api_key_location: z
+      .enum(['header_bearer', 'header_basic_password'])
+      .describe('The header to verify the API key'),
+    endpoint: z.string().describe('The endpoint to verify the API key'),
+  }),
   connector_config: z
     .object({})
     .optional()
-    .default({})
     .describe('Additional configuration for the api key connector config'),
   connection_settings: z
     .object({})
     .optional()
-    .default({})
     .describe('Additional configuration for api key connection settings'),
   overrides: z
     .object({

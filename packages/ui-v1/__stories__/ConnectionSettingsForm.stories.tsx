@@ -42,6 +42,10 @@ export const acceloConnectionSettings: Story = {
   args: {name: 'accelo'},
 }
 
+export const acmeApikeyConnectionSettings: Story = {
+  args: {name: 'acme-apikey'},
+}
+
 export const acmeOauth2ConnectionSettings: Story = {
   args: {name: 'acme-oauth2'},
 }
@@ -272,6 +276,10 @@ export const gorgiasConnectionSettings: Story = {
 
 export const grainConnectionSettings: Story = {
   args: {name: 'grain'},
+}
+
+export const greenhouse2ConnectionSettings: Story = {
+  args: {name: 'greenhouse2'},
 }
 
 export const gumroadConnectionSettings: Story = {
