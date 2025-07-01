@@ -4,6 +4,7 @@ import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 import Elysia from 'elysia'
 import {extractId} from '@openint/cdk'
 import {oauth2Schemas, zOauthState} from '@openint/cnext/auth-oauth2/schemas'
+import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
@@ -90,6 +91,28 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     orgId: 'org_222',
     customerId: 'cus_222' as CustomerId,
   })
+
+  const asOrg = getCaller({
+    role: 'org',
+    orgId: 'org_222',
+  })
+
+  beforeAll(async () => {
+    await db
+      .insert(schema.organization)
+      .values({
+        id: 'org_222',
+        name: 'Test Organization',
+        api_key: 'test_api_key',
+        slug: 'test-organization',
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
+      })
+      .onConflictDoNothing()
+    await asOrg.upsertCustomer({
+      id: 'cus_222',
+    })
+  })
+
   // Tests linearly depend on each other for performance and simplicty
 
   const describeMaybeOnly =
@@ -184,7 +207,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(settings.access_token).toEqual(
         settings.oauth.credentials?.access_token,
       )
-      
 
       // adding this if to satisfy the type checker
       if (settings.oauth.credentials?.expires_in) {
@@ -334,6 +356,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.status_message).toBeNull()
       expect(res.customer_id).toBe('cus_222')
       expect(res.id).toEqual(rePreConnectRes.current.state.connection_id)
+
+      await asOrg.upsertCustomer({
+        id: 'cus_222',
+      })
 
       const events = await asUser.listEvents()
       const recentEvent = events.items.find(

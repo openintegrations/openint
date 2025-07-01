@@ -1,77 +1,143 @@
-// example event
-// {
-//   "name": "connect/connection-connected",
-//   "data": {
-//     "connectionId": "conn_microsoft_xxxxx"
-//   },
-//   "id": "evt_xxxx",
-//   "ts": 1741530259940
-// }
-
-// TODO: pull this in from the server OAS spec
-// NOTE: connect.loaded is currently only client side
-export type EventName = 'connect.connection-connected' | 'connect.loaded'
-
-export interface OpenIntEvent {
-  name: EventName
-  data?: {
-    connection_id?: string
-    [key: string]: any
-  }
-  /** Optional prompt that can be used to help the AI understand the context / action to take from the event */
-  prompt?: string
-  id: string // Should start with 'evt_'
-  ts: number
-}
+// import Openint from '@openint/sdk'
+import {ListEventsResponse} from '@openint/sdk/resources/top-level'
+import {ConnectProps} from './common'
 
 export const createClientOnlyEventId = (): string => {
   return `evt_CLIENTONLY_${Math.random().toString(36).substring(2, 15)}`
 }
 
-export const frameEventsListener = (
+export type OpenIntEvent = ListEventsResponse
+
+export const listenToEvents = (
+  props: ConnectProps,
   callback: (event: OpenIntEvent) => void,
 ): (() => void) => {
-  // Use a more reliable approach than a fixed delay
-  const iframe = document.getElementById(
-    'openint-connect-frame',
-  ) as HTMLIFrameElement
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage('openIntListen', '*')
-  } else {
-    // Set up a mutation observer to detect when the iframe is added
-    const observer = new MutationObserver(() => {
-      const iframe = document.getElementById(
-        'openint-connect-frame',
-      ) as HTMLIFrameElement
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage('openIntListen', '*')
-        observer.disconnect()
-      }
-    })
-    observer.observe(document.body, {childList: true, subtree: true})
+  if (typeof window === 'undefined') {
+    console.warn(
+      '[OpenInt Connect] listenToEvents called in a non-browser environment. Polling will not start.',
+    )
+    return () => {}
   }
 
-  const messageListener = (event: MessageEvent) => {
-    // Check if the event data has the openIntEvent type
-    if (typeof event.data === 'object' && event.data !== null) {
-      if (event.data.type === 'openIntEvent' && event.data.event) {
-        const payload = event.data.event
-        // the backend may still be sending it as connectionId (camel case)
-        if (payload.data?.connectionId) {
-          payload.data.connection_id = payload.data.connectionId
-          delete payload.data.connectionId
-        }
+  // the base URL passed in the SDK is the same one, even though its used to load
+  // the connect domain and API. listEvents needs the API URL, not the connect domain.
+  // for now this is a temporary fix that works for our local development as per the default .env but we should move to a better solution
+  // potentially with an apiBaseURL and connectBaseURL as separate props
+  let baseURL = props.baseURL || 'https://api.openint.dev/v1'
+  if (baseURL && baseURL.endsWith('/connect')) {
+    baseURL = baseURL.slice(0, -8) + '/api/v1'
+  }
+  // const client = new Openint({token: props.token, baseURL})
 
-        callback(payload as OpenIntEvent)
-        return
+  let lastEventTimestamp = new Date()
+  let pollingIntervalId: number | undefined = undefined
+  let isActive = true
+  let errorCount = 0
+  const MAX_ERRORS = 3
+  const POLLING_INTERVAL_MS = 1000
+  const EVENT_LIMIT_PER_POLL = 50
+
+  const pollEvents = async () => {
+    const newEvents: OpenIntEvent[] = []
+    if (!isActive) {
+      return
+    }
+
+    try {
+      const sdkEvents = await fetch(
+        `${baseURL}/event?limit=${EVENT_LIMIT_PER_POLL}&since=${lastEventTimestamp.toISOString()}&include_prompt=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          return data.items
+        })
+
+      // const {items: sdkEvents} = await client.listEvents({
+      //   limit: EVENT_LIMIT_PER_POLL,
+      //   since: lastEventTimestamp.toISOString(),
+      //   expand: ['prompt'],
+      // })
+
+      errorCount = 0
+
+      for (const sdkEvent of sdkEvents) {
+        if (!sdkEvent.timestamp) {
+          continue
+        }
+        if (new Date(sdkEvent.timestamp) > lastEventTimestamp) {
+          newEvents.push(sdkEvent) // Pass SDK event as is
+        }
+      }
+
+      if (newEvents.length > 0) {
+        // sort events by timestamp ascending just in case backend changes default sorting
+        newEvents.sort(
+          (a, b) =>
+            new Date(a?.timestamp ?? '').getTime() -
+            new Date(b?.timestamp ?? '').getTime(),
+        )
+        let maxTsInBatch = lastEventTimestamp
+        for (const eventToCallback of newEvents) {
+          // console.log('eventToCallback', eventToCallback)
+          callback(eventToCallback) // Successful SDK event
+          if (
+            eventToCallback.timestamp &&
+            new Date(eventToCallback.timestamp) > maxTsInBatch
+          ) {
+            maxTsInBatch = new Date(
+              // add 1 second to the timestamp to avoid duplicating events with the backend GTE comparison
+              new Date(eventToCallback.timestamp).getTime() + 1000,
+            )
+          }
+        }
+        if (maxTsInBatch > lastEventTimestamp) {
+          lastEventTimestamp = maxTsInBatch
+        }
+      }
+    } catch (error) {
+      console.error(
+        '[OpenInt Connect] Error polling for events via SDK:',
+        error,
+      )
+      errorCount++
+
+      if (errorCount === MAX_ERRORS) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Unknown polling events error via SDK'
+
+        const pollingFailedEvent: OpenIntEvent = {
+          name: 'connect.loading-error',
+          id: createClientOnlyEventId(),
+          timestamp: new Date().toISOString(),
+          data: {
+            error_message: `Events polling failed after ${errorCount} attempts`,
+            error_details: errorMessage as any, // TODO: remove this when types are updated in BE to be string|undefined
+          },
+        }
+        callback(pollingFailedEvent)
+        isActive = false
+        if (pollingIntervalId !== undefined) {
+          window.clearInterval(pollingIntervalId)
+        }
       }
     }
   }
 
-  window.addEventListener('message', messageListener)
+  setTimeout(pollEvents, 0)
 
-  // Return a cleanup function to remove the listener
+  pollingIntervalId = window.setInterval(pollEvents, POLLING_INTERVAL_MS)
+
   return () => {
-    window.removeEventListener('message', messageListener)
+    isActive = false
+    if (pollingIntervalId !== undefined) {
+      window.clearInterval(pollingIntervalId)
+    }
   }
 }
