@@ -143,12 +143,14 @@ export function createOAuth2ConnectorServer<
               scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
               raw: res,
               token_type: undefined, // What should this be?
+              // TODO: generalize this based on the connector schema
               instance_url:
                 connectorDef.name === 'salesforce'
                   ? (res['instance_url'] ?? undefined)
                   : undefined,
             },
           },
+          // TODO: generalize this based on the connector schema
           instance_url:
             connectorDef.name === 'salesforce'
               ? (res['instance_url'] ?? undefined)
@@ -206,8 +208,19 @@ export function createOAuth2ConnectorServer<
                 scope:
                   res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
                 token_type: undefined, // What should this be?
+                // @ts-expect-error TODO: fix this
+                // TODO: generalize this based on the connector schema
+                instance_url:
+                  connectorDef.name === 'salesforce'
+                    ? (res['instance_url'] ?? undefined)
+                    : undefined,
               },
             },
+            // TODO: generalize this based on the connector schema
+            instance_url:
+              connectorDef.name === 'salesforce'
+                ? (res['instance_url'] ?? undefined)
+                : undefined,
           } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
           // Attempt to refresh the token
           return {settings, status: 'healthy', status_message: null}
