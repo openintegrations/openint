@@ -2,10 +2,10 @@ import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
 import type {Viewer} from '@openint/cdk'
-import type {initDbNeon} from './db.neon'
-import type {initDbPg, initDbPgDirect} from './db.pg'
-import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
 
+import {initDbNeon} from './db.neon'
+import {initDbPg, initDbPgDirect} from './db.pg'
+import {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
 import {schema} from './schema'
 
 // MARK: - For users
@@ -91,3 +91,10 @@ export type AnyDrizzle = NonNullable<Database['_drizzle']>
 export type AnyDatabase = ReturnType<
   typeof dbFactory<DatabaseDriver, AnyDrizzle, SpecificExtensions<AnyDrizzle>>
 >
+
+export function initDb(url: string) {
+  if (url.includes('neon')) {
+    return initDbNeon(url)
+  }
+  return initDbPg(url)
+}
