@@ -9,9 +9,7 @@ export const envConfig = {
   server: {
     // MARK: - Not validated, may not be used...
     // Core env vars
-    DATABASE_URL: z
-      .string()
-      .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
+    DATABASE_URL: z.string(),
     DATABASE_URL_UNPOOLED: z.string().optional(),
     /** placeholder here for testing purposes. This needs to be set in order for tokens to actually be valid across server restarts */
     JWT_SECRET: z.string().default(`placeholder_jwt_secret_${makeUlid()}`),
