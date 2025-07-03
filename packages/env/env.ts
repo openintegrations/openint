@@ -34,7 +34,7 @@ export const envConfig = {
     INTEGRATION_TEST_SECRET: z.string().optional(),
 
     // Secret for cron jobs
-    CRON_SECRET: z.string().optional(),
+    CRON_SECRET: z.string().optional().default('cron_default'),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
     PORT: z.string().optional(),
     NODE_ENV: z.enum(['production', 'development', 'test']).optional(),
