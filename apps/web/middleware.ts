@@ -7,7 +7,7 @@ import {env} from '@openint/env'
 const clerkMiddlewareFn = clerkMiddleware()
 
 export const middleware: NextMiddleware = (req, ev) => {
-  if (env.VERCEL_ENV === 'production') {
+  if (env.VERCEL_ENV === 'production' || env.NODE_ENV === 'production') {
     // Avoid the extra clerk latency for connect requests in production
     if (
       env.NEXT_PUBLIC_CONNECT_URL &&
@@ -24,6 +24,6 @@ export const middleware: NextMiddleware = (req, ev) => {
 export const config = {
   // matcher has to be a constant without any variables or even functions like filter...
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|api).*)',
   ],
 } satisfies MiddlewareConfig
