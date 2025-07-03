@@ -47,9 +47,9 @@ function drizzleForViewer(
 }
 
 export function initDbNeon(url: string, options: DbOptions = {}) {
-  if (!url.includes('neon') && !url.includes('localtest')) {
-    throw new Error('Only neon database urls are supported with initDbNeon')
-  }
+  // if (!url.includes('neon') && !url.includes('localtest')) {
+  //   throw new Error('Only neon database urls are supported with initDbNeon')
+  // }
 
   // This is unfortunately global...
   neonConfig.fetchEndpoint = (host) => {
