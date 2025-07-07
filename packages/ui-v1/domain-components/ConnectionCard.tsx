@@ -3,7 +3,14 @@ import type {ConnectionExpanded, ConnectorName} from '@openint/api-v1/models'
 import {Settings} from 'lucide-react'
 import React, {useRef, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Card, CardContent} from '@openint/shadcn/ui'
+import {
+  Card,
+  CardContent,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
 import {
   ConnectionStatusPill,
@@ -36,7 +43,12 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
-  const {borderColor} = getConnectionStatusStyles(connection.status)
+  const {
+    borderColor,
+    pillColor,
+    icon: StatusIcon,
+    message,
+  } = getConnectionStatusStyles(connection.status)
 
   const handleMouseEnter = () => {
     if (onPress) {
@@ -63,6 +75,38 @@ export function ConnectionCard({
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
+      {/* Status indicator in top-left corner with tooltip */}
+      {connection.status && connection.status !== 'healthy' && (
+        <TooltipProvider>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <div className="absolute left-2 top-2 z-10 cursor-help">
+                <div className={cn('h-2 w-2 rounded-full', pillColor)} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent
+              className="z-50 flex max-w-[260px] items-start gap-2.5"
+              side="bottom"
+              align="start"
+              sideOffset={5}>
+              <StatusIcon
+                className={cn(
+                  'mt-0.5 h-4 w-4 flex-shrink-0',
+                  connection.status === 'error'
+                    ? 'text-rose-600'
+                    : connection.status === 'disconnected'
+                      ? 'text-amber-600'
+                      : 'text-slate-600',
+                )}
+              />
+              <span className="text-background text-xs leading-relaxed">
+                {message}
+              </span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+
       <CardContent
         className="flex h-full flex-col items-center justify-center p-4 py-2"
         onClick={onPress}>
@@ -92,11 +136,15 @@ export function ConnectionCard({
                   {connection.id}
                 </pre>
               )}
-              {connection.status && (
-                <ConnectionStatusPill
-                  status={connection.status}
-                  onClick={onReconnect}
-                />
+
+              {/* Reconnect button for disconnected status */}
+              {connection.status === 'disconnected' && (
+                <div className="mt-2">
+                  <ConnectionStatusPill
+                    status={connection.status}
+                    onClick={onReconnect}
+                  />
+                </div>
               )}
             </>
           )}

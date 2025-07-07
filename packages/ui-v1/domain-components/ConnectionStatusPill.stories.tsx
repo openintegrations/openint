@@ -36,10 +36,29 @@ export const Error: Story = {
 
 // Disconnected status
 export const Disconnected: Story = {
-  args: {status: 'disconnected'},
+  args: {
+    status: 'disconnected',
+    onClick: () => alert('Reconnect clicked!'),
+  },
 }
 
 // Manual status
 export const Manual: Story = {
   args: {status: 'manual'},
+}
+
+// Reconnect button showcase
+export const ReconnectButton: Story = {
+  args: {
+    status: 'disconnected',
+    onClick: () => console.log('Reconnecting...'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Shows the improved Reconnect button with icon and outline variant when connection is disconnected.',
+      },
+    },
+  },
 }

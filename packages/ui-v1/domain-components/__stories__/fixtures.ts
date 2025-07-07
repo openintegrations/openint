@@ -125,6 +125,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'HubSpot Connection',
+    status: 'healthy' as const,
   },
   'hubspot-with-integration': {
     id: 'conn_hubspot_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -139,6 +140,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'HubSpot Connection with Integration',
+    status: 'healthy' as const,
   },
   'hubspot-without-logo': {
     id: 'conn_hubspot_123',
@@ -156,6 +158,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'HubSpot No Logo',
+    status: 'error' as const,
   },
   'notion-basic': {
     id: 'conn_notion_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -170,6 +173,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Notion Connection',
+    status: 'disconnected' as const,
   },
   'notion-with-integration': {
     id: 'conn_notion_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -184,6 +188,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Notion Connection with Integration',
+    status: 'manual' as const,
   },
   'notion-without-logo': {
     id: 'conn_notion_123',
@@ -201,6 +206,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Notion No Logo',
+    status: 'unknown' as const,
   },
   'google-drive-basic': {
     id: 'conn_google-drive_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -215,6 +221,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Google Drive Connection',
+    status: 'healthy' as const,
   },
   'google-drive-with-integration': {
     id: 'conn_google-drive_01HN4QZXG7YPBR8MXQT4KBWQ5N',
@@ -229,6 +236,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Google Drive Connection with Integration',
+    status: 'healthy' as const,
   },
   'google-drive-without-logo': {
     id: 'conn_gdrive_123',
@@ -246,6 +254,7 @@ const connections = {
     settings: {},
     disabled: false,
     display_name: 'Google Drive No Logo',
+    status: 'disconnected' as const,
   },
 } satisfies Record<string, ConnectionExpanded>
 
