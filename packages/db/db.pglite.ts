@@ -7,7 +7,12 @@ import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
 import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
-import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
+import {
+  dbFactory,
+  getDrizzleConfig,
+  getMigrationConfig,
+  runBootstrapIfExists,
+} from './db'
 import {parsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
@@ -48,13 +53,18 @@ export function initDbPGLite(options: DbOptions = {}) {
       return {rows: res as any[]}
     },
     async $migrate() {
-      return migratePgProxy(
+      await migratePgProxy(
         db,
         async (queries) => {
           await pglite.exec(queries.join(';\n'))
         },
         getMigrationConfig(),
       )
+
+      // Run bootstrap.sql if it exists
+      await runBootstrapIfExists(async (query) => {
+        await pglite.exec(query)
+      })
     },
     // TODO: Implement asViewer so we can actually test it out...
     async $end() {
@@ -74,8 +84,13 @@ export function initDbPGLiteDirect(options: DbOptions) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
-    $migrate() {
-      return migratePGLite(db, getMigrationConfig())
+    async $migrate() {
+      await migratePGLite(db, getMigrationConfig())
+
+      // Run bootstrap.sql if it exists
+      await runBootstrapIfExists(async (query) => {
+        await pglite.exec(query)
+      })
     },
     $end() {
       return pglite.close()

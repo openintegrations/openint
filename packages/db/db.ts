@@ -1,3 +1,4 @@
+import {readFile} from 'node:fs/promises'
 import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
@@ -49,6 +50,29 @@ export function getMigrationConfig(): MigrationConfig {
     // including accessing server side env from client error when running app in browser...
     // migrationsSchema: config.migrations?.schema,
     // migrationsTable: config.migrations?.table,
+  }
+}
+
+/**
+ * Executes bootstrap.sql if it exists after successful migrations
+ */
+export async function runBootstrapIfExists(
+  execQuery: (query: string) => Promise<unknown>,
+): Promise<void> {
+  const bootstrapPath = path.join(__dirname, './scripts/bootstrap.sql')
+
+  try {
+    const bootstrapSql = await readFile(bootstrapPath, 'utf-8')
+    console.log('🎯 Found bootstrap.sql, running bootstrap...')
+    await execQuery(bootstrapSql)
+    console.log('✅ Bootstrap completed successfully')
+  } catch (error) {
+    if ((error as {code?: string}).code === 'ENOENT') {
+      console.log('⏭️  No bootstrap.sql found, skipping bootstrap step')
+    } else {
+      console.error('❌ ERROR: Bootstrap failed:', error)
+      throw error
+    }
   }
 }
 

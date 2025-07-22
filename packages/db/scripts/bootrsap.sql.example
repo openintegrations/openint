@@ -1,0 +1,58 @@
+-- this is used to bootstrap the instance running in docker. may contain sensitive info like api keys and client secrets. i.e
+
+-- Bootstrap SQL for OpenInt Production Deployment
+-- Sample queries to verify database connectivity and show table structure
+SELECT
+  'select 1' AS result;
+
+-- Bootstrap organization data
+INSERT INTO
+  "public"."organization" ("id", "api_key", "name", "slug", "metadata", "created_at", "updated_at")
+VALUES
+  (
+    'org_xxxx',-- maintain this format
+    'key_04xxx', -- maintain this format
+    'My Org',
+    'myorg',
+    '{}',
+    '2024-11-16 20:54:16.559+00',
+    '2025-06-22 00:50:46.875+00'
+  )
+ON CONFLICT (id) DO NOTHING;
+
+-- Bootstrap connector config data
+INSERT INTO
+  "public"."connector_config" (
+    "id",
+    "connector_name",
+    "config",
+    "created_at",
+    "updated_at",
+    "org_id",
+    "display_name",
+    "env_name",
+    "disabled",
+    "default_pipe_out",
+    "default_pipe_in",
+    "default_pipe_out_destination_id",
+    "default_pipe_in_source_id",
+    "metadata"
+  )
+VALUES
+  (
+    'ccfg_sharepoint_xxx2', -- maintain this format
+    'sharepoint',
+    '{"oauth": {"scopes": ["offline_access", "openid"], "client_id": "xxx", "client_secret": "xxx"}}',
+    '2025-04-30 06:40:42.870726+00',
+    '2025-05-29 17:05:00.98+00',
+    'org_xxx',
+    '',
+    NULL,
+    't',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  )
+ON CONFLICT (id) DO NOTHING;
