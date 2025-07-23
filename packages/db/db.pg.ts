@@ -6,12 +6,8 @@ import {migrate} from 'drizzle-orm/node-postgres/migrator'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {types as pgTypes, Pool} from 'pg'
-import {
-  dbFactory,
-  getDrizzleConfig,
-  getMigrationConfig,
-  runBootstrapIfExists,
-} from './db'
+import {runBootstrapIfExists} from './bootstrap'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 

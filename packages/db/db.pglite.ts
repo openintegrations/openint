@@ -7,12 +7,8 @@ import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
 import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
-import {
-  dbFactory,
-  getDrizzleConfig,
-  getMigrationConfig,
-  runBootstrapIfExists,
-} from './db'
+import {runBootstrapIfExists} from './bootstrap'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {parsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
