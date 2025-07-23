@@ -3,10 +3,12 @@ import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
 import type {Viewer} from '@openint/cdk'
-import type {initDbNeon} from './db.neon'
-import type {initDbPg, initDbPgDirect} from './db.pg'
+import type {initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
 
+// Import the actual init functions
+import {initDbNeon} from './db.neon'
+import {initDbPg} from './db.pg'
 import {schema} from './schema'
 
 // MARK: - For users
@@ -115,3 +117,15 @@ export type AnyDrizzle = NonNullable<Database['_drizzle']>
 export type AnyDatabase = ReturnType<
   typeof dbFactory<DatabaseDriver, AnyDrizzle, SpecificExtensions<AnyDrizzle>>
 >
+
+/**
+ * Automatically initializes the appropriate database driver based on the URL
+ * - Uses initDbNeon for Neon database URLs
+ * - Uses initDbPg for all other PostgreSQL URLs
+ */
+export function initDb(url: string, options: DbOptions = {}) {
+  if (url.includes('neon') || url.includes('localtest')) {
+    return initDbNeon(url, options)
+  }
+  return initDbPg(url, options)
+}

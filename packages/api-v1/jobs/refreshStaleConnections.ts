@@ -3,8 +3,7 @@ import type {ConnectorServer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
-import {initDbNeon} from '@openint/db/db.neon'
+import {and, desc, eq, initDb, isNotNull, lt, schema, sql} from '@openint/db'
 import {envRequired, isProduction} from '@openint/env'
 import {makeSentryClient} from '../lib/sentry.client'
 import {routerContextFromViewer} from '../trpc/context'
@@ -138,7 +137,7 @@ export const handleRefreshStaleConnections: Handler = async ({request}) => {
     })
   }
 
-  const db = initDbNeon(envRequired.DATABASE_URL)
+  const db = initDb(envRequired.DATABASE_URL)
   const sentry = makeSentryClient({dsn: envRequired.NEXT_PUBLIC_SENTRY_DSN})
 
   const result = await sentry.withCheckin(

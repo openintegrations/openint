@@ -1,8 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zViewerRole} from '@openint/cdk'
-import {eq, schema} from '@openint/db'
-import {initDbNeon} from '@openint/db/db.neon'
+import {eq, initDb, schema} from '@openint/db'
 import {envRequired} from '@openint/env'
 import {R} from '@openint/util/remeda'
 import {z} from '@openint/util/zod-utils'
@@ -38,7 +37,7 @@ export const generalRouter = router({
     .input(z.void())
     .output(z.object({ok: z.boolean()}))
     .query(async () => {
-      const db = initDbNeon(envRequired.DATABASE_URL)
+      const db = initDb(envRequired.DATABASE_URL)
       const ctx = routerContextFromViewer({db, viewer: {role: 'system'}})
       const INTEGRATION_TEST_ORG_ID = 'org_2owpNzLGQbIKvcpHnyfNivjXcDu'
       const connections = await ctx.db

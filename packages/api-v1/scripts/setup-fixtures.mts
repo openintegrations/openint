@@ -2,8 +2,7 @@ import {parseArgs} from 'node:util'
 import type {Id, Viewer} from '@openint/cdk'
 
 import {makeId} from '@openint/cdk'
-import {schema} from '@openint/db'
-import {initDbNeon} from '@openint/db/db.neon'
+import {initDb, schema} from '@openint/db'
 import {envRequired} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {makeJwtClient} from '../lib/makeJwtClient'
@@ -11,7 +10,7 @@ import {makeJwtClient} from '../lib/makeJwtClient'
 type Info = Required<typeof values>
 
 export async function setupFixture(info: Info) {
-  const db = initDbNeon(envRequired.DATABASE_URL)
+  const db = initDb(envRequired.DATABASE_URL)
   const jwt = makeJwtClient({
     secretOrPublicKey: envRequired.JWT_SECRET,
   })
