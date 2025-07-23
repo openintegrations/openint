@@ -11,7 +11,7 @@ export const testEnv = createEnv({
 
     // MARK: - Not validated, may not be used...
     // Core env vars
-    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z.string(),
     DATABASE_URL_UNPOOLED: z.string().optional(),
     // Required for worker to work when deployed
     INNGEST_SIGNING_KEY: z.string().optional(),
