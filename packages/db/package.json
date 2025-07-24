@@ -4,6 +4,7 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
+    "bootstrap": "bun scripts/bootstrap.ts",
     "clean": "rm -rf ./drizzle",
     "drizzle-kit": "drizzle-kit",
     "export": "drizzle-kit export",
