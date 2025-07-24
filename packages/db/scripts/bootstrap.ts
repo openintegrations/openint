@@ -16,8 +16,7 @@ async function main() {
   const db = initDb(databaseUrl)
 
   try {
-    const bootstrapPath = path.join(__dirname, './scripts/bootstrap.sql')
-
+    const bootstrapPath = path.join(__dirname, './bootstrap.sql')
     const bootstrapSql = await readFile(bootstrapPath, 'utf-8')
     if (bootstrapSql) {
       console.log('🎯 Found bootstrap.sql, running bootstrap...')
