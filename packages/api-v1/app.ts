@@ -3,7 +3,7 @@ import type {CreateFetchHandlerOptions} from './trpc/handlers'
 import {cors} from '@elysiajs/cors'
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
-import {initDbNeon} from '@openint/db/db.neon'
+import {initDb} from '@openint/db/init'
 import {env, envRequired, resolveRoute} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
@@ -95,7 +95,7 @@ export function createApp(opts: CreateAppOptions) {
 
 // @ts-expect-error Property 'main' does not exist on type 'ImportMeta'.ts(2339)
 if (import.meta.main) {
-  const app = createApp({db: initDbNeon(envRequired.DATABASE_URL)})
+  const app = createApp({db: initDb(envRequired.DATABASE_URL)})
   app.listen(process.env['PORT'] || 3002)
   console.log(
     `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,

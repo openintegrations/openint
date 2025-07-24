@@ -9,12 +9,7 @@ import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import * as pgTypes from 'pg-types'
-import {
-  dbFactory,
-  getDrizzleConfig,
-  getMigrationConfig,
-  runBootstrapIfExists,
-} from './db'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
@@ -87,11 +82,6 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
         },
         getMigrationConfig(),
       )
-
-      // Run bootstrap.sql if it exists
-      await runBootstrapIfExists(async (query) => {
-        await neonSql(query)
-      })
     },
   })
 }

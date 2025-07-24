@@ -4,7 +4,7 @@ import type {InferInsertModel, InferSelectModel} from 'drizzle-orm'
 import {createClerkClient} from '@clerk/backend'
 import {eq} from 'drizzle-orm'
 import {schema} from '..'
-import {initDbNeon} from '../db.neon'
+import {initDb} from '../init'
 
 const clerkSecretKey = process.env['CLERK_SECRET_KEY']
 const dbUrl = process.env['DATABASE_URL']
@@ -12,7 +12,7 @@ if (!clerkSecretKey) throw new Error('CLERK_SECRET_KEY is not defined')
 if (!dbUrl) throw new Error('DATABASE_URL is not defined')
 
 const clerk = createClerkClient({secretKey: clerkSecretKey})
-const db = initDbNeon(dbUrl)
+const db = initDb(dbUrl)
 
 type OrganizationSelect = InferSelectModel<typeof schema.organization>
 type OrganizationInsert = InferInsertModel<typeof schema.organization>

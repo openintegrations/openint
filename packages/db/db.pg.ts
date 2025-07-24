@@ -6,12 +6,7 @@ import {migrate} from 'drizzle-orm/node-postgres/migrator'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {types as pgTypes, Pool} from 'pg'
-import {
-  dbFactory,
-  getDrizzleConfig,
-  getMigrationConfig,
-  runBootstrapIfExists,
-} from './db'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
@@ -80,16 +75,6 @@ export function initDbPg(url: string, options: DbOptions = {}) {
         },
         getMigrationConfig(),
       )
-
-      // Run bootstrap.sql if it exists
-      await runBootstrapIfExists(async (query) => {
-        const client = await pool.connect()
-        try {
-          await client.query(query)
-        } finally {
-          client.release()
-        }
-      })
     },
     async $end() {
       return pool.end()
@@ -108,11 +93,6 @@ export function initDbPgDirect(url: string, options: DbOptions = {}) {
     },
     async $migrate() {
       await migrate(db, getMigrationConfig())
-
-      // Run bootstrap.sql if it exists
-      await runBootstrapIfExists(async (query) => {
-        await db.execute(query)
-      })
     },
     $end() {
       return pool.end()

@@ -52,6 +52,7 @@ CMD set -e && \
     \
     echo "📊 Running database migrations..." && \
     pnpm migrate || { echo "❌ ERROR: Migration failed"; exit 1; } && \
+    pnpm bootstrap || { echo "❌ ERROR: Bootstrap failed"; exit 1; } && \
     \
     echo "🎉 Starting OpenInt application..." && \
     cd apps/web && exec pnpm start
