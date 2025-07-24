@@ -1,4 +1,4 @@
-import {initDb} from '@openint/db'
+import {initDb} from '@openint/db/init'
 import {envRequired} from '@openint/env'
 import {routerContextFromViewer} from '../trpc/context'
 import {appRouter} from '../trpc/routers'

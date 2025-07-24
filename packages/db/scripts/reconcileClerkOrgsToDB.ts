@@ -4,7 +4,7 @@ import type {InferInsertModel, InferSelectModel} from 'drizzle-orm'
 import {createClerkClient} from '@clerk/backend'
 import {eq} from 'drizzle-orm'
 import {schema} from '..'
-import {initDb} from '../db'
+import {initDb} from '../init'
 
 const clerkSecretKey = process.env['CLERK_SECRET_KEY']
 const dbUrl = process.env['DATABASE_URL']
