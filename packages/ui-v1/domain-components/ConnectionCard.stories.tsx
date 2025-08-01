@@ -42,6 +42,7 @@ export const Disconnected: Story = {
       ...FIXTURES.connections['google-drive-basic'],
       status: 'disconnected',
     },
+    onReconnect: () => alert('Reconnect clicked!'),
   },
 }
 
@@ -63,6 +64,61 @@ export const NoLogo: Story = {
 export const NoIntegration: Story = {
   args: {
     connection: FIXTURES.connections['google-drive-basic'],
+  },
+}
+
+export const WithReconnectButton: Story = {
+  args: {
+    connection: FIXTURES.connections['notion-basic'],
+    onReconnect: () => alert('Reconnecting...'),
+  },
+}
+
+export const LinearInspiredShowcase: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-6 p-6">
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-gray-600">
+          Healthy Connection
+        </h3>
+        <ConnectionCard
+          connection={FIXTURES.connections['google-drive-basic']}
+          onPress={() => {}}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-gray-600">
+          Disconnected (with Reconnect)
+        </h3>
+        <ConnectionCard
+          connection={FIXTURES.connections['notion-basic']}
+          onReconnect={() => alert('Reconnecting...')}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-gray-600">Error State</h3>
+        <ConnectionCard
+          connection={FIXTURES.connections['hubspot-without-logo']}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-gray-600">Manual Status</h3>
+        <ConnectionCard
+          connection={FIXTURES.connections['notion-with-integration']}
+        />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Showcase of the Linear-inspired ConnectionCard design with status indicators in the top-left corner and improved Reconnect button styling.',
+      },
+    },
   },
 }
 
