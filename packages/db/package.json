@@ -14,7 +14,7 @@
     "reconcile-clerk-orgs": "npx tsx scripts/reconcileClerkOrgsToDB.ts"
   },
   "dependencies": {
-    "@clerk/backend": "^1.25.1",
+    "@clerk/backend": "^2.6.2",
     "@electric-sql/pglite": "^0.2.16",
     "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",
