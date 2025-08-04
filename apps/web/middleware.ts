@@ -24,6 +24,6 @@ export const middleware: NextMiddleware = (req, ev) => {
 export const config = {
   // matcher has to be a constant without any variables or even functions like filter...
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|api).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 } satisfies MiddlewareConfig
