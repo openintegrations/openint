@@ -1,0 +1,65 @@
+---
+name: centralize-alert-dialog-handling
+description: Use centralized alert/confirmation dialogs through a provider pattern instead of scattered alert implementations
+severity: warning
+globs: ['**/*.tsx', '**/*.jsx']
+---
+
+Implement a centralized alert/confirmation dialog system using React context to avoid duplicating dialog logic.
+
+❌ Bad:
+```tsx
+function Component() {
+  const [showAlert, setShowAlert] = useState(false);
+  
+  return (
+    <>
+      <AlertDialog open={showAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}
+```
+
+✅ Good:
+```tsx
+// ConfirmationProvider.tsx
+export const ConfirmationProvider = ({children}: {children: React.ReactNode}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [options, setOptions] = useState<ConfirmationOptions | null>(null);
+  
+  const confirm = (options: ConfirmationOptions) => {
+    setOptions(options);
+    setIsOpen(true);
+  };
+
+  return (
+    <ConfirmationContext.Provider value={{confirm}}>
+      {children}
+      <AlertDialog open={isOpen}>
+        // Centralized dialog content
+      </AlertDialog>
+    </ConfirmationContext.Provider>
+  );
+};
+
+// Usage
+function Component() {
+  const confirm = useConfirm();
+  
+  const handleDelete = () => {
+    confirm({
+      title: 'Delete Item',
+      description: 'Are you sure you want to delete this item?',
+      onConfirm: () => {
+        // Handle deletion
+      }
+    });
+  };
+}
+```
