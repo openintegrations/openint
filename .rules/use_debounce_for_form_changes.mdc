@@ -1,0 +1,33 @@
+---
+name: use-debounce-for-form-changes
+description: Form field changes should be debounced using setTimeout to prevent excessive state updates and re-renders on every keystroke
+severity: warning
+globs: ['**/*.tsx', '**/*.jsx']
+---
+
+Debounce form field change handlers to improve performance by preventing unnecessary state updates and re-renders on every keystroke.
+
+❌ Bad:
+```tsx
+const handleFormChange = (data: {formData?: FormData}) => {
+  if (data.formData) {
+    setFormState(data.formData);
+  }
+};
+```
+
+✅ Good:
+```tsx
+const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+const handleFormChange = useCallback((data: {formData?: FormData}) => {
+  if (timeoutRef.current) {
+    clearTimeout(timeoutRef.current);
+  }
+  timeoutRef.current = setTimeout(() => {
+    if (data.formData) {
+      setFormState(data.formData);
+    }
+  }, 300);
+}, []);
+```

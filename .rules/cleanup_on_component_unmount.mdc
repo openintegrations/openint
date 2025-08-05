@@ -1,0 +1,37 @@
+---
+name: cleanup-on-component-unmount
+description: Clean up resources and reset state when components unmount or on successful operations to prevent stale state
+severity: warning
+globs: ['**/*.tsx', '**/*.jsx'] 
+---
+
+Always clean up resources and reset state on component unmount or after successful operations to prevent memory leaks and stale state.
+
+❌ Bad:
+```tsx
+const saveData = async () => {
+  await updateConfig.mutateAsync(data);
+  setSheetOpen(false);
+};
+```
+
+✅ Good:
+```tsx
+const saveData = async () => {
+  await updateConfig.mutateAsync(data);
+  // Clean up all state
+  setSheetOpen(false);
+  setSelectedConnector(null);
+  setSelectedCcfg(null); 
+  setChangedFields([]);
+};
+
+// Cleanup on unmount
+useEffect(() => {
+  return () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  };
+}, []);
+```
