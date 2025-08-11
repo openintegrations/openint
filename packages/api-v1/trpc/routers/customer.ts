@@ -15,9 +15,10 @@ export const customerRouter = router({
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/customers',
+        path: '/customer',
         description: 'Create or update a customer',
         summary: 'Upsert Customer',
+        enabled: true,
       },
     })
     .input(
@@ -71,10 +72,10 @@ export const customerRouter = router({
     .meta({
       openapi: {
         method: 'GET',
-        path: '/customers',
+        path: '/customer',
         description: 'List all customers',
         summary: 'List Customers',
-        enabled: false,
+        enabled: true,
       },
     })
     .input(

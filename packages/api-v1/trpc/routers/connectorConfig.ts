@@ -221,7 +221,7 @@ export const connectorConfigRouter = router({
     ),
   createConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connector-config', enabled: false},
+      openapi: {method: 'POST', path: '/connector-config'},
     })
     .input(core.connector_config_insert)
     .output(core.connector_config_select)
@@ -239,7 +239,7 @@ export const connectorConfigRouter = router({
     }),
   updateConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
+      openapi: {method: 'PUT', path: '/connector-config/{id}'},
     })
     .input(
       z.object({
