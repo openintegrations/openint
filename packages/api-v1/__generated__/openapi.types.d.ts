@@ -34,7 +34,7 @@ export interface paths {
         get: operations["getConnectorConfig"];
         put: operations["updateConnectorConfig"];
         post?: never;
-        delete?: never;
+        delete: operations["deleteConnectorConfig"];
         options?: never;
         head?: never;
         patch?: never;
@@ -9167,6 +9167,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["core.connector_config_select"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    deleteConnectorConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id of the connector config, starts with `ccfg_` */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The id of the connector config, starts with `ccfg_` */
+                        id: string;
+                    };
                 };
             };
             /** @description Invalid input data */
