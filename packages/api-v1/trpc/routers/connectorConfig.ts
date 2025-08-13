@@ -2,6 +2,7 @@ import type {ConnectorConfig} from '../../models'
 
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import {zDiscriminatedConfig} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {
   and,
@@ -221,11 +222,43 @@ export const connectorConfigRouter = router({
     ),
   createConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connector-config', enabled: false},
+      openapi: {method: 'POST', path: '/connector-config'},
     })
-    .input(core.connector_config_insert)
+    .input(
+      z.object({
+        // Accept any string here to keep compatibility with callers using core.connector_config_insert
+        connector_name: z.string(),
+        display_name: z.string().nullish().optional(),
+        disabled: z.boolean().nullish().optional(),
+        metadata: z.record(z.string(), z.unknown()).nullish(),
+        // Accept nullish config, validate at runtime below
+        config: z.record(z.string(), z.unknown()).nullish(),
+      }),
+    )
     .output(core.connector_config_select)
     .mutation(async ({ctx, input: {connector_name, ...input}}) => {
+      // Validate config at runtime if provided
+      if (input.config != null) {
+        const parsed = zDiscriminatedConfig.safeParse({
+          connector_name,
+          config: input.config,
+        })
+        if (!parsed.success) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid config for the specified connector_name',
+          })
+        }
+      } else {
+        // When config is not provided, still ensure connector_name is valid
+        const nameOk = zConnectorName.safeParse(connector_name).success
+        if (!nameOk) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid connector_name',
+          })
+        }
+      }
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
@@ -239,7 +272,7 @@ export const connectorConfigRouter = router({
     }),
   updateConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
+      openapi: {method: 'PUT', path: '/connector-config/{id}'},
     })
     .input(
       z.object({
@@ -278,7 +311,6 @@ export const connectorConfigRouter = router({
       openapi: {
         method: 'DELETE',
         path: '/connector-config/{id}',
-        enabled: false,
       },
     })
     .input(z.object({id: zConnectorConfigId}))
