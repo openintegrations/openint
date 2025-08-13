@@ -32,7 +32,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getConnectorConfig"];
-        put?: never;
+        put: operations["updateConnectorConfig"];
         post?: never;
         delete?: never;
         options?: never;
@@ -50,7 +50,7 @@ export interface paths {
         /** List Configured Connectors */
         get: operations["listConnectorConfigs"];
         put?: never;
-        post?: never;
+        post: operations["createConnectorConfig"];
         delete?: never;
         options?: never;
         head?: never;
@@ -165,14 +165,18 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/customers": {
+    "/customer": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * List Customers
+         * @description List all customers
+         */
+        get: operations["listCustomers"];
         /**
          * Upsert Customer
          * @description Create or update a customer
@@ -8614,6 +8618,25 @@ export interface components {
          * @enum {string}
          */
         "core.connector.name": "accelo" | "acme-apikey" | "acme-oauth2" | "adobe" | "adyen" | "aircall" | "airtable" | "amazon" | "apaleo" | "apollo" | "asana" | "attio" | "auth0" | "autodesk" | "aws" | "bamboohr" | "basecamp" | "battlenet" | "bigcommerce" | "bitbucket" | "bitly" | "blackbaud" | "boldsign" | "box" | "braintree" | "brex" | "calendly" | "clickup" | "close" | "coda" | "confluence" | "contentful" | "contentstack" | "copper" | "coros" | "datev" | "deel" | "dialpad" | "digitalocean" | "discord" | "docusign" | "dropbox" | "ebay" | "egnyte" | "envoy" | "eventbrite" | "exist" | "facebook" | "factorial" | "figma" | "finch" | "firebase" | "fitbit" | "foreceipt" | "fortnox" | "freshbooks" | "front" | "github" | "gitlab" | "gong" | "google-calendar" | "google-docs" | "google-drive" | "google-mail" | "google-sheet" | "gorgias" | "grain" | "greenhouse" | "gumroad" | "gusto" | "harvest" | "heron" | "highlevel" | "hubspot" | "instagram" | "intercom" | "jira" | "keap" | "lever" | "linear" | "linkedin" | "linkhut" | "lunchmoney" | "mailchimp" | "mercury" | "merge" | "miro" | "monday" | "moota" | "mural" | "namely" | "nationbuilder" | "netsuite" | "notion" | "odoo" | "okta" | "onebrick" | "openledger" | "osu" | "oura" | "outreach" | "pagerduty" | "pandadoc" | "payfit" | "paypal" | "pennylane" | "pinterest" | "pipedrive" | "plaid" | "podium" | "postgres" | "productboard" | "qualtrics" | "quickbooks" | "ramp" | "reddit" | "sage" | "salesforce" | "salesloft" | "saltedge" | "segment" | "servicem8" | "servicenow" | "sharepoint" | "sharepoint-onprem" | "shopify" | "signnow" | "slack" | "smartsheet" | "snowflake" | "splitwise" | "spotify" | "squarespace" | "squareup" | "stackexchange" | "strava" | "stripe" | "teamwork" | "teller" | "ticktick" | "timely" | "todoist" | "toggl" | "tremendous" | "tsheetsteam" | "tumblr" | "twenty" | "twinfield" | "twitch" | "twitter" | "typeform" | "uber" | "venmo" | "vimeo" | "wakatime" | "wealthbox" | "webflow" | "whoop" | "wise" | "wordpress" | "wrike" | "xero" | "yahoo" | "yandex" | "yodlee" | "zapier" | "zendesk" | "zenefits" | "zoho" | "zoho-desk" | "zoom";
+        /** connector_config_select */
+        "core.connector_config_select": {
+            connector_name: "core.connector_config_select";
+        } & ({
+            id: string;
+            created_at: string;
+            updated_at: string;
+            org_id: string;
+            display_name: string | null;
+            disabled: boolean | null;
+            /** @description
+             *       JSON object can can be used to associate arbitrary metadata to
+             *       avoid needing a separate 1-1 table just for simple key values in your application.
+             *       During updates this object will be shallowly merged
+             *      */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        } & Omit<components["schemas"]["connector.accelo.discriminated_connector_config"] | components["schemas"]["connector.acme-apikey.discriminated_connector_config"] | components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.adobe.discriminated_connector_config"] | components["schemas"]["connector.adyen.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.amazon.discriminated_connector_config"] | components["schemas"]["connector.apaleo.discriminated_connector_config"] | components["schemas"]["connector.asana.discriminated_connector_config"] | components["schemas"]["connector.attio.discriminated_connector_config"] | components["schemas"]["connector.auth0.discriminated_connector_config"] | components["schemas"]["connector.autodesk.discriminated_connector_config"] | components["schemas"]["connector.aws.discriminated_connector_config"] | components["schemas"]["connector.bamboohr.discriminated_connector_config"] | components["schemas"]["connector.basecamp.discriminated_connector_config"] | components["schemas"]["connector.battlenet.discriminated_connector_config"] | components["schemas"]["connector.bigcommerce.discriminated_connector_config"] | components["schemas"]["connector.bitbucket.discriminated_connector_config"] | components["schemas"]["connector.bitly.discriminated_connector_config"] | components["schemas"]["connector.blackbaud.discriminated_connector_config"] | components["schemas"]["connector.boldsign.discriminated_connector_config"] | components["schemas"]["connector.box.discriminated_connector_config"] | components["schemas"]["connector.braintree.discriminated_connector_config"] | components["schemas"]["connector.calendly.discriminated_connector_config"] | components["schemas"]["connector.clickup.discriminated_connector_config"] | components["schemas"]["connector.close.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.contentful.discriminated_connector_config"] | components["schemas"]["connector.contentstack.discriminated_connector_config"] | components["schemas"]["connector.copper.discriminated_connector_config"] | components["schemas"]["connector.coros.discriminated_connector_config"] | components["schemas"]["connector.datev.discriminated_connector_config"] | components["schemas"]["connector.deel.discriminated_connector_config"] | components["schemas"]["connector.dialpad.discriminated_connector_config"] | components["schemas"]["connector.digitalocean.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.docusign.discriminated_connector_config"] | components["schemas"]["connector.dropbox.discriminated_connector_config"] | components["schemas"]["connector.ebay.discriminated_connector_config"] | components["schemas"]["connector.egnyte.discriminated_connector_config"] | components["schemas"]["connector.envoy.discriminated_connector_config"] | components["schemas"]["connector.eventbrite.discriminated_connector_config"] | components["schemas"]["connector.exist.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.factorial.discriminated_connector_config"] | components["schemas"]["connector.figma.discriminated_connector_config"] | components["schemas"]["connector.fitbit.discriminated_connector_config"] | components["schemas"]["connector.fortnox.discriminated_connector_config"] | components["schemas"]["connector.freshbooks.discriminated_connector_config"] | components["schemas"]["connector.front.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gitlab.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.gorgias.discriminated_connector_config"] | components["schemas"]["connector.grain.discriminated_connector_config"] | components["schemas"]["connector.gumroad.discriminated_connector_config"] | components["schemas"]["connector.gusto.discriminated_connector_config"] | components["schemas"]["connector.harvest.discriminated_connector_config"] | components["schemas"]["connector.highlevel.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.keap.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.linkhut.discriminated_connector_config"] | components["schemas"]["connector.mailchimp.discriminated_connector_config"] | components["schemas"]["connector.miro.discriminated_connector_config"] | components["schemas"]["connector.monday.discriminated_connector_config"] | components["schemas"]["connector.mural.discriminated_connector_config"] | components["schemas"]["connector.namely.discriminated_connector_config"] | components["schemas"]["connector.nationbuilder.discriminated_connector_config"] | components["schemas"]["connector.netsuite.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.odoo.discriminated_connector_config"] | components["schemas"]["connector.okta.discriminated_connector_config"] | components["schemas"]["connector.osu.discriminated_connector_config"] | components["schemas"]["connector.oura.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pagerduty.discriminated_connector_config"] | components["schemas"]["connector.pandadoc.discriminated_connector_config"] | components["schemas"]["connector.payfit.discriminated_connector_config"] | components["schemas"]["connector.paypal.discriminated_connector_config"] | components["schemas"]["connector.pennylane.discriminated_connector_config"] | components["schemas"]["connector.pinterest.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.podium.discriminated_connector_config"] | components["schemas"]["connector.productboard.discriminated_connector_config"] | components["schemas"]["connector.qualtrics.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.sage.discriminated_connector_config"] | components["schemas"]["connector.salesforce.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.segment.discriminated_connector_config"] | components["schemas"]["connector.servicem8.discriminated_connector_config"] | components["schemas"]["connector.servicenow.discriminated_connector_config"] | components["schemas"]["connector.sharepoint.discriminated_connector_config"] | components["schemas"]["connector.shopify.discriminated_connector_config"] | components["schemas"]["connector.signnow.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.smartsheet.discriminated_connector_config"] | components["schemas"]["connector.snowflake.discriminated_connector_config"] | components["schemas"]["connector.spotify.discriminated_connector_config"] | components["schemas"]["connector.squarespace.discriminated_connector_config"] | components["schemas"]["connector.squareup.discriminated_connector_config"] | components["schemas"]["connector.stackexchange.discriminated_connector_config"] | components["schemas"]["connector.strava.discriminated_connector_config"] | components["schemas"]["connector.teamwork.discriminated_connector_config"] | components["schemas"]["connector.ticktick.discriminated_connector_config"] | components["schemas"]["connector.timely.discriminated_connector_config"] | components["schemas"]["connector.todoist.discriminated_connector_config"] | components["schemas"]["connector.tremendous.discriminated_connector_config"] | components["schemas"]["connector.tsheetsteam.discriminated_connector_config"] | components["schemas"]["connector.tumblr.discriminated_connector_config"] | components["schemas"]["connector.twinfield.discriminated_connector_config"] | components["schemas"]["connector.twitch.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.typeform.discriminated_connector_config"] | components["schemas"]["connector.uber.discriminated_connector_config"] | components["schemas"]["connector.vimeo.discriminated_connector_config"] | components["schemas"]["connector.wakatime.discriminated_connector_config"] | components["schemas"]["connector.wealthbox.discriminated_connector_config"] | components["schemas"]["connector.webflow.discriminated_connector_config"] | components["schemas"]["connector.whoop.discriminated_connector_config"] | components["schemas"]["connector.wordpress.discriminated_connector_config"] | components["schemas"]["connector.wrike.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.yahoo.discriminated_connector_config"] | components["schemas"]["connector.yandex.discriminated_connector_config"] | components["schemas"]["connector.zapier.discriminated_connector_config"] | components["schemas"]["connector.zendesk.discriminated_connector_config"] | components["schemas"]["connector.zenefits.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.zoho.discriminated_connector_config"] | components["schemas"]["connector.zoom.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.openledger.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.sharepoint-onprem.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name">);
         /** customer_select */
         "core.customer_select": {
             org_id: string;
@@ -9115,6 +9138,84 @@ export interface operations {
             };
         };
     };
+    updateConnectorConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id of the connector config, starts with `ccfg_` */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    display_name?: string;
+                    disabled?: boolean;
+                    config?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.connector_config_select"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
     listConnectorConfigs: {
         parameters: {
             query?: {
@@ -9206,6 +9307,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    createConnectorConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    connector_name: string;
+                    display_name?: string | null;
+                    disabled?: boolean | null;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                    config?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.connector_config_select"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
                 };
             };
             /** @description Internal server error */
@@ -9767,6 +9938,95 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.event"][];
+                        /** @description Total number of items in the database for the organization */
+                        total: number;
+                        /** @description Limit the number of items returned */
+                        limit: number;
+                        /** @description Offset the items returned */
+                        offset: number;
+                        /** @description Convenience flag = offset + limit >= total */
+                        has_next_page?: boolean;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    listCustomers: {
+        parameters: {
+            query?: {
+                /** @description Limit the number of items returned */
+                limit?: number;
+                /** @description Offset the items returned */
+                offset?: number;
+                search_query?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: {
+                            /** @description Customer Id */
+                            id: string | null;
+                            connection_count: number;
+                            /** @description postgres timestamp format, not yet ISO */
+                            created_at: string;
+                            /** @description postgres timestamp format, not yet ISO */
+                            updated_at: string;
+                        }[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
                         /** @description Limit the number of items returned */
