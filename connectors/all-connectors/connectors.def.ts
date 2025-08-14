@@ -22,7 +22,6 @@ import {default as connectorPlaid} from '@openint/connector-plaid/def'
 import {default as connectorPostgres} from '@openint/connector-postgres/def'
 import {default as connectorRamp} from '@openint/connector-ramp/def'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/def'
-import {default as connectorSharepointOnprem} from '@openint/connector-sharepoint-onprem/def'
 import {default as connectorSplitwise} from '@openint/connector-splitwise/def'
 import {default as connectorStripe} from '@openint/connector-stripe/def'
 import {default as connectorTeller} from '@openint/connector-teller/def'
@@ -52,7 +51,6 @@ export const customConnectors = {
   postgres: connectorPostgres,
   ramp: connectorRamp,
   saltedge: connectorSaltedge,
-  'sharepoint-onprem': connectorSharepointOnprem,
   splitwise: connectorSplitwise,
   stripe: connectorStripe,
   teller: connectorTeller,
