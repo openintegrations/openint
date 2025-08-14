@@ -42,6 +42,10 @@ export const acceloConnectionSettings: Story = {
   args: {name: 'accelo'},
 }
 
+export const acmeApikeyConnectionSettings: Story = {
+  args: {name: 'acme-apikey'},
+}
+
 export const acmeOauth2ConnectionSettings: Story = {
   args: {name: 'acme-oauth2'},
 }
@@ -664,6 +668,10 @@ export const rampConnectionSettings: Story = {
 
 export const saltedgeConnectionSettings: Story = {
   args: {name: 'saltedge'},
+}
+
+export const sharepointOnpremConnectionSettings: Story = {
+  args: {name: 'sharepoint-onprem'},
 }
 
 export const splitwiseConnectionSettings: Story = {

@@ -18,6 +18,7 @@ export const publicProcedure = trpc.procedure
 export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
   if (!hasRole(viewer, ['customer', 'user', 'org', 'system'])) {
+    console.error('Authentication required', viewer)
     throw new TRPCError({code: 'FORBIDDEN', message: 'Authentication required'})
   }
   return next({ctx: {...ctx, viewer}})
@@ -26,6 +27,7 @@ export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {
 export const customerProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
   if (!hasRole(viewer, ['customer', 'user'])) {
+    console.error('Customer procedure failed', viewer)
     // TODO: Figure out how to user impersonating as customer
     throw new TRPCError({code: 'FORBIDDEN', message: 'Org customer only'})
   }
@@ -38,6 +40,7 @@ export const orgProcedure = publicProcedure.use(({next, ctx}) => {
     throw new TRPCError({code: 'FORBIDDEN', message: 'Org admin only'})
   }
   if (!viewer.orgId) {
+    console.error('OrgId missing in token for user', viewer.userId)
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: `orgId missing in token for user ${viewer.userId}`,
@@ -53,6 +56,7 @@ export const orgProcedure = publicProcedure.use(({next, ctx}) => {
 
 export const adminProcedure = publicProcedure.use(({next, ctx}) => {
   if (!hasRole(ctx.viewer, ['user', 'org', 'system'])) {
+    console.error('Admin procedure failed', ctx.viewer)
     throw new TRPCError({
       code: ctx.viewer.role === 'anon' ? 'UNAUTHORIZED' : 'FORBIDDEN',
     })

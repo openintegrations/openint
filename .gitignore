@@ -80,3 +80,6 @@ tailwind-v3.css
 
 .nx/cache
 .nx/workspace-data
+
+bootstrap.sql
+.nx/workspace-data

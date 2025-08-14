@@ -44,7 +44,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
 
   const availableScopes: string[] = useOpenIntCredentials
     ? openint_allowed_scopes
-    : scopes.map((s) => s.scope)
+    : (scopes?.map((s) => s.scope) ?? [])
 
   const handleChange = (field: string, value?: string | string[]) => {
     onChange({

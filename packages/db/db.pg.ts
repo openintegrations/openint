@@ -59,7 +59,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
       return {rows: res as any[]}
     },
     async $migrate() {
-      return migratePgProxy(
+      await migratePgProxy(
         db,
         async (queries) => {
           if (queries.length === 0) {
@@ -91,8 +91,8 @@ export function initDbPgDirect(url: string, options: DbOptions = {}) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
-    $migrate() {
-      return migrate(db, getMigrationConfig())
+    async $migrate() {
+      await migrate(db, getMigrationConfig())
     },
     $end() {
       return pool.end()

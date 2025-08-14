@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@clerk/nextjs": "^6.13.0",
-    "@clerk/themes": "^2.2.34",
+    "@clerk/nextjs": "^6.28.1",
+    "@clerk/themes": "^2.4.4",
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/ui-v1": "workspace:*",

@@ -48,7 +48,7 @@ export function initDbPGLite(options: DbOptions = {}) {
       return {rows: res as any[]}
     },
     async $migrate() {
-      return migratePgProxy(
+      await migratePgProxy(
         db,
         async (queries) => {
           await pglite.exec(queries.join(';\n'))
@@ -74,8 +74,8 @@ export function initDbPGLiteDirect(options: DbOptions) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
-    $migrate() {
-      return migratePGLite(db, getMigrationConfig())
+    async $migrate() {
+      await migratePGLite(db, getMigrationConfig())
     },
     $end() {
       return pglite.close()

@@ -1,7 +1,7 @@
 {
   "name": "@openint/all-connectors",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
+  "license": "ELv2",
   "scripts": {
     "generate": "run-s generate:lists generate:meta generate:stories generate:deps",
     "generate:deps": "bun ./__scripts__/verifyDependencies.ts",
@@ -31,6 +31,7 @@
     "@openint/connector-postgres": "workspace:*",
     "@openint/connector-ramp": "workspace:*",
     "@openint/connector-saltedge": "workspace:*",
+    "@openint/connector-sharepoint-onprem": "workspace:*",
     "@openint/connector-splitwise": "workspace:*",
     "@openint/connector-stripe": "workspace:*",
     "@openint/connector-teller": "workspace:*",

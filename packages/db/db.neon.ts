@@ -74,8 +74,8 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res as any[]}
     },
-    $migrate() {
-      return migrate(
+    async $migrate() {
+      await migrate(
         db,
         async (queries) => {
           await neonSql.transaction(queries.map((q) => neonSql(q)))

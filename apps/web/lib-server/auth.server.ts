@@ -36,26 +36,70 @@ export async function currentViewerFromCookie() {
 }
 
 export async function currentViewerFromPageProps(props: PageProps) {
+  console.log('🔍 currentViewerFromPageProps: parsing props...')
   const {
     searchParams: {token},
   } = await parsePageProps(props, {
     searchParams: z.object({token: z.string().optional()}),
   })
 
+  console.log(
+    '🎫 Token from searchParams:',
+    token ? `present (${token.substring(0, 20)}...)` : 'missing',
+  )
+
   const {viewer, payload} = await jwt.verifyToken(token)
+  console.log('✅ Token verified successfully:', viewer.role, viewer.orgId)
   return {viewer, token, payload} satisfies ServerSession
 }
 
 export async function currentViewer(props?: PageProps) {
+  console.log(
+    '🔍 currentViewer called with props:',
+    !!props,
+    props ? 'has props' : 'no props',
+  )
+
   const {viewer, token, payload} = await firstNonAnonViewerOrFirst([
     props
-      ? currentViewerFromPageProps(props)
-      : Promise.resolve({
-          viewer: {role: 'anon'},
-          token: '',
-          payload: undefined,
-        }),
-    currentViewerFromCookie(),
+      ? (async (): Promise<ServerSession> => {
+          console.log('🎫 Attempting currentViewerFromPageProps...')
+          try {
+            const result = await currentViewerFromPageProps(props)
+            console.log(
+              '✅ currentViewerFromPageProps success:',
+              result.viewer.role,
+              result.viewer.orgId,
+            )
+            return result
+          } catch (error) {
+            console.log('❌ currentViewerFromPageProps failed:', String(error))
+            throw error
+          }
+        })()
+      : (async (): Promise<ServerSession> => {
+          console.log('🚫 Skipping pageProps auth (no props provided)')
+          return Promise.resolve({
+            viewer: {role: 'anon' as const},
+            token: '',
+            payload: undefined,
+          })
+        })(),
+    (async (): Promise<ServerSession> => {
+      console.log('🍪 Attempting currentViewerFromCookie...')
+      try {
+        const result = await currentViewerFromCookie()
+        console.log(
+          '✅ currentViewerFromCookie success:',
+          result.viewer.role,
+          result.viewer.orgId,
+        )
+        return result
+      } catch (error) {
+        console.log('❌ currentViewerFromCookie failed:', String(error))
+        throw error
+      }
+    })(),
   ])
   // Ensure the org exists in the database if not already
   // TODO: How do we add a test for this?
@@ -78,11 +122,32 @@ export async function currentViewer(props?: PageProps) {
   }
   return {viewer, token, payload} satisfies ServerSession
 }
-
 async function firstNonAnonViewerOrFirst(
   _viewers: NonEmptyArray<MaybePromise<ServerSession>>,
 ): Promise<ServerSession> {
+  console.log(
+    '🔄 firstNonAnonViewerOrFirst: resolving',
+    _viewers.length,
+    'auth methods...',
+  )
   const viewers = await Promise.all(_viewers)
+
+  console.log('📊 Authentication results:')
+  viewers.forEach((viewer, index) => {
+    console.log(
+      `  [${index}] role: ${viewer.viewer.role}, orgId: ${viewer.viewer.orgId}, hasToken: ${!!viewer.token}`,
+    )
+  })
+
+  const selected = viewers.find((v) => v.viewer.role !== 'anon') ?? viewers[0]
+  console.log(
+    '🎯 Selected viewer:',
+    selected.viewer.role,
+    selected.viewer.orgId,
+    'hasToken:',
+    !!selected.token,
+  )
+
   // TODO: Refactor this with resolveViewer. bit we need the token though...
-  return viewers.find((v) => v.viewer.role !== 'anon') ?? viewers[0]
+  return selected
 }

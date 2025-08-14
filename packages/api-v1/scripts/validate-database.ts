@@ -1,10 +1,10 @@
-import {initDbNeon} from '@openint/db/db.neon'
+import {initDb} from '@openint/db/init'
 import {envRequired} from '@openint/env'
 import {routerContextFromViewer} from '../trpc/context'
 import {appRouter} from '../trpc/routers'
 
 async function main() {
-  const db = initDbNeon(envRequired.DATABASE_URL)
+  const db = initDb(envRequired.DATABASE_URL)
 
   const context = routerContextFromViewer({db, viewer: {role: 'system'}})
   const caller = appRouter.createCaller(context)

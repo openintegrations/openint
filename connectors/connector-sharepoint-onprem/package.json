@@ -1,0 +1,11 @@
+{
+  "name": "@openint/connector-sharepoint-onprem",
+  "version": "0.0.1",
+  "private": true,
+  "module": "./index.ts",
+  "dependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/util": "workspace:*",
+    "@opensdks/runtime": "^0.0.19"
+  }
+}
