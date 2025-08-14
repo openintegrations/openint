@@ -9992,7 +9992,7 @@ export interface operations {
                 /** @description Offset the items returned */
                 offset?: number;
                 search_query?: string;
-                expand?: "prompt"[];
+                include_prompt?: boolean;
                 since?: string;
             };
             header?: never;
