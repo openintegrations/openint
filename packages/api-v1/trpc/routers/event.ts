@@ -1,13 +1,10 @@
 import {TRPCError} from '@trpc/server'
-import {extractId} from '@openint/cdk'
 import {and, any, asc, desc, eq, gte, ilike, schema, sql} from '@openint/db'
-import {envRequired} from '@openint/env'
 import {zEvent} from '@openint/events/events'
 import {eventMap} from '@openint/events/events.def'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models/core'
-import {getConnectorModelByName} from './connector.models'
 import {
   formatListResponse,
   zListParams,
