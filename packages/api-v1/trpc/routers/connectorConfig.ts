@@ -223,23 +223,20 @@ export const connectorConfigRouter = router({
           ctx.viewer.role === 'customer'
         ) {
           // Check if there are already postgres connections
-          const connections = await ctx.db.query.connection.findMany({
-            with: {
-              connector_config: {
-                columns: {
-                  connector_name: true,
-                  org_id: true,
+          const connections =
+            await ctx.asOrgIfCustomer.db.query.connection.findMany({
+              with: {
+                connector_config: {
+                  columns: {
+                    connector_name: true,
+                    org_id: true,
+                  },
                 },
               },
-            },
-          })
+              where: eq(schema.connection.connector_name, 'postgres'),
+            })
 
-          const hasPostgresConnection = connections.some(
-            (conn) =>
-              conn.connector_config?.org_id === ctx.viewer.orgId &&
-              conn.connector_config?.connector_name === 'postgres',
-          )
-
+          const hasPostgresConnection = connections.length > 0
           if (hasPostgresConnection) {
             // Remove postgres connector configs from the list
             filteredItems = expandedItems.filter(
