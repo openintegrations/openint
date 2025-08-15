@@ -28,6 +28,11 @@ export const zConnectOptions = z.object({
     description:
       'Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization',
   }),
+  hide_navigation: zCoerceBoolean().optional().openapi({
+    title: 'Hide Navigation',
+    description:
+      'Whether to hide the navigation bar. This is useful for hardcoding to a particular view.',
+  }),
 })
 
 export const connectRouterModels = {

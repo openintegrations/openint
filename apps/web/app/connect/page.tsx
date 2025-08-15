@@ -201,7 +201,10 @@ export default async function ConnectPage(
                   paramKey="view"
                   className="flex-1 p-4 lg:pt-12">
                   <div className="mx-auto w-full max-w-4xl">
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList
+                      className={cn('grid w-full grid-cols-2', {
+                        hidden: searchParams.hide_navigation,
+                      })}>
                       <TabsTrigger value="manage">
                         Manage Integrations
                       </TabsTrigger>
