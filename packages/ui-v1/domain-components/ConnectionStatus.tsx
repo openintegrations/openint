@@ -2,7 +2,13 @@
 
 import type {ConnectionExpanded} from '@openint/api-v1/models'
 
-import {AlertCircle, CheckCircle2, HelpCircle, XCircle} from 'lucide-react'
+import {
+  AlertCircle,
+  CheckCircle2,
+  HelpCircle,
+  RotateCcw,
+  XCircle,
+} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
@@ -122,16 +128,21 @@ export function ConnectionStatusPill({
       <Tooltip delayDuration={200}>
         <TooltipTrigger asChild>
           <div className={cn('inline-flex', className)}>
-            <div className={cn('flex items-center gap-1')}>
-              <div className={cn('h-2 w-2 rounded-full', pillColor)} />
-              {status !== 'disconnected' ? (
+            {status !== 'disconnected' ? (
+              <div className={cn('flex items-center gap-1')}>
+                <div className={cn('h-2 w-2 rounded-full', pillColor)} />
                 <div className="text-xs text-gray-500">{label}</div>
-              ) : (
-                <Button variant="ghost" onClick={onClick}>
-                  Reconnect
-                </Button>
-              )}
-            </div>
+              </div>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onClick}
+                className="group h-7 gap-1.5 px-3 text-xs font-medium shadow-none transition-colors">
+                <RotateCcw className="h-3 w-3 transition-transform duration-500 group-hover:-rotate-[360deg]" />
+                Reconnect
+              </Button>
+            )}
           </div>
         </TooltipTrigger>
         <TooltipContent
