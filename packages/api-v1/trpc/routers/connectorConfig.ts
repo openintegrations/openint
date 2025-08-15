@@ -214,9 +214,43 @@ export const connectorConfigRouter = router({
             }
           }
         })
+        //  hack
+
+        // Special filtering logic for specific org and customer viewers
+        let filteredItems = expandedItems
+        if (
+          ctx.viewer.orgId === 'org_30tX19eKICtpokzSfMWDOiLU3KK' &&
+          ctx.viewer.role === 'customer'
+        ) {
+          // Check if there are already postgres connections
+          const connections = await ctx.db.query.connection.findMany({
+            with: {
+              connector_config: {
+                columns: {
+                  connector_name: true,
+                  org_id: true,
+                },
+              },
+            },
+          })
+
+          const hasPostgresConnection = connections.some(
+            (conn) =>
+              conn.connector_config?.org_id === ctx.viewer.orgId &&
+              conn.connector_config?.connector_name === 'postgres',
+          )
+
+          if (hasPostgresConnection) {
+            // Remove postgres connector configs from the list
+            filteredItems = expandedItems.filter(
+              (item) => item.connector_name !== 'postgres',
+            )
+          }
+        }
+
         return {
           ...formatListResponse(items, {limit, offset}),
-          items: expandedItems,
+          items: filteredItems,
         }
       },
     ),
