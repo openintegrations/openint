@@ -5659,7 +5659,7 @@ export interface components {
              */
             connector_name: "postgres";
             settings?: {
-                databaseURL?: string;
+                database_url?: string;
             };
         };
         /** postgres */

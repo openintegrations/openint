@@ -20423,7 +20423,7 @@
           "settings": {
             "type": "object",
             "properties": {
-              "databaseURL": {
+              "database_url": {
                 "type": "string"
               }
             }

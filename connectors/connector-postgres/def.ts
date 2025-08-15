@@ -4,7 +4,7 @@ import {connHelpers} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
 export const zPgConfig = z.object({
-  databaseURL: z.string(),
+  database_url: z.string(),
 })
 
 export const postgresSchemas = {
@@ -14,7 +14,7 @@ export const postgresSchemas = {
   // in the list of integrations...
   // How do we create default connections for integrations that are basically single connection?
   // This is to take into account all the default postgres connections that used to exist
-  connection_settings: zPgConfig.partial({databaseURL: true}),
+  connection_settings: zPgConfig.partial({database_url: true}),
 } satisfies ConnectorSchemas
 
 export const postgresHelpers = connHelpers(postgresSchemas)
