@@ -214,14 +214,11 @@ export const connectorConfigRouter = router({
             }
           }
         })
-        //  hack
 
+        // TODO: Remove this this after go live
         // Special filtering logic for specific org and customer viewers
         let filteredItems = expandedItems
-        if (
-          ctx.viewer.orgId === 'org_30tX19eKICtpokzSfMWDOiLU3KK' &&
-          ctx.viewer.role === 'customer'
-        ) {
+        if (ctx.viewer.orgId === 'org_30tX19eKICtpokzSfMWDOiLU3KK') {
           // Check if there are already postgres connections
           const connections =
             await ctx.asOrgIfCustomer.db.query.connection.findMany({
