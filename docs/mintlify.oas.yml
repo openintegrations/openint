@@ -3226,13 +3226,9 @@ paths:
           schema:
             type: string
         - in: query
-          name: expand
+          name: include_prompt
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - prompt
+            type: boolean
         - in: query
           name: since
           schema:

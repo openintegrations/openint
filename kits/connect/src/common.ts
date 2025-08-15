@@ -18,6 +18,7 @@ export interface ConnectProps {
     view?: 'add' | 'manage'
     debug?: boolean
     isMagicLink?: boolean
+    hideNavigation?: boolean
     // TODO: add theme enum and colors object
   }
 }

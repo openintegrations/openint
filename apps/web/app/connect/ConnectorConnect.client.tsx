@@ -130,8 +130,15 @@ export function ConnectorConnectContainer({
       )
 
       const url = new URL(window.location.href)
-      url.searchParams.set('view', 'manage')
-      router.replace((url.search || `?view=manage`) as never) // FIXME: This typing is problematic
+      const hideNavigation = url.searchParams.get('hide_navigation') === 'true'
+      if (!hideNavigation) {
+        url.searchParams.set('view', 'manage')
+        router.replace((url.search || `?view=manage`) as never) // FIXME: This typing is problematic
+      } else {
+        // re-navigating to reset state of the embed
+        url.searchParams.set('view', 'add')
+        router.replace((url.search || `?view=add`) as never) // FIXME: This typing is problematic
+      }
       return postConnectRes
     } catch (error) {
       console.error('Error connecting', error)

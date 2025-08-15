@@ -5659,7 +5659,7 @@ export interface components {
              */
             connector_name: "postgres";
             settings?: {
-                databaseURL?: string;
+                database_url?: string;
             };
         };
         /** postgres */
@@ -9861,6 +9861,11 @@ export interface operations {
                          * @description Whether to enable embedded mode. Embedded mode hides the side bar with extra context for the end user (customer) on the organization
                          */
                         is_embedded?: boolean;
+                        /**
+                         * Hide Navigation
+                         * @description Whether to hide the navigation bar. This is useful for hardcoding to a particular view.
+                         */
+                        hide_navigation?: boolean;
                     };
                 };
             };
