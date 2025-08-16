@@ -1,0 +1,35 @@
+---
+name: scope-validation-required
+description: OAuth scopes must be properly validated across default, allowed and required scopes to maintain security
+severity: error
+globs: ['**/oauth/*.ts', '**/auth/*.ts']
+---
+
+Ensure OAuth scopes are properly validated by checking that required scopes are included in both default and allowed scopes.
+
+❌ Bad:
+```typescript
+const connector = {
+  required_scopes: ['read:user'],
+  openint_default_scopes: ['read:user'],
+  // Missing validation that required scopes are in allowed scopes
+};
+```
+
+✅ Good:
+```typescript
+test('oauth2 connectors have valid scope structure', async () => {
+  oauth2Connectors.forEach((connector) => {
+    // Check that they are arrays
+    expect(Array.isArray(connector.openint_default_scopes)).toBe(true);
+    expect(Array.isArray(connector.openint_allowed_scopes)).toBe(true);
+    expect(Array.isArray(connector.scopes)).toBe(true);
+    
+    // Validate required scopes are included
+    connector.required_scopes.forEach(scope => {
+      expect(connector.openint_default_scopes).toContain(scope);
+      expect(connector.openint_allowed_scopes).toContain(scope); 
+    });
+  });
+});
+```

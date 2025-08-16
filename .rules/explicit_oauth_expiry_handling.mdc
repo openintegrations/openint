@@ -1,0 +1,29 @@
+---
+name: explicit-oauth-expiry-handling  
+description: OAuth tokens should have explicit expiry time handling to ensure consistent token expiration behavior
+severity: error
+globs: ['**/auth/*.ts', '**/oauth/*.ts']
+---
+
+Always explicitly handle OAuth token expiration by calculating and setting expires_at when expires_in is provided.
+
+❌ Bad:
+```typescript
+const settings = {
+  oauth: {
+    credentials: {
+      expires_in: 3600,
+      access_token: 'token'
+    }
+  }
+};
+```
+
+✅ Good:
+```typescript
+if (settings?.oauth?.credentials?.expires_in && !settings?.oauth?.credentials?.expires_at) {
+  settings.oauth.credentials.expires_at = new Date(
+    Date.now() + settings.oauth.credentials.expires_in * 1000
+  );
+}
+```
