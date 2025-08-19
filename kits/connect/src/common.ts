@@ -31,17 +31,30 @@ export const createMagicLinkUrl = ({
   const url = new URL(baseURL)
   url.searchParams.set('token', token)
   Object.entries(connectOptions).forEach(([key, value]) => {
-    if (value && typeof value === 'string') {
-      url.searchParams.set(
-        // basic camelCase to snake_case conversion
-        key
-          // convert first letter to lowercase for pascal case scenario?
-          .replace(/^([A-Z])/, (match) => match.toLowerCase())
-          // convert remaining uppercase letters to _ + lowercase
-          .replace(/([A-Z])/g, '_$1')
-          .toLowerCase(),
-        value,
-      )
+    if (value === undefined || value === null) return
+
+    const paramKey = key
+      // convert first letter to lowercase for pascal case scenario?
+      .replace(/^([A-Z])/, (match) => match.toLowerCase())
+      // convert remaining uppercase letters to _ + lowercase
+      .replace(/([A-Z])/g, '_$1')
+      .toLowerCase()
+
+    let paramValue: string | undefined
+    if (typeof value === 'string') {
+      paramValue = value
+    } else if (typeof value === 'boolean') {
+      // Use explicit true/false so server can coerce reliably
+      paramValue = value ? 'true' : 'false'
+    } else if (typeof value === 'number') {
+      paramValue = String(value)
+    } else if (Array.isArray(value)) {
+      // Comma-separated values (server supports zCoerceArray)
+      paramValue = value.join(',')
+    }
+
+    if (paramValue !== undefined) {
+      url.searchParams.set(paramKey, paramValue)
     }
   })
   return url.toString()
