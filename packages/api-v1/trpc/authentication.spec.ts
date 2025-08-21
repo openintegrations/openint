@@ -2,10 +2,12 @@
 import type {Id, Viewer} from '@openint/cdk'
 
 import {TRPCError} from '@trpc/server'
+import {makeId} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {envRequired} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
+import {createApp} from '../app'
 import {makeJwtClient} from '../lib/makeJwtClient'
 import {viewerFromRequest} from './authentication'
 
@@ -139,6 +141,79 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
       // Act & Assert
       await expect(viewerFromRequest(ctx, req)).rejects.toThrow('JWTExpired')
+    })
+  })
+
+  describe('Unauthenticated getConnection whitelist', () => {
+    const whitelistedOrg = 'org_30tX19eKICtpokzSfMWDOiLU3KK' as Id['org']
+    const nonWhitelistedOrg = `org_${makeUlid()}` as Id['org']
+    let app: ReturnType<typeof createApp>
+    let whitelistedConnectionId = ''
+    let nonWhitelistedConnectionId = ''
+
+    beforeAll(async () => {
+      app = createApp({db})
+      // Create a whitelisted org and a connector_config + connection
+      await db.insert(schema.organization).values({id: whitelistedOrg})
+      const [ccfg1] = await db
+        .insert(schema.connector_config)
+        .values({
+          id: makeId('ccfg', 'plaid', makeUlid()),
+          org_id: whitelistedOrg,
+          config: {},
+        })
+        .returning()
+      const [conn1] = await db
+        .insert(schema.connection)
+        .values({
+          id: makeId('conn', 'plaid', makeUlid()),
+          connector_config_id: ccfg1!.id,
+          settings: {},
+        })
+        .returning()
+      whitelistedConnectionId = conn1!.id
+
+      // Create a non-whitelisted org and a connector_config + connection
+      await db.insert(schema.organization).values({id: nonWhitelistedOrg})
+      const [ccfg2] = await db
+        .insert(schema.connector_config)
+        .values({
+          id: makeId('ccfg', 'plaid', makeUlid()),
+          org_id: nonWhitelistedOrg,
+          config: {},
+        })
+        .returning()
+      const [conn2] = await db
+        .insert(schema.connection)
+        .values({
+          id: makeId('conn', 'plaid', makeUlid()),
+          connector_config_id: ccfg2!.id,
+          settings: {},
+        })
+        .returning()
+      nonWhitelistedConnectionId = conn2!.id
+    })
+
+    test('allows GET /connection/{id} for whitelisted org without auth', async () => {
+      const res = await app.handle(
+        new Request(
+          `http://localhost/v1/connection/${whitelistedConnectionId}`,
+        ),
+      )
+      expect(res.status).toBe(200)
+      const data = await res.json()
+      expect(data.id).toBe(whitelistedConnectionId)
+    })
+
+    test('rejects GET /connection/{id} for non-whitelisted org without auth', async () => {
+      const res = await app.handle(
+        new Request(
+          `http://localhost/v1/connection/${nonWhitelistedConnectionId}`,
+        ),
+      )
+      expect(res.status).toBe(403)
+      const body = await res.json()
+      expect(body.message).toMatch(/Authentication required/)
     })
   })
 })

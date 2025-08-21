@@ -10,6 +10,41 @@ export async function viewerFromRequest(
   ctx: {db: AnyDatabase},
   req: Request,
 ): Promise<Viewer> {
+  // Allow unauthenticated access to GET /v1/connection/{id} for specific orgs
+  try {
+    const url = new URL(req.url)
+    const isGet = (req.method || 'GET').toUpperCase() === 'GET'
+    const match = url.pathname.match(/^\/v1\/connection\/(conn_[^/]+)$/)
+    if (isGet && match) {
+      const connectionId = match[1] as string
+      const whitelistedOrgIds = [
+        'org_30tX19eKICtpokzSfMWDOiLU3KK',
+        'org_31Kp0uFDyKhgnI7Agnus7RrDvlR',
+      ] as const
+
+      const conn = await ctx.db.query.connection.findFirst({
+        where: eq(schema.connection.id, connectionId),
+        columns: {connector_config_id: true},
+      })
+      if (conn?.connector_config_id) {
+        const ccfg = await ctx.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, conn.connector_config_id),
+          columns: {org_id: true},
+        })
+        if (
+          ccfg &&
+          whitelistedOrgIds.includes(
+            ccfg.org_id as (typeof whitelistedOrgIds)[number],
+          )
+        ) {
+          return {role: 'org', orgId: ccfg.org_id as Id['org']}
+        }
+      }
+    }
+  } catch (_) {
+    // Fallback to normal auth flow on URL parse or DB errors
+  }
+
   const authHeader = req.headers.get('authorization')
   const token = authHeader?.match(/^Bearer (.+)/)?.[1]
   if (authHeader && !token) {
