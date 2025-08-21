@@ -75,6 +75,12 @@
     "node": "22"
   },
   "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1"
+      }
+    },
     "neverBuiltDependencies": [
       "libpq"
     ],
@@ -92,8 +98,8 @@
       "@types/react-dom": "19.0.4",
       "axios": "0.21.1",
       "esbuild": "0.17.5",
-      "react": "19.0.0",
-      "react-dom": "19.0.0"
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
     },
     "patchedDependencies": {
       "@jsonurl/jsonurl@1.1.7": "patches/@jsonurl__jsonurl@1.1.7.patch",
