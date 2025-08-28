@@ -18,7 +18,7 @@ export const middleware: NextMiddleware = (req, ev) => {
   }
 
   // We allow for clerk on all non-special routes except for connect in production
-  return clerkMiddlewareFn(req, ev)
+  return clerkMiddlewareFn(req as any, ev as any)
 }
 
 export const config = {
