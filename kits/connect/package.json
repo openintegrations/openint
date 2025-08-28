@@ -14,6 +14,7 @@
     "@openint/sdk": "~2.10.0"
   },
   "devDependencies": {
+    "@openint/events": "workspace:*",
     "@types/react": "19.1.0",
     "typescript": "*"
   },
