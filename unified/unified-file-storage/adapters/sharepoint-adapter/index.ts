@@ -1,5 +1,6 @@
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
-import {TRPCError} from '@trpc/server'
+
+import {TRPCError} from '@openint/vdk'
 import {type FileStorageAdapter} from '../../router'
 import {mappers} from './mappers'
 
@@ -212,10 +213,11 @@ export const sharepointAdapter = {
       })
     }
 
+    const cursor = extractCursor(res['@odata.nextLink'])
     return {
-      has_next_page: !!res['@odata.nextLink'],
+      has_next_page: !!cursor,
       items: res.value.map(mappers.DriveGroup),
-      next_cursor: extractCursor(res['@odata.nextLink']),
+      next_cursor: cursor,
     }
   },
 
@@ -283,10 +285,11 @@ export const sharepointAdapter = {
       })
     }
 
+    const cursor = extractCursor(drivesResponse['@odata.nextLink'])
     return {
-      has_next_page: !!drivesResponse['@odata.nextLink'],
+      has_next_page: !!cursor,
       items: drivesResponse.value.map(mappers.Drive),
-      next_cursor: extractCursor(drivesResponse['@odata.nextLink']),
+      next_cursor: cursor,
     }
   },
 
@@ -371,12 +374,13 @@ export const sharepointAdapter = {
       })
     }
 
+    const cursor = extractCursor(filesResponse['@odata.nextLink'] ?? '')
     return {
-      has_next_page: !!filesResponse['@odata.nextLink'],
+      has_next_page: !!cursor,
       items: filesResponse.value
         // .filter((item: any) => item.file)
         .map(mappers.File),
-      next_cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
+      next_cursor: cursor,
     }
   },
 
@@ -463,10 +467,11 @@ export const sharepointAdapter = {
       })
     }
 
+    const cursor = extractCursor(foldersResponse['@odata.nextLink'])
     return {
-      has_next_page: !!foldersResponse['@odata.nextLink'],
+      has_next_page: !!cursor,
       items: foldersResponse.value.map(mappers.Folder),
-      next_cursor: extractCursor(foldersResponse['@odata.nextLink']),
+      next_cursor: cursor,
     }
   },
 } satisfies FileStorageAdapter<MsgraphSDK>
